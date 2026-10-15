@@ -1,0 +1,921 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
+| Date         : Thu Oct 15 12:33:12 2026
+| Host         : ALEXSALAMAT56FC running 64-bit major release  (build 9200)
+| Command      : report_timing -max_paths 10 -nworst 1 -unique_pins -file C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/Alex/timing_paths.rpt
+| Design       : system_wrapper
+| Device       : 7z020-clg484
+| Speed File   : -1  PRODUCTION 1.11 2014-09-11
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             4.664ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_59/ADDRBWRADDR[7]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.242ns  (logic 4.545ns (31.913%)  route 9.697ns (68.087%))
+  Logic Levels:           14  (CARRY4=9 LUT2=1 LUT3=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.018ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.802ns = ( 22.802 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          1.004    11.055    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y80         LUT5 (Prop_lut5_I0_O)        0.313    11.368 r  system_i/mac/inst/u_core/bmem_reg_0_i_41/O
+                         net (fo=1, routed)           0.000    11.368    system_i/mac/inst/u_core/bmem_reg_0_i_41_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_S[1]_O[1])
+                                                      0.227    11.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/O[1]
+                         net (fo=2, routed)           2.165    13.761    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_6
+    SLICE_X45Y46         LUT2 (Prop_lut2_I1_O)        0.329    14.090 r  system_i/mac/inst/u_core/bmem_reg_32_i_7/O
+                         net (fo=32, routed)          3.087    17.177    system_i/mac/inst/u_core/bmem_reg_32_i_7_n_0
+    RAMB18_X0Y2          RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_59/ADDRBWRADDR[7]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.623    22.802    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X0Y2          RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_59/CLKBWRCLK
+                         clock pessimism              0.115    22.917    
+                         clock uncertainty           -0.302    22.615    
+    RAMB18_X0Y2          RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[7])
+                                                     -0.774    21.841    system_i/mac/inst/u_core/bmem_reg_59
+  -------------------------------------------------------------------
+                         required time                         21.841    
+                         arrival time                         -17.177    
+  -------------------------------------------------------------------
+                         slack                                  4.664    
+
+Slack (MET) :             4.857ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_59/ADDRBWRADDR[10]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.257ns  (logic 5.017ns (35.190%)  route 9.240ns (64.810%))
+  Logic Levels:           15  (CARRY4=10 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        -0.018ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.802ns = ( 22.802 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.507    12.164 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/CO[3]
+                         net (fo=1, routed)           0.000    12.164    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_0
+    SLICE_X45Y81         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    12.386 r  system_i/mac/inst/u_core/bmem_reg_0_i_22/O[0]
+                         net (fo=2, routed)           1.768    14.153    system_i/mac/inst/u_core/bmem_reg_0_i_22_n_7
+    SLICE_X45Y46         LUT2 (Prop_lut2_I1_O)        0.299    14.452 r  system_i/mac/inst/u_core/bmem_reg_32_i_4/O
+                         net (fo=32, routed)          2.739    17.192    system_i/mac/inst/u_core/bmem_reg_32_i_4_n_0
+    RAMB18_X0Y2          RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_59/ADDRBWRADDR[10]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.623    22.802    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X0Y2          RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_59/CLKBWRCLK
+                         clock pessimism              0.115    22.917    
+                         clock uncertainty           -0.302    22.615    
+    RAMB18_X0Y2          RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[10])
+                                                     -0.566    22.049    system_i/mac/inst/u_core/bmem_reg_59
+  -------------------------------------------------------------------
+                         required time                         22.049    
+                         arrival time                         -17.192    
+  -------------------------------------------------------------------
+                         slack                                  4.857    
+
+Slack (MET) :             4.868ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_8/ADDRBWRADDR[12]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.284ns  (logic 5.037ns (35.264%)  route 9.247ns (64.736%))
+  Logic Levels:           15  (CARRY4=10 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        0.019ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.825ns = ( 22.825 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.507    12.164 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/CO[3]
+                         net (fo=1, routed)           0.000    12.164    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_0
+    SLICE_X45Y81         CARRY4 (Prop_carry4_CI_O[2])
+                                                      0.239    12.403 r  system_i/mac/inst/u_core/bmem_reg_0_i_22/O[2]
+                         net (fo=2, routed)           1.535    13.938    system_i/mac/inst/u_core/bmem_reg_0_i_22_n_5
+    SLICE_X45Y46         LUT2 (Prop_lut2_I1_O)        0.302    14.240 r  system_i/mac/inst/u_core/bmem_reg_0_i_8/O
+                         net (fo=32, routed)          2.978    17.219    system_i/mac/inst/u_core/bmem_reg_0_i_8_n_0
+    RAMB18_X5Y34         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_8/ADDRBWRADDR[12]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.646    22.825    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X5Y34         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_8/CLKBWRCLK
+                         clock pessimism              0.129    22.954    
+                         clock uncertainty           -0.302    22.652    
+    RAMB18_X5Y34         RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[12])
+                                                     -0.566    22.086    system_i/mac/inst/u_core/bmem_reg_8
+  -------------------------------------------------------------------
+                         required time                         22.086    
+                         arrival time                         -17.219    
+  -------------------------------------------------------------------
+                         slack                                  4.868    
+
+Slack (MET) :             4.868ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_9/ADDRBWRADDR[12]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.284ns  (logic 5.037ns (35.264%)  route 9.247ns (64.736%))
+  Logic Levels:           15  (CARRY4=10 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        0.019ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.825ns = ( 22.825 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.507    12.164 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/CO[3]
+                         net (fo=1, routed)           0.000    12.164    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_0
+    SLICE_X45Y81         CARRY4 (Prop_carry4_CI_O[2])
+                                                      0.239    12.403 r  system_i/mac/inst/u_core/bmem_reg_0_i_22/O[2]
+                         net (fo=2, routed)           1.535    13.938    system_i/mac/inst/u_core/bmem_reg_0_i_22_n_5
+    SLICE_X45Y46         LUT2 (Prop_lut2_I1_O)        0.302    14.240 r  system_i/mac/inst/u_core/bmem_reg_0_i_8/O
+                         net (fo=32, routed)          2.978    17.219    system_i/mac/inst/u_core/bmem_reg_0_i_8_n_0
+    RAMB18_X5Y35         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_9/ADDRBWRADDR[12]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.646    22.825    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X5Y35         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_9/CLKBWRCLK
+                         clock pessimism              0.129    22.954    
+                         clock uncertainty           -0.302    22.652    
+    RAMB18_X5Y35         RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[12])
+                                                     -0.566    22.086    system_i/mac/inst/u_core/bmem_reg_9
+  -------------------------------------------------------------------
+                         required time                         22.086    
+                         arrival time                         -17.219    
+  -------------------------------------------------------------------
+                         slack                                  4.868    
+
+Slack (MET) :             4.881ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_35/ADDRBWRADDR[8]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.066ns  (logic 4.854ns (34.510%)  route 9.212ns (65.490%))
+  Logic Levels:           14  (CARRY4=9 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        0.017ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.837ns = ( 22.837 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_O[2])
+                                                      0.537    12.194 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/O[2]
+                         net (fo=2, routed)           1.945    14.139    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_5
+    SLICE_X45Y46         LUT2 (Prop_lut2_I1_O)        0.328    14.467 r  system_i/mac/inst/u_core/bmem_reg_32_i_6/O
+                         net (fo=32, routed)          2.534    17.001    system_i/mac/inst/u_core/bmem_reg_32_i_6_n_0
+    RAMB18_X4Y7          RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_35/ADDRBWRADDR[8]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.658    22.837    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X4Y7          RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_35/CLKBWRCLK
+                         clock pessimism              0.115    22.952    
+                         clock uncertainty           -0.302    22.650    
+    RAMB18_X4Y7          RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[8])
+                                                     -0.768    21.882    system_i/mac/inst/u_core/bmem_reg_35
+  -------------------------------------------------------------------
+                         required time                         21.882    
+                         arrival time                         -17.001    
+  -------------------------------------------------------------------
+                         slack                                  4.881    
+
+Slack (MET) :             4.890ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_8/ADDRBWRADDR[10]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.262ns  (logic 5.017ns (35.179%)  route 9.245ns (64.821%))
+  Logic Levels:           15  (CARRY4=10 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        0.019ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.825ns = ( 22.825 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.507    12.164 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/CO[3]
+                         net (fo=1, routed)           0.000    12.164    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_0
+    SLICE_X45Y81         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    12.386 r  system_i/mac/inst/u_core/bmem_reg_0_i_22/O[0]
+                         net (fo=2, routed)           1.366    13.752    system_i/mac/inst/u_core/bmem_reg_0_i_22_n_7
+    SLICE_X45Y50         LUT2 (Prop_lut2_I1_O)        0.299    14.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_10/O
+                         net (fo=32, routed)          3.146    17.197    system_i/mac/inst/u_core/bmem_reg_0_i_10_n_0
+    RAMB18_X5Y34         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_8/ADDRBWRADDR[10]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.646    22.825    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X5Y34         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_8/CLKBWRCLK
+                         clock pessimism              0.129    22.954    
+                         clock uncertainty           -0.302    22.652    
+    RAMB18_X5Y34         RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[10])
+                                                     -0.566    22.086    system_i/mac/inst/u_core/bmem_reg_8
+  -------------------------------------------------------------------
+                         required time                         22.086    
+                         arrival time                         -17.197    
+  -------------------------------------------------------------------
+                         slack                                  4.890    
+
+Slack (MET) :             4.890ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_9/ADDRBWRADDR[10]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.262ns  (logic 5.017ns (35.179%)  route 9.245ns (64.821%))
+  Logic Levels:           15  (CARRY4=10 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        0.019ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.825ns = ( 22.825 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.507    12.164 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/CO[3]
+                         net (fo=1, routed)           0.000    12.164    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_0
+    SLICE_X45Y81         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    12.386 r  system_i/mac/inst/u_core/bmem_reg_0_i_22/O[0]
+                         net (fo=2, routed)           1.366    13.752    system_i/mac/inst/u_core/bmem_reg_0_i_22_n_7
+    SLICE_X45Y50         LUT2 (Prop_lut2_I1_O)        0.299    14.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_10/O
+                         net (fo=32, routed)          3.146    17.197    system_i/mac/inst/u_core/bmem_reg_0_i_10_n_0
+    RAMB18_X5Y35         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_9/ADDRBWRADDR[10]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.646    22.825    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X5Y35         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_9/CLKBWRCLK
+                         clock pessimism              0.129    22.954    
+                         clock uncertainty           -0.302    22.652    
+    RAMB18_X5Y35         RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[10])
+                                                     -0.566    22.086    system_i/mac/inst/u_core/bmem_reg_9
+  -------------------------------------------------------------------
+                         required time                         22.086    
+                         arrival time                         -17.197    
+  -------------------------------------------------------------------
+                         slack                                  4.890    
+
+Slack (MET) :             4.894ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_4/ADDRBWRADDR[8]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.257ns  (logic 4.828ns (33.864%)  route 9.429ns (66.136%))
+  Logic Levels:           14  (CARRY4=9 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        0.019ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.825ns = ( 22.825 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_O[2])
+                                                      0.537    12.194 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/O[2]
+                         net (fo=2, routed)           1.528    13.722    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_5
+    SLICE_X45Y50         LUT2 (Prop_lut2_I1_O)        0.302    14.024 r  system_i/mac/inst/u_core/bmem_reg_0_i_12/O
+                         net (fo=32, routed)          3.168    17.192    system_i/mac/inst/u_core/bmem_reg_0_i_12_n_0
+    RAMB18_X4Y36         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_4/ADDRBWRADDR[8]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.646    22.825    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X4Y36         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_4/CLKBWRCLK
+                         clock pessimism              0.129    22.954    
+                         clock uncertainty           -0.302    22.652    
+    RAMB18_X4Y36         RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[8])
+                                                     -0.566    22.086    system_i/mac/inst/u_core/bmem_reg_4
+  -------------------------------------------------------------------
+                         required time                         22.086    
+                         arrival time                         -17.192    
+  -------------------------------------------------------------------
+                         slack                                  4.894    
+
+Slack (MET) :             4.899ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_59/ADDRBWRADDR[9]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.215ns  (logic 4.891ns (34.407%)  route 9.324ns (65.593%))
+  Logic Levels:           14  (CARRY4=9 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        -0.018ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.802ns = ( 22.802 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_O[3])
+                                                      0.596    12.253 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/O[3]
+                         net (fo=2, routed)           1.744    13.997    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_4
+    SLICE_X45Y46         LUT2 (Prop_lut2_I1_O)        0.306    14.303 r  system_i/mac/inst/u_core/bmem_reg_32_i_5/O
+                         net (fo=32, routed)          2.847    17.150    system_i/mac/inst/u_core/bmem_reg_32_i_5_n_0
+    RAMB18_X0Y2          RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_59/ADDRBWRADDR[9]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.623    22.802    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X0Y2          RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_59/CLKBWRCLK
+                         clock pessimism              0.115    22.917    
+                         clock uncertainty           -0.302    22.615    
+    RAMB18_X0Y2          RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[9])
+                                                     -0.566    22.049    system_i/mac/inst/u_core/bmem_reg_59
+  -------------------------------------------------------------------
+                         required time                         22.049    
+                         arrival time                         -17.150    
+  -------------------------------------------------------------------
+                         slack                                  4.899    
+
+Slack (MET) :             4.908ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/t_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            system_i/mac/inst/u_core/bmem_reg_13/ADDRBWRADDR[8]
+                            (rising edge-triggered cell RAMB18E1 clocked by clk_fpga_0  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (clk_fpga_0 rise@20.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        14.238ns  (logic 4.828ns (33.910%)  route 9.410ns (66.090%))
+  Logic Levels:           14  (CARRY4=9 LUT2=1 LUT3=2 LUT4=1 LUT6=1)
+  Clock Path Skew:        0.014ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.820ns = ( 22.820 - 20.000 ) 
+    Source Clock Delay      (SCD):    2.935ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.302ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.600ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641     2.935    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X33Y81         FDSE                                         r  system_i/mac/inst/u_core/t_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y81         FDSE (Prop_fdse_C_Q)         0.456     3.391 r  system_i/mac/inst/u_core/t_reg[0]/Q
+                         net (fo=9, routed)           0.837     4.228    system_i/mac/inst/u_core/t[0]
+    SLICE_X38Y84         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.602     4.830 r  system_i/mac/inst/u_core/amem_reg_0_i_95/O[2]
+                         net (fo=1, routed)           0.917     5.748    system_i/mac/inst/u_core/n_o5[3]
+    SLICE_X37Y86         LUT6 (Prop_lut6_I1_O)        0.301     6.049 r  system_i/mac/inst/u_core/amem_reg_0_i_77/O
+                         net (fo=1, routed)           0.000     6.049    system_i/mac/inst/u_core/amem_reg_0_i_77_n_0
+    SLICE_X37Y86         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     6.599 r  system_i/mac/inst/u_core/amem_reg_0_i_51/CO[3]
+                         net (fo=1, routed)           0.000     6.599    system_i/mac/inst/u_core/amem_reg_0_i_51_n_0
+    SLICE_X37Y87         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.713 r  system_i/mac/inst/u_core/amem_reg_0_i_36/CO[3]
+                         net (fo=1, routed)           0.000     6.713    system_i/mac/inst/u_core/amem_reg_0_i_36_n_0
+    SLICE_X37Y88         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228     6.941 f  system_i/mac/inst/u_core/amem_reg_0_i_17/CO[2]
+                         net (fo=689, routed)         0.765     7.705    system_i/mac/inst/u_core/n_o4
+    SLICE_X42Y91         LUT4 (Prop_lut4_I3_O)        0.313     8.018 f  system_i/mac/inst/u_core/amem_reg_0_i_14/O
+                         net (fo=100, routed)         0.921     8.939    system_i/mac/inst/u_core/amem_reg_0_i_14_n_0
+    SLICE_X39Y84         LUT3 (Prop_lut3_I1_O)        0.124     9.063 r  system_i/mac/inst/u_core/bmem_reg_0_i_66/O
+                         net (fo=1, routed)           0.000     9.063    system_i/mac/inst/u_core/bmem_reg_0_i_66_n_0
+    SLICE_X39Y84         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.595 r  system_i/mac/inst/u_core/bmem_reg_0_i_50/CO[3]
+                         net (fo=1, routed)           0.000     9.595    system_i/mac/inst/u_core/bmem_reg_0_i_50_n_0
+    SLICE_X39Y85         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.709 r  system_i/mac/inst/u_core/bmem_reg_0_i_44/CO[3]
+                         net (fo=1, routed)           0.000     9.709    system_i/mac/inst/u_core/bmem_reg_0_i_44_n_0
+    SLICE_X39Y86         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.823 r  system_i/mac/inst/u_core/bmem_reg_0_i_26/CO[3]
+                         net (fo=1, routed)           0.000     9.823    system_i/mac/inst/u_core/bmem_reg_0_i_26_n_0
+    SLICE_X39Y87         CARRY4 (Prop_carry4_CI_CO[2])
+                                                      0.228    10.051 r  system_i/mac/inst/u_core/bmem_reg_0_i_21/CO[2]
+                         net (fo=84, routed)          0.962    11.013    system_i/mac/inst/u_core/CO[0]
+    SLICE_X45Y79         LUT3 (Prop_lut3_I0_O)        0.313    11.326 r  system_i/mac/inst/u_core/bmem_reg_0_i_38/O
+                         net (fo=1, routed)           0.331    11.657    system_i/mac/inst/u_core/bmem_reg_0_i_38_n_0
+    SLICE_X45Y80         CARRY4 (Prop_carry4_DI[1]_O[2])
+                                                      0.537    12.194 r  system_i/mac/inst/u_core/bmem_reg_0_i_23/O[2]
+                         net (fo=2, routed)           1.528    13.722    system_i/mac/inst/u_core/bmem_reg_0_i_23_n_5
+    SLICE_X45Y50         LUT2 (Prop_lut2_I1_O)        0.302    14.024 r  system_i/mac/inst/u_core/bmem_reg_0_i_12/O
+                         net (fo=32, routed)          3.149    17.173    system_i/mac/inst/u_core/bmem_reg_0_i_12_n_0
+    RAMB18_X5Y33         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_13/ADDRBWRADDR[8]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                     20.000    20.000 r  
+    PS7_X0Y0             PS7                          0.000    20.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088    21.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=4055, routed)        1.641    22.820    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB18_X5Y33         RAMB18E1                                     r  system_i/mac/inst/u_core/bmem_reg_13/CLKBWRCLK
+                         clock pessimism              0.129    22.949    
+                         clock uncertainty           -0.302    22.647    
+    RAMB18_X5Y33         RAMB18E1 (Setup_ramb18e1_CLKBWRCLK_ADDRBWRADDR[8])
+                                                     -0.566    22.081    system_i/mac/inst/u_core/bmem_reg_13
+  -------------------------------------------------------------------
+                         required time                         22.081    
+                         arrival time                         -17.173    
+  -------------------------------------------------------------------
+                         slack                                  4.908    
+
+
+
+
