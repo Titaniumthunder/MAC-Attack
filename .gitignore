@@ -1,0 +1,33 @@
+# Vivado generated (no path prefix, so it matches at any depth)
+mac_zed_project/
+mac_attack_project/
+.Xil/
+*.cache/
+*.runs/
+*.sim/
+*.hw/
+*.gen/
+*.ip_user_files/
+vivado*.jou
+vivado*.log
+vivado*.str
+webtalk*
+*.wdb
+
+# Xilinx SDK / hardware exports
+*.sdk/
+*.hdf
+*.bit
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Large data
+*.wav
+data/
+
+# OS
+Thumbs.db

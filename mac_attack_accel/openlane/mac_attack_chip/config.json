@@ -1,0 +1,6 @@
+{
+    "DESIGN_NAME": "mac_attack_chip",
+    "VERILOG_FILES": ["dir::src/mac_attack_chip.v"],
+    "CLOCK_PORT": "clk",
+    "CLOCK_PERIOD": 25
+}
