@@ -1,0 +1,26 @@
+MAC Attack Golden Model Validation
+==================================
+Source: user's original mac_test.c, compiled locally with GCC host stubs.
+Python source: mac_golden_model.py.
+
+Tests: all eight in the original sequence; P=16 for pass/cycle examples.
+For each case, every signed byte of matrices A and B and every byte of
+signed 32-bit reference output C was hashed in row-major order using FNV-1a
+32-bit, plus the final PRNG state was cross-checked between C and Python.
+
+ Case   C vs Python byte-for-byte checksum
+  1     0x985013f0  MATCH
+  2     0x4ad7d6dc  MATCH
+  3     0x8dc39813  MATCH
+  4     0x6bcb10fa  MATCH
+  5     0xeeab81c9  MATCH
+  6     0xfd6ab5c5  MATCH
+  7     0xe2640fc5  MATCH
+  8     0x7b67453b  MATCH
+
+Simulated UART comparison: all eight cases passed full comparison (6,051
+output elements total). One deliberately modified C[0][0] was detected:
+ expected 72, simulated hardware output 73.
+
+IMPORTANT: These are host-side reference checks and synthetic UART parser
+tests. They are NOT evidence that the FPGA hardware has been tested/passed.
