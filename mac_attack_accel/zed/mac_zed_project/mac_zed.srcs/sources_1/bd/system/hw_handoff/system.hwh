@@ -1,39 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Thu Oct 15 13:04:17 2026" VIVADOVERSION="2019.1">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Fri Oct 16 12:20:19 2026" VIVADOVERSION="2019.1">
 
   <SYSTEMINFO ARCH="zynq" BOARD="em.avnet.com:zed:part0:1.4" DEVICE="7z020" NAME="system" PACKAGE="clg484" SPEEDGRADE="-1"/>
 
   <EXTERNALPORTS>
-    <PORT DIR="IO" LEFT="53" NAME="FIXED_IO_mio" RIGHT="0" SIGIS="undef" SIGNAME="ps7_MIO">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="ps7" PORT="MIO"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="IO" NAME="FIXED_IO_ddr_vrn" SIGIS="undef" SIGNAME="ps7_DDR_VRN">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="ps7" PORT="DDR_VRN"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="IO" NAME="FIXED_IO_ddr_vrp" SIGIS="undef" SIGNAME="ps7_DDR_VRP">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="ps7" PORT="DDR_VRP"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="IO" NAME="FIXED_IO_ps_srstb" SIGIS="undef" SIGNAME="ps7_PS_SRSTB">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="ps7" PORT="PS_SRSTB"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="IO" NAME="FIXED_IO_ps_clk" SIGIS="undef" SIGNAME="ps7_PS_CLK">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="ps7" PORT="PS_CLK"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="IO" NAME="FIXED_IO_ps_porb" SIGIS="undef" SIGNAME="ps7_PS_PORB">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="ps7" PORT="PS_PORB"/>
-      </CONNECTIONS>
-    </PORT>
     <PORT DIR="IO" NAME="DDR_cas_n" SIGIS="undef" SIGNAME="ps7_DDR_CAS_n">
       <CONNECTIONS>
         <CONNECTION INSTANCE="ps7" PORT="DDR_CAS_n"/>
@@ -107,6 +77,36 @@
     <PORT DIR="IO" LEFT="3" NAME="DDR_dqs_p" RIGHT="0" SIGIS="undef" SIGNAME="ps7_DDR_DQS">
       <CONNECTIONS>
         <CONNECTION INSTANCE="ps7" PORT="DDR_DQS"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="IO" LEFT="53" NAME="FIXED_IO_mio" RIGHT="0" SIGIS="undef" SIGNAME="ps7_MIO">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="ps7" PORT="MIO"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="IO" NAME="FIXED_IO_ddr_vrn" SIGIS="undef" SIGNAME="ps7_DDR_VRN">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="ps7" PORT="DDR_VRN"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="IO" NAME="FIXED_IO_ddr_vrp" SIGIS="undef" SIGNAME="ps7_DDR_VRP">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="ps7" PORT="DDR_VRP"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="IO" NAME="FIXED_IO_ps_srstb" SIGIS="undef" SIGNAME="ps7_PS_SRSTB">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="ps7" PORT="PS_SRSTB"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="IO" NAME="FIXED_IO_ps_clk" SIGIS="undef" SIGNAME="ps7_PS_CLK">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="ps7" PORT="PS_CLK"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="IO" NAME="FIXED_IO_ps_porb" SIGIS="undef" SIGNAME="ps7_PS_PORB">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="ps7" PORT="PS_PORB"/>
       </CONNECTIONS>
     </PORT>
   </EXTERNALPORTS>
@@ -2192,8 +2192,8 @@
             <CONNECTION INSTANCE="axi_ic" PORT="S00_ACLK"/>
             <CONNECTION INSTANCE="axi_ic" PORT="M00_ACLK"/>
             <CONNECTION INSTANCE="ps7" PORT="M_AXI_GP0_ACLK"/>
-            <CONNECTION INSTANCE="mac" PORT="s_axi_aclk"/>
             <CONNECTION INSTANCE="rst_fclk0" PORT="slowest_sync_clk"/>
+            <CONNECTION INSTANCE="mac" PORT="s_axi_aclk"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" NAME="FCLK_RESET0_N" SIGIS="rst" SIGNAME="ps7_FCLK_RESET0_N">
