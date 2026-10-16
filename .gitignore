@@ -1,5 +1,5 @@
 # Vivado generated (no path prefix, so it matches at any depth)
-mac_zed_project/
+# mac_zed_project/ itself is tracked (.xpr, .srcs, SDK app code); its build dirs are ignored below
 mac_attack_project/
 .Xil/
 *.cache/
@@ -15,7 +15,12 @@ webtalk*
 *.wdb
 
 # Xilinx SDK / hardware exports
-*.sdk/
+# Keep only the SDK application projects (MAC_*), skip BSPs, hw platforms, workspace metadata
+**/*.sdk/*
+!**/*.sdk/MAC_*/
+**/*.sdk/*_bsp/
+**/*.sdk/MAC_*/Debug/
+**/*.sdk/MAC_*/Release/
 *.hdf
 *.bit
 
