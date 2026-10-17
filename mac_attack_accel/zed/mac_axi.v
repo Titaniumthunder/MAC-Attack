@@ -22,15 +22,17 @@
 //                         the same way (column first, then row)
 //   0x1C PERF_PASSES  R   tile passes in the last run
 //   0x20 PERF_CYCLES  R   cycles spent in passes (equals passes x (M + 3P - 2))
-//   0x24 PERF_TOTAL   R   all busy cycles (PERF_CYCLES + 3)
+//   0x24 PERF_TOTAL   R   all busy cycles (PERF_CYCLES + 3 + PIPE + MEM_REG = PERF_CYCLES + 6 by default)
 //   0x28 INFO         R   [7:0] P, [15:8] bits per input, [23:16] accumulator bits, [31:24] MAXD
 //   0x2C ID           R   0x4D414331 ("MAC1")
 //
 // Typical use: write DIMS, write LOAD_PTR = A at (0,0), stream A with LOAD_DATA, the same for B,
 // write CTRL = 1, poll STATUS until done, write RESULT_PTR = (0,0), read RESULT_DATA M x N times.
 module mac_axi #(
-    parameter P    = 8,      // array size (P x P PEs)
-    parameter MAXD = 64      // largest M, K or N
+    parameter P       = 8,   // array size (P x P PEs)
+    parameter MAXD    = 64,  // largest M, K or N
+    parameter PIPE    = 1,   // 1 = two-stage PEs (see pe.sv)
+    parameter MEM_REG = 2    // registers after the block-RAM reads (see mm_core.sv)
 )(
     (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 s_axi_aclk CLK" *)
     (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF s_axi, ASSOCIATED_RESET s_axi_aresetn" *)
@@ -69,7 +71,10 @@ module mac_axi #(
                      A_PASSES = 6'h1C, A_CYCLES = 6'h20, A_TOTAL = 6'h24, A_INFO = 6'h28, A_ID = 6'h2C;
 
     wire clk = s_axi_aclk;
-    wire rst = ~s_axi_aresetn;           // the core uses an active-high reset
+    // Active-high reset for this block and the core, registered here so the reset wire
+    // gets a whole clock cycle to reach its loads (and the tool may copy the register).
+    (* max_fanout = 64 *) reg rst;
+    always @(posedge clk) rst <= ~s_axi_aresetn;
 
     // ------------------------------------------------------------ the matrix core
     reg        core_start;
@@ -83,7 +88,7 @@ module mac_axi #(
     reg  [7:0] ld_row, ld_col;           // where the next loaded byte goes
     reg  [7:0] rd_row, rd_col;           // which C value RESULT_DATA returns
 
-    mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(0), .MAXD(MAXD)) u_core (
+    mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(0), .MAXD(MAXD), .PIPE(PIPE), .MEM_REG(MEM_REG)) u_core (
         .clk(clk), .rst(rst),
         .wr_en(core_wr_en), .wr_sel(ld_sel), .wr_row(ld_row), .wr_col(ld_col), .wr_data(core_wr_data),
         .start(core_start), .dim_m(dim_m), .dim_k(dim_k), .dim_n(dim_n),
@@ -95,8 +100,17 @@ module mac_axi #(
     // A LOAD_DATA write holds 4 bytes; they go into the core one per clock.
     reg  [31:0] ld_word;
     reg  [2:0]  ld_left;                 // bytes still to write from ld_word
-    wire [7:0]  ld_rows   = ld_sel ? dim_k : dim_m;   // rows of the matrix being loaded
-    wire [7:0]  ld_rowlen = ld_sel ? dim_n : dim_k;   // row length
+    // Size of the matrix being loaded, kept in registers (they change only when DIMS or LOAD_PTR
+    // is written, at least 2 cycles before the next LOAD_DATA write can start), so the compares
+    // below start from flip-flops instead of from a mux on ld_sel.
+    reg  [7:0]  ld_rows;                 // rows of the matrix being loaded
+    reg  [7:0]  ld_rowlen;               // row length
+    reg  [7:0]  ld_collast;              // row length - 1 (the last column)
+    always @(posedge clk) begin
+        ld_rows    <= ld_sel ? dim_k : dim_m;
+        ld_rowlen  <= ld_sel ? dim_n : dim_k;
+        ld_collast <= (ld_sel ? dim_n : dim_k) - 8'd1;
+    end
     wire        ld_inside = (ld_row < ld_rows) && (ld_col < ld_rowlen);
     assign core_wr_en   = (ld_left != 3'd0) && ld_inside && !core_busy;
     assign core_wr_data = ld_word[7:0];
@@ -110,8 +124,19 @@ module mac_axi #(
     assign s_axi_wready  = axi_wready;
     assign s_axi_bvalid  = axi_bvalid;
     assign s_axi_bresp   = 2'b00;        // always OKAY
-    // A write happens in the cycle where both address and data are handed over.
-    wire wr_fire = axi_awready && s_axi_awvalid && axi_wready && s_axi_wvalid;
+    // A write happens in the cycle where both address and data are handed over. awready and
+    // wready are raised only after awvalid and wvalid were seen, and AXI says a valid stays
+    // up (with the address and data unchanged) until it is accepted, so that cycle is simply
+    // the one where axi_awready is 1, and the address and data are the copies taken the
+    // cycle before. Decoding from these registers keeps the ARM's slow AXI wires (they leave
+    // the processor late and cross the chip) out of the decode logic.
+    wire wr_fire = axi_awready;
+    reg [5:0]  wr_addr_q;
+    reg [31:0] wr_data_q;
+    always @(posedge clk) begin
+        wr_addr_q <= s_axi_awaddr;
+        wr_data_q <= s_axi_wdata;
+    end
 
     // ------------------------------------------------------------ AXI read channel
     reg        axi_arready, axi_rvalid;
@@ -124,6 +149,9 @@ module mac_axi #(
     assign s_axi_rresp   = 2'b00;
     wire ar_fire = axi_arready && s_axi_arvalid;
     wire r_fire  = axi_rvalid && s_axi_rready;
+    // C read data, registered: the block-RAM output and the lane select get a cycle of their own
+    reg [31:0] core_rd_q;
+    always @(posedge clk) core_rd_q <= core_rd_data;
 
     always @(posedge clk) begin
         if (rst) begin
@@ -143,7 +171,7 @@ module mac_axi #(
                 ld_word <= {8'd0, ld_word[31:8]};
                 ld_left <= ld_left - 3'd1;
                 if (ld_inside) begin
-                    if (ld_col + 8'd1 == ld_rowlen) begin
+                    if (ld_col == ld_collast) begin
                         ld_col <= 8'd0;
                         ld_row <= ld_row + 8'd1;
                     end else begin
@@ -163,44 +191,45 @@ module mac_axi #(
             end
             if (wr_fire) begin
                 axi_bvalid <= 1'b1;
-                case (s_axi_awaddr)
-                    A_CTRL: if (s_axi_wdata[0] && !core_busy) begin
+                case (wr_addr_q)
+                    A_CTRL: if (wr_data_q[0] && !core_busy) begin
                                 core_start <= 1'b1;
                                 done_flag  <= 1'b0;
                                 load_err   <= 1'b0;
                             end
                     A_DIMS: if (!core_busy) begin
-                                dim_m <= s_axi_wdata[7:0];
-                                dim_k <= s_axi_wdata[15:8];
-                                dim_n <= s_axi_wdata[23:16];
+                                dim_m <= wr_data_q[7:0];
+                                dim_k <= wr_data_q[15:8];
+                                dim_n <= wr_data_q[23:16];
                             end
                     A_LOAD_PTR: begin
-                                ld_sel <= s_axi_wdata[0];
-                                ld_row <= s_axi_wdata[15:8];
-                                ld_col <= s_axi_wdata[23:16];
+                                ld_sel <= wr_data_q[0];
+                                ld_row <= wr_data_q[15:8];
+                                ld_col <= wr_data_q[23:16];
                             end
                     A_LOAD_DATA: if (core_busy) load_err <= 1'b1;
                             else begin
-                                ld_word <= s_axi_wdata;
+                                ld_word <= wr_data_q;
                                 ld_left <= 3'd4;
                             end
                     A_RES_PTR: begin
-                                rd_row <= s_axi_wdata[7:0];
-                                rd_col <= s_axi_wdata[15:8];
+                                rd_row <= wr_data_q[7:0];
+                                rd_col <= wr_data_q[15:8];
                             end
                     default: ;
                 endcase
             end
             if (axi_bvalid && s_axi_bready) axi_bvalid <= 1'b0;
 
-            // ---- read channel: wait two clocks so the core's memory read has finished
+            // ---- read channel: wait three clocks so the core's memory read (1) and the
+            //      registered read data (1) are ready
             if (!axi_arready && s_axi_arvalid && !axi_rvalid && rd_wait == 2'd0)
                 axi_arready <= 1'b1;
             else
                 axi_arready <= 1'b0;
             if (ar_fire) begin
                 rd_addr <= s_axi_araddr;
-                rd_wait <= 2'd2;
+                rd_wait <= 2'd3;
             end
             if (rd_wait != 2'd0) begin
                 rd_wait <= rd_wait - 2'd1;
@@ -211,7 +240,7 @@ module mac_axi #(
                         A_DIMS:     axi_rdata <= {8'd0, dim_n, dim_k, dim_m};
                         A_LOAD_PTR: axi_rdata <= {8'd0, ld_col, ld_row, 7'd0, ld_sel};
                         A_RES_PTR:  axi_rdata <= {16'd0, rd_col, rd_row};
-                        A_RES_DATA: axi_rdata <= core_rd_data;
+                        A_RES_DATA: axi_rdata <= core_rd_q;
                         A_PASSES:   axi_rdata <= perf_passes;
                         A_CYCLES:   axi_rdata <= perf_cycles;
                         A_TOTAL:    axi_rdata <= perf_total;

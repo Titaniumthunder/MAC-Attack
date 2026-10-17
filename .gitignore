@@ -1,5 +1,7 @@
 # Vivado generated (no path prefix, so it matches at any depth)
-# mac_zed_project/ itself is tracked (.xpr, .srcs, SDK app code); its build dirs are ignored below
+# mac_zed_project/ is rebuilt by zed/create_zed_project.tcl; only its SDK app code (mac_zed.sdk/MAC_*) is tracked
+**/mac_zed_project/*
+!**/mac_zed_project/mac_zed.sdk/
 mac_attack_project/
 .Xil/
 *.cache/
@@ -36,3 +38,4 @@ data/
 
 # OS
 Thumbs.db
+.DS_Store
