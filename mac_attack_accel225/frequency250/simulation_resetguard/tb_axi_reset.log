@@ -1,0 +1,22 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Mon Oct 19 01:03:26 2026
+# Process ID: 40888
+# Current directory: C:/mac_attack_accel/frequency250/simulation_resetguard
+# Command line: xsim.exe -log tb_axi_reset.log -mode tcl -source {xsim.dir/tb_axi_reset/xsim_script.tcl}
+# Log file: C:/mac_attack_accel/frequency250/simulation_resetguard/tb_axi_reset.log
+# Journal file: C:/mac_attack_accel/frequency250/simulation_resetguard\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb_axi_reset/xsim_script.tcl
+# xsim {tb_axi_reset} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+  PASS             compute after reset  7x11x 9    63/  63 correct  passes   4 (eq   4)  cycles   116 (eq   116)  bus: load    328, run   135, read    509 clocks
+  PASS  compute after completion reset  3x 5x 7    21/  21 correct  passes   1 (eq   1)  cycles    25 (eq    25)  bus: load    104, run    39, read    173 clocks
+ALL AXI TESTS PASSED: pending write, stalled read, active run and completion reset at 250 MHz
+$finish called at time : 6276 ns : File "C:/mac_attack_accel/frequency250/tb_axi_reset.sv" Line 176
+exit
+INFO: [Common 17-206] Exiting xsim at Mon Oct 19 01:03:32 2026...

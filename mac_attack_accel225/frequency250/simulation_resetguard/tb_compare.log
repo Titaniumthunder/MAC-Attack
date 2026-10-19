@@ -1,0 +1,33 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Mon Oct 19 01:09:52 2026
+# Process ID: 35392
+# Current directory: C:/mac_attack_accel/frequency250/simulation_resetguard
+# Command line: xsim.exe -log tb_compare.log -mode tcl -source {xsim.dir/tb_compare/xsim_script.tcl}
+# Log file: C:/mac_attack_accel/frequency250/simulation_resetguard/tb_compare.log
+# Journal file: C:/mac_attack_accel/frequency250/simulation_resetguard\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb_compare/xsim_script.tcl
+# xsim {tb_compare} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+Same 64x64 times 64x64 multiply (random INT8) on three array sizes
+
+    array    PEs  passes   cycles  equation         results     busy  speedup
+    4x  4     16     256    18944     18944  4096/4096 PASS    86.5%     1.0x
+    8x  8     64      64     5504      5504  4096/4096 PASS    74.4%     3.4x
+   16x 16    256      16     1760      1760  4096/4096 PASS    58.2%    10.8x
+
+  More PEs finish in fewer cycles, but every pass also spends 3P - 2 cycles
+  loading weights, filling and draining. So the speedup is smaller than the
+  increase in PEs, and the PEs are busy a smaller share of the time.
+
+ ALL SIZES PASSED
+$finish called at time : 753750 ns : File "C:/mac_attack_accel/frequency250/tb/tb_compare.sv" Line 124
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:00:12 . Memory (MB): peak = 221.215 ; gain = 0.000
+exit
+INFO: [Common 17-206] Exiting xsim at Mon Oct 19 01:10:08 2026...

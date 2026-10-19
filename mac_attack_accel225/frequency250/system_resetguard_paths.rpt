@@ -1,0 +1,1712 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
+| Date         : Mon Oct 19 01:13:51 2026
+| Host         : DESKTOP-VONROUT running 64-bit major release  (build 9200)
+| Command      : report_timing -max_paths 30 -file C:/mac_attack_accel/frequency250/system_resetguard_paths.rpt
+| Design       : system_wrapper
+| Device       : 7z020-clg484
+| Speed File   : -1  PRODUCTION 1.11 2014-09-11
+----------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (VIOLATED) :        -0.295ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/o_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/a_addr_reg[5]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.997ns  (logic 1.430ns (35.780%)  route 2.567ns (64.220%))
+  Logic Levels:           3  (CARRY4=1 LUT4=1 LUT6=1)
+  Clock Path Skew:        -0.024ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.714ns = ( 6.714 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.003ns
+    Clock Pessimism Removal (CPR):    0.265ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.709     3.003    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X54Y90         FDRE                                         r  system_i/mac/inst/u_core/o_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X54Y90         FDRE (Prop_fdre_C_Q)         0.478     3.481 r  system_i/mac/inst/u_core/o_reg[0]/Q
+                         net (fo=19, routed)          0.946     4.427    system_i/mac/inst/u_core/o_reg_n_0_[0]
+    SLICE_X53Y89         LUT4 (Prop_lut4_I2_O)        0.296     4.723 r  system_i/mac/inst/u_core/a_addr[0]_i_13/O
+                         net (fo=1, routed)           0.000     4.723    system_i/mac/inst/u_core/a_addr[0]_i_13_n_0
+    SLICE_X53Y89         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     5.255 r  system_i/mac/inst/u_core/a_addr_reg[0]_i_3/CO[3]
+                         net (fo=2, routed)           0.893     6.148    system_i/mac/inst/u_core/a_addr2
+    SLICE_X53Y87         LUT6 (Prop_lut6_I2_O)        0.124     6.272 r  system_i/mac/inst/u_core/a_addr[0]_i_1/O
+                         net (fo=9, routed)           0.727     7.000    system_i/mac/inst/u_core/a_addr[0]_i_1_n_0
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[5]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.535     6.714    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[5]/C
+                         clock pessimism              0.265     6.979    
+                         clock uncertainty           -0.070     6.909    
+    SLICE_X55Y91         FDRE (Setup_fdre_C_CE)      -0.205     6.704    system_i/mac/inst/u_core/a_addr_reg[5]
+  -------------------------------------------------------------------
+                         required time                          6.704    
+                         arrival time                          -7.000    
+  -------------------------------------------------------------------
+                         slack                                 -0.295    
+
+Slack (VIOLATED) :        -0.295ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/o_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/a_addr_reg[6]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.997ns  (logic 1.430ns (35.780%)  route 2.567ns (64.220%))
+  Logic Levels:           3  (CARRY4=1 LUT4=1 LUT6=1)
+  Clock Path Skew:        -0.024ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.714ns = ( 6.714 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.003ns
+    Clock Pessimism Removal (CPR):    0.265ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.709     3.003    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X54Y90         FDRE                                         r  system_i/mac/inst/u_core/o_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X54Y90         FDRE (Prop_fdre_C_Q)         0.478     3.481 r  system_i/mac/inst/u_core/o_reg[0]/Q
+                         net (fo=19, routed)          0.946     4.427    system_i/mac/inst/u_core/o_reg_n_0_[0]
+    SLICE_X53Y89         LUT4 (Prop_lut4_I2_O)        0.296     4.723 r  system_i/mac/inst/u_core/a_addr[0]_i_13/O
+                         net (fo=1, routed)           0.000     4.723    system_i/mac/inst/u_core/a_addr[0]_i_13_n_0
+    SLICE_X53Y89         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     5.255 r  system_i/mac/inst/u_core/a_addr_reg[0]_i_3/CO[3]
+                         net (fo=2, routed)           0.893     6.148    system_i/mac/inst/u_core/a_addr2
+    SLICE_X53Y87         LUT6 (Prop_lut6_I2_O)        0.124     6.272 r  system_i/mac/inst/u_core/a_addr[0]_i_1/O
+                         net (fo=9, routed)           0.727     7.000    system_i/mac/inst/u_core/a_addr[0]_i_1_n_0
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[6]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.535     6.714    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[6]/C
+                         clock pessimism              0.265     6.979    
+                         clock uncertainty           -0.070     6.909    
+    SLICE_X55Y91         FDRE (Setup_fdre_C_CE)      -0.205     6.704    system_i/mac/inst/u_core/a_addr_reg[6]
+  -------------------------------------------------------------------
+                         required time                          6.704    
+                         arrival time                          -7.000    
+  -------------------------------------------------------------------
+                         slack                                 -0.295    
+
+Slack (VIOLATED) :        -0.295ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/o_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/a_addr_reg[7]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.997ns  (logic 1.430ns (35.780%)  route 2.567ns (64.220%))
+  Logic Levels:           3  (CARRY4=1 LUT4=1 LUT6=1)
+  Clock Path Skew:        -0.024ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.714ns = ( 6.714 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.003ns
+    Clock Pessimism Removal (CPR):    0.265ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.709     3.003    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X54Y90         FDRE                                         r  system_i/mac/inst/u_core/o_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X54Y90         FDRE (Prop_fdre_C_Q)         0.478     3.481 r  system_i/mac/inst/u_core/o_reg[0]/Q
+                         net (fo=19, routed)          0.946     4.427    system_i/mac/inst/u_core/o_reg_n_0_[0]
+    SLICE_X53Y89         LUT4 (Prop_lut4_I2_O)        0.296     4.723 r  system_i/mac/inst/u_core/a_addr[0]_i_13/O
+                         net (fo=1, routed)           0.000     4.723    system_i/mac/inst/u_core/a_addr[0]_i_13_n_0
+    SLICE_X53Y89         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     5.255 r  system_i/mac/inst/u_core/a_addr_reg[0]_i_3/CO[3]
+                         net (fo=2, routed)           0.893     6.148    system_i/mac/inst/u_core/a_addr2
+    SLICE_X53Y87         LUT6 (Prop_lut6_I2_O)        0.124     6.272 r  system_i/mac/inst/u_core/a_addr[0]_i_1/O
+                         net (fo=9, routed)           0.727     7.000    system_i/mac/inst/u_core/a_addr[0]_i_1_n_0
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[7]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.535     6.714    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[7]/C
+                         clock pessimism              0.265     6.979    
+                         clock uncertainty           -0.070     6.909    
+    SLICE_X55Y91         FDRE (Setup_fdre_C_CE)      -0.205     6.704    system_i/mac/inst/u_core/a_addr_reg[7]
+  -------------------------------------------------------------------
+                         required time                          6.704    
+                         arrival time                          -7.000    
+  -------------------------------------------------------------------
+                         slack                                 -0.295    
+
+Slack (VIOLATED) :        -0.295ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/o_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/a_addr_reg[8]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.997ns  (logic 1.430ns (35.780%)  route 2.567ns (64.220%))
+  Logic Levels:           3  (CARRY4=1 LUT4=1 LUT6=1)
+  Clock Path Skew:        -0.024ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.714ns = ( 6.714 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.003ns
+    Clock Pessimism Removal (CPR):    0.265ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.709     3.003    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X54Y90         FDRE                                         r  system_i/mac/inst/u_core/o_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X54Y90         FDRE (Prop_fdre_C_Q)         0.478     3.481 r  system_i/mac/inst/u_core/o_reg[0]/Q
+                         net (fo=19, routed)          0.946     4.427    system_i/mac/inst/u_core/o_reg_n_0_[0]
+    SLICE_X53Y89         LUT4 (Prop_lut4_I2_O)        0.296     4.723 r  system_i/mac/inst/u_core/a_addr[0]_i_13/O
+                         net (fo=1, routed)           0.000     4.723    system_i/mac/inst/u_core/a_addr[0]_i_13_n_0
+    SLICE_X53Y89         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     5.255 r  system_i/mac/inst/u_core/a_addr_reg[0]_i_3/CO[3]
+                         net (fo=2, routed)           0.893     6.148    system_i/mac/inst/u_core/a_addr2
+    SLICE_X53Y87         LUT6 (Prop_lut6_I2_O)        0.124     6.272 r  system_i/mac/inst/u_core/a_addr[0]_i_1/O
+                         net (fo=9, routed)           0.727     7.000    system_i/mac/inst/u_core/a_addr[0]_i_1_n_0
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[8]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.535     6.714    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[8]/C
+                         clock pessimism              0.265     6.979    
+                         clock uncertainty           -0.070     6.909    
+    SLICE_X55Y91         FDRE (Setup_fdre_C_CE)      -0.205     6.704    system_i/mac/inst/u_core/a_addr_reg[8]
+  -------------------------------------------------------------------
+                         required time                          6.704    
+                         arrival time                          -7.000    
+  -------------------------------------------------------------------
+                         slack                                 -0.295    
+
+Slack (VIOLATED) :        -0.281ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_dsp_i_3__0_psdsp/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/B[5]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.231ns  (logic 0.478ns (21.423%)  route 1.753ns (78.577%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.066ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.753ns = ( 6.753 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.934ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.640     2.934    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X46Y68         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_3__0_psdsp/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X46Y68         FDRE (Prop_fdre_C_Q)         0.478     3.412 r  system_i/mac/inst/u_core/u_dsp_i_3__0_psdsp/Q
+                         net (fo=1, routed)           1.753     5.165    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp_i_3__0_psdsp_n_alias
+    DSP48_X2Y11          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/B[5]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.574     6.753    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/s_axi_aclk
+    DSP48_X2Y11          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/CLK
+                         clock pessimism              0.115     6.868    
+                         clock uncertainty           -0.070     6.798    
+    DSP48_X2Y11          DSP48E1 (Setup_dsp48e1_CLK_B[5])
+                                                     -1.914     4.884    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp
+  -------------------------------------------------------------------
+                         required time                          4.884    
+                         arrival time                          -5.165    
+  -------------------------------------------------------------------
+                         slack                                 -0.281    
+
+Slack (VIOLATED) :        -0.271ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_dsp_i_1__0_psdsp/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.980ns  (logic 2.578ns (64.779%)  route 1.402ns (35.221%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.251ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.654ns = ( 6.654 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[15])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[15]
+                         net (fo=2, routed)           1.402     6.889    system_i/mac/inst/u_core/bq[15]
+    SLICE_X49Y60         LUT2 (Prop_lut2_I1_O)        0.124     7.013 r  system_i/mac/inst/u_core/u_dsp_i_1__0_replica/O
+                         net (fo=1, routed)           0.000     7.013    system_i/mac/inst/u_core/w_row[15]_repN
+    SLICE_X49Y60         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_1__0_psdsp/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.475     6.654    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X49Y60         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_1__0_psdsp/C
+                         clock pessimism              0.129     6.783    
+                         clock uncertainty           -0.070     6.713    
+    SLICE_X49Y60         FDRE (Setup_fdre_C_D)        0.029     6.742    system_i/mac/inst/u_core/u_dsp_i_1__0_psdsp
+  -------------------------------------------------------------------
+                         required time                          6.742    
+                         arrival time                          -7.013    
+  -------------------------------------------------------------------
+                         slack                                 -0.271    
+
+Slack (VIOLATED) :        -0.223ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/dim_n_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/ld_inside_reg/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        4.123ns  (logic 1.644ns (39.875%)  route 2.479ns (60.125%))
+  Logic Levels:           4  (CARRY4=1 LUT3=1 LUT6=2)
+  Clock Path Skew:        -0.061ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.719ns = ( 6.719 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.009ns
+    Clock Pessimism Removal (CPR):    0.229ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.715     3.009    system_i/mac/inst/s_axi_aclk
+    SLICE_X66Y93         FDRE                                         r  system_i/mac/inst/dim_n_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X66Y93         FDRE (Prop_fdre_C_Q)         0.518     3.527 r  system_i/mac/inst/dim_n_reg[0]/Q
+                         net (fo=19, routed)          0.917     4.444    system_i/mac/inst/p_2_in_9[16]
+    SLICE_X60Y94         LUT3 (Prop_lut3_I0_O)        0.150     4.594 r  system_i/mac/inst/ld_last_col[2]_i_2/O
+                         net (fo=4, routed)           0.468     5.062    system_i/mac/inst/ld_last_col[2]_i_2_n_0
+    SLICE_X65Y95         LUT6 (Prop_lut6_I4_O)        0.326     5.388 r  system_i/mac/inst/i__carry_i_4/O
+                         net (fo=1, routed)           0.336     5.724    system_i/mac/inst/i__carry_i_4_n_0
+    SLICE_X64Y94         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.526     6.250 r  system_i/mac/inst/ld_inside1_inferred__0/i__carry/CO[3]
+                         net (fo=1, routed)           0.758     7.008    system_i/mac/inst/u_core/CO[0]
+    SLICE_X63Y94         LUT6 (Prop_lut6_I0_O)        0.124     7.132 r  system_i/mac/inst/u_core/ld_inside_i_1/O
+                         net (fo=1, routed)           0.000     7.132    system_i/mac/inst/u_core_n_75
+    SLICE_X63Y94         FDRE                                         r  system_i/mac/inst/ld_inside_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.540     6.719    system_i/mac/inst/s_axi_aclk
+    SLICE_X63Y94         FDRE                                         r  system_i/mac/inst/ld_inside_reg/C
+                         clock pessimism              0.229     6.948    
+                         clock uncertainty           -0.070     6.878    
+    SLICE_X63Y94         FDRE (Setup_fdre_C_D)        0.031     6.909    system_i/mac/inst/ld_inside_reg
+  -------------------------------------------------------------------
+                         required time                          6.909    
+                         arrival time                          -7.132    
+  -------------------------------------------------------------------
+                         slack                                 -0.223    
+
+Slack (VIOLATED) :        -0.186ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_dsp_i_5__0_psdsp/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/B[3]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.129ns  (logic 0.419ns (19.681%)  route 1.710ns (80.319%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.069ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.753ns = ( 6.753 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.937ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.643     2.937    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X45Y66         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_5__0_psdsp/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X45Y66         FDRE (Prop_fdre_C_Q)         0.419     3.356 r  system_i/mac/inst/u_core/u_dsp_i_5__0_psdsp/Q
+                         net (fo=1, routed)           1.710     5.066    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp_i_5__0_psdsp_n_alias
+    DSP48_X2Y11          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/B[3]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.574     6.753    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/s_axi_aclk
+    DSP48_X2Y11          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/CLK
+                         clock pessimism              0.115     6.868    
+                         clock uncertainty           -0.070     6.798    
+    DSP48_X2Y11          DSP48E1 (Setup_dsp48e1_CLK_B[3])
+                                                     -1.918     4.880    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp
+  -------------------------------------------------------------------
+                         required time                          4.880    
+                         arrival time                          -5.066    
+  -------------------------------------------------------------------
+                         slack                                 -0.186    
+
+Slack (VIOLATED) :        -0.174ns  (required time - arrival time)
+  Source:                 system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/m_valid_i_reg/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[2]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        4.196ns  (logic 1.014ns (24.164%)  route 3.182ns (75.836%))
+  Logic Levels:           4  (LUT3=2 LUT6=2)
+  Clock Path Skew:        0.061ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.879ns = ( 6.879 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.947ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.653     2.947    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/aclk
+    SLICE_X32Y99         FDRE                                         r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/m_valid_i_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y99         FDRE (Prop_fdre_C_Q)         0.518     3.465 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/m_valid_i_reg/Q
+                         net (fo=16, routed)          0.878     4.343    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/aw_cmd_fsm_0/si_rs_awvalid
+    SLICE_X33Y102        LUT3 (Prop_lut3_I2_O)        0.124     4.467 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/aw_cmd_fsm_0/wrap_boundary_axaddr_r[11]_i_1/O
+                         net (fo=27, routed)          0.714     5.180    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/wrap_cnt_r_reg[0]
+    SLICE_X28Y102        LUT6 (Prop_lut6_I3_O)        0.124     5.304 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/axaddr_offset_r[1]_i_1/O
+                         net (fo=7, routed)           0.791     6.096    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/axaddr_offset_r_reg[1]
+    SLICE_X30Y100        LUT6 (Prop_lut6_I3_O)        0.124     6.220 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/wrap_second_len_r[1]_i_1/O
+                         net (fo=4, routed)           0.800     7.019    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/wrap_second_len_r_reg[1]
+    SLICE_X31Y102        LUT3 (Prop_lut3_I1_O)        0.124     7.143 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/wrap_cnt_r[2]_i_1/O
+                         net (fo=1, routed)           0.000     7.143    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[3]_0[2]
+    SLICE_X31Y102        FDRE                                         r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[2]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.700     6.879    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/aclk
+    SLICE_X31Y102        FDRE                                         r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[2]/C
+                         clock pessimism              0.129     7.008    
+                         clock uncertainty           -0.070     6.938    
+    SLICE_X31Y102        FDRE (Setup_fdre_C_D)        0.031     6.969    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[2]
+  -------------------------------------------------------------------
+                         required time                          6.969    
+                         arrival time                          -7.143    
+  -------------------------------------------------------------------
+                         slack                                 -0.174    
+
+Slack (VIOLATED) :        -0.167ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_dsp_i_5__0_psdsp/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.918ns  (logic 2.571ns (65.627%)  route 1.347ns (34.373%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.255ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.650ns = ( 6.650 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[11])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[11]
+                         net (fo=2, routed)           1.347     6.834    system_i/mac/inst/u_core/bq[11]
+    SLICE_X45Y66         LUT2 (Prop_lut2_I1_O)        0.117     6.951 r  system_i/mac/inst/u_core/u_dsp_i_5__0/O
+                         net (fo=1, routed)           0.000     6.951    system_i/mac/inst/u_core/w_row[11]
+    SLICE_X45Y66         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_5__0_psdsp/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.471     6.650    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X45Y66         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_5__0_psdsp/C
+                         clock pessimism              0.129     6.779    
+                         clock uncertainty           -0.070     6.709    
+    SLICE_X45Y66         FDRE (Setup_fdre_C_D)        0.075     6.784    system_i/mac/inst/u_core/u_dsp_i_5__0_psdsp
+  -------------------------------------------------------------------
+                         required time                          6.784    
+                         arrival time                          -6.951    
+  -------------------------------------------------------------------
+                         slack                                 -0.167    
+
+Slack (VIOLATED) :        -0.158ns  (required time - arrival time)
+  Source:                 system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/m_valid_i_reg/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[3]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        4.224ns  (logic 1.042ns (24.667%)  route 3.182ns (75.333%))
+  Logic Levels:           4  (LUT3=1 LUT4=1 LUT6=2)
+  Clock Path Skew:        0.061ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.879ns = ( 6.879 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.947ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.653     2.947    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/aclk
+    SLICE_X32Y99         FDRE                                         r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/m_valid_i_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X32Y99         FDRE (Prop_fdre_C_Q)         0.518     3.465 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/m_valid_i_reg/Q
+                         net (fo=16, routed)          0.878     4.343    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/aw_cmd_fsm_0/si_rs_awvalid
+    SLICE_X33Y102        LUT3 (Prop_lut3_I2_O)        0.124     4.467 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/aw_cmd_fsm_0/wrap_boundary_axaddr_r[11]_i_1/O
+                         net (fo=27, routed)          0.714     5.180    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/wrap_cnt_r_reg[0]
+    SLICE_X28Y102        LUT6 (Prop_lut6_I3_O)        0.124     5.304 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/axaddr_offset_r[1]_i_1/O
+                         net (fo=7, routed)           0.791     6.096    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/axaddr_offset_r_reg[1]
+    SLICE_X30Y100        LUT6 (Prop_lut6_I3_O)        0.124     6.220 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/wrap_second_len_r[1]_i_1/O
+                         net (fo=4, routed)           0.800     7.019    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/wrap_second_len_r_reg[1]
+    SLICE_X31Y102        LUT4 (Prop_lut4_I0_O)        0.152     7.171 r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/aw.aw_pipe/wrap_cnt_r[3]_i_1/O
+                         net (fo=1, routed)           0.000     7.171    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[3]_0[3]
+    SLICE_X31Y102        FDRE                                         r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[3]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.700     6.879    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/aclk
+    SLICE_X31Y102        FDRE                                         r  system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[3]/C
+                         clock pessimism              0.129     7.008    
+                         clock uncertainty           -0.070     6.938    
+    SLICE_X31Y102        FDRE (Setup_fdre_C_D)        0.075     7.013    system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/wrap_cmd_0/wrap_cnt_r_reg[3]
+  -------------------------------------------------------------------
+                         required time                          7.013    
+                         arrival time                          -7.171    
+  -------------------------------------------------------------------
+                         slack                                 -0.158    
+
+Slack (VIOLATED) :        -0.155ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_dsp_i_2__0_psdsp/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.908ns  (logic 2.578ns (65.971%)  route 1.330ns (34.029%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.255ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.650ns = ( 6.650 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[14])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[14]
+                         net (fo=2, routed)           1.330     6.817    system_i/mac/inst/u_core/bq[14]
+    SLICE_X46Y66         LUT2 (Prop_lut2_I1_O)        0.124     6.941 r  system_i/mac/inst/u_core/u_dsp_i_2__0/O
+                         net (fo=1, routed)           0.000     6.941    system_i/mac/inst/u_core/w_row[14]
+    SLICE_X46Y66         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_2__0_psdsp/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.471     6.650    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X46Y66         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_2__0_psdsp/C
+                         clock pessimism              0.129     6.779    
+                         clock uncertainty           -0.070     6.709    
+    SLICE_X46Y66         FDRE (Setup_fdre_C_D)        0.077     6.786    system_i/mac/inst/u_core/u_dsp_i_2__0_psdsp
+  -------------------------------------------------------------------
+                         required time                          6.786    
+                         arrival time                          -6.941    
+  -------------------------------------------------------------------
+                         slack                                 -0.155    
+
+Slack (VIOLATED) :        -0.155ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/o_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/a_addr_reg[4]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.854ns  (logic 1.430ns (37.101%)  route 2.424ns (62.899%))
+  Logic Levels:           3  (CARRY4=1 LUT4=1 LUT6=1)
+  Clock Path Skew:        -0.026ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.712ns = ( 6.712 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.003ns
+    Clock Pessimism Removal (CPR):    0.265ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.709     3.003    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X54Y90         FDRE                                         r  system_i/mac/inst/u_core/o_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X54Y90         FDRE (Prop_fdre_C_Q)         0.478     3.481 r  system_i/mac/inst/u_core/o_reg[0]/Q
+                         net (fo=19, routed)          0.946     4.427    system_i/mac/inst/u_core/o_reg_n_0_[0]
+    SLICE_X53Y89         LUT4 (Prop_lut4_I2_O)        0.296     4.723 r  system_i/mac/inst/u_core/a_addr[0]_i_13/O
+                         net (fo=1, routed)           0.000     4.723    system_i/mac/inst/u_core/a_addr[0]_i_13_n_0
+    SLICE_X53Y89         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     5.255 r  system_i/mac/inst/u_core/a_addr_reg[0]_i_3/CO[3]
+                         net (fo=2, routed)           0.893     6.148    system_i/mac/inst/u_core/a_addr2
+    SLICE_X53Y87         LUT6 (Prop_lut6_I2_O)        0.124     6.272 r  system_i/mac/inst/u_core/a_addr[0]_i_1/O
+                         net (fo=9, routed)           0.585     6.857    system_i/mac/inst/u_core/a_addr[0]_i_1_n_0
+    SLICE_X55Y88         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[4]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.533     6.712    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X55Y88         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[4]/C
+                         clock pessimism              0.265     6.977    
+                         clock uncertainty           -0.070     6.907    
+    SLICE_X55Y88         FDRE (Setup_fdre_C_CE)      -0.205     6.702    system_i/mac/inst/u_core/a_addr_reg[4]
+  -------------------------------------------------------------------
+                         required time                          6.702    
+                         arrival time                          -6.857    
+  -------------------------------------------------------------------
+                         slack                                 -0.155    
+
+Slack (VIOLATED) :        -0.152ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[0].g_c[2].g_dsp.u_pe/w_out_reg[5]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.780ns  (logic 2.578ns (68.204%)  route 1.202ns (31.796%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.263ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.642ns = ( 6.642 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[21])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[21]
+                         net (fo=1, routed)           0.851     6.339    system_i/mac/inst/u_core/bq[21]
+    SLICE_X48Y74         LUT2 (Prop_lut2_I1_O)        0.124     6.463 r  system_i/mac/inst/u_core/u_dsp_i_3__0__0/O
+                         net (fo=2, routed)           0.351     6.813    system_i/mac/inst/u_core/u_array/g_r[0].g_c[2].g_dsp.u_pe/w_row[5]
+    SLICE_X47Y73         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[2].g_dsp.u_pe/w_out_reg[5]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.463     6.642    system_i/mac/inst/u_core/u_array/g_r[0].g_c[2].g_dsp.u_pe/s_axi_aclk
+    SLICE_X47Y73         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[2].g_dsp.u_pe/w_out_reg[5]/C
+                         clock pessimism              0.129     6.771    
+                         clock uncertainty           -0.070     6.701    
+    SLICE_X47Y73         FDRE (Setup_fdre_C_D)       -0.040     6.661    system_i/mac/inst/u_core/u_array/g_r[0].g_c[2].g_dsp.u_pe/w_out_reg[5]
+  -------------------------------------------------------------------
+                         required time                          6.661    
+                         arrival time                          -6.813    
+  -------------------------------------------------------------------
+                         slack                                 -0.152    
+
+Slack (VIOLATED) :        -0.151ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_dsp_i_6__0_psdsp/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/B[2]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.284ns  (logic 0.456ns (19.964%)  route 1.828ns (80.036%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.054ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.753ns = ( 6.753 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.922ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.628     2.922    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X51Y68         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_6__0_psdsp/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X51Y68         FDRE (Prop_fdre_C_Q)         0.456     3.378 r  system_i/mac/inst/u_core/u_dsp_i_6__0_psdsp/Q
+                         net (fo=1, routed)           1.828     5.206    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp_i_6__0_psdsp_n_alias
+    DSP48_X2Y11          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/B[2]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.574     6.753    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/s_axi_aclk
+    DSP48_X2Y11          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/CLK
+                         clock pessimism              0.115     6.868    
+                         clock uncertainty           -0.070     6.798    
+    DSP48_X2Y11          DSP48E1 (Setup_dsp48e1_CLK_B[2])
+                                                     -1.743     5.055    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp
+  -------------------------------------------------------------------
+                         required time                          5.055    
+                         arrival time                          -5.206    
+  -------------------------------------------------------------------
+                         slack                                 -0.151    
+
+Slack (VIOLATED) :        -0.148ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_dsp_i_4__0_psdsp/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.907ns  (logic 2.578ns (65.992%)  route 1.329ns (34.008%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.249ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.656ns = ( 6.656 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[12])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[12]
+                         net (fo=2, routed)           1.329     6.816    system_i/mac/inst/u_core/bq[12]
+    SLICE_X46Y58         LUT2 (Prop_lut2_I1_O)        0.124     6.940 r  system_i/mac/inst/u_core/u_dsp_i_4__0/O
+                         net (fo=1, routed)           0.000     6.940    system_i/mac/inst/u_core/w_row[12]
+    SLICE_X46Y58         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_4__0_psdsp/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.477     6.656    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X46Y58         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_4__0_psdsp/C
+                         clock pessimism              0.129     6.785    
+                         clock uncertainty           -0.070     6.715    
+    SLICE_X46Y58         FDRE (Setup_fdre_C_D)        0.077     6.792    system_i/mac/inst/u_core/u_dsp_i_4__0_psdsp
+  -------------------------------------------------------------------
+                         required time                          6.792    
+                         arrival time                          -6.940    
+  -------------------------------------------------------------------
+                         slack                                 -0.148    
+
+Slack (VIOLATED) :        -0.127ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_dsp_i_3__0_psdsp/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.917ns  (logic 2.570ns (65.608%)  route 1.347ns (34.392%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.258ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.647ns = ( 6.647 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[13])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[13]
+                         net (fo=2, routed)           1.347     6.835    system_i/mac/inst/u_core/bq[13]
+    SLICE_X46Y68         LUT2 (Prop_lut2_I1_O)        0.116     6.951 r  system_i/mac/inst/u_core/u_dsp_i_3__0_replica/O
+                         net (fo=1, routed)           0.000     6.951    system_i/mac/inst/u_core/w_row[13]_repN
+    SLICE_X46Y68         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_3__0_psdsp/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.468     6.647    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X46Y68         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_3__0_psdsp/C
+                         clock pessimism              0.129     6.776    
+                         clock uncertainty           -0.070     6.706    
+    SLICE_X46Y68         FDRE (Setup_fdre_C_D)        0.118     6.824    system_i/mac/inst/u_core/u_dsp_i_3__0_psdsp
+  -------------------------------------------------------------------
+                         required time                          6.824    
+                         arrival time                          -6.951    
+  -------------------------------------------------------------------
+                         slack                                 -0.127    
+
+Slack (VIOLATED) :        -0.123ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/o_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/a_addr_reg[4]/R
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.599ns  (logic 1.014ns (28.177%)  route 2.585ns (71.823%))
+  Logic Levels:           4  (LUT2=1 LUT4=2 LUT6=1)
+  Clock Path Skew:        -0.026ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.712ns = ( 6.712 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.003ns
+    Clock Pessimism Removal (CPR):    0.265ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.709     3.003    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X54Y90         FDRE                                         r  system_i/mac/inst/u_core/o_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X54Y90         FDRE (Prop_fdre_C_Q)         0.518     3.521 r  system_i/mac/inst/u_core/o_reg[3]/Q
+                         net (fo=17, routed)          0.950     4.471    system_i/mac/inst/u_core/o_reg_n_0_[3]
+    SLICE_X53Y90         LUT6 (Prop_lut6_I1_O)        0.124     4.595 f  system_i/mac/inst/u_core/FSM_sequential_state[0]_i_6/O
+                         net (fo=1, routed)           0.348     4.942    system_i/mac/inst/u_core/FSM_sequential_state[0]_i_6_n_0
+    SLICE_X52Y90         LUT4 (Prop_lut4_I3_O)        0.124     5.066 r  system_i/mac/inst/u_core/FSM_sequential_state[0]_i_3/O
+                         net (fo=16, routed)          0.195     5.261    system_i/mac/inst/u_core/FSM_sequential_state[0]_i_3_n_0
+    SLICE_X52Y90         LUT4 (Prop_lut4_I3_O)        0.124     5.385 r  system_i/mac/inst/u_core/kb[3]_i_3/O
+                         net (fo=18, routed)          0.417     5.802    system_i/mac/inst/u_core/kb[3]_i_3_n_0
+    SLICE_X55Y90         LUT2 (Prop_lut2_I1_O)        0.124     5.926 r  system_i/mac/inst/u_core/a_addr[7]_i_1/O
+                         net (fo=5, routed)           0.676     6.602    system_i/mac/inst/u_core/a_addr[7]_i_1_n_0
+    SLICE_X55Y88         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[4]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.533     6.712    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X55Y88         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[4]/C
+                         clock pessimism              0.265     6.977    
+                         clock uncertainty           -0.070     6.907    
+    SLICE_X55Y88         FDRE (Setup_fdre_C_R)       -0.429     6.478    system_i/mac/inst/u_core/a_addr_reg[4]
+  -------------------------------------------------------------------
+                         required time                          6.478    
+                         arrival time                          -6.602    
+  -------------------------------------------------------------------
+                         slack                                 -0.123    
+
+Slack (VIOLATED) :        -0.121ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/o_reg[4]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/a_addr_reg[5]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        4.059ns  (logic 1.288ns (31.729%)  route 2.771ns (68.271%))
+  Logic Levels:           4  (CARRY4=1 LUT2=1 LUT4=1 LUT6=1)
+  Clock Path Skew:        -0.024ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.714ns = ( 6.714 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.003ns
+    Clock Pessimism Removal (CPR):    0.265ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.709     3.003    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X54Y90         FDRE                                         r  system_i/mac/inst/u_core/o_reg[4]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X54Y90         FDRE (Prop_fdre_C_Q)         0.518     3.521 f  system_i/mac/inst/u_core/o_reg[4]/Q
+                         net (fo=14, routed)          0.959     4.480    system_i/mac/inst/u_core/o_reg_n_0_[4]
+    SLICE_X55Y87         LUT2 (Prop_lut2_I0_O)        0.124     4.604 r  system_i/mac/inst/u_core/a_addr[0]_i_16/O
+                         net (fo=1, routed)           0.000     4.604    system_i/mac/inst/u_core/a_addr[0]_i_16_n_0
+    SLICE_X55Y87         CARRY4 (Prop_carry4_S[2]_CO[3])
+                                                      0.398     5.002 r  system_i/mac/inst/u_core/a_addr_reg[0]_i_4/CO[3]
+                         net (fo=2, routed)           0.941     5.943    system_i/mac/inst/u_core/a_addr272_in
+    SLICE_X53Y87         LUT6 (Prop_lut6_I2_O)        0.124     6.067 r  system_i/mac/inst/u_core/a_addr[0]_i_5/O
+                         net (fo=9, routed)           0.872     6.938    system_i/mac/inst/u_core/a_addr[0]_i_5_n_0
+    SLICE_X55Y91         LUT4 (Prop_lut4_I0_O)        0.124     7.062 r  system_i/mac/inst/u_core/a_addr[5]_i_1/O
+                         net (fo=1, routed)           0.000     7.062    system_i/mac/inst/u_core/a_addr[5]_i_1_n_0
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[5]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.535     6.714    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X55Y91         FDRE                                         r  system_i/mac/inst/u_core/a_addr_reg[5]/C
+                         clock pessimism              0.265     6.979    
+                         clock uncertainty           -0.070     6.909    
+    SLICE_X55Y91         FDRE (Setup_fdre_C_D)        0.032     6.941    system_i/mac/inst/u_core/a_addr_reg[5]
+  -------------------------------------------------------------------
+                         required time                          6.941    
+                         arrival time                          -7.062    
+  -------------------------------------------------------------------
+                         slack                                 -0.121    
+
+Slack (VIOLATED) :        -0.111ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].amem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/sh_reg[0][7]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.807ns  (logic 2.578ns (67.723%)  route 1.229ns (32.277%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.172ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.638ns = ( 6.638 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.039ns
+    Clock Pessimism Removal (CPR):    0.229ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.745     3.039    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y16         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].amem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y16         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[23])
+                                                      2.454     5.493 r  system_i/mac/inst/u_core/g_write_lane[1].amem_reg/DOADO[23]
+                         net (fo=1, routed)           0.611     6.104    system_i/mac/inst/u_core/aq[23]
+    SLICE_X52Y84         LUT2 (Prop_lut2_I1_O)        0.124     6.228 r  system_i/mac/inst/u_core/sh[0][7]_i_1__0/O
+                         net (fo=1, routed)           0.618     6.846    system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/a_row__0[7]
+    SLICE_X52Y83         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/sh_reg[0][7]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.459     6.638    system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/s_axi_aclk
+    SLICE_X52Y83         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/sh_reg[0][7]/C
+                         clock pessimism              0.229     6.867    
+                         clock uncertainty           -0.070     6.797    
+    SLICE_X52Y83         FDRE (Setup_fdre_C_D)       -0.062     6.735    system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/sh_reg[0][7]
+  -------------------------------------------------------------------
+                         required time                          6.735    
+                         arrival time                          -6.846    
+  -------------------------------------------------------------------
+                         slack                                 -0.111    
+
+Slack (VIOLATED) :        -0.110ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/ahead_kb_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/next_b_rows_reg[1]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.921ns  (logic 1.014ns (25.862%)  route 2.907ns (74.138%))
+  Logic Levels:           4  (LUT3=1 LUT4=1 LUT5=2)
+  Clock Path Skew:        -0.150ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.652ns = ( 6.652 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.931ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.637     2.931    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X50Y90         FDRE                                         r  system_i/mac/inst/u_core/ahead_kb_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X50Y90         FDRE (Prop_fdre_C_Q)         0.518     3.449 f  system_i/mac/inst/u_core/ahead_kb_reg[3]/Q
+                         net (fo=7, routed)           1.380     4.829    system_i/mac/inst/u_core/ahead_kb[3]
+    SLICE_X38Y84         LUT4 (Prop_lut4_I1_O)        0.124     4.953 f  system_i/mac/inst/u_core/next_b_rows[3]_i_4/O
+                         net (fo=1, routed)           0.597     5.551    system_i/mac/inst/u_core/next_b_rows[3]_i_4_n_0
+    SLICE_X38Y84         LUT5 (Prop_lut5_I0_O)        0.124     5.675 f  system_i/mac/inst/u_core/next_b_rows[3]_i_2/O
+                         net (fo=4, routed)           0.313     5.988    system_i/mac/inst/u_core/next_b_rows[3]_i_2_n_0
+    SLICE_X39Y84         LUT5 (Prop_lut5_I0_O)        0.124     6.112 r  system_i/mac/inst/u_core/next_b_rows[3]_i_1/O
+                         net (fo=7, routed)           0.616     6.728    system_i/mac/inst/u_core/next_b_rows[3]_i_1_n_0
+    SLICE_X40Y84         LUT3 (Prop_lut3_I0_O)        0.124     6.852 r  system_i/mac/inst/u_core/next_b_rows[1]_i_1/O
+                         net (fo=1, routed)           0.000     6.852    system_i/mac/inst/u_core/next_b_rows[1]_i_1_n_0
+    SLICE_X40Y84         FDRE                                         r  system_i/mac/inst/u_core/next_b_rows_reg[1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.473     6.652    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X40Y84         FDRE                                         r  system_i/mac/inst/u_core/next_b_rows_reg[1]/C
+                         clock pessimism              0.129     6.781    
+                         clock uncertainty           -0.070     6.711    
+    SLICE_X40Y84         FDRE (Setup_fdre_C_D)        0.031     6.742    system_i/mac/inst/u_core/next_b_rows_reg[1]
+  -------------------------------------------------------------------
+                         required time                          6.742    
+                         arrival time                          -6.852    
+  -------------------------------------------------------------------
+                         slack                                 -0.110    
+
+Slack (VIOLATED) :        -0.107ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/w_out_reg[3]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.719ns  (logic 2.578ns (69.320%)  route 1.141ns (30.680%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.261ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.644ns = ( 6.644 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[3])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[3]
+                         net (fo=1, routed)           0.595     6.082    system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_6[3]
+    SLICE_X51Y78         LUT2 (Prop_lut2_I1_O)        0.124     6.206 r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_i_5/O
+                         net (fo=2, routed)           0.546     6.752    system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_i_5_n_0
+    SLICE_X49Y78         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/w_out_reg[3]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.465     6.644    system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/s_axi_aclk
+    SLICE_X49Y78         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/w_out_reg[3]/C
+                         clock pessimism              0.129     6.773    
+                         clock uncertainty           -0.070     6.703    
+    SLICE_X49Y78         FDRE (Setup_fdre_C_D)       -0.058     6.645    system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/w_out_reg[3]
+  -------------------------------------------------------------------
+                         required time                          6.645    
+                         arrival time                          -6.752    
+  -------------------------------------------------------------------
+                         slack                                 -0.107    
+
+Slack (VIOLATED) :        -0.107ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_i_1_psdsp/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.859ns  (logic 2.603ns (67.460%)  route 1.256ns (32.540%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.254ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.651ns = ( 6.651 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[7])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[7]
+                         net (fo=2, routed)           1.256     6.743    system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_6[7]
+    SLICE_X44Y84         LUT2 (Prop_lut2_I1_O)        0.149     6.892 r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_i_1_replica/O
+                         net (fo=1, routed)           0.000     6.892    system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_i_1_n_0_repN
+    SLICE_X44Y84         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_i_1_psdsp/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.472     6.651    system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/s_axi_aclk
+    SLICE_X44Y84         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_i_1_psdsp/C
+                         clock pessimism              0.129     6.780    
+                         clock uncertainty           -0.070     6.710    
+    SLICE_X44Y84         FDRE (Setup_fdre_C_D)        0.075     6.785    system_i/mac/inst/u_core/u_array/g_r[0].g_c[0].g_dsp.u_pe/u_dsp_i_1_psdsp
+  -------------------------------------------------------------------
+                         required time                          6.785    
+                         arrival time                          -6.892    
+  -------------------------------------------------------------------
+                         slack                                 -0.107    
+
+Slack (VIOLATED) :        -0.106ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/ahead_kb_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/next_b_rows_reg[5]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.917ns  (logic 1.014ns (25.884%)  route 2.903ns (74.116%))
+  Logic Levels:           4  (LUT4=1 LUT5=3)
+  Clock Path Skew:        -0.150ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.652ns = ( 6.652 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.931ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.637     2.931    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X50Y90         FDRE                                         r  system_i/mac/inst/u_core/ahead_kb_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X50Y90         FDRE (Prop_fdre_C_Q)         0.518     3.449 f  system_i/mac/inst/u_core/ahead_kb_reg[3]/Q
+                         net (fo=7, routed)           1.380     4.829    system_i/mac/inst/u_core/ahead_kb[3]
+    SLICE_X38Y84         LUT4 (Prop_lut4_I1_O)        0.124     4.953 f  system_i/mac/inst/u_core/next_b_rows[3]_i_4/O
+                         net (fo=1, routed)           0.597     5.551    system_i/mac/inst/u_core/next_b_rows[3]_i_4_n_0
+    SLICE_X38Y84         LUT5 (Prop_lut5_I0_O)        0.124     5.675 f  system_i/mac/inst/u_core/next_b_rows[3]_i_2/O
+                         net (fo=4, routed)           0.313     5.988    system_i/mac/inst/u_core/next_b_rows[3]_i_2_n_0
+    SLICE_X39Y84         LUT5 (Prop_lut5_I0_O)        0.124     6.112 r  system_i/mac/inst/u_core/next_b_rows[3]_i_1/O
+                         net (fo=7, routed)           0.612     6.724    system_i/mac/inst/u_core/next_b_rows[3]_i_1_n_0
+    SLICE_X40Y84         LUT5 (Prop_lut5_I0_O)        0.124     6.848 r  system_i/mac/inst/u_core/next_b_rows[5]_i_1/O
+                         net (fo=1, routed)           0.000     6.848    system_i/mac/inst/u_core/next_b_rows[5]_i_1_n_0
+    SLICE_X40Y84         FDRE                                         r  system_i/mac/inst/u_core/next_b_rows_reg[5]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.473     6.652    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X40Y84         FDRE                                         r  system_i/mac/inst/u_core/next_b_rows_reg[5]/C
+                         clock pessimism              0.129     6.781    
+                         clock uncertainty           -0.070     6.711    
+    SLICE_X40Y84         FDRE (Setup_fdre_C_D)        0.031     6.742    system_i/mac/inst/u_core/next_b_rows_reg[5]
+  -------------------------------------------------------------------
+                         required time                          6.742    
+                         arrival time                          -6.848    
+  -------------------------------------------------------------------
+                         slack                                 -0.106    
+
+Slack (VIOLATED) :        -0.106ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_dsp_i_7__0_psdsp/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/B[1]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.230ns  (logic 0.456ns (20.452%)  route 1.774ns (79.548%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.064ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.753ns = ( 6.753 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.932ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.638     2.932    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X48Y69         FDRE                                         r  system_i/mac/inst/u_core/u_dsp_i_7__0_psdsp/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X48Y69         FDRE (Prop_fdre_C_Q)         0.456     3.388 r  system_i/mac/inst/u_core/u_dsp_i_7__0_psdsp/Q
+                         net (fo=1, routed)           1.774     5.162    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp_i_7__0_psdsp_n_alias
+    DSP48_X2Y11          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/B[1]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.574     6.753    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/s_axi_aclk
+    DSP48_X2Y11          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp/CLK
+                         clock pessimism              0.115     6.868    
+                         clock uncertainty           -0.070     6.798    
+    DSP48_X2Y11          DSP48E1 (Setup_dsp48e1_CLK_B[1])
+                                                     -1.743     5.055    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/u_dsp
+  -------------------------------------------------------------------
+                         required time                          5.055    
+                         arrival time                          -5.162    
+  -------------------------------------------------------------------
+                         slack                                 -0.106    
+
+Slack (VIOLATED) :        -0.101ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/ahead_kb_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/next_b_rows_reg[6]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.913ns  (logic 1.014ns (25.915%)  route 2.899ns (74.085%))
+  Logic Levels:           4  (LUT4=1 LUT5=2 LUT6=1)
+  Clock Path Skew:        -0.150ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.652ns = ( 6.652 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.931ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.637     2.931    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X50Y90         FDRE                                         r  system_i/mac/inst/u_core/ahead_kb_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X50Y90         FDRE (Prop_fdre_C_Q)         0.518     3.449 f  system_i/mac/inst/u_core/ahead_kb_reg[3]/Q
+                         net (fo=7, routed)           1.380     4.829    system_i/mac/inst/u_core/ahead_kb[3]
+    SLICE_X38Y84         LUT4 (Prop_lut4_I1_O)        0.124     4.953 f  system_i/mac/inst/u_core/next_b_rows[3]_i_4/O
+                         net (fo=1, routed)           0.597     5.551    system_i/mac/inst/u_core/next_b_rows[3]_i_4_n_0
+    SLICE_X38Y84         LUT5 (Prop_lut5_I0_O)        0.124     5.675 f  system_i/mac/inst/u_core/next_b_rows[3]_i_2/O
+                         net (fo=4, routed)           0.313     5.988    system_i/mac/inst/u_core/next_b_rows[3]_i_2_n_0
+    SLICE_X39Y84         LUT5 (Prop_lut5_I0_O)        0.124     6.112 r  system_i/mac/inst/u_core/next_b_rows[3]_i_1/O
+                         net (fo=7, routed)           0.608     6.720    system_i/mac/inst/u_core/next_b_rows[3]_i_1_n_0
+    SLICE_X40Y84         LUT6 (Prop_lut6_I1_O)        0.124     6.844 r  system_i/mac/inst/u_core/next_b_rows[6]_i_1/O
+                         net (fo=1, routed)           0.000     6.844    system_i/mac/inst/u_core/next_b_rows[6]_i_1_n_0
+    SLICE_X40Y84         FDRE                                         r  system_i/mac/inst/u_core/next_b_rows_reg[6]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.473     6.652    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X40Y84         FDRE                                         r  system_i/mac/inst/u_core/next_b_rows_reg[6]/C
+                         clock pessimism              0.129     6.781    
+                         clock uncertainty           -0.070     6.711    
+    SLICE_X40Y84         FDRE (Setup_fdre_C_D)        0.032     6.743    system_i/mac/inst/u_core/next_b_rows_reg[6]
+  -------------------------------------------------------------------
+                         required time                          6.743    
+                         arrival time                          -6.844    
+  -------------------------------------------------------------------
+                         slack                                 -0.101    
+
+Slack (VIOLATED) :        -0.097ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/w_out_reg[4]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.803ns  (logic 2.578ns (67.792%)  route 1.225ns (32.208%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.254ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.651ns = ( 6.651 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.033ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.739     3.033    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y15         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y15         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[12])
+                                                      2.454     5.487 r  system_i/mac/inst/u_core/g_write_lane[1].bmem_reg/DOADO[12]
+                         net (fo=2, routed)           1.225     6.712    system_i/mac/inst/u_core/bq[12]
+    SLICE_X47Y65         LUT2 (Prop_lut2_I1_O)        0.124     6.836 r  system_i/mac/inst/u_core/u_dsp_i_4__0_replica/O
+                         net (fo=1, routed)           0.000     6.836    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/w_row[12]_repN_alias
+    SLICE_X47Y65         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/w_out_reg[4]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.472     6.651    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/s_axi_aclk
+    SLICE_X47Y65         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/w_out_reg[4]/C
+                         clock pessimism              0.129     6.780    
+                         clock uncertainty           -0.070     6.710    
+    SLICE_X47Y65         FDRE (Setup_fdre_C_D)        0.029     6.739    system_i/mac/inst/u_core/u_array/g_r[0].g_c[1].g_dsp.u_pe/w_out_reg[4]
+  -------------------------------------------------------------------
+                         required time                          6.739    
+                         arrival time                          -6.836    
+  -------------------------------------------------------------------
+                         slack                                 -0.097    
+
+Slack (VIOLATED) :        -0.097ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/ahead_kb_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/next_b_rows_reg[0]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.906ns  (logic 1.014ns (25.961%)  route 2.892ns (74.039%))
+  Logic Levels:           4  (LUT4=2 LUT5=2)
+  Clock Path Skew:        -0.150ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.652ns = ( 6.652 - 4.000 ) 
+    Source Clock Delay      (SCD):    2.931ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.637     2.931    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X50Y90         FDRE                                         r  system_i/mac/inst/u_core/ahead_kb_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X50Y90         FDRE (Prop_fdre_C_Q)         0.518     3.449 f  system_i/mac/inst/u_core/ahead_kb_reg[3]/Q
+                         net (fo=7, routed)           1.380     4.829    system_i/mac/inst/u_core/ahead_kb[3]
+    SLICE_X38Y84         LUT4 (Prop_lut4_I1_O)        0.124     4.953 f  system_i/mac/inst/u_core/next_b_rows[3]_i_4/O
+                         net (fo=1, routed)           0.597     5.551    system_i/mac/inst/u_core/next_b_rows[3]_i_4_n_0
+    SLICE_X38Y84         LUT5 (Prop_lut5_I0_O)        0.124     5.675 f  system_i/mac/inst/u_core/next_b_rows[3]_i_2/O
+                         net (fo=4, routed)           0.313     5.988    system_i/mac/inst/u_core/next_b_rows[3]_i_2_n_0
+    SLICE_X39Y84         LUT5 (Prop_lut5_I0_O)        0.124     6.112 r  system_i/mac/inst/u_core/next_b_rows[3]_i_1/O
+                         net (fo=7, routed)           0.601     6.713    system_i/mac/inst/u_core/next_b_rows[3]_i_1_n_0
+    SLICE_X40Y84         LUT4 (Prop_lut4_I1_O)        0.124     6.837 r  system_i/mac/inst/u_core/next_b_rows[0]_i_1/O
+                         net (fo=1, routed)           0.000     6.837    system_i/mac/inst/u_core/next_b_rows[0]_i_1_n_0
+    SLICE_X40Y84         FDRE                                         r  system_i/mac/inst/u_core/next_b_rows_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.473     6.652    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X40Y84         FDRE                                         r  system_i/mac/inst/u_core/next_b_rows_reg[0]/C
+                         clock pessimism              0.129     6.781    
+                         clock uncertainty           -0.070     6.711    
+    SLICE_X40Y84         FDRE (Setup_fdre_C_D)        0.029     6.740    system_i/mac/inst/u_core/next_b_rows_reg[0]
+  -------------------------------------------------------------------
+                         required time                          6.740    
+                         arrival time                          -6.837    
+  -------------------------------------------------------------------
+                         slack                                 -0.097    
+
+Slack (VIOLATED) :        -0.082ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/g_write_lane[1].amem_reg/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/sh_reg[0][2]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        3.781ns  (logic 2.578ns (68.182%)  route 1.203ns (31.818%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.264ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.647ns = ( 6.647 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.039ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.745     3.039    system_i/mac/inst/u_core/s_axi_aclk
+    RAMB36_X3Y16         RAMB36E1                                     r  system_i/mac/inst/u_core/g_write_lane[1].amem_reg/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y16         RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOADO[18])
+                                                      2.454     5.493 r  system_i/mac/inst/u_core/g_write_lane[1].amem_reg/DOADO[18]
+                         net (fo=1, routed)           1.203     6.697    system_i/mac/inst/u_core/aq[18]
+    SLICE_X44Y81         LUT2 (Prop_lut2_I1_O)        0.124     6.821 r  system_i/mac/inst/u_core/sh[0][2]_i_1__0/O
+                         net (fo=1, routed)           0.000     6.821    system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/a_row__0[2]
+    SLICE_X44Y81         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/sh_reg[0][2]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.468     6.647    system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/s_axi_aclk
+    SLICE_X44Y81         FDRE                                         r  system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/sh_reg[0][2]/C
+                         clock pessimism              0.129     6.776    
+                         clock uncertainty           -0.070     6.706    
+    SLICE_X44Y81         FDRE (Setup_fdre_C_D)        0.032     6.738    system_i/mac/inst/u_core/u_array/g_skew[2].g_dly.u_skew/sh_reg[0][2]
+  -------------------------------------------------------------------
+                         required time                          6.738    
+                         arrival time                          -6.821    
+  -------------------------------------------------------------------
+                         slack                                 -0.082    
+
+Slack (VIOLATED) :        -0.080ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/cap_kb_reg[2]_rep__0/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/c_write_data_reg[29]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        4.195ns  (logic 1.904ns (45.388%)  route 2.291ns (54.612%))
+  Logic Levels:           7  (CARRY4=6 LUT6=1)
+  Clock Path Skew:        0.075ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.955ns = ( 6.955 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.009ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.715     3.009    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X64Y96         FDRE                                         r  system_i/mac/inst/u_core/cap_kb_reg[2]_rep__0/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X64Y96         FDRE (Prop_fdre_C_Q)         0.456     3.465 r  system_i/mac/inst/u_core/cap_kb_reg[2]_rep__0/Q
+                         net (fo=80, routed)          2.291     5.756    system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[31]
+    SLICE_X90Y106        LUT6 (Prop_lut6_I0_O)        0.124     5.880 r  system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data[11]_i_4/O
+                         net (fo=1, routed)           0.000     5.880    system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data[11]_i_4_n_0
+    SLICE_X90Y106        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     6.413 r  system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[11]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.413    system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[11]_i_1_n_0
+    SLICE_X90Y107        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.530 r  system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[15]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.530    system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[15]_i_1_n_0
+    SLICE_X90Y108        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.647 r  system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[19]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.647    system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[19]_i_1_n_0
+    SLICE_X90Y109        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.764 r  system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[23]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.764    system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[23]_i_1_n_0
+    SLICE_X90Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.881 r  system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[27]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.881    system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[27]_i_1_n_0
+    SLICE_X90Y111        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323     7.204 r  system_i/mac/inst/u_core/u_array/g_out[0].g_dly.u_deskew/c_write_data_reg[31]_i_1/O[1]
+                         net (fo=1, routed)           0.000     7.204    system_i/mac/inst/u_core/acc_add_return[29]
+    SLICE_X90Y111        FDRE                                         r  system_i/mac/inst/u_core/c_write_data_reg[29]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3575, routed)        1.776     6.955    system_i/mac/inst/u_core/s_axi_aclk
+    SLICE_X90Y111        FDRE                                         r  system_i/mac/inst/u_core/c_write_data_reg[29]/C
+                         clock pessimism              0.129     7.084    
+                         clock uncertainty           -0.070     7.014    
+    SLICE_X90Y111        FDRE (Setup_fdre_C_D)        0.109     7.123    system_i/mac/inst/u_core/c_write_data_reg[29]
+  -------------------------------------------------------------------
+                         required time                          7.123    
+                         arrival time                          -7.204    
+  -------------------------------------------------------------------
+                         slack                                 -0.080    
+
+
+
+

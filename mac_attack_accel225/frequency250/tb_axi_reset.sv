@@ -1,0 +1,184 @@
+`timescale 1ns/1ps
+// Self-checking testbench for mac_axi. It plays the ARM processor: every access goes over
+// AXI4-Lite exactly as the C program on the ZedBoard will do it (same registers, same order).
+//
+// In Vivado: this is the simulation top of the ZedBoard project. Run Behavioral Simulation and
+// read the Tcl Console. The last line should be ALL AXI TESTS PASSED.
+//
+// Besides correctness, it counts clock cycles for each phase (loading over the bus, computing,
+// reading back), which shows how much of the time is moving data rather than doing math.
+module tb_axi_reset #(
+    parameter int P = 8
+);
+    localparam int MAXD = 64;
+    localparam logic [5:0] CTRL = 6'h00, STATUS = 6'h04, DIMS = 6'h08, LOAD_PTR = 6'h0C,
+                           LOAD_DATA = 6'h10, RES_PTR = 6'h14, RES_DATA = 6'h18,
+                           PASSES = 6'h1C, CYCLES = 6'h20, TOTAL = 6'h24, INFO = 6'h28, ID = 6'h2C;
+
+    logic clk = 1'b0, aresetn = 1'b0;
+    always #2 clk = ~clk;                       // 50 MHz, the planned ZedBoard clock
+
+    logic [5:0]  awaddr = '0, araddr = '0;
+    logic        awvalid = 1'b0, wvalid = 1'b0, bready = 1'b0, arvalid = 1'b0, rready = 1'b0;
+    logic [31:0] wdata = '0;
+    wire         awready, wready, bvalid, arready, rvalid;
+    wire [1:0]   bresp, rresp;
+    wire [31:0]  rdata;
+
+    mac_axi #(.P(P), .MAXD(MAXD)) dut (
+        .s_axi_aclk(clk), .s_axi_aresetn(aresetn),
+        .s_axi_awaddr(awaddr), .s_axi_awprot(3'b000), .s_axi_awvalid(awvalid), .s_axi_awready(awready),
+        .s_axi_wdata(wdata), .s_axi_wstrb(4'hF), .s_axi_wvalid(wvalid), .s_axi_wready(wready),
+        .s_axi_bresp(bresp), .s_axi_bvalid(bvalid), .s_axi_bready(bready),
+        .s_axi_araddr(araddr), .s_axi_arprot(3'b000), .s_axi_arvalid(arvalid), .s_axi_arready(arready),
+        .s_axi_rdata(rdata), .s_axi_rresp(rresp), .s_axi_rvalid(rvalid), .s_axi_rready(rready));
+
+    // ---------------------------------------------------------------- bus transactions
+    int bus_errors = 0;
+    longint cycle = 0;
+    always @(posedge clk) cycle <= cycle + 1;
+
+    task automatic axi_write(input logic [5:0] addr, input logic [31:0] data);
+        @(negedge clk);
+        awaddr = addr; wdata = data; awvalid = 1'b1; wvalid = 1'b1; bready = 1'b1;
+        do @(posedge clk); while (!(awready && wready));   // address and data accepted
+        @(negedge clk);
+        awvalid = 1'b0; wvalid = 1'b0;
+        while (!bvalid) @(negedge clk);                     // write response
+        if (bresp != 2'b00) bus_errors++;
+        @(posedge clk);
+        @(negedge clk);
+        bready = 1'b0;
+    endtask
+
+    task automatic axi_read(input logic [5:0] addr, output logic [31:0] data);
+        @(negedge clk);
+        araddr = addr; arvalid = 1'b1; rready = 1'b1;
+        do @(posedge clk); while (!arready);
+        @(negedge clk);
+        arvalid = 1'b0;
+        while (!rvalid) @(negedge clk);
+        data = rdata;
+        if (rresp != 2'b00) bus_errors++;
+        @(posedge clk);
+        @(negedge clk);
+        rready = 1'b0;
+    endtask
+
+    // ---------------------------------------------------------------- test data
+    int     A [MAXD][MAXD], B [MAXD][MAXD];
+    longint Cexp [MAXD][MAXD];
+    int unsigned seed = 32'h2468ACE1;
+    function automatic int next_rand();
+        seed = seed ^ (seed << 13); seed = seed ^ (seed >> 17); seed = seed ^ (seed << 5);
+        return int'(seed & 32'h7FFF_FFFF);
+    endfunction
+    localparam int RANDOM = 0, SMALL = 1, MINV = 2, MAXV = 3, IDENT = 4;
+
+    task automatic make_data(input int kind, input int M, input int K, input int N);
+        for (int i = 0; i < M; i++) for (int k = 0; k < K; k++)
+            A[i][k] = (kind == SMALL) ? next_rand() % 19 - 9 : (kind == MINV) ? -128 : (kind == MAXV) ? 127 : next_rand() % 256 - 128;
+        for (int k = 0; k < K; k++) for (int j = 0; j < N; j++)
+            B[k][j] = (kind == SMALL) ? next_rand() % 19 - 9 : (kind == MINV) ? -128 : (kind == MAXV) ? 127 :
+                      (kind == IDENT) ? ((k == j) ? 1 : 0) : next_rand() % 256 - 128;
+        for (int i = 0; i < M; i++) for (int j = 0; j < N; j++) begin
+            Cexp[i][j] = 0;
+            for (int k = 0; k < K; k++) Cexp[i][j] += longint'(A[i][k]) * longint'(B[k][j]);
+        end
+    endtask
+
+    // stream a matrix as bytes in row order, 4 per LOAD_DATA write (like the C program)
+    task automatic load_matrix(input bit isB, input int R, input int Cn);
+        logic [31:0] w; int n = 0;
+        axi_write(LOAD_PTR, {8'd0, 8'd0, 8'd0, 7'd0, isB});
+        w = '0;
+        for (int r = 0; r < R; r++) for (int c = 0; c < Cn; c++) begin
+            w[8*(n%4) +: 8] = isB ? 8'(B[r][c]) : 8'(A[r][c]);
+            n++;
+            if (n % 4 == 0) begin axi_write(LOAD_DATA, w); w = '0; end
+        end
+        if (n % 4 != 0) axi_write(LOAD_DATA, w);   // last partial word; extra bytes are dropped
+    endtask
+
+    int tests_run = 0, tests_passed = 0;
+    longint t_load_total = 0, t_comp_total = 0, t_read_total = 0;
+
+    task automatic run_test(input string title, input int kind, input int M, input int K, input int N);
+        logic [31:0] v, passes, cycles, status;
+        longint t0, t1, t2, t3;
+        int correct, eqp, eqc, polls;
+        bit ok;
+        make_data(kind, M, K, N);
+        t0 = cycle;
+        axi_write(DIMS, {8'd0, 8'(N), 8'(K), 8'(M)});
+        load_matrix(1'b0, M, K);
+        load_matrix(1'b1, K, N);
+        t1 = cycle;
+        axi_write(CTRL, 32'd1);
+        polls = 0;
+        do begin axi_read(STATUS, status); polls++; end while (!status[1] && polls < 100000);
+        t2 = cycle;
+        axi_write(RES_PTR, 32'd0);
+        correct = 0;
+        for (int i = 0; i < M; i++) for (int j = 0; j < N; j++) begin
+            axi_read(RES_DATA, v);
+            if (longint'($signed(v)) == Cexp[i][j]) correct++;
+        end
+        t3 = cycle;
+        axi_read(PASSES, passes); axi_read(CYCLES, cycles);
+        eqp = ((K + P - 1) / P) * ((N + P - 1) / P);
+        eqc = eqp * (M + 3 * P - 2);
+        ok = (correct == M * N) && (passes == eqp) && (cycles == eqc) && !status[2];
+        tests_run++; if (ok) tests_passed++;
+        t_load_total += t1 - t0; t_comp_total += t2 - t1; t_read_total += t3 - t2;
+        $display("  %s  %-30s %2dx%2dx%2d  %4d/%-4d correct  passes %3d (eq %3d)  cycles %5d (eq %5d)  bus: load %6d, run %5d, read %6d clocks",
+                 ok ? "PASS" : "FAIL", title, M, K, N, correct, M * N, passes, eqp, cycles, eqc, t1 - t0, t2 - t1, t3 - t2);
+    endtask
+
+    task automatic reset_once;
+        @(negedge clk);
+        aresetn=0; awvalid=0; wvalid=0; arvalid=0; bready=0; rready=0;
+        @(posedge clk); #1;
+        if(bvalid || rvalid || awready || wready || arready) $fatal(1,"FAIL AXI reset outputs");
+        @(negedge clk); aresetn=1;
+        @(posedge clk); #1;
+        if(dut.core_busy) $fatal(1,"FAIL core reset did not settle");
+        repeat(2) @(negedge clk);
+    endtask
+    initial begin
+        logic [31:0] v;
+        repeat(60) @(posedge clk);
+        @(negedge clk); aresetn=1;
+        // Abort a captured write before its deferred register update.
+        @(negedge clk); awaddr=DIMS; wdata=32'h00070707; awvalid=1; wvalid=1;
+        do @(posedge clk); while(!(awready && wready));
+        reset_once();
+        axi_read(DIMS,v); if(v!==0) $fatal(1,"FAIL deferred write survived reset");
+        // Reset while the slave holds a read response under backpressure.
+        @(negedge clk); araddr=ID; arvalid=1; rready=0;
+        do @(posedge clk); while(!arready);
+        @(negedge clk); arvalid=0;
+        wait(rvalid); reset_once();
+        // Interrupt an active computation, then run a fresh matrix job.
+        axi_write(DIMS,32'h00404040); axi_write(CTRL,1);
+        wait(dut.core_busy); repeat(10) @(posedge clk);
+        reset_once();
+        axi_read(STATUS,v); if(v!==0) $fatal(1,"FAIL stale status after reset");
+        run_test("compute after reset", RANDOM,7,11,9);
+        // Assert reset on the edge that would produce DONE.
+        axi_write(CTRL,1);
+        wait(dut.u_core.state == 3'd4);
+        reset_once();
+        axi_read(STATUS,v); if(v!==0) $fatal(1,"FAIL DONE leaked across reset");
+        run_test("compute after completion reset",SMALL,3,5,7);
+        if(tests_passed!=tests_run || bus_errors!=0) $fatal(1,"FAIL reset recovery computation");
+        $display("ALL AXI TESTS PASSED: pending write, stalled read, active run and completion reset at 250 MHz");
+        $finish;
+    end
+    initial begin
+        #200ms;
+        $display("ERROR: timeout");
+        $finish;
+    end
+endmodule
+

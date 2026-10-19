@@ -1,0 +1,25 @@
+{
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.0.19  2019-03-26 bk=1.5019 VDI=41 GEI=35 GUI=JA:9.0 non-TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 2 -x 650 -y 50 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 2 -x 650 -y 110 -defaultsOSRD
+preplace inst ps7 -pg 1 -lvl 1 -x 380 -y 170 -defaultsOSRD
+preplace inst axi_ic -pg 1 -lvl 1 -x 380 -y 410 -defaultsOSRD
+preplace inst rst_fclk0 -pg 1 -lvl 1 -x 380 -y 750 -defaultsOSRD
+preplace inst mac -pg 1 -lvl 1 -x 380 -y 590 -defaultsOSRD
+preplace netloc ps7_FCLK_RESET0_N 1 0 2 -170 20 600
+preplace netloc rst_fclk0_interconnect_aresetn 1 0 2 -160 860 600
+preplace netloc rst_fclk0_peripheral_aresetn 1 0 2 -150 870 590
+preplace netloc clk_wiz_0_clk_out1 1 0 2 -180 10 610
+preplace netloc axi_ic_M00_AXI 1 0 2 -140 850 610
+preplace netloc ps7_FIXED_IO 1 1 1 NJ 110
+preplace netloc ps7_M_AXI_GP0 1 0 2 -140 30 590
+preplace netloc ps7_DDR 1 1 1 620J 50n
+levelinfo -pg 1 -200 380 650
+pagesize -pg 1 -db -bbox -sgen -200 -120 770 880
+"
+}
+{
+   "da_ps7_cnt":"1"
+}

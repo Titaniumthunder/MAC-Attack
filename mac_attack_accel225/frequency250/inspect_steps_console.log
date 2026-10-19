@@ -1,0 +1,23 @@
+
+****** Vivado v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source inspect_steps.tcl
+# open_project C:/mac_attack_accel/frequency250/zed_resetguard/mac_zed_resetguard.xpr
+Scanning sources...
+Finished scanning sources
+WARNING: [filemgmt 56-3] IPUserFilesDir: Could not find the directory 'C:/mac_attack_accel/frequency250/zed_resetguard/mac_zed_resetguard.ip_user_files'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+open_project: Time (s): cpu = 00:00:03 ; elapsed = 00:00:14 . Memory (MB): peak = 335.555 ; gain = 58.059
+# foreach p [list_property [get_runs impl_1]] {if {[string match *POST_ROUTE* $p]} {puts "$p = [get_property $p [get_runs impl_1]]"}}
+STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED = 0
+STEPS.POST_ROUTE_PHYS_OPT_DESIGN.TCL.PRE = 
+STEPS.POST_ROUTE_PHYS_OPT_DESIGN.TCL.POST = 
+STEPS.POST_ROUTE_PHYS_OPT_DESIGN.REPORTS = impl_1_post_route_phys_opt_report_timing_summary_0 impl_1_post_route_phys_opt_report_bus_skew_0
+STEPS.POST_ROUTE_PHYS_OPT_DESIGN.ARGS.DIRECTIVE = Default
+STEPS.POST_ROUTE_PHYS_OPT_DESIGN.ARGS.MORE OPTIONS = 
+INFO: [Common 17-206] Exiting Vivado at Mon Oct 19 01:14:33 2026...

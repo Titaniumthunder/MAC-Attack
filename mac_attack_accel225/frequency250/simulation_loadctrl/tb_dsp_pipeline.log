@@ -1,0 +1,20 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Mon Oct 19 01:27:44 2026
+# Process ID: 16324
+# Current directory: C:/mac_attack_accel/frequency250/simulation_loadctrl
+# Command line: xsim.exe -log tb_dsp_pipeline.log -mode tcl -source {xsim.dir/tb_dsp_pipeline/xsim_script.tcl}
+# Log file: C:/mac_attack_accel/frequency250/simulation_loadctrl/tb_dsp_pipeline.log
+# Journal file: C:/mac_attack_accel/frequency250/simulation_loadctrl\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb_dsp_pipeline/xsim_script.tcl
+# xsim {tb_dsp_pipeline} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+ALL TESTS PASSED: DSP primitive equivalence, 2000 cycles x 4 modes at 250 MHz
+$finish called at time : 8239 ns : File "C:/mac_attack_accel/frequency250/tb_dsp_pipeline.sv" Line 30
+exit
+INFO: [Common 17-206] Exiting xsim at Mon Oct 19 01:27:48 2026...

@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Mon Oct 19 01:30:45 2026
+# Process ID: 26892
+# Current directory: C:/mac_attack_accel/frequency250/simulation_loadctrl
+# Command line: xsim.exe -log tb_axi_p16.log -mode tcl -source {xsim.dir/tb_axi_p16/xsim_script.tcl}
+# Log file: C:/mac_attack_accel/frequency250/simulation_loadctrl/tb_axi_p16.log
+# Journal file: C:/mac_attack_accel/frequency250/simulation_loadctrl\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb_axi_p16/xsim_script.tcl
+run -all

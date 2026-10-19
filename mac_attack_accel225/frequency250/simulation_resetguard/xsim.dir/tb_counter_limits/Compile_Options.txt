@@ -1,0 +1,1 @@
+"work.tb_counter_limits" "work.glbl" -L "unisims_ver" -s "tb_counter_limits" 
