@@ -43,7 +43,7 @@ module chip_top #(
         .perf_passes(perf_passes), .perf_cycles(perf_cycles), .perf_total(perf_total));
 
     mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD)) u_core (
-        .clk(clk), .rst(rst),
+        .clk(clk), .hclk(clk), .rst(rst),
         .wr_en(wr_en), .wr_sel(wr_sel), .wr_row(wr_row), .wr_col(wr_col), .wr_data(wr_data),
         .start(start), .dim_m(dim_m), .dim_k(dim_k), .dim_n(dim_n), .busy(busy), .done(done),
         .rd_row(rd_row), .rd_col(rd_col), .rd_data(rd_data),

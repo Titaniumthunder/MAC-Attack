@@ -29,7 +29,7 @@ module tb_compare #(
     for (genvar g = 0; g < NS; g++) begin : g_core
         localparam int PG = (g == 0) ? 4 : (g == 1) ? 8 : 16;
         mm_core #(.P(PG), .BITS(BITS), .ACC(ACC), .SAT(0), .MAXD(MAXD)) u_core (
-            .clk(clk), .rst(rst),
+            .clk(clk), .hclk(clk), .rst(rst),
             .wr_en(wr_en[g]), .wr_sel(wr_sel[g]), .wr_row(wr_row[g]), .wr_col(wr_col[g]), .wr_data(wr_data[g]),
             .start(start[g]), .dim_m(dim_m[g]), .dim_k(dim_k[g]), .dim_n(dim_n[g]),
             .busy(busy[g]), .done(done[g]),

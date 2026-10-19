@@ -31,7 +31,13 @@
 /* PL clock (FCLK_CLK0) in Hz. Use the value from Vivado's Clock Summary, not the one you asked
  * for: asking the Zynq for 80 MHz gives 76.929 MHz (period 12.999 ns). */
 #ifndef FCLK_HZ
-#define FCLK_HZ 76929000u
+#define FCLK_HZ 200000000u   /* 200.000 MHz: step 7c build (asked for 190, the Zynq gave 200) */
+#endif
+/* Clock of the matrix core in Hz. One clock (CORE_CLK = 0): the same as FCLK_HZ. With the core on
+ * its own clock (step 12, CORE_CLK = 1): the Clocking Wizard's actual output frequency. The "array"
+ * times and the clock check use this one, because the performance counters count core cycles. */
+#ifndef CORE_HZ
+#define CORE_HZ FCLK_HZ
 #endif
 
 /* Register map: the same offsets as in mac_axi.v */
@@ -47,9 +53,11 @@
 #define REG_TOTAL      0x24u
 #define REG_INFO       0x28u
 #define REG_ID         0x2Cu
+#define REG_CONFIG     0x30u
 #define STATUS_BUSY     0x1u
 #define STATUS_DONE     0x2u
 #define STATUS_LOAD_ERR 0x4u
+#define STATUS_WAIT     0x8u    /* the core's own clock is not running yet (CORE_CLK = 1 only) */
 
 #define MAXD 64
 
@@ -86,7 +94,7 @@ static uint32_t next_rand(void)
     return seed & 0x7FFFFFFFu;
 }
 
-enum { RANDOM, SMALL, MINV, MAXV, IDENT };
+enum { RANDOM, SMALL, MINV, MAXV, IDENT, MIXV };   /* MIXV: A = 127, B = -128 */
 
 static int8_t value(int kind, int is_b, int r, int c)
 {
@@ -94,6 +102,7 @@ static int8_t value(int kind, int is_b, int r, int c)
     case SMALL: return (int8_t)((int)(next_rand() % 19u) - 9);
     case MINV:  return -128;
     case MAXV:  return 127;
+    case MIXV:  return is_b ? -128 : 127;
     case IDENT: if (is_b) return (int8_t)(r == c ? 1 : 0); /* A is random */
                 return (int8_t)((int)(next_rand() % 256u) - 128);
     default:    return (int8_t)((int)(next_rand() % 256u) - 128);
@@ -175,29 +184,29 @@ static void run_test(const char *name, int kind, int M, int K, int N)
 
     printf("%s  %-28s %2dx%2dx%2d  %4d/%-4d correct  passes %lu (eq %lu)  cycles %lu (eq %lu)\r\n",
            ok ? "PASS" : "FAIL", name, M, K, N, correct, M * N, passes, eq_passes, cycles, eq_cycles);
-    /* "array" is calculated (cycles / FCLK_HZ); "run" is measured by the ARM timer */
+    /* "array" is calculated (cycles / CORE_HZ); "run" is measured by the ARM timer */
     printf("      array %lu us (calc) | over the bus: load %lu us, run %lu us, read %lu us | ARM software %lu us\r\n",
-           (unsigned long)((cycles * 1000000ull) / FCLK_HZ),
+           (unsigned long)((cycles * 1000000ull) / CORE_HZ),
            to_us(t1 - t0), to_us(t2 - t1), to_us(t3 - t2), to_us(t4 - t3));
 }
 
-/* Compares the measured PL clock with FCLK_HZ and warns if they differ by more than 5% */
+/* Compares the measured core clock with CORE_HZ and warns if they differ by more than 5% */
 static void check_clock(void)
 {
     if (clk_ticks == 0) return;
     unsigned long meas = (unsigned long)((clk_cycles * (uint64_t)COUNTS_PER_SECOND) / clk_ticks);
-    printf("\r\n PL clock: FCLK_HZ says ");
-    print_mhz(FCLK_HZ);
+    printf("\r\n Core clock: CORE_HZ says ");
+    print_mhz(CORE_HZ);
     printf(", measured on the board ");
     print_mhz(meas);
     printf("\r\n");
 
-    uint64_t diff = meas > FCLK_HZ ? (uint64_t)(meas - FCLK_HZ) : (uint64_t)(FCLK_HZ - meas);
-    if (diff * 20u > (uint64_t)FCLK_HZ) {
-        printf(" WARNING: the board is not running at FCLK_HZ, so the \"array\" times are wrong.\r\n");
+    uint64_t diff = meas > CORE_HZ ? (uint64_t)(meas - CORE_HZ) : (uint64_t)(CORE_HZ - meas);
+    if (diff * 20u > (uint64_t)CORE_HZ) {
+        printf(" WARNING: the core is not running at CORE_HZ, so the \"array\" times are wrong.\r\n");
         printf("          If you changed the clock in Vivado: re-export the hardware with the bitstream\r\n");
         printf("          and update the hardware platform in the SDK (ps7_init sets the clock).\r\n");
-        printf("          Otherwise set FCLK_HZ to the value in Vivado's Clock Summary.\r\n");
+        printf("          Otherwise set FCLK_HZ (and CORE_HZ with two clocks) to the values Vivado shows.\r\n");
     }
 }
 
@@ -219,6 +228,19 @@ int main(void)
            (unsigned long)(info >> 24));
     print_mhz(FCLK_HZ);
     printf(" (FCLK_HZ)\r\n");
+    uint32_t cfg = rd(REG_CONFIG);
+    printf(" Pipeline: PIPE %lu, MEM_REG %lu%s; core clock: %s", (unsigned long)(cfg & 0xFFu),
+           (unsigned long)((cfg >> 8) & 0xFFu), (cfg & 0x20000u) ? ", one DSP48E1 per PE" : "",
+           (cfg & 0x10000u) ? "its own, " : "the same as the bus, ");
+    print_mhz(CORE_HZ);
+    printf(" (CORE_HZ)\r\n");
+    /* With its own clock, wait until the core is out of reset (the Clocking Wizard has locked) */
+    for (int i = 0; i < 1000000 && (rd(REG_STATUS) & STATUS_WAIT); i++) ;
+    if (rd(REG_STATUS) & STATUS_WAIT) {
+        printf(" The core clock never started (STATUS bit 3 stays 1): check the Clocking Wizard's\r\n");
+        printf(" input clock and reset, and that ps7_init ran.\r\n");
+        return 1;
+    }
 #ifdef __OPTIMIZE__
     printf(" Build: optimised (Release), so the ARM software times are a fair baseline.\r\n\r\n");
 #else
@@ -237,6 +259,10 @@ int main(void)
     run_test("every input -128",           MINV,   16, 16, 16);
     run_test("every input 127",            MAXV,   16, 16, 16);
     run_test("B = identity",               IDENT,  16, 16, 16);
+    /* The two largest sums possible with K = 64: they need every accumulator bit
+     * (64 x 16384 = 1,048,576 and 64 x -16256 = -1,040,384). */
+    run_test("every input -128, K = 64",   MINV,   64, 64, 64);
+    run_test("A = 127, B = -128, K = 64",  MIXV,   64, 64, 64);
 
     check_clock();
 
