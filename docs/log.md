@@ -41,6 +41,9 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 17 Oct | **Step 11b built at 250.000 MHz** (one clock): **64 DSPs** (one per PE), but timing fails by 0.263 ns: WNS -0.263 ns, TNS -3.113 ns, 45 of 10,707 endpoints, WHS +0.037 ns (floor about 235 MHz). LUT 1,119 (was 2,192), FF 2,895 (was 3,847), BRAM 4.5, DSP 64, CARRY4 86 (was 398), power 1.940 W. No array path among the 10 worst: host read of C (7 paths), Xilinx AXI interconnect (1), the controller's last-row compare (2). Reports copied to `Alex/timing_summary_v6.rpt`, `Alex/utilization_v6.rpt`. | `impl_1` reports (17 Oct 22:40), Design Runs (screenshot) |
 | 17 Oct | Worst 100 paths of the 250 MHz build (`Alex/timing_paths_v6.rpt`): of the 45 failing endpoints, 25 are on the bus side (C read, AXI interconnect, loader) and 20 in the core (last-row compare, state -> read-counter reset, A block RAM -> register, top-row weight wire). | `Alex/timing_paths_v6.rpt` |
 | 18 Oct | **Step 13 written** (`rtl/mm_core.sv` only): last-row flags, `idle_q`, the A/B feed registers swapped (MEM_REG = 2). Simulation: 0 differences against the step 11b core in every cycle (45 settings, 4.26 million cycles); NumPy suite 560/560 exact; `tb_axi` 14/14 and byte-identical (P = 4, 8, 16; DSP48E1 and `pe.sv`); two clocks 15/15 (38.5 to 400 MHz core); team testbenches byte-identical; `mac.py test` 60/60; 6 planted bugs caught. Not built yet. | Icarus Verilog 12, Verilator 5.020, Xilinx DSP48E1 model |
+| 18 Oct | Committed and pushed on `Alex_edit` ("200MHz clock", 0409010). | git |
+| 18 Oct | **Step 13, one clock, rebuilt at 200.000 MHz** (Alex's VM): WNS +0.259 ns, WHS +0.037 ns, 0 failing of 10,627 endpoints; bitstream written with 0 critical warnings. LUT 1,096, FF 2,792, BRAM 4.5, DSP 64, power 1.884 W. The worst paths are the Xilinx AXI interconnect and the loader in `mac_axi.v` (bus side); none in the core. Reports copied to `Alex/timing_summary_v7.rpt`, `Alex/utilization_v7.rpt`. Not run on the board yet. | `impl_1` reports (18 Oct 19:55) |
+| 18 Oct | `.gitignore` changed so the Vivado project is tracked (block design, run results with the bitstream, SDK projects); `zed/README.md` section 0 says how a teammate opens it and runs the board without rebuilding. | `.gitignore`, `zed/README.md` |
 | 16 Oct | `docs/systolic_dataflow.html`: animated cycle-by-cycle view of data moving from the A/B buffers through the array to C (1-stage / 2-stage PE, MEM_REG on/off). Its model matches `systolic_array.sv` + `pe.sv` in Icarus cycle for cycle (every PE partial-sum register, `c_row`, `out_valid`; P = 2, 3, 4, PIPE = 0 and 1). | Icarus Verilog 12 |
 
 (Add a row each time work is finished.)
@@ -65,6 +68,7 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 17 Oct | Step 12: the core gets its own clock from a Clocking Wizard (the professor's suggestion; GALS as in Simba). | The AXI port to the ARM is limited to 250 MHz. | agreed |
 | 17 Oct | Step 13 before the step 12 build: three core fixes, every cycle and result unchanged. | The worst 100 paths at 250 MHz had 20 failing core endpoints, and the core stays at 250 MHz in step 12. | agreed |
 | 17 Oct | Fallback for Monday: the 200 MHz build (steps 9 + 10) if 250 MHz does not pass; a core clock of 240 MHz from the wizard if it misses by a little. | Step 13 changes no result or cycle, so it can stay in either case. | agreed |
+| 18 Oct | The Vivado project `zed/mac_zed_project` is tracked in git with its results and SDK projects; `create_zed_project.tcl` stays as the way to rebuild it. Only builds that met timing and passed on the board are pushed, by one person at a time. | Teammates and the professor can program the board without the 20-minute build. | agreed |
 
 ## 3. Current status (what is and is not proven)
 
@@ -136,7 +140,8 @@ running at 50 MHz until the SDK hardware platform (ps7_init) is updated (section
 | 10b + 11 | 17 Oct | 250.000 | synthesis only | - | - | `w_load` from a flip-flop; `PIPE = 2` (add inside the DSP): Vivado made 2 DSPs per PE | +1 per run: `perf_total = perf_cycles + 7` | mac block: 704 / 2,377 / 4.5 / **128** (synthesis) |
 | 11b | 17 Oct | 250.000 | **no** | -0.263 / +0.037 | 4.26 ns / 235 MHz | Each PE as one DSP48E1 placed directly (`PE_PRIM = 1`) | same as 10b + 11 | 1,119 / 2,895 / 4.5 / **64** |
 | 12 | - | AXI 200, core 250 + | not built | - | - | The core on its own clock (Clocking Wizard), `CORE_CLK = 1` | same as 10b + 11, in core cycles | - |
-| 13 | - | (core 250, with step 12) | not built | - | - | Last-row flags, `idle_q`, A/B feed registers swapped (MEM_REG = 2) | no change | - |
+| 13 (one clock) | 18 Oct | 200.000 | **yes** | +0.259 / +0.037 | 4.74 ns / 211 MHz | Last-row flags, `idle_q`, A/B feed registers swapped (MEM_REG = 2); one clock (`CORE_CLK = 0`). Worst paths on the bus side | same as 10b + 11 | 1,096 / 2,792 / 4.5 / 64 |
+| 12 + 13 | - | AXI 200, core 250 | not built | - | - | Two clocks with the step 13 core | same as 10b + 11, in core cycles | - |
 
 ### Step 0 -> 1: 50 to 76.9 MHz (clock setting only, 15 Oct)
 
@@ -785,6 +790,8 @@ All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` f
 | Timing, 200.000 MHz, step 7c | WNS +0.209 ns, WHS +0.015 ns; LUT 2,779, FF 4,532, BRAM 6, DSP 64; power 2.012 W | Vivado |
 | Timing, 200.000 MHz, steps 9 + 10 (best so far) | WNS +0.529 ns, WHS +0.014 ns; LUT 2,192, FF 3,847, BRAM 4.5, DSP 64, CARRY4 398; power 1.935 W | Vivado |
 | Timing, 250.000 MHz, step 11b (one clock) | WNS -0.263 ns (fails), TNS -3.113 ns, 45 of 10,707 endpoints, WHS +0.037 ns; LUT 1,119, FF 2,895, BRAM 4.5, DSP 64, CARRY4 86; power 1.940 W | Vivado |
+| Timing, 200.000 MHz, step 13 (one clock) | WNS +0.259 ns, WHS +0.037 ns, 0 failing of 10,627; LUT 1,096, FF 2,792, BRAM 4.5, DSP 64; power 1.884 W | Vivado |
+| Block RAM minimum clock period (XC7Z020-1) | RAMB36E1 2.576 ns (388 MHz) for the A/B buffers, 2.944 ns (340 MHz) for the C buffer's mode, so the core clock cannot go past about 340 MHz without changing the C buffer | Vivado's own Pulse Width check in the 18 Oct timing report |
 | Zynq FCLK options on this board | [claim] FCLK = one PS PLL / two whole-number dividers. PLLs here: IO 1000 MHz, ARM 1333.3 MHz (CPU 666.7), DDR 1066.7 MHz (DDR 533.3). Near our range: 200 (IO/5), 213.3 (DDR/5), 222.2 (ARM/6), 250 (IO/4). The Actual Frequency in the Zynq dialog is what counts (asking 180 once gave 187.512, which this rule does not explain) | Zynq block design settings |
 | Exact accumulator width | ACC >= 2*BITS + ceil(log2 MAXD): 22 bits for INT8 with MAXD = 64 (largest sum 1,048,576 = 64 x 16,384) | Proof in section 5, step 10 |
 | PS-PL AXI interface, fastest clock | 250 MHz (all speed grades listed as FAXI_MAX) | Zynq-7000 data sheet DS187, Table 19 |
@@ -803,7 +810,7 @@ The professor warned: every equation needs a proof or a citation. Nothing below 
 - [x] XC7Z020 has 220 DSPs and 140 BRAM36 (and no high-speed transceivers): Xilinx selection guide.
 - [ ] Exact accumulator width ACC >= 2*BITS + ceil(log2 MAXD) (22 bits for INT8, MAXD = 64): proof in section 5, step 10; team to check it.
 - [x] PS-PL AXI interface at most 250 MHz: DS187 (Zynq-7000 DC and AC switching characteristics), Table 19.
-- [ ] Fabric limits of the XC7Z020-1 (DSP48E1, block RAM, global clock buffer maximum frequency): look up in the data sheet. Claude quoted about 464 / 388 / 464 MHz from memory, not checked.
+- [ ] Fabric limits of the XC7Z020-1 (DSP48E1, block RAM, global clock buffer maximum frequency): look up in the data sheet. Claude quoted about 464 / 388 / 464 MHz from memory, not checked. (Block RAM: Vivado's own report gives 2.576 ns = 388 MHz, and 2.944 ns = 340 MHz in the C buffer's mode, 18 Oct; DSP and clock buffer still not checked.)
 - [ ] ZedBoard audio codec ADAU1761 (I2C control, I2S audio) and its sample rates: check the ZedBoard manual and ADAU1761 datasheet.
 
 Claims that turned out wrong (kept here on purpose):

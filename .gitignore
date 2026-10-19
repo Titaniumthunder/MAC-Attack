@@ -1,7 +1,12 @@
+# ---------------------------------------------------------------------------------------------
+# Vivado / SDK files are generated, so in general they are not tracked.
+# Exception (18 Oct 2026): the ZedBoard project mac_attack_accel/zed/mac_zed_project IS tracked,
+# with its block design, its results (bitstream, checkpoints, reports) and its SDK projects, so
+# a teammate can open it, program the board and run the app without the 20-minute build.
+# zed/create_zed_project.tcl still rebuilds the project from scratch if it ever breaks.
+# ---------------------------------------------------------------------------------------------
+
 # Vivado generated (no path prefix, so it matches at any depth)
-# mac_zed_project/ is rebuilt by zed/create_zed_project.tcl; only its SDK app code (mac_zed.sdk/MAC_*) is tracked
-**/mac_zed_project/*
-!**/mac_zed_project/mac_zed.sdk/
 mac_attack_project/
 .Xil/
 *.cache/
@@ -16,8 +21,7 @@ vivado*.str
 webtalk*
 *.wdb
 
-# Xilinx SDK / hardware exports
-# Keep only the SDK application projects (MAC_*), skip BSPs, hw platforms, workspace metadata
+# Xilinx SDK / hardware exports: keep only the SDK application projects (MAC_*)
 **/*.sdk/*
 !**/*.sdk/MAC_*/
 **/*.sdk/*_bsp/
@@ -25,6 +29,23 @@ webtalk*
 **/*.sdk/MAC_*/Release/
 *.hdf
 *.bit
+
+# The ZedBoard project, tracked (see the top). These lines must stay below the general rules.
+# Tracked: mac_zed.xpr, mac_zed.srcs (block design and IP), mac_zed.runs (bitstream, checkpoints,
+# reports), mac_zed.hw, and in mac_zed.sdk the .hdf, the hardware platform, the BSP and the apps.
+# Still not tracked: .cache, .sim, .ip_user_files, .Xil, logs/journals, the SDK workspace settings
+# (.metadata) and the apps' Debug/Release build folders (the tools remake all of these).
+!**/mac_zed_project/mac_zed.runs/
+!**/mac_zed_project/mac_zed.hw/
+!**/mac_zed_project/**/*.bit
+!**/mac_zed_project/**/*.hdf
+!**/mac_zed_project/mac_zed.sdk/*
+**/mac_zed_project/mac_zed.sdk/.metadata/
+**/mac_zed_project/mac_zed.sdk/RemoteSystemsTempFiles/
+**/mac_zed_project/mac_zed.sdk/webtalk/
+**/mac_zed_project/mac_zed.sdk/.sdk/
+**/mac_zed_project/mac_zed.sdk/*/Debug/
+**/mac_zed_project/mac_zed.sdk/*/Release/
 
 # Python
 __pycache__/

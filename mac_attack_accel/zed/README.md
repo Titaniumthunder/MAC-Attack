@@ -32,6 +32,37 @@ caught (byte order reversed: 8 tests fail; no result auto-increment: 6 fail).
 
 ---
 
+## 0. Open the committed project and run it (no rebuild)
+
+Since 18 Oct 2026 the Vivado project `mac_zed_project/` is in git together with its results, so you can
+program the board without the 20-minute build. In git: `mac_zed.xpr`, the block design (`mac_zed.srcs`),
+the run results (`mac_zed.runs`: bitstream, checkpoints, reports) and, in `mac_zed.sdk`, the `.hdf`, the
+hardware platform, the BSP and `MAC_attack_V2`. Not in git (the tools remake them): caches, simulation
+files, logs, the SDK workspace settings (`.metadata`) and the apps' `Debug`/`Release` folders.
+Needs Vivado and SDK **2019.1** and the ZedBoard board files (section 2, step 2).
+
+1. `git pull`, then open `zed/mac_zed_project/mac_zed.xpr`. If Vivado says the runs are out of date (git
+   does not keep file dates), do not rebuild: Open Implemented Design still shows the timing, and the
+   bitstream is already in the SDK hardware platform.
+2. Start SDK on the workspace `zed/mac_zed_project/mac_zed.sdk` (Vivado: File > Launch SDK, both locations
+   `<Local to Project>`).
+3. A new workspace does not list the projects yet: File > Import > General > Existing Projects into
+   Workspace, root directory `mac_zed.sdk`, select all, do **not** tick "Copy projects into workspace".
+4. Board: JTAG and the USB-UART (J14) plugged in, terminal at 115200 8N1. Right-click `MAC_attack_V2` >
+   Run As > Run Configurations > Target Setup: tick Reset entire system, Program FPGA, Run ps7_init and
+   Run ps7_post_config, then Run. Pass: `ALL BOARD TESTS PASSED` and the measured PL clock equal to
+   `FCLK_HZ` in `mac_test.c`.
+
+Rules for the team:
+- Push a build only if it met timing (WNS >= 0) and passed on the board; write the clock, WNS and the board
+  result in the commit message.
+- One person pushes builds at a time. Two different builds pushed at once conflict on binary files.
+- Opening the project changes a few files (for example `mac_zed.xpr`). If you did not change the design,
+  undo those before you pull: `git status`, then `git restore <file>` for each one.
+- If the project breaks: delete `mac_zed_project/` except `mac_zed.sdk/`, run `create_zed_project.tcl`
+  (section 2), and get the SDK files back with `git checkout -- mac_zed_project/mac_zed.sdk` if the
+  script removed them.
+
 ## 1. Copy the folder to a local drive
 
 Same rule as before: `C:\mac_attack_accel`, not `\\Mac\Home\...` (the simulator fails on
