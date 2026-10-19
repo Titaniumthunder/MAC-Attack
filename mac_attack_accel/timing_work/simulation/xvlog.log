@@ -1,0 +1,30 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/chip_top.sv" into library work
+INFO: [VRFC 10-311] analyzing module chip_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/delay_line.sv" into library work
+INFO: [VRFC 10-311] analyzing module delay_line
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/host_if.sv" into library work
+INFO: [VRFC 10-311] analyzing module host_if
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/mm_core.sv" into library work
+INFO: [VRFC 10-311] analyzing module mm_core
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/pe.sv" into library work
+INFO: [VRFC 10-311] analyzing module pe
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/postproc.sv" into library work
+INFO: [VRFC 10-311] analyzing module postproc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/systolic_array.sv" into library work
+INFO: [VRFC 10-311] analyzing module systolic_array
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/uart_rx.sv" into library work
+INFO: [VRFC 10-311] analyzing module uart_rx
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/rtl/uart_tx.sv" into library work
+INFO: [VRFC 10-311] analyzing module uart_tx
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/tb/tb_selfcheck.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_selfcheck
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/tb/tb_extras.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_extras
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/zed/mac_axi.v" into library work
+INFO: [VRFC 10-311] analyzing module mac_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/zed/tb_axi.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/timing_work/tb_selfcheck3.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_selfcheck3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/timing_work/tb_counter_limits.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_counter_limits

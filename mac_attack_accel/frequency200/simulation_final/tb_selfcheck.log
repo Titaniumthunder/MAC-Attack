@@ -1,0 +1,96 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sat Oct 17 17:46:54 2026
+# Process ID: 7912
+# Current directory: C:/mac_attack_accel/frequency200/simulation_final
+# Command line: xsim.exe -log tb_selfcheck.log -mode tcl -source {xsim.dir/tb_selfcheck/xsim_script.tcl}
+# Log file: C:/mac_attack_accel/frequency200/simulation_final/tb_selfcheck.log
+# Journal file: C:/mac_attack_accel/frequency200/simulation_final\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb_selfcheck/xsim_script.tcl
+# xsim {tb_selfcheck} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ MAC Attack accelerator: 16x16 systolic array (256 PEs), INT8 inputs,
+ 32-bit accumulators. Every answer is checked against plain loops.
+==================================================================
+
+Test 1: 4x4 times 4x4, small numbers (check by hand)
+  A =
+         5     4     4    -1
+        -4     4     8     0
+         7     5    -6    -8
+         3    -7     0    -8
+  B =
+         5    -1     2     9
+         2     9    -3     3
+         9    -2    -9     3
+        -3     9    -4     2
+  C from the hardware =
+        72    14   -34    67
+        60    24   -92     0
+        15   -22    85    44
+        25  -138    59   -10
+  C expected =
+        72    14   -34    67
+        60    24   -92     0
+        15   -22    85    44
+        25  -138    59   -10
+  PASS  16/16 results correct
+  PASS  passes = 1  (equation: ceil(4/16) x ceil(4/16) = 1)
+  PASS  cycles = 50  (equation: passes x (M + 3P - 2) = 1 x 50 = 50)
+        64 multiply-adds; the 256 PEs were busy 0.5% of the time
+
+Test 2: 16x16 times 16x16, random INT8, one tile
+  PASS  256/256 results correct
+  PASS  passes = 1  (equation: ceil(16/16) x ceil(16/16) = 1)
+  PASS  cycles = 62  (equation: passes x (M + 3P - 2) = 1 x 62 = 62)
+        4096 multiply-adds; the 256 PEs were busy 25.8% of the time
+
+Test 3: 64x64 times 64x64, random INT8, folded over 16 tiles
+  PASS  4096/4096 results correct
+  PASS  passes = 16  (equation: ceil(64/16) x ceil(64/16) = 16)
+  PASS  cycles = 1760  (equation: passes x (M + 3P - 2) = 16 x 110 = 1760)
+        262144 multiply-adds; the 256 PEs were busy 58.2% of the time
+
+Test 4: 37x50 times 50x23, random INT8, odd sizes (edge tiles)
+  PASS  851/851 results correct
+  PASS  passes = 8  (equation: ceil(50/16) x ceil(23/16) = 8)
+  PASS  cycles = 664  (equation: passes x (M + 3P - 2) = 8 x 83 = 664)
+        42550 multiply-adds; the 256 PEs were busy 25.0% of the time
+
+Test 5: 1x64 times 64x64, one row of A (M = 1)
+  PASS  64/64 results correct
+  PASS  passes = 16  (equation: ceil(64/16) x ceil(64/16) = 16)
+  PASS  cycles = 752  (equation: passes x (M + 3P - 2) = 16 x 47 = 752)
+        4096 multiply-adds; the 256 PEs were busy 2.1% of the time
+
+Test 6: 16x16 times 16x16, every input -128 (largest products)
+  PASS  256/256 results correct
+  PASS  passes = 1  (equation: ceil(16/16) x ceil(16/16) = 1)
+  PASS  cycles = 62  (equation: passes x (M + 3P - 2) = 1 x 62 = 62)
+        4096 multiply-adds; the 256 PEs were busy 25.8% of the time
+
+Test 7: 16x16 times 16x16, every input 127
+  PASS  256/256 results correct
+  PASS  passes = 1  (equation: ceil(16/16) x ceil(16/16) = 1)
+  PASS  cycles = 62  (equation: passes x (M + 3P - 2) = 1 x 62 = 62)
+        4096 multiply-adds; the 256 PEs were busy 25.8% of the time
+
+Test 8: 16x16 times 16x16, B = identity, so C must equal A
+  PASS  256/256 results correct
+  PASS  passes = 1  (equation: ceil(16/16) x ceil(16/16) = 1)
+  PASS  cycles = 62  (equation: passes x (M + 3P - 2) = 1 x 62 = 62)
+        4096 multiply-adds; the 256 PEs were busy 25.8% of the time
+
+==================================================================
+ ALL TESTS PASSED (8/8)
+==================================================================
+$finish called at time : 330430 ns : File "C:/mac_attack_accel/frequency200/tb/tb_selfcheck.sv" Line 196
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 17:47:02 2026...

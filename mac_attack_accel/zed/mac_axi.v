@@ -78,6 +78,9 @@ module mac_axi #(
     wire       core_wr_en;
     wire [7:0] core_wr_data;
     wire [ACC-1:0] core_rd_data;
+    // Isolate the C-buffer lane mux from the AXI register-selection mux.
+    reg [ACC-1:0] core_rd_q;
+    always @(posedge s_axi_aclk) core_rd_q <= core_rd_data;
     wire [31:0] perf_passes, perf_cycles, perf_total;
     reg        ld_sel;                   // 0 = loading A, 1 = loading B
     reg  [7:0] ld_row, ld_col;           // where the next loaded byte goes
@@ -97,7 +100,10 @@ module mac_axi #(
     reg  [2:0]  ld_left;                 // bytes still to write from ld_word
     wire [7:0]  ld_rows   = ld_sel ? dim_k : dim_m;   // rows of the matrix being loaded
     wire [7:0]  ld_rowlen = ld_sel ? dim_n : dim_k;   // row length
-    wire        ld_inside = (ld_row < ld_rows) && (ld_col < ld_rowlen);
+    // Bounds are stable for an accepted LOAD_DATA transaction. Predict its end
+    // instead of rechecking both coordinates in the row-counter enable path.
+    reg ld_inside;
+    reg [7:0] ld_last_col, ld_last_row;
     assign core_wr_en   = (ld_left != 3'd0) && ld_inside && !core_busy;
     assign core_wr_data = ld_word[7:0];
 
@@ -132,6 +138,7 @@ module mac_axi #(
             rd_addr <= 6'd0; rd_wait <= 2'd0;
             core_start <= 1'b0; dim_m <= 8'd0; dim_k <= 8'd0; dim_n <= 8'd0;
             ld_sel <= 1'b0; ld_row <= 8'd0; ld_col <= 8'd0; ld_word <= 32'd0; ld_left <= 3'd0;
+            ld_inside <= 1'b0; ld_last_col <= 8'd0; ld_last_row <= 8'd0;
             rd_row <= 8'd0; rd_col <= 8'd0;
             done_flag <= 1'b0; load_err <= 1'b0;
         end else begin
@@ -143,9 +150,10 @@ module mac_axi #(
                 ld_word <= {8'd0, ld_word[31:8]};
                 ld_left <= ld_left - 3'd1;
                 if (ld_inside) begin
-                    if (ld_col + 8'd1 == ld_rowlen) begin
+                    if (ld_col == ld_last_col) begin
                         ld_col <= 8'd0;
                         ld_row <= ld_row + 8'd1;
+                        if (ld_row == ld_last_row) ld_inside <= 1'b0;
                     end else begin
                         ld_col <= ld_col + 8'd1;
                     end
@@ -183,6 +191,9 @@ module mac_axi #(
                             else begin
                                 ld_word <= s_axi_wdata;
                                 ld_left <= 3'd4;
+                                ld_inside <= (ld_row < ld_rows) && (ld_col < ld_rowlen);
+                                ld_last_col <= ld_rowlen - 8'd1;
+                                ld_last_row <= ld_rows - 8'd1;
                             end
                     A_RES_PTR: begin
                                 rd_row <= s_axi_wdata[7:0];
@@ -193,14 +204,14 @@ module mac_axi #(
             end
             if (axi_bvalid && s_axi_bready) axi_bvalid <= 1'b0;
 
-            // ---- read channel: wait two clocks so the core's memory read has finished
+            // ---- read channel: allow memory read and result staging before responding
             if (!axi_arready && s_axi_arvalid && !axi_rvalid && rd_wait == 2'd0)
                 axi_arready <= 1'b1;
             else
                 axi_arready <= 1'b0;
             if (ar_fire) begin
                 rd_addr <= s_axi_araddr;
-                rd_wait <= 2'd2;
+                rd_wait <= 2'd3;
             end
             if (rd_wait != 2'd0) begin
                 rd_wait <= rd_wait - 2'd1;
@@ -211,7 +222,7 @@ module mac_axi #(
                         A_DIMS:     axi_rdata <= {8'd0, dim_n, dim_k, dim_m};
                         A_LOAD_PTR: axi_rdata <= {8'd0, ld_col, ld_row, 7'd0, ld_sel};
                         A_RES_PTR:  axi_rdata <= {16'd0, rd_col, rd_row};
-                        A_RES_DATA: axi_rdata <= core_rd_data;
+                        A_RES_DATA: axi_rdata <= core_rd_q;
                         A_PASSES:   axi_rdata <= perf_passes;
                         A_CYCLES:   axi_rdata <= perf_cycles;
                         A_TOTAL:    axi_rdata <= perf_total;
@@ -238,3 +249,5 @@ module mac_axi #(
     // AXI signals this slave does not need
     wire unused = &{1'b0, s_axi_awprot, s_axi_arprot, s_axi_wstrb};
 endmodule
+
+

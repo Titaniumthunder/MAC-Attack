@@ -8,12 +8,15 @@
 //   * Partial sums flow down the columns. Column j is delayed P-1-j cycles at the
 //     bottom (output deskew) so a whole row of C leaves at once.
 //
-// A row of A that enters on cycle t leaves as a row of C on cycle t + 2P - 1.
+// With EARLY_MAC=0, A presented with in_valid exits after 2P-1 cycles.
+// With EARLY_MAC=1/2, present A that many cycles before in_valid;
+// the output-valid delay and external core schedule remain unchanged.
 module systolic_array #(
     parameter int P    = 4,
     parameter int BITS = 8,
     parameter int ACC  = 32,
-    parameter int SAT  = 0
+    parameter int SAT  = 0,
+    parameter int EARLY_MAC = 0
 )(
     input  logic              clk,
     input  logic              rst,
@@ -44,7 +47,7 @@ module systolic_array #(
         end
         for (k = 0; k < P; k++) begin : g_r
             for (j = 0; j < P; j++) begin : g_c
-                pe #(.BITS(BITS), .ACC(ACC), .SAT(SAT)) u_pe (
+                pe #(.BITS(BITS), .ACC(ACC), .SAT(SAT), .EARLY_MAC(EARLY_MAC)) u_pe (
                     .clk(clk), .rst(rst), .w_load(w_load),
                     .w_in(w_v[k][j]),      .w_out(w_v[k+1][j]),
                     .a_in(a_h[k][j]),      .a_out(a_h[k][j+1]),
@@ -64,3 +67,5 @@ module systolic_array #(
     delay_line #(.WIDTH(1), .DEPTH(2 * P - 1)) u_valid (
         .clk(clk), .rst(rst), .d(in_valid), .q(out_valid));
 endmodule
+
+

@@ -1,0 +1,51 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sat Oct 17 00:06:21 2026
+# Process ID: 26572
+# Current directory: C:/mac_attack_accel/timing_work
+# Command line: vivado.exe -mode batch -source C:/Users/JAMESM~1/AppData/Local/Temp/mac_attack_timing_work/check110.tcl -log check110.log -journal check110.jou
+# Log file: C:/mac_attack_accel/timing_work/check110.log
+# Journal file: C:/mac_attack_accel/timing_work\check110.jou
+#-----------------------------------------------------------
+source C:/Users/JAMESM~1/AppData/Local/Temp/mac_attack_timing_work/check110.tcl
+# open_checkpoint C:/mac_attack_accel/timing_work/final.dcp
+Command: open_checkpoint C:/mac_attack_accel/timing_work/final.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.033 . Memory (MB): peak = 300.824 ; gain = 0.000
+INFO: [Device 21-403] Loading part xc7z020clg484-1
+INFO: [Netlist 29-17] Analyzing 1303 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2019.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF File: Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 1280.430 ; gain = 2.984
+Restored from archive | CPU: 1.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 1280.430 ; gain = 2.984
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1280.430 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2019.1 (64-bit) build 2552052
+open_checkpoint: Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 1280.430 ; gain = 979.605
+# create_clock -name clk -period 9.091 [get_ports s_axi_aclk]
+WARNING: [Constraints 18-619] A clock with name 'clk' already exists, overwriting the previous clock with the same name.
+# report_timing_summary -file C:/mac_attack_accel/timing_work/final_110mhz_timing.rpt
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "s_axi_aclk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+# puts "CHECK_110MHZ_SETUP [get_property SLACK [get_timing_paths -setup -max_paths 1]]"
+CHECK_110MHZ_SETUP 0.331
+# puts "CHECK_110MHZ_HOLD [get_property SLACK [get_timing_paths -hold -max_paths 1]]"
+CHECK_110MHZ_HOLD 0.151
+INFO: [Common 17-206] Exiting Vivado at Sat Oct 17 00:06:43 2026...

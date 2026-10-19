@@ -1,0 +1,1 @@
+"work.tb_axi_p4" -s "tb_axi_p4" 

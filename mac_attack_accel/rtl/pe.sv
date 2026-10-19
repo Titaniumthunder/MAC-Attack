@@ -8,10 +8,11 @@
 //
 // SAT = 0: the sum wraps around if it overflows ACC bits (two's complement).
 // SAT = 1: the sum is clamped to the largest or smallest ACC-bit value instead.
-module pe #(
+(* use_dsp = "yes" *) module pe #(
     parameter int BITS = 8,      // operand width: 8 for INT8, 4 for INT4
     parameter int ACC  = 32,     // partial-sum width; at least 2*BITS
-    parameter int SAT  = 0       // 1 = saturating adder
+    parameter int SAT  = 0,      // 1 = saturating adder
+    parameter int EARLY_MAC = 0  // 0: direct, 1: product register, 2: input + product registers
 )(
     input  logic                   clk,
     input  logic                   rst,
@@ -28,7 +29,30 @@ module pe #(
     logic signed [ACC-1:0]    prod_ext;
     logic signed [ACC:0]      sum;            // one extra bit, so overflow is visible
 
-    assign prod  = a_in * w;                   // 2*BITS bits always hold the full product
+    logic signed [BITS-1:0] mac_a;
+    generate
+        if (EARLY_MAC >= 2) begin : g_a_pipeline
+            always_ff @(posedge clk) begin
+                if (rst) mac_a <= '0;
+                else mac_a <= a_in;
+            end
+        end else begin : g_a_direct
+            assign mac_a = a_in;
+        end
+    endgenerate
+    logic signed [2*BITS-1:0] product_q;
+    generate
+        if (EARLY_MAC != 0) begin : g_product_pipeline
+            always_ff @(posedge clk) begin
+                if (rst) product_q <= '0;
+                // The core loads weights one cycle early, before the product stage.
+                else product_q <= mac_a * w;
+            end
+            assign prod = product_q;
+        end else begin : g_product_comb
+            assign prod = a_in * w;
+        end
+    endgenerate
     assign w_out = w;
 
     generate
@@ -48,15 +72,31 @@ module pe #(
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            w        <= '0;
-            a_out    <= '0;
-            psum_out <= '0;
+            w <= '0;
+            a_out <= '0;
         end else begin
             if (w_load) w <= w_in;
             a_out <= a_in;
-            if (SAT != 0 && sum > MAXV)      psum_out <= MAXV[ACC-1:0];
-            else if (SAT != 0 && sum < MINV) psum_out <= MINV[ACC-1:0];
-            else                             psum_out <= sum[ACC-1:0];
         end
     end
+
+    generate
+        if (SAT == 0) begin : g_wrap
+            // A single signed MAC expression lets the DSP multiplier and adder
+            // share one slice; the registered result still has one-cycle latency.
+            always_ff @(posedge clk) begin
+                if (rst) psum_out <= '0;
+                else psum_out <= psum_in + prod;
+            end
+        end else begin : g_sat
+            always_ff @(posedge clk) begin
+                if (rst) psum_out <= '0;
+                else if (sum > MAXV) psum_out <= MAXV[ACC-1:0];
+                else if (sum < MINV) psum_out <= MINV[ACC-1:0];
+                else psum_out <= sum[ACC-1:0];
+            end
+        end
+    endgenerate
 endmodule
+
+

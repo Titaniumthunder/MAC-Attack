@@ -105,7 +105,7 @@
             "value": "10.000000"
           },
           "PCW_ACT_FPGA0_PERIPHERAL_FREQMHZ": {
-            "value": "76.923080"
+            "value": "187.500000"
           },
           "PCW_ACT_FPGA1_PERIPHERAL_FREQMHZ": {
             "value": "10.000000"
@@ -117,10 +117,10 @@
             "value": "10.000000"
           },
           "PCW_ACT_PCAP_PERIPHERAL_FREQMHZ": {
-            "value": "200.000000"
+            "value": "187.500000"
           },
           "PCW_ACT_QSPI_PERIPHERAL_FREQMHZ": {
-            "value": "200.000000"
+            "value": "187.500000"
           },
           "PCW_ACT_SDIO_PERIPHERAL_FREQMHZ": {
             "value": "50.000000"
@@ -162,7 +162,7 @@
             "value": "666.666667"
           },
           "PCW_CLK0_FREQ": {
-            "value": "76923080"
+            "value": "187500000"
           },
           "PCW_CLK1_FREQ": {
             "value": "10000000"
@@ -225,7 +225,7 @@
             "value": "1"
           },
           "PCW_FPGA0_PERIPHERAL_FREQMHZ": {
-            "value": "80"
+            "value": "185"
           },
           "PCW_FPGA1_PERIPHERAL_FREQMHZ": {
             "value": "150.000000"
@@ -1124,7 +1124,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "76923080",
+                "value": "187500000",
                 "value_src": "user_prop"
               },
               "HAS_BRESP": {
@@ -1324,7 +1324,7 @@
                 "value_src": "default_prop"
               },
               "FREQ_HZ": {
-                "value": "76923080",
+                "value": "187500000",
                 "value_src": "user_prop"
               }
             }
@@ -1343,28 +1343,28 @@
       }
     },
     "interface_nets": {
-      "axi_ic_M00_AXI": {
-        "interface_ports": [
-          "axi_ic/M00_AXI",
-          "mac/s_axi"
-        ]
-      },
       "ps7_FIXED_IO": {
         "interface_ports": [
           "FIXED_IO",
           "ps7/FIXED_IO"
         ]
       },
-      "ps7_DDR": {
-        "interface_ports": [
-          "DDR",
-          "ps7/DDR"
-        ]
-      },
       "ps7_M_AXI_GP0": {
         "interface_ports": [
           "ps7/M_AXI_GP0",
           "axi_ic/S00_AXI"
+        ]
+      },
+      "axi_ic_M00_AXI": {
+        "interface_ports": [
+          "axi_ic/M00_AXI",
+          "mac/s_axi"
+        ]
+      },
+      "ps7_DDR": {
+        "interface_ports": [
+          "DDR",
+          "ps7/DDR"
         ]
       }
     },

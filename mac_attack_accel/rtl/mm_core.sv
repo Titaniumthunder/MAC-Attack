@@ -22,8 +22,8 @@
 // Edge tiles: rows of B past K, columns past N, and columns of A past K are fed as
 // zeros, so any M, K, N works without padding the matrices in memory.
 //
-// Memories have one cycle of read latency, so every read address is issued one
-// cycle early from the next-cycle values of the pass counters.
+// Prefetch pointers issue A/B reads ahead of the pipelined DSPs. C is read two
+// cycles ahead so its RAM output can be registered before accumulation.
 module mm_core #(
     parameter int P    = 16,    // array size
     parameter int BITS = 8,     // operand width
@@ -72,28 +72,43 @@ module mm_core #(
     assign wr_addr = 32'(wr_row) * TM + 32'(wr_col) / P;
     assign wr_lane = 8'(32'(wr_col) % P);
 
-    always_ff @(posedge clk) begin
-        if (wr_en && !wr_sel) amem[wr_addr][wr_lane * BITS +: BITS] <= wr_data;
-        if (wr_en &&  wr_sel) bmem[wr_addr][wr_lane * BITS +: BITS] <= wr_data;
+    // Static slices expose independent lane write enables to RAM inference.
+    // A variable part-select can turn every data bit into a separate RAM bank.
+    for (genvar lane = 0; lane < P; lane++) begin : g_write_lane
+        always_ff @(posedge clk) begin
+            if (wr_en && !wr_sel && wr_lane == lane)
+                amem[wr_addr][lane * BITS +: BITS] <= wr_data;
+            if (wr_en && wr_sel && wr_lane == lane)
+                bmem[wr_addr][lane * BITS +: BITS] <= wr_data;
+        end
     end
 
     // ---------------------------------------------------------------- controller
     typedef enum logic [2:0] {S_IDLE, S_PRIME, S_RUN, S_LAST, S_DONE} state_t;
     state_t state;
 
-    int  m, k, n, kt, nt, t;                  // dimensions, tile counts, cycles per pass
-    int  o, kb, nb;                           // cycle within pass, reduction block, output block
+    // Size the controller to MAXD. Keep a bit for
+    // terminal counts; do not truncate the padded edge of a non-power-of-two tile.
+    localparam int TW = ($clog2(TM + 1) < 1) ? 1 : $clog2(TM + 1);
+    localparam int CW = $clog2(MAXD + 3 * P);
+    localparam int DW = ($clog2(MAXD+1) < 1) ? 1 : $clog2(MAXD+1);
+    logic [DW-1:0] m, k, n, m_last;
+    logic [TW-1:0] kt, nt, kt_last, nt_last;
+    logic [CW-1:0] t, t_last, t_before_last;
+    logic [CW-1:0] o;                         // cycle within pass
+    logic [TW-1:0] kb, nb;                    // tile indices
     logic last_pass;
-    assign last_pass = (kb == kt - 1) && (nb == nt - 1);
+    assign last_pass = (kb == kt_last) && (nb == nt_last);
 
     // next-cycle pass counters
-    int n_o, n_kb, n_nb;
+    logic [CW-1:0] n_o;
+    logic [TW-1:0] n_kb, n_nb;
     always_comb begin
         n_o = 0; n_kb = 0; n_nb = 0;
-        if (state == S_RUN && !(o == t - 1 && last_pass)) begin
-            if (o == t - 1) begin
+        if (state == S_RUN && !(o == t_last && last_pass)) begin
+            if (o == t_last) begin
                 n_o = 0;
-                if (kb == kt - 1) begin n_kb = 0;      n_nb = nb + 1; end
+                if (kb == kt_last) begin n_kb = 0;      n_nb = nb + 1; end
                 else              begin n_kb = kb + 1; n_nb = nb;     end
             end else begin
                 n_o = o + 1; n_kb = kb; n_nb = nb;
@@ -101,40 +116,109 @@ module mm_core #(
         end
     end
 
-    // read addresses and lane masks for the next cycle
-    /* verilator lint_off UNUSEDSIGNAL */   // addresses are 32-bit ints; only the low bits index memory
-    int           k_n, i_n, a_addr, b_addr;   // B row and A row needed next cycle
-    /* verilator lint_on UNUSEDSIGNAL */
-    logic         b_need, a_need;
+    // Independent prefetch pointers remove next-state arithmetic from RAM inputs.
+    // A is supplied EARLY cycles before in_valid; weights load one cycle early.
+    localparam int EARLY = (P >= 3) ? 2 : 1;
+    localparam int AW = ($clog2(DEPTH) < 1) ? 1 : $clog2(DEPTH);
+    localparam int IXW = $clog2(MAXD + 2*P + 1);
+    logic [AW-1:0] a_addr, b_addr, next_b_first;
+    logic [TW-1:0] ahead_kb, ahead_nb;
     logic [P-1:0] a_lanes, b_lanes;
-    always_comb begin
-        b_need = (n_o < P);
-        a_need = (n_o >= P) && (n_o < P + m);
-        k_n    = b_need ? n_kb * P + (P - 1) - n_o : 0;
-        i_n    = a_need ? n_o - P : 0;
-        b_addr = b_need ? k_n * TM + n_nb : 0;
-        a_addr = a_need ? i_n * TM + n_kb : 0;
-        for (int j = 0; j < P; j++) begin
-            b_lanes[j] = b_need && (k_n < k) && (n_nb * P + j < n);
-            a_lanes[j] = (n_kb * P + j < k);
-        end
+    logic [P-1:0] b_rows, b_cols, next_b_rows, next_b_cols;
+    logic [CW-1:0] a_first, a_last;
+    wire first_read = (state == S_IDLE && start);
+    wire [AW-1:0] b_read_addr = first_read ? AW'((P-1)*TM) : b_addr;
+    for (genvar lane = 0; lane < P; lane++) begin : g_b_mask
+        assign b_lanes[lane] = first_read
+            ? ((P-1 < int'(dim_k)) && (lane < int'(dim_n)))
+            : (b_cols[lane] && b_rows[P-1]);
     end
 
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            a_addr <= '0; b_addr <= '0; next_b_first <= '0;
+            ahead_kb <= '0; ahead_nb <= '0;
+            a_lanes <= '0; b_rows <= '0; b_cols <= '0;
+            next_b_rows <= '0; next_b_cols <= '0;
+            a_first <= CW'(P-EARLY-1); a_last <= CW'(P-EARLY-1);
+        end else begin
+            if (state == S_IDLE && start) begin
+                a_addr <= '0;
+                b_addr <= AW'((P-2)*TM);
+                a_first <= CW'(P-EARLY-1);
+                a_last <= CW'(int'(dim_m)+P-EARLY-2);
+                for (int j=0; j<P; j++) begin
+                    a_lanes[j] <= (j < int'(dim_k));
+                    b_rows[j] <= (j > 0 && j-1 < int'(dim_k));
+                    b_cols[j] <= (j < int'(dim_n));
+                end
+            end
+            // Start reads row P-1; PRIME and early RUN cycles read the remaining rows.
+            if (state == S_PRIME || (state == S_RUN && o < P-2)) begin
+                b_addr <= b_addr - AW'(TM);
+                b_rows <= b_rows << 1;
+            end
+            if (state == S_RUN) begin
+                // Prepare the following tile in separate clocks, during this tile.
+                if (o == 0) begin
+                    ahead_kb <= (kb == kt_last) ? '0 : kb + 1'b1;
+                    ahead_nb <= (kb == kt_last) ? nb + 1'b1 : nb;
+                end
+                if (o == 1) begin
+                    next_b_first <= AW'((ahead_kb*P+P-1)*TM+ahead_nb);
+                    for (int j=0; j<P; j++) begin
+                        next_b_rows[j] <= (IXW'(ahead_kb*P+j) < IXW'(k));
+                        next_b_cols[j] <= (IXW'(ahead_nb*P+j) < IXW'(n));
+                    end
+                end
+                if (o == P) begin
+                    b_addr <= next_b_first;
+                    b_rows <= next_b_rows;
+                    b_cols <= next_b_cols;
+                end
+                // The end-of-pass read fetches the next tile's first weight row.
+                if (o == t_last || o == t_before_last) begin
+                    b_addr <= b_addr - AW'(TM);
+                    b_rows <= b_rows << 1;
+                end
+                if (o == t_last) begin
+                    a_addr <= AW'(ahead_kb);
+                    a_lanes <= next_b_rows;
+                end else if (o >= a_first && o < a_last) begin
+                    a_addr <= a_addr + AW'(TM);
+                end
+            end
+        end
+    end
     logic [P*BITS-1:0] aq, bq;
     logic [P-1:0]      a_lanes_q, b_lanes_q;
     always_ff @(posedge clk) begin
         aq <= amem[a_addr];
-        bq <= bmem[b_addr];
+        bq <= bmem[b_read_addr];
         a_lanes_q <= a_lanes;
         b_lanes_q <= b_lanes;
     end
 
     // ---------------------------------------------------------------- the array
-    logic              w_load, in_valid, out_valid;
+    (* max_fanout = 8 *) logic w_load;
+    logic in_valid, out_valid;
     logic [P*BITS-1:0] w_row, a_row;
     logic [P*ACC-1:0]  c_row;
 
-    assign w_load   = (state == S_RUN) && (o < P);
+    // Predict the next cycle's load phase, so the DSP enables are driven by
+    // local replicated flops rather than the terminal-count compare network.
+    always_ff @(posedge clk) begin
+        if (rst) w_load <= 1'b0;
+        else begin
+            case (state)
+                S_IDLE:  w_load <= start;
+                S_PRIME: w_load <= 1'b1;
+                S_RUN:   w_load <= (o < P-2) ||
+                    (((o == t_before_last) || (o == t_last)) && !last_pass);
+                default: w_load <= 1'b0;
+            endcase
+        end
+    end
     assign in_valid = (state == S_RUN) && (o >= P) && (o < P + m);
     always_comb begin
         for (int j = 0; j < P; j++) begin
@@ -143,30 +227,31 @@ module mm_core #(
         end
     end
 
-    systolic_array #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT)) u_array (
+    systolic_array #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .EARLY_MAC(EARLY)) u_array (
         .clk(clk), .rst(rst), .w_load(w_load), .w_row(w_row),
         .in_valid(in_valid), .a_row(a_row), .out_valid(out_valid), .c_row(c_row));
 
     // ---------------------------------------------------------------- accumulators
-    // An output row reaches the bottom one cycle after "out_next", so C is read one
-    // cycle early (read-modify-write with a one-cycle read).
+    // Read C two cycles before out_valid: RAM read, then an output register.
+    // Host reads retain their original one-cycle latency through cq.
     logic out_next;
-    delay_line #(.WIDTH(1), .DEPTH(2 * P - 2)) u_next (
+    delay_line #(.WIDTH(1), .DEPTH(2 * P - 3)) u_next (
         .clk(clk), .rst(rst), .d(in_valid), .q(out_next));
 
-    int cap_kb, cap_nb;                       // pass whose results are draining
-    int pre_row, out_row;                     // row being read / written in C
+    logic [TW-1:0] cap_kb, cap_nb;             // pass whose results are draining
+    logic [DW-1:0] pre_row, out_row;              // row being read / written in C
     /* verilator lint_off UNUSEDSIGNAL */   // addresses are 32-bit ints; only the low bits index memory
     int c_raddr;
     /* verilator lint_on UNUSEDSIGNAL */
     logic [7:0] rd_lane;
-    logic [P*ACC-1:0] cq;
+    logic [P*ACC-1:0] cq, cq_pipe;
 
     assign c_raddr = busy ? (out_next ? pre_row * TM + cap_nb : 0)
                           : int'(rd_row) * TM + int'(rd_col) / P;
 
     always_ff @(posedge clk) begin
         cq <= cmem[c_raddr];
+        cq_pipe <= cq;
         rd_lane <= 8'(32'(rd_col) % P);
     end
     assign rd_data = cq[rd_lane * ACC +: ACC];
@@ -184,11 +269,20 @@ module mm_core #(
 
     logic [P*ACC-1:0] c_new;
     for (genvar j = 0; j < P; j++) begin : g_acc
-        assign c_new[j*ACC +: ACC] = acc_add((cap_kb == 0) ? '0 : cq[j*ACC +: ACC], c_row[j*ACC +: ACC]);
+        assign c_new[j*ACC +: ACC] = acc_add((cap_kb == 0) ? '0 : cq_pipe[j*ACC +: ACC], c_row[j*ACC +: ACC]);
     end
 
+    // The existing S_DONE cycle can commit a registered C write without delaying
+    // done or changing any pass counts. Separate BRAM-read/add from BRAM-write.
+    logic c_write_valid;
+    logic [AW-1:0] c_write_addr;
+    logic [P*ACC-1:0] c_write_data;
     always_ff @(posedge clk) begin
-        if (out_valid) cmem[out_row * TM + cap_nb] <= c_new;
+        if (rst) c_write_valid <= 1'b0;
+        else c_write_valid <= out_valid;
+        c_write_addr <= AW'(out_row * TM + cap_nb);
+        c_write_data <= c_new;
+        if (c_write_valid && !rst) cmem[c_write_addr] <= c_write_data;
     end
 
     // ---------------------------------------------------------------- sequencer
@@ -197,6 +291,7 @@ module mm_core #(
             state <= S_IDLE; busy <= 1'b0; done <= 1'b0;
             o <= 0; kb <= 0; nb <= 0;
             m <= 1; k <= 1; n <= 1; kt <= 1; nt <= 1; t <= 1;
+            m_last <= 0; kt_last <= 0; nt_last <= 0; t_last <= 0; t_before_last <= 0;
             cap_kb <= 0; cap_nb <= 0; pre_row <= 0; out_row <= 0;
             perf_passes <= '0; perf_cycles <= '0; perf_total <= '0;
         end else begin
@@ -205,7 +300,13 @@ module mm_core #(
 
             case (state)
                 S_IDLE: if (start) begin
-                    m  <= int'(dim_m); k <= int'(dim_k); n <= int'(dim_n);
+                    m <= dim_m; k <= dim_k; n <= dim_n;
+                    // Compute terminal values once, outside the per-cycle address path.
+                    m_last <= dim_m - 8'd1;
+                    kt_last <= TW'((int'(dim_k) + P - 1) / P - 1);
+                    nt_last <= TW'((int'(dim_n) + P - 1) / P - 1);
+                    t_last <= CW'(int'(dim_m) + 3 * P - 3);
+                    t_before_last <= CW'(int'(dim_m) + 3 * P - 4);
                     kt <= (int'(dim_k) + P - 1) / P;
                     nt <= (int'(dim_n) + P - 1) / P;
                     t  <= int'(dim_m) + 3 * P - 2;
@@ -219,7 +320,7 @@ module mm_core #(
                 S_RUN: begin
                     perf_cycles <= perf_cycles + 32'd1;
                     if (o == 0) perf_passes <= perf_passes + 32'd1;
-                    if (o == t - 1 && last_pass) state <= S_LAST;
+                    if (o == t_last && last_pass) state <= S_LAST;
                     o <= n_o; kb <= n_kb; nb <= n_nb;
                 end
                 S_LAST: if (out_valid) state <= S_DONE;   // last row of the last pass
@@ -230,8 +331,11 @@ module mm_core #(
             endcase
 
             if (in_valid && o == P) begin cap_kb <= kb; cap_nb <= nb; end
-            if (out_next)  pre_row <= (pre_row == m - 1) ? 0 : pre_row + 1;
-            if (out_valid) out_row <= (out_row == m - 1) ? 0 : out_row + 1;
+            if (out_next)  pre_row <= (pre_row == m_last) ? 0 : pre_row + 1;
+            if (out_valid) out_row <= (out_row == m_last) ? 0 : out_row + 1;
         end
     end
 endmodule
+
+
+

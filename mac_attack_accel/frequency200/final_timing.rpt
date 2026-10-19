@@ -1,0 +1,330 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
+| Date         : Sat Oct 17 17:51:09 2026
+| Host         : DESKTOP-VONROUT running 64-bit major release  (build 9200)
+| Command      : report_timing_summary -file C:/mac_attack_accel/frequency200/final_timing.rpt
+| Design       : mac_axi
+| Device       : 7z020-clg484
+| Speed File   : -1  PRODUCTION 1.11 2014-09-11
+-----------------------------------------------------------------------------------------------
+
+Timing Summary Report
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+  Ignore I/O Paths                           :  No
+  Timing Early Launch at Borrowing Latches   :  No
+  Borrow Time for Max Delay Exceptions       :  Yes
+
+  Corner  Analyze    Analyze    
+  Name    Max Paths  Min Paths  
+  ------  ---------  ---------  
+  Slow    Yes        Yes        
+  Fast    Yes        Yes        
+
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock
+2. checking constant_clock
+3. checking pulse_width_clock
+4. checking unconstrained_internal_endpoints
+5. checking no_input_delay
+6. checking no_output_delay
+7. checking multiple_clock
+8. checking generated_clocks
+9. checking loops
+10. checking partial_input_delay
+11. checking partial_output_delay
+12. checking latch_loops
+
+1. checking no_clock
+--------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock
+--------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock
+-----------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints
+--------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay
+--------------------------
+ There are 0 input ports with no input delay specified.
+
+ There are 0 input ports with no input delay but user has a false path constraint.
+
+
+6. checking no_output_delay
+---------------------------
+ There are 0 ports with no output delay specified.
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock
+--------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks
+----------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops
+-----------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay
+--------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay
+---------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops
+------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+     -0.162       -2.503                     37                11702       -0.128       -3.131                     44                11702        1.520        0.000                       0                  2428  
+
+
+Timing constraints are not met.
+
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock  Waveform(ns)         Period(ns)      Frequency(MHz)
+-----  ------------         ----------      --------------
+clk    {0.000 2.500}        5.000           200.000         
+
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+clk                -0.162       -2.503                     37                11702       -0.128       -3.131                     44                11702        1.520        0.000                       0                  2428  
+
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------    ----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  clk
+  To Clock:  clk
+
+Setup :           37  Failing Endpoints,  Worst Slack       -0.162ns,  Total Violation       -2.503ns
+Hold  :           44  Failing Endpoints,  Worst Slack       -0.128ns,  Total Violation       -3.131ns
+PW    :            0  Failing Endpoints,  Worst Slack        1.520ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (VIOLATED) :        -0.162ns  (required time - arrival time)
+  Source:                 u_core/cmem_reg_0/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            u_core/c_write_data_reg[93]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        5.070ns  (logic 4.128ns (81.412%)  route 0.942ns (18.588%))
+  Logic Levels:           9  (CARRY4=8 LUT6=1)
+  Clock Path Skew:        -0.118ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.561ns = ( 6.561 - 5.000 ) 
+    Source Clock Delay      (SCD):    1.794ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=2427, unset)         1.794     1.794    u_core/s_axi_aclk
+    RAMB36_X1Y1          RAMB36E1                                     r  u_core/cmem_reg_0/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X1Y1          RAMB36E1 (Prop_ramb36e1_CLKARDCLK_DOPADOP[0])
+                                                      2.454     4.248 r  u_core/cmem_reg_0/DOPADOP[0]
+                         net (fo=2, routed)           0.942     5.191    u_core/u_array/g_out[2].g_dly.u_deskew/cq[0]
+    SLICE_X25Y12         LUT6 (Prop_lut6_I4_O)        0.124     5.315 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data[67]_i_5/O
+                         net (fo=1, routed)           0.000     5.315    u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data[67]_i_5_n_0
+    SLICE_X25Y12         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     5.847 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[67]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     5.847    u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[67]_i_1_n_0
+    SLICE_X25Y13         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     5.961 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[71]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     5.961    u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[71]_i_1_n_0
+    SLICE_X25Y14         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.075 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[75]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.075    u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[75]_i_1_n_0
+    SLICE_X25Y15         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.189 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[79]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.189    u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[79]_i_1_n_0
+    SLICE_X25Y16         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.303 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[83]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.303    u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[83]_i_1_n_0
+    SLICE_X25Y17         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.417 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[87]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.417    u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[87]_i_1_n_0
+    SLICE_X25Y18         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.531 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[91]_i_1/CO[3]
+                         net (fo=1, routed)           0.000     6.531    u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[91]_i_1_n_0
+    SLICE_X25Y19         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334     6.865 r  u_core/u_array/g_out[2].g_dly.u_deskew/c_write_data_reg[95]_i_1/O[1]
+                         net (fo=1, routed)           0.000     6.865    u_core/acc_add1_return[29]
+    SLICE_X25Y19         FDRE                                         r  u_core/c_write_data_reg[93]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  s_axi_aclk (IN)
+                         net (fo=2427, unset)         1.561     6.561    u_core/s_axi_aclk
+    SLICE_X25Y19         FDRE                                         r  u_core/c_write_data_reg[93]/C
+                         clock pessimism              0.115     6.676    
+                         clock uncertainty           -0.035     6.641    
+    SLICE_X25Y19         FDRE (Setup_fdre_C_D)        0.062     6.703    u_core/c_write_data_reg[93]
+  -------------------------------------------------------------------
+                         required time                          6.703    
+                         arrival time                          -6.865    
+  -------------------------------------------------------------------
+                         slack                                 -0.162    
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (VIOLATED) :        -0.128ns  (arrival time - required time)
+  Source:                 s_axi_araddr[1]
+                            (input port clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            rd_addr_reg[1]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Slow Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.924ns  (logic 0.000ns (0.000%)  route 0.924ns (100.000%))
+  Logic Levels:           0  
+  Input Delay:            1.000ns
+  Clock Path Skew:        1.660ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.660ns
+    Source Clock Delay      (SCD):    0.000ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                         input delay                  1.000     1.000    
+                                                      0.000     1.000 r  s_axi_araddr[1] (IN)
+                         net (fo=0)                   0.924     1.924    s_axi_araddr[1]
+    SLICE_X33Y17         FDRE                                         r  rd_addr_reg[1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  s_axi_aclk (IN)
+                         net (fo=2427, unset)         1.660     1.660    s_axi_aclk
+    SLICE_X33Y17         FDRE                                         r  rd_addr_reg[1]/C
+                         clock pessimism              0.000     1.660    
+                         clock uncertainty            0.035     1.695    
+    SLICE_X33Y17         FDRE (Hold_fdre_C_D)         0.357     2.052    rd_addr_reg[1]
+  -------------------------------------------------------------------
+                         required time                         -2.052    
+                         arrival time                           1.924    
+  -------------------------------------------------------------------
+                         slack                                 -0.128    
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         clk
+Waveform(ns):       { 0.000 2.500 }
+Period(ns):         5.000
+Sources:            { s_axi_aclk }
+
+Check Type        Corner  Lib Pin             Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location      Pin
+Min Period        n/a     RAMB36E1/CLKARDCLK  n/a            2.944         5.000       2.056      RAMB36_X1Y1   u_core/cmem_reg_0/CLKARDCLK
+Low Pulse Width   Slow    SRL16E/CLK          n/a            0.980         2.500       1.520      SLICE_X36Y24  u_core/u_array/g_skew[5].g_dly.u_skew/sh_reg[2][0]_srl3___u_core_u_array_u_valid_sh_reg_r_1/CLK
+High Pulse Width  Slow    SRL16E/CLK          n/a            0.980         2.500       1.520      SLICE_X42Y21  u_core/u_array/g_skew[4].g_dly.u_skew/sh_reg[1][0]_srl2___u_core_u_array_u_valid_sh_reg_r_0/CLK
+
+
+

@@ -1,0 +1,83 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sat Oct 17 00:33:30 2026
+# Process ID: 24072
+# Current directory: C:/mac_attack_accel/frequency200
+# Command line: vivado.exe -mode batch -source build_system200.tcl -log system_build.log -journal system_build.jou
+# Log file: C:/mac_attack_accel/frequency200/system_build.log
+# Journal file: C:/mac_attack_accel/frequency200\system_build.jou
+#-----------------------------------------------------------
+source build_system200.tcl
+# set root [file dirname [file normalize [info script]]]
+# open_project -read_only C:/mac_attack_accel/zed/mac_zed_project/mac_zed.xpr
+Scanning sources...
+Finished scanning sources
+WARNING: [filemgmt 56-3] IPUserFilesDir: Could not find the directory 'C:/mac_attack_accel/zed/mac_zed_project/mac_zed.ip_user_files'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+WARNING: [BD 41-1663] The design 'system.bd' cannot be modified due to following reason(s):
+* Project is read-only. Please run 'save_project_as' before making any change to the bd-design. 
+
+WARNING: [BD 41-1661] One or more IPs have been locked in the design 'system.bd'. Please run report_ip_status for more details and recommendations on how to fix this issue.
+List of locked IPs:
+system_ps7_0
+system_axi_ic_0
+system_rst_fclk0_0
+system_auto_pc_0
+
+# save_project_as mac_zed_200 $root/zed200 -exclude_run_results
+WARNING: [IP_Flow 19-2162] IP 'system_auto_pc_0' is locked:
+* Project containing IP 'system_auto_pc_0' is read-only.
+WARNING: [IP_Flow 19-3571] IP 'system_mac_0' is restricted:
+* Module reference is stale and needs refreshing.
+WARNING: [IP_Flow 19-2162] IP 'system_ps7_0' is locked:
+* Project containing IP 'system_ps7_0' is read-only.
+WARNING: [IP_Flow 19-2162] IP 'system_rst_fclk0_0' is locked:
+* Project containing IP 'system_rst_fclk0_0' is read-only.
+WARNING: [IP_Flow 19-3571] IP 'system_mac_0' is restricted:
+* Module reference is stale and needs refreshing.
+INFO: [IP_Flow 19-1976] HDL Parser: Replacing 'ACC' by 32 for port or parameter 'core_rd_data'
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi_aclk' of definition 'xilinx.com:signal:clock:1.0' (from X_INTERFACE_INFO parameter from HDL file).
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi_aclk' of definition 'xilinx.com:signal:clock:1.0' (from 'X_INTERFACE_INFO' attribute).
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi_aresetn' of definition 'xilinx.com:signal:reset:1.0' (from X_INTERFACE_INFO parameter from HDL file).
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi_aresetn' of definition 'xilinx.com:signal:reset:1.0' (from 'X_INTERFACE_INFO' attribute).
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi' of definition 'xilinx.com:interface:aximm:1.0' (from Xilinx Repository).
+INFO: [IP_Flow 19-4728] Bus Interface 's_axi_aclk': Added interface parameter 'ASSOCIATED_BUSIF' with value 's_axi'.
+INFO: [IP_Flow 19-4728] Bus Interface 's_axi_aclk': Added interface parameter 'ASSOCIATED_RESET' with value 's_axi_aresetn'.
+INFO: [IP_Flow 19-4728] Bus Interface 's_axi_aresetn': Added interface parameter 'POLARITY' with value 'ACTIVE_LOW'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [Coretcl 2-133] re-setting run 'synth_1'...
+INFO: [Coretcl 2-133] re-setting run 'system_rst_fclk0_0_synth_1'...
+INFO: [Coretcl 2-133] re-setting run 'system_ps7_0_synth_1'...
+INFO: [Coretcl 2-133] re-setting run 'system_mac_0_synth_1'...
+INFO: [Coretcl 2-133] re-setting run 'system_auto_pc_0_synth_1'...
+INFO: [Coretcl 2-133] re-setting run 'impl_1'...
+INFO: [Coretcl 2-133] re-setting run 'system_rst_fclk0_0_impl_1'...
+INFO: [Coretcl 2-133] re-setting run 'system_ps7_0_impl_1'...
+INFO: [Coretcl 2-133] re-setting run 'system_mac_0_impl_1'...
+INFO: [Coretcl 2-133] re-setting run 'system_auto_pc_0_impl_1'...
+save_project_as: Time (s): cpu = 00:00:02 ; elapsed = 00:00:07 . Memory (MB): peak = 312.570 ; gain = 7.031
+# foreach f [get_files -quiet *] {
+#     if {[file tail $f] in {mm_core.sv pe.sv}} { remove_files $f }
+# }
+# add_files -norecurse [list $root/rtl/mm_core.sv $root/rtl/pe.sv]
+# update_compile_order -fileset sources_1
+# set bd [get_files */system.bd]
+# if {![string match "$root/zed200/*" [file normalize $bd]]} { error "BD is not isolated: $bd" }
+# open_bd_design $bd
+Adding component instance block -- xilinx.com:ip:processing_system7:5.5 - ps7
+Adding component instance block -- xilinx.com:ip:axi_interconnect:2.1 - axi_ic
+Adding component instance block -- xilinx.com:ip:axi_protocol_converter:2.1 - auto_pc
+Adding component instance block -- xilinx.com:ip:proc_sys_reset:5.0 - rst_fclk0
+Adding component instance block -- xilinx.com:module_ref:mac_axi:1.0 - mac
+Successfully read diagram <system> from BD file <C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/system.bd>
+# update_module_reference [get_bd_cells mac]
+
+    while executing
+"update_module_reference [get_bd_cells mac]"
+    (file "build_system200.tcl" line 12)
+INFO: [Common 17-206] Exiting Vivado at Sat Oct 17 00:33:46 2026...

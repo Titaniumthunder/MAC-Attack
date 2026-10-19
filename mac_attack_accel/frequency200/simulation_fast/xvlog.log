@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb_selfcheck2.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_selfcheck2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb/tb_compare.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_compare

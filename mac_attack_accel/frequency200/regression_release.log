@@ -1,0 +1,813 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/chip_top.sv" into library work
+INFO: [VRFC 10-311] analyzing module chip_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/delay_line.sv" into library work
+INFO: [VRFC 10-311] analyzing module delay_line
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/host_if.sv" into library work
+INFO: [VRFC 10-311] analyzing module host_if
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/mm_core.sv" into library work
+INFO: [VRFC 10-311] analyzing module mm_core
+INFO: [VRFC 10-311] analyzing module mac_accumulator
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/pe.sv" into library work
+INFO: [VRFC 10-311] analyzing module pe
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/postproc.sv" into library work
+INFO: [VRFC 10-311] analyzing module postproc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/systolic_array.sv" into library work
+INFO: [VRFC 10-311] analyzing module systolic_array
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/uart_rx.sv" into library work
+INFO: [VRFC 10-311] analyzing module uart_rx
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_release/uart_tx.sv" into library work
+INFO: [VRFC 10-311] analyzing module uart_tx
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb/tb_selfcheck.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_selfcheck
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb/tb_extras.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_extras
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/mac_axi_fast.v" into library work
+INFO: [VRFC 10-311] analyzing module mac_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb/tb_axi.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb_selfcheck3.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_selfcheck3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb_counter_limits.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_counter_limits
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb_selfcheck2.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_selfcheck2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb/tb_compare.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_compare
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_selfcheck -s tb_selfcheck 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.delay_line(DEPTH=3)
+Compiling module work.delay_line(DEPTH=4)
+Compiling module work.delay_line(DEPTH=5)
+Compiling module work.delay_line(DEPTH=6)
+Compiling module work.delay_line(DEPTH=7)
+Compiling module work.delay_line(DEPTH=8)
+Compiling module work.delay_line(DEPTH=9)
+Compiling module work.delay_line(DEPTH=10)
+Compiling module work.delay_line(DEPTH=11)
+Compiling module work.delay_line(DEPTH=12)
+Compiling module work.delay_line(DEPTH=13)
+Compiling module work.delay_line(DEPTH=14)
+Compiling module work.delay_line(DEPTH=15)
+Compiling module work.pe(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=32,DEPTH=15)
+Compiling module work.delay_line(WIDTH=32,DEPTH=14)
+Compiling module work.delay_line(WIDTH=32,DEPTH=13)
+Compiling module work.delay_line(WIDTH=32,DEPTH=12)
+Compiling module work.delay_line(WIDTH=32,DEPTH=11)
+Compiling module work.delay_line(WIDTH=32,DEPTH=10)
+Compiling module work.delay_line(WIDTH=32,DEPTH=9)
+Compiling module work.delay_line(WIDTH=32,DEPTH=8)
+Compiling module work.delay_line(WIDTH=32,DEPTH=7)
+Compiling module work.delay_line(WIDTH=32,DEPTH=6)
+Compiling module work.delay_line(WIDTH=32,DEPTH=5)
+Compiling module work.delay_line(WIDTH=32,DEPTH=4)
+Compiling module work.delay_line(WIDTH=32,DEPTH=3)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=31)
+Compiling module work.systolic_array(P=16,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=30)
+Compiling module work.mac_accumulator_default
+Compiling module work.mm_core_default
+Compiling module work.tb_selfcheck
+Built simulation snapshot tb_selfcheck
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/mac_attack_accel/frequency200/simulation_release/xsim.dir/tb_selfcheck/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Oct 17 17:53:52 2026...
+
+****** xsim v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_selfcheck/xsim_script.tcl
+# xsim {tb_selfcheck} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ MAC Attack accelerator: 16x16 systolic array (256 PEs), INT8 inputs,
+ 32-bit accumulators. Every answer is checked against plain loops.
+==================================================================
+
+Test 1: 4x4 times 4x4, small numbers (check by hand)
+  A =
+         5     4     4    -1
+        -4     4     8     0
+         7     5    -6    -8
+         3    -7     0    -8
+  B =
+         5    -1     2     9
+         2     9    -3     3
+         9    -2    -9     3
+        -3     9    -4     2
+  C from the hardware =
+        72    14   -34    67
+        60    24   -92     0
+        15   -22    85    44
+        25  -138    59   -10
+  C expected =
+        72    14   -34    67
+        60    24   -92     0
+        15   -22    85    44
+        25  -138    59   -10
+  PASS  16/16 results correct
+  PASS  passes = 1  (equation: ceil(4/16) x ceil(4/16) = 1)
+  PASS  cycles = 50  (equation: passes x (M + 3P - 2) = 1 x 50 = 50)
+        64 multiply-adds; the 256 PEs were busy 0.5% of the time
+
+Test 2: 16x16 times 16x16, random INT8, one tile
+  PASS  256/256 results correct
+  PASS  passes = 1  (equation: ceil(16/16) x ceil(16/16) = 1)
+  PASS  cycles = 62  (equation: passes x (M + 3P - 2) = 1 x 62 = 62)
+        4096 multiply-adds; the 256 PEs were busy 25.8% of the time
+
+Test 3: 64x64 times 64x64, random INT8, folded over 16 tiles
+  PASS  4096/4096 results correct
+  PASS  passes = 16  (equation: ceil(64/16) x ceil(64/16) = 16)
+  PASS  cycles = 1760  (equation: passes x (M + 3P - 2) = 16 x 110 = 1760)
+        262144 multiply-adds; the 256 PEs were busy 58.2% of the time
+
+Test 4: 37x50 times 50x23, random INT8, odd sizes (edge tiles)
+  PASS  851/851 results correct
+  PASS  passes = 8  (equation: ceil(50/16) x ceil(23/16) = 8)
+  PASS  cycles = 664  (equation: passes x (M + 3P - 2) = 8 x 83 = 664)
+        42550 multiply-adds; the 256 PEs were busy 25.0% of the time
+
+Test 5: 1x64 times 64x64, one row of A (M = 1)
+  PASS  64/64 results correct
+  PASS  passes = 16  (equation: ceil(64/16) x ceil(64/16) = 16)
+  PASS  cycles = 752  (equation: passes x (M + 3P - 2) = 16 x 47 = 752)
+        4096 multiply-adds; the 256 PEs were busy 2.1% of the time
+
+Test 6: 16x16 times 16x16, every input -128 (largest products)
+  PASS  256/256 results correct
+  PASS  passes = 1  (equation: ceil(16/16) x ceil(16/16) = 1)
+  PASS  cycles = 62  (equation: passes x (M + 3P - 2) = 1 x 62 = 62)
+        4096 multiply-adds; the 256 PEs were busy 25.8% of the time
+
+Test 7: 16x16 times 16x16, every input 127
+  PASS  256/256 results correct
+  PASS  passes = 1  (equation: ceil(16/16) x ceil(16/16) = 1)
+  PASS  cycles = 62  (equation: passes x (M + 3P - 2) = 1 x 62 = 62)
+        4096 multiply-adds; the 256 PEs were busy 25.8% of the time
+
+Test 8: 16x16 times 16x16, B = identity, so C must equal A
+  PASS  256/256 results correct
+  PASS  passes = 1  (equation: ceil(16/16) x ceil(16/16) = 1)
+  PASS  cycles = 62  (equation: passes x (M + 3P - 2) = 1 x 62 = 62)
+        4096 multiply-adds; the 256 PEs were busy 25.8% of the time
+
+==================================================================
+ ALL TESTS PASSED (8/8)
+==================================================================
+$finish called at time : 330430 ns : File "C:/mac_attack_accel/frequency200/tb/tb_selfcheck.sv" Line 196
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 17:54:02 2026...
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_selfcheck2 -s tb_selfcheck2 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.pe(EARLY_MAC=1)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=3)
+Compiling module work.systolic_array(P=2,EARLY_MAC=1)
+Compiling module work.delay_line(WIDTH=1,DEPTH=2)
+Compiling module work.mac_accumulator_default
+Compiling module work.mm_core(P=2)
+Compiling module work.tb_selfcheck(P=2)
+Compiling module work.tb_selfcheck2
+Built simulation snapshot tb_selfcheck2
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/mac_attack_accel/frequency200/simulation_release/xsim.dir/tb_selfcheck2/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Oct 17 17:54:06 2026...
+
+****** xsim v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_selfcheck2/xsim_script.tcl
+# xsim {tb_selfcheck2} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ MAC Attack accelerator: 2x2 systolic array (4 PEs), INT8 inputs,
+ 32-bit accumulators. Every answer is checked against plain loops.
+==================================================================
+
+Test 1: 4x4 times 4x4, small numbers (check by hand)
+  A =
+         5     4     4    -1
+        -4     4     8     0
+         7     5    -6    -8
+         3    -7     0    -8
+  B =
+         5    -1     2     9
+         2     9    -3     3
+         9    -2    -9     3
+        -3     9    -4     2
+  C from the hardware =
+        72    14   -34    67
+        60    24   -92     0
+        15   -22    85    44
+        25  -138    59   -10
+  C expected =
+        72    14   -34    67
+        60    24   -92     0
+        15   -22    85    44
+        25  -138    59   -10
+  PASS  16/16 results correct
+  PASS  passes = 4  (equation: ceil(4/2) x ceil(4/2) = 4)
+  PASS  cycles = 32  (equation: passes x (M + 3P - 2) = 4 x 8 = 32)
+        64 multiply-adds; the 4 PEs were busy 50.0% of the time
+
+Test 2: 16x16 times 16x16, random INT8, one tile
+  PASS  256/256 results correct
+  PASS  passes = 64  (equation: ceil(16/2) x ceil(16/2) = 64)
+  PASS  cycles = 1280  (equation: passes x (M + 3P - 2) = 64 x 20 = 1280)
+        4096 multiply-adds; the 4 PEs were busy 80.0% of the time
+
+Test 3: 64x64 times 64x64, random INT8, folded over 16 tiles
+  PASS  4096/4096 results correct
+  PASS  passes = 1024  (equation: ceil(64/2) x ceil(64/2) = 1024)
+  PASS  cycles = 69632  (equation: passes x (M + 3P - 2) = 1024 x 68 = 69632)
+        262144 multiply-adds; the 4 PEs were busy 94.1% of the time
+
+Test 4: 37x50 times 50x23, random INT8, odd sizes (edge tiles)
+  PASS  851/851 results correct
+  PASS  passes = 300  (equation: ceil(50/2) x ceil(23/2) = 300)
+  PASS  cycles = 12300  (equation: passes x (M + 3P - 2) = 300 x 41 = 12300)
+        42550 multiply-adds; the 4 PEs were busy 86.5% of the time
+
+Test 5: 1x64 times 64x64, one row of A (M = 1)
+  PASS  64/64 results correct
+  PASS  passes = 1024  (equation: ceil(64/2) x ceil(64/2) = 1024)
+  PASS  cycles = 5120  (equation: passes x (M + 3P - 2) = 1024 x 5 = 5120)
+        4096 multiply-adds; the 4 PEs were busy 20.0% of the time
+
+Test 6: 16x16 times 16x16, every input -128 (largest products)
+  PASS  256/256 results correct
+  PASS  passes = 64  (equation: ceil(16/2) x ceil(16/2) = 64)
+  PASS  cycles = 1280  (equation: passes x (M + 3P - 2) = 64 x 20 = 1280)
+        4096 multiply-adds; the 4 PEs were busy 80.0% of the time
+
+Test 7: 16x16 times 16x16, every input 127
+  PASS  256/256 results correct
+  PASS  passes = 64  (equation: ceil(16/2) x ceil(16/2) = 64)
+  PASS  cycles = 1280  (equation: passes x (M + 3P - 2) = 64 x 20 = 1280)
+        4096 multiply-adds; the 4 PEs were busy 80.0% of the time
+
+Test 8: 16x16 times 16x16, B = identity, so C must equal A
+  PASS  256/256 results correct
+  PASS  passes = 64  (equation: ceil(16/2) x ceil(16/2) = 64)
+  PASS  cycles = 1280  (equation: passes x (M + 3P - 2) = 64 x 20 = 1280)
+        4096 multiply-adds; the 4 PEs were busy 80.0% of the time
+
+==================================================================
+ ALL TESTS PASSED (8/8)
+==================================================================
+$finish called at time : 1217730 ns : File "C:/mac_attack_accel/frequency200/tb/tb_selfcheck.sv" Line 196
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 17:54:12 2026...
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_selfcheck3 -s tb_selfcheck3 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.pe(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=5)
+Compiling module work.systolic_array(P=3,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=4)
+Compiling module work.mac_accumulator_default
+Compiling module work.mm_core(P=3)
+Compiling module work.tb_selfcheck(P=3)
+Compiling module work.tb_selfcheck3
+Built simulation snapshot tb_selfcheck3
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/mac_attack_accel/frequency200/simulation_release/xsim.dir/tb_selfcheck3/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Oct 17 17:54:16 2026...
+
+****** xsim v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_selfcheck3/xsim_script.tcl
+# xsim {tb_selfcheck3} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ MAC Attack accelerator: 3x3 systolic array (9 PEs), INT8 inputs,
+ 32-bit accumulators. Every answer is checked against plain loops.
+==================================================================
+
+Test 1: 4x4 times 4x4, small numbers (check by hand)
+  A =
+         5     4     4    -1
+        -4     4     8     0
+         7     5    -6    -8
+         3    -7     0    -8
+  B =
+         5    -1     2     9
+         2     9    -3     3
+         9    -2    -9     3
+        -3     9    -4     2
+  C from the hardware =
+        72    14   -34    67
+        60    24   -92     0
+        15   -22    85    44
+        25  -138    59   -10
+  C expected =
+        72    14   -34    67
+        60    24   -92     0
+        15   -22    85    44
+        25  -138    59   -10
+  PASS  16/16 results correct
+  PASS  passes = 4  (equation: ceil(4/3) x ceil(4/3) = 4)
+  PASS  cycles = 44  (equation: passes x (M + 3P - 2) = 4 x 11 = 44)
+        64 multiply-adds; the 9 PEs were busy 16.2% of the time
+
+Test 2: 16x16 times 16x16, random INT8, one tile
+  PASS  256/256 results correct
+  PASS  passes = 36  (equation: ceil(16/3) x ceil(16/3) = 36)
+  PASS  cycles = 828  (equation: passes x (M + 3P - 2) = 36 x 23 = 828)
+        4096 multiply-adds; the 9 PEs were busy 55.0% of the time
+
+Test 3: 64x64 times 64x64, random INT8, folded over 16 tiles
+  PASS  4096/4096 results correct
+  PASS  passes = 484  (equation: ceil(64/3) x ceil(64/3) = 484)
+  PASS  cycles = 34364  (equation: passes x (M + 3P - 2) = 484 x 71 = 34364)
+        262144 multiply-adds; the 9 PEs were busy 84.8% of the time
+
+Test 4: 37x50 times 50x23, random INT8, odd sizes (edge tiles)
+  PASS  851/851 results correct
+  PASS  passes = 136  (equation: ceil(50/3) x ceil(23/3) = 136)
+  PASS  cycles = 5984  (equation: passes x (M + 3P - 2) = 136 x 44 = 5984)
+        42550 multiply-adds; the 9 PEs were busy 79.0% of the time
+
+Test 5: 1x64 times 64x64, one row of A (M = 1)
+  PASS  64/64 results correct
+  PASS  passes = 484  (equation: ceil(64/3) x ceil(64/3) = 484)
+  PASS  cycles = 3872  (equation: passes x (M + 3P - 2) = 484 x 8 = 3872)
+        4096 multiply-adds; the 9 PEs were busy 11.8% of the time
+
+Test 6: 16x16 times 16x16, every input -128 (largest products)
+  PASS  256/256 results correct
+  PASS  passes = 36  (equation: ceil(16/3) x ceil(16/3) = 36)
+  PASS  cycles = 828  (equation: passes x (M + 3P - 2) = 36 x 23 = 828)
+        4096 multiply-adds; the 9 PEs were busy 55.0% of the time
+
+Test 7: 16x16 times 16x16, every input 127
+  PASS  256/256 results correct
+  PASS  passes = 36  (equation: ceil(16/3) x ceil(16/3) = 36)
+  PASS  cycles = 828  (equation: passes x (M + 3P - 2) = 36 x 23 = 828)
+        4096 multiply-adds; the 9 PEs were busy 55.0% of the time
+
+Test 8: 16x16 times 16x16, B = identity, so C must equal A
+  PASS  256/256 results correct
+  PASS  passes = 36  (equation: ceil(16/3) x ceil(16/3) = 36)
+  PASS  cycles = 828  (equation: passes x (M + 3P - 2) = 36 x 23 = 828)
+        4096 multiply-adds; the 9 PEs were busy 55.0% of the time
+
+==================================================================
+ ALL TESTS PASSED (8/8)
+==================================================================
+$finish called at time : 771450 ns : File "C:/mac_attack_accel/frequency200/tb/tb_selfcheck.sv" Line 196
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 17:54:23 2026...
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_counter_limits -s tb_counter_limits 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.delay_line(DEPTH=3)
+Compiling module work.delay_line(DEPTH=4)
+Compiling module work.delay_line(DEPTH=5)
+Compiling module work.delay_line(DEPTH=6)
+Compiling module work.pe(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=32,DEPTH=6)
+Compiling module work.delay_line(WIDTH=32,DEPTH=5)
+Compiling module work.delay_line(WIDTH=32,DEPTH=4)
+Compiling module work.delay_line(WIDTH=32,DEPTH=3)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=13)
+Compiling module work.systolic_array(P=7,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=12)
+Compiling module work.mac_accumulator_default
+Compiling module work.mm_core(P=7,MAXD=255)
+Compiling module work.tb_counter_limits
+Built simulation snapshot tb_counter_limits
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/mac_attack_accel/frequency200/simulation_release/xsim.dir/tb_counter_limits/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Oct 17 17:54:27 2026...
+
+****** xsim v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_counter_limits/xsim_script.tcl
+# xsim {tb_counter_limits} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ MAC Attack accelerator: 7x7 systolic array (49 PEs), INT8 inputs,
+ 32-bit accumulators. Every answer is checked against plain loops.
+==================================================================
+
+==================================================================
+
+Test 1: 255x3 times 3x5, maximum M
+  PASS  1275/1275 results correct
+  PASS  passes = 1  (equation: ceil(3/7) x ceil(5/7) = 1)
+  PASS  cycles = 274  (equation: passes x (M + 3P - 2) = 1 x 274 = 274)
+        3825 multiply-adds; the 49 PEs were busy 28.5% of the time
+
+Test 2: 3x255 times 255x5, maximum K, padded tile
+  PASS  15/15 results correct
+  PASS  passes = 37  (equation: ceil(255/7) x ceil(5/7) = 37)
+  PASS  cycles = 814  (equation: passes x (M + 3P - 2) = 37 x 22 = 814)
+        3825 multiply-adds; the 49 PEs were busy 9.6% of the time
+
+Test 3: 3x5 times 5x255, maximum N, padded tile
+  PASS  765/765 results correct
+  PASS  passes = 37  (equation: ceil(5/7) x ceil(255/7) = 37)
+  PASS  cycles = 814  (equation: passes x (M + 3P - 2) = 37 x 22 = 814)
+        3825 multiply-adds; the 49 PEs were busy 9.6% of the time
+ ALL TESTS PASSED (3/3)
+==================================================================
+$finish called at time : 101370 ns : File "C:/mac_attack_accel/frequency200/tb_counter_limits.sv" Line 191
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 17:54:33 2026...
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_axi -s tb_axi 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.delay_line(DEPTH=3)
+Compiling module work.delay_line(DEPTH=4)
+Compiling module work.delay_line(DEPTH=5)
+Compiling module work.delay_line(DEPTH=6)
+Compiling module work.delay_line(DEPTH=7)
+Compiling module work.pe(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=32,DEPTH=7)
+Compiling module work.delay_line(WIDTH=32,DEPTH=6)
+Compiling module work.delay_line(WIDTH=32,DEPTH=5)
+Compiling module work.delay_line(WIDTH=32,DEPTH=4)
+Compiling module work.delay_line(WIDTH=32,DEPTH=3)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=15)
+Compiling module work.systolic_array(P=8,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=14)
+Compiling module work.mac_accumulator_default
+Compiling module work.mm_core(P=8)
+Compiling module work.mac_axi_default
+Compiling module work.tb_axi
+Built simulation snapshot tb_axi
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/mac_attack_accel/frequency200/simulation_release/xsim.dir/tb_axi/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Oct 17 17:54:38 2026...
+
+****** xsim v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_axi/xsim_script.tcl
+# xsim {tb_axi} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ mac_axi on a 8x8 array: the ARM's view over AXI4-Lite (50 MHz)
+==================================================================
+  ID   = 0x4d414331  (MAC1)
+  INFO = P 8, 8-bit inputs, 32-bit sums, matrices up to 64
+  DIMS write then read back: 0x050607    (ok)
+
+  PASS                   small numbers  4x 4x 4    16/  16 correct  passes   1 (eq   1)  cycles    26 (eq    26)  bus: load     58, run    42, read    100 clocks
+  PASS          random INT8, one 16x16 16x16x16   256/ 256 correct  passes   4 (eq   4)  cycles   152 (eq   152)  bus: load    778, run   168, read   1540 clocks
+  PASS       random INT8, 64x64 folded 64x64x64  4096/4096 correct  passes  64 (eq  64)  cycles  5504 (eq  5504)  bus: load  12298, run  5520, read  24580 clocks
+  PASS          odd sizes (edge tiles) 37x50x23   851/ 851 correct  passes  21 (eq  21)  cycles  1239 (eq  1239)  bus: load   4516, run  1254, read   5110 clocks
+  PASS                    one row of A  1x64x64    64/  64 correct  passes  64 (eq  64)  cycles  1472 (eq  1472)  bus: load   6250, run  1488, read    388 clocks
+  PASS                every input -128 16x16x16   256/ 256 correct  passes   4 (eq   4)  cycles   152 (eq   152)  bus: load    778, run   168, read   1540 clocks
+  PASS                 every input 127 16x16x16   256/ 256 correct  passes   4 (eq   4)  cycles   152 (eq   152)  bus: load    778, run   168, read   1540 clocks
+  PASS                    B = identity 16x16x16   256/ 256 correct  passes   4 (eq   4)  cycles   152 (eq   152)  bus: load    778, run   168, read   1540 clocks
+  PASS  load during a run is dropped and flagged (STATUS = 0x6)
+
+  Clocks over all 8 multiplies: loading 26234, computing 8976, reading 36338
+  Moving data takes 7.0x as long as the computing, even with an ideal bus.
+
+==================================================================
+ ALL AXI TESTS PASSED (12/12)
+==================================================================
+$finish called at time : 1543900 ns : File "C:/mac_attack_accel/frequency200/tb/tb_axi.sv" Line 183
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 17:54:47 2026...
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_extras -s tb_extras 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4328] File: C:/mac_attack_accel/frequency200/tb/tb_extras.sv Line: 92 : Sensitivity on input argument "c" of task "sat_run" may never get triggered.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.delay_line(DEPTH=3)
+Compiling module work.pe(ACC=16,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=16,DEPTH=3)
+Compiling module work.delay_line(WIDTH=16,DEPTH=2)
+Compiling module work.delay_line(WIDTH=16)
+Compiling module work.delay_line(WIDTH=1,DEPTH=7)
+Compiling module work.systolic_array(ACC=16,EARLY_MAC=...
+Compiling module work.delay_line(WIDTH=1,DEPTH=6)
+Compiling module work.mac_accumulator(ACC=16)
+Compiling module work.mm_core(P=4,ACC=16)
+Compiling module work.pe(ACC=16,EARLY_MAC=2,SAT=1)
+Compiling module work.systolic_array(ACC=16,EARLY_MAC=...
+Compiling module work.mac_accumulator(ACC=16,SAT=1)
+Compiling module work.mm_core(P=4,ACC=16,SAT=1)
+Compiling module work.postproc_default
+Compiling module work.uart_rx(CLKS_PER_BIT=4)
+Compiling module work.uart_tx(CLKS_PER_BIT=4)
+Compiling module work.host_if
+Compiling module work.delay_line(DEPTH=4)
+Compiling module work.delay_line(DEPTH=5)
+Compiling module work.delay_line(DEPTH=6)
+Compiling module work.delay_line(DEPTH=7)
+Compiling module work.delay_line(DEPTH=8)
+Compiling module work.delay_line(DEPTH=9)
+Compiling module work.delay_line(DEPTH=10)
+Compiling module work.delay_line(DEPTH=11)
+Compiling module work.delay_line(DEPTH=12)
+Compiling module work.delay_line(DEPTH=13)
+Compiling module work.delay_line(DEPTH=14)
+Compiling module work.delay_line(DEPTH=15)
+Compiling module work.pe(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=32,DEPTH=15)
+Compiling module work.delay_line(WIDTH=32,DEPTH=14)
+Compiling module work.delay_line(WIDTH=32,DEPTH=13)
+Compiling module work.delay_line(WIDTH=32,DEPTH=12)
+Compiling module work.delay_line(WIDTH=32,DEPTH=11)
+Compiling module work.delay_line(WIDTH=32,DEPTH=10)
+Compiling module work.delay_line(WIDTH=32,DEPTH=9)
+Compiling module work.delay_line(WIDTH=32,DEPTH=8)
+Compiling module work.delay_line(WIDTH=32,DEPTH=7)
+Compiling module work.delay_line(WIDTH=32,DEPTH=6)
+Compiling module work.delay_line(WIDTH=32,DEPTH=5)
+Compiling module work.delay_line(WIDTH=32,DEPTH=4)
+Compiling module work.delay_line(WIDTH=32,DEPTH=3)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=31)
+Compiling module work.systolic_array(P=16,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=30)
+Compiling module work.mac_accumulator_default
+Compiling module work.mm_core_default
+Compiling module work.chip_top(CLKS_PER_BIT=4)
+Compiling module work.tb_extras
+Built simulation snapshot tb_extras
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/mac_attack_accel/frequency200/simulation_release/xsim.dir/tb_extras/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Oct 17 17:54:53 2026...
+
+****** xsim v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_extras/xsim_script.tcl
+# xsim {tb_extras} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ Part 1: overflow versus saturation (4x4 array, INT8, 16-bit accumulators)
+==================================================================
+  Every input is -128 and K = 8, so each output is 8 x 16,384 = 131072
+  True answer (no limit)               131072
+  Hardware, wrapping accumulators           0   (as expected)
+  Hardware, saturating accumulators     32767   (as expected)
+  Wrapping turns 131,072 into 0. Saturating stops at the largest 16-bit value:
+  still wrong, but by the least possible amount, and the sign never flips.
+
+  Random 32x32 times 32x32: 327 of 1024 true answers do not fit in 16 bits.
+    wrapping:   327 wrong, worst error 131072
+    saturating: 468 wrong, worst error 70704
+  Saturation also broke 141 results whose final value fits in 16 bits: a partial
+  sum overflowed on the way and was clamped. Wrapping gets those right because the
+  overflows cancel out. So saturation bounds the error but depends on the order.
+  PASS  wrapping hardware matches its model (1024/1024)
+  PASS  saturating hardware matches its model (1024/1024)
+
+==================================================================
+ Part 2: post-processing unit (bias + requantize + ReLU)
+   y = clamp( round( (acc + bias) x 16384 / 2^22 ), lo, 127 )   scale = 1/256
+==================================================================
+  PASS  ReLU on : 400/400 outputs correct
+  PASS  ReLU off: 400/400 outputs correct
+
+        acc + bias   exact value   ReLU off   ReLU on
+                 0          0.00          0         0
+               128          0.50          1         1
+               384          1.50          2         2
+              -128         -0.50          0         0
+              -384         -1.50         -1         0
+        1073741824    4194304.00        127       127
+       -1073741824   -4194304.00       -128         0
+               255          1.00          1         1
+              4632         18.09         18        18
+            -30330       -118.48       -118         0
+  Halves round up (0.5 -> 1, -0.5 -> 0). Results outside -128..127 are clamped,
+  and ReLU sets negatives to 0. One result per clock; 3 pipeline stages.
+
+==================================================================
+ Part 3: whole chip over a serial line: laptop <-> UART <-> host interface <-> 16x16 core
+==================================================================
+  laptop sends               chip replies
+  'I'  (identify)            'MAC'  P=16 BITS=8 ACC=32 MAXD=64
+          'D' 8 8 8  (sizes) 'k'
+              'A' + 64 bytes 'k'
+              'B' + 64 bytes 'k'
+  'G'  (run)                 'g'  passes=1 cycles=54 total=57
+  'C'  (read result)         256 bytes = 64 results
+  PASS  64/64 results correct; cycles 54, equation 54
+
+==================================================================
+ ALL PARTS PASSED
+==================================================================
+$finish called at time : 329615 ns : File "C:/mac_attack_accel/frequency200/tb/tb_extras.sv" Line 330
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 17:55:03 2026...
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_compare -s tb_compare 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4328] File: C:/mac_attack_accel/frequency200/tb/tb_compare.sv Line: 70 : Sensitivity on input argument "c" of task "run_core" may never get triggered.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.delay_line(DEPTH=3)
+Compiling module work.pe(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=32,DEPTH=3)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=7)
+Compiling module work.systolic_array(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=6)
+Compiling module work.mac_accumulator_default
+Compiling module work.mm_core(P=4)
+Compiling module work.delay_line(DEPTH=4)
+Compiling module work.delay_line(DEPTH=5)
+Compiling module work.delay_line(DEPTH=6)
+Compiling module work.delay_line(DEPTH=7)
+Compiling module work.delay_line(WIDTH=32,DEPTH=7)
+Compiling module work.delay_line(WIDTH=32,DEPTH=6)
+Compiling module work.delay_line(WIDTH=32,DEPTH=5)
+Compiling module work.delay_line(WIDTH=32,DEPTH=4)
+Compiling module work.delay_line(WIDTH=1,DEPTH=15)
+Compiling module work.systolic_array(P=8,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=14)
+Compiling module work.mm_core(P=8)
+Compiling module work.delay_line(DEPTH=8)
+Compiling module work.delay_line(DEPTH=9)
+Compiling module work.delay_line(DEPTH=10)
+Compiling module work.delay_line(DEPTH=11)
+Compiling module work.delay_line(DEPTH=12)
+Compiling module work.delay_line(DEPTH=13)
+Compiling module work.delay_line(DEPTH=14)
+Compiling module work.delay_line(DEPTH=15)
+Compiling module work.delay_line(WIDTH=32,DEPTH=15)
+Compiling module work.delay_line(WIDTH=32,DEPTH=14)
+Compiling module work.delay_line(WIDTH=32,DEPTH=13)
+Compiling module work.delay_line(WIDTH=32,DEPTH=12)
+Compiling module work.delay_line(WIDTH=32,DEPTH=11)
+Compiling module work.delay_line(WIDTH=32,DEPTH=10)
+Compiling module work.delay_line(WIDTH=32,DEPTH=9)
+Compiling module work.delay_line(WIDTH=32,DEPTH=8)
+Compiling module work.delay_line(WIDTH=1,DEPTH=31)
+Compiling module work.systolic_array(P=16,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=30)
+Compiling module work.mm_core_default
+Compiling module work.tb_compare
+Built simulation snapshot tb_compare
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/mac_attack_accel/frequency200/simulation_release/xsim.dir/tb_compare/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Oct 17 17:55:09 2026...
+
+****** xsim v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_compare/xsim_script.tcl
+# xsim {tb_compare} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+Same 64x64 times 64x64 multiply (random INT8) on three array sizes
+
+    array    PEs  passes   cycles  equation         results     busy  speedup
+    4x  4     16     256    18944     18944  4096/4096 PASS    86.5%     1.0x
+    8x  8     64      64     5504      5504  4096/4096 PASS    74.4%     3.4x
+   16x 16    256      16     1760      1760  4096/4096 PASS    58.2%    10.8x
+
+  More PEs finish in fewer cycles, but every pass also spends 3P - 2 cycles
+  loading weights, filling and draining. So the speedup is smaller than the
+  increase in PEs, and the PEs are busy a smaller share of the time.
+
+ ALL SIZES PASSED
+$finish called at time : 753750 ns : File "C:/mac_attack_accel/frequency200/tb/tb_compare.sv" Line 124
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:00:11 . Memory (MB): peak = 221.902 ; gain = 0.000
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 17:55:26 2026...

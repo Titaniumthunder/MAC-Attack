@@ -1,0 +1,18 @@
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
+|       Launch Clock       |      Capture Clock       |                                                 Pin                                                      |
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
+|                      clk |                      clk |                                                                                    u_core/b_addr_reg[2]/D|
+|                      clk |                      clk |                                                                                    u_core/b_rows_reg[7]/D|
+|                      clk |                      clk |                                                                                        axi_rdata_reg[8]/D|
+|                      clk |                      clk |                                                                                           rd_row_reg[0]/D|
+|                      clk |                      clk |                                                                                    u_core/b_rows_reg[6]/D|
+|                      clk |                      clk |                                                                              u_core/perf_passes_reg[26]/D|
+|                      clk |                      clk |                                                                             u_core/c_write_data_reg[94]/D|
+|                      clk |                      clk |                                                                                           ld_col_reg[6]/D|
+|                      clk |                      clk |                                                                                    u_core/b_rows_reg[4]/D|
+|                      clk |                      clk |                                                                                    u_core/b_addr_reg[8]/D|
+|                      clk |                      clk |                                                                                      ld_last_row_reg[6]/D|
+|                      clk |                      clk |                                                                              u_core/perf_passes_reg[29]/D|
+|                      clk |                      clk |                                                                              u_core/perf_passes_reg[28]/D|
+|                      clk |                      clk |                                                                                    u_core/a_addr_reg[4]/D|
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+

@@ -1,0 +1,1606 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
+| Date         : Sun Oct 18 21:38:25 2026
+| Host         : DESKTOP-VONROUT running 64-bit major release  (build 9200)
+| Command      : report_timing -max_paths 30 -file C:/mac_attack_accel/frequency250/system_250mhz_paths.rpt
+| Design       : system_wrapper
+| Device       : 7z020-clg484
+| Speed File   : -1  PRODUCTION 1.11 2014-09-11
+------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (VIOLATED) :        -0.717ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[9]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.653ns  (logic 0.434ns (16.359%)  route 2.219ns (83.641%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.294ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.760ns = ( 6.760 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.183ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.889     3.183    system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/s_axi_aclk
+    DSP48_X3Y16          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y16          DSP48E1 (Prop_dsp48e1_CLK_P[9])
+                                                      0.434     3.617 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/P[9]
+                         net (fo=1, routed)           2.219     5.836    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg_5[9]
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[9]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.581     6.760    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/s_axi_aclk
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.889    
+                         clock uncertainty           -0.070     6.819    
+    DSP48_X2Y14          DSP48E1 (Setup_dsp48e1_CLK_C[9])
+                                                     -1.701     5.118    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.118    
+                         arrival time                          -5.836    
+  -------------------------------------------------------------------
+                         slack                                 -0.717    
+
+Slack (VIOLATED) :        -0.711ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[45]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.657ns  (logic 0.434ns (16.332%)  route 2.223ns (83.668%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.223     5.806    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[45]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[45])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.806    
+  -------------------------------------------------------------------
+                         slack                                 -0.711    
+
+Slack (VIOLATED) :        -0.709ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[34]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.655ns  (logic 0.434ns (16.346%)  route 2.221ns (83.654%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.221     5.804    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[34]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[34])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.804    
+  -------------------------------------------------------------------
+                         slack                                 -0.709    
+
+Slack (VIOLATED) :        -0.704ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[40]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.650ns  (logic 0.434ns (16.378%)  route 2.216ns (83.622%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.216     5.798    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[40]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[40])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.798    
+  -------------------------------------------------------------------
+                         slack                                 -0.704    
+
+Slack (VIOLATED) :        -0.704ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[42]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.650ns  (logic 0.434ns (16.378%)  route 2.216ns (83.622%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.216     5.798    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[42]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[42])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.798    
+  -------------------------------------------------------------------
+                         slack                                 -0.704    
+
+Slack (VIOLATED) :        -0.695ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/C[41]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.631ns  (logic 0.434ns (16.494%)  route 2.197ns (83.506%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.293ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.733ns = ( 6.733 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.156ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.862     3.156    system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/s_axi_aclk
+    DSP48_X3Y32          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y32          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.590 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.197     5.787    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/C[41]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.554     6.733    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/s_axi_aclk
+    DSP48_X2Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.862    
+                         clock uncertainty           -0.070     6.793    
+    DSP48_X2Y30          DSP48E1 (Setup_dsp48e1_CLK_C[41])
+                                                     -1.701     5.092    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.092    
+                         arrival time                          -5.787    
+  -------------------------------------------------------------------
+                         slack                                 -0.695    
+
+Slack (VIOLATED) :        -0.688ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[38]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.628ns  (logic 0.434ns (16.515%)  route 2.194ns (83.485%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.290ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.184ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.890     3.184    system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/s_axi_aclk
+    DSP48_X3Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y18          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.618 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.194     5.811    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/psum_out[31]
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[38]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/s_axi_aclk
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.894    
+                         clock uncertainty           -0.070     6.824    
+    DSP48_X2Y17          DSP48E1 (Setup_dsp48e1_CLK_C[38])
+                                                     -1.701     5.123    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.123    
+                         arrival time                          -5.811    
+  -------------------------------------------------------------------
+                         slack                                 -0.688    
+
+Slack (VIOLATED) :        -0.688ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[39]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.628ns  (logic 0.434ns (16.515%)  route 2.194ns (83.485%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.290ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.184ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.890     3.184    system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/s_axi_aclk
+    DSP48_X3Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y18          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.618 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.194     5.811    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/psum_out[31]
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[39]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/s_axi_aclk
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.894    
+                         clock uncertainty           -0.070     6.824    
+    DSP48_X2Y17          DSP48E1 (Setup_dsp48e1_CLK_C[39])
+                                                     -1.701     5.123    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.123    
+                         arrival time                          -5.811    
+  -------------------------------------------------------------------
+                         slack                                 -0.688    
+
+Slack (VIOLATED) :        -0.688ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[44]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.628ns  (logic 0.434ns (16.515%)  route 2.194ns (83.485%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.290ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.184ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.890     3.184    system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/s_axi_aclk
+    DSP48_X3Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y18          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.618 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.194     5.811    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/psum_out[31]
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[44]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/s_axi_aclk
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.894    
+                         clock uncertainty           -0.070     6.824    
+    DSP48_X2Y17          DSP48E1 (Setup_dsp48e1_CLK_C[44])
+                                                     -1.701     5.123    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.123    
+                         arrival time                          -5.811    
+  -------------------------------------------------------------------
+                         slack                                 -0.688    
+
+Slack (VIOLATED) :        -0.684ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[23]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.626ns  (logic 0.434ns (16.527%)  route 2.192ns (83.473%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.288ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.168ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.874     3.168    system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/s_axi_aclk
+    DSP48_X3Y20          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y20          DSP48E1 (Prop_dsp48e1_CLK_P[23])
+                                                      0.434     3.602 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/P[23]
+                         net (fo=1, routed)           2.192     5.793    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg_4[23]
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[23]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/s_axi_aclk
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.115     6.880    
+                         clock uncertainty           -0.070     6.810    
+    DSP48_X2Y18          DSP48E1 (Setup_dsp48e1_CLK_C[23])
+                                                     -1.701     5.109    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.109    
+                         arrival time                          -5.793    
+  -------------------------------------------------------------------
+                         slack                                 -0.684    
+
+Slack (VIOLATED) :        -0.677ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[46]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.616ns  (logic 0.434ns (16.588%)  route 2.182ns (83.412%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.290ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.184ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.890     3.184    system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/s_axi_aclk
+    DSP48_X3Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y18          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.618 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.182     5.800    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/psum_out[31]
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[46]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/s_axi_aclk
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.894    
+                         clock uncertainty           -0.070     6.824    
+    DSP48_X2Y17          DSP48E1 (Setup_dsp48e1_CLK_C[46])
+                                                     -1.701     5.123    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.123    
+                         arrival time                          -5.800    
+  -------------------------------------------------------------------
+                         slack                                 -0.677    
+
+Slack (VIOLATED) :        -0.677ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[47]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.616ns  (logic 0.434ns (16.588%)  route 2.182ns (83.412%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.290ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.184ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.890     3.184    system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/s_axi_aclk
+    DSP48_X3Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y18          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.618 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.182     5.800    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/psum_out[31]
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[47]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/s_axi_aclk
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.894    
+                         clock uncertainty           -0.070     6.824    
+    DSP48_X2Y17          DSP48E1 (Setup_dsp48e1_CLK_C[47])
+                                                     -1.701     5.123    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.123    
+                         arrival time                          -5.800    
+  -------------------------------------------------------------------
+                         slack                                 -0.677    
+
+Slack (VIOLATED) :        -0.676ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[41]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.622ns  (logic 0.434ns (16.555%)  route 2.188ns (83.445%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.188     5.770    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[41]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[41])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.770    
+  -------------------------------------------------------------------
+                         slack                                 -0.676    
+
+Slack (VIOLATED) :        -0.673ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[32]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.619ns  (logic 0.434ns (16.573%)  route 2.185ns (83.427%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.185     5.767    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[32]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[32])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.767    
+  -------------------------------------------------------------------
+                         slack                                 -0.673    
+
+Slack (VIOLATED) :        -0.668ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[38]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.610ns  (logic 0.434ns (16.628%)  route 2.176ns (83.372%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.288ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.168ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.874     3.168    system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/s_axi_aclk
+    DSP48_X3Y20          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y20          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.602 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.176     5.778    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg_4[31]
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[38]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/s_axi_aclk
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.115     6.880    
+                         clock uncertainty           -0.070     6.810    
+    DSP48_X2Y18          DSP48E1 (Setup_dsp48e1_CLK_C[38])
+                                                     -1.701     5.109    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.109    
+                         arrival time                          -5.778    
+  -------------------------------------------------------------------
+                         slack                                 -0.668    
+
+Slack (VIOLATED) :        -0.668ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[44]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.610ns  (logic 0.434ns (16.628%)  route 2.176ns (83.372%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.288ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.168ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.874     3.168    system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/s_axi_aclk
+    DSP48_X3Y20          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y20          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.602 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.176     5.778    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg_4[31]
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[44]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/s_axi_aclk
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.115     6.880    
+                         clock uncertainty           -0.070     6.810    
+    DSP48_X2Y18          DSP48E1 (Setup_dsp48e1_CLK_C[44])
+                                                     -1.701     5.109    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.109    
+                         arrival time                          -5.778    
+  -------------------------------------------------------------------
+                         slack                                 -0.668    
+
+Slack (VIOLATED) :        -0.668ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[46]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.610ns  (logic 0.434ns (16.628%)  route 2.176ns (83.372%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.288ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.168ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.874     3.168    system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/s_axi_aclk
+    DSP48_X3Y20          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y20          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.602 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.176     5.778    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg_4[31]
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[46]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/s_axi_aclk
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.115     6.880    
+                         clock uncertainty           -0.070     6.810    
+    DSP48_X2Y18          DSP48E1 (Setup_dsp48e1_CLK_C[46])
+                                                     -1.701     5.109    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.109    
+                         arrival time                          -5.778    
+  -------------------------------------------------------------------
+                         slack                                 -0.668    
+
+Slack (VIOLATED) :        -0.666ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[1].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[1].u_pe/g_wrap.psum_out_reg/C[38]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.613ns  (logic 0.434ns (16.607%)  route 2.179ns (83.393%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.282ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.741ns = ( 6.741 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.153ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.859     3.153    system_i/mac/inst/u_core/u_array/g_r[3].g_c[1].u_pe/s_axi_aclk
+    DSP48_X3Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[1].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y28          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.587 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[1].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.179     5.766    system_i/mac/inst/u_core/u_array/g_r[4].g_c[1].u_pe/g_wrap.psum_out_reg_4[31]
+    DSP48_X2Y26          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[1].u_pe/g_wrap.psum_out_reg/C[38]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.562     6.741    system_i/mac/inst/u_core/u_array/g_r[4].g_c[1].u_pe/s_axi_aclk
+    DSP48_X2Y26          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[1].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.870    
+                         clock uncertainty           -0.070     6.801    
+    DSP48_X2Y26          DSP48E1 (Setup_dsp48e1_CLK_C[38])
+                                                     -1.701     5.100    system_i/mac/inst/u_core/u_array/g_r[4].g_c[1].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.100    
+                         arrival time                          -5.766    
+  -------------------------------------------------------------------
+                         slack                                 -0.666    
+
+Slack (VIOLATED) :        -0.666ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[39]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.602ns  (logic 0.434ns (16.679%)  route 2.168ns (83.321%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.294ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.760ns = ( 6.760 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.183ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.889     3.183    system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/s_axi_aclk
+    DSP48_X3Y16          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y16          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.617 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.168     5.785    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg_5[31]
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[39]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.581     6.760    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/s_axi_aclk
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.889    
+                         clock uncertainty           -0.070     6.819    
+    DSP48_X2Y14          DSP48E1 (Setup_dsp48e1_CLK_C[39])
+                                                     -1.701     5.118    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.118    
+                         arrival time                          -5.785    
+  -------------------------------------------------------------------
+                         slack                                 -0.666    
+
+Slack (VIOLATED) :        -0.666ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[44]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.602ns  (logic 0.434ns (16.679%)  route 2.168ns (83.321%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.294ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.760ns = ( 6.760 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.183ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.889     3.183    system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/s_axi_aclk
+    DSP48_X3Y16          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y16          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.617 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.168     5.785    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg_5[31]
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[44]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.581     6.760    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/s_axi_aclk
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.889    
+                         clock uncertainty           -0.070     6.819    
+    DSP48_X2Y14          DSP48E1 (Setup_dsp48e1_CLK_C[44])
+                                                     -1.701     5.118    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.118    
+                         arrival time                          -5.785    
+  -------------------------------------------------------------------
+                         slack                                 -0.666    
+
+Slack (VIOLATED) :        -0.666ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[21]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.606ns  (logic 0.434ns (16.656%)  route 2.172ns (83.344%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.290ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.184ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.890     3.184    system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/s_axi_aclk
+    DSP48_X3Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y18          DSP48E1 (Prop_dsp48e1_CLK_P[21])
+                                                      0.434     3.618 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[7].u_pe/g_wrap.psum_out_reg/P[21]
+                         net (fo=1, routed)           2.172     5.789    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/psum_out[21]
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/C[21]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/s_axi_aclk
+    DSP48_X2Y17          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.894    
+                         clock uncertainty           -0.070     6.824    
+    DSP48_X2Y17          DSP48E1 (Setup_dsp48e1_CLK_C[21])
+                                                     -1.701     5.123    system_i/mac/inst/u_core/u_array/g_r[6].g_c[7].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.123    
+                         arrival time                          -5.789    
+  -------------------------------------------------------------------
+                         slack                                 -0.666    
+
+Slack (VIOLATED) :        -0.666ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[21]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.612ns  (logic 0.434ns (16.617%)  route 2.178ns (83.383%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[21])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[21]
+                         net (fo=1, routed)           2.178     5.760    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[21]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[21]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[21])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.760    
+  -------------------------------------------------------------------
+                         slack                                 -0.666    
+
+Slack (VIOLATED) :        -0.666ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[29]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.612ns  (logic 0.434ns (16.617%)  route 2.178ns (83.383%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[29])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[29]
+                         net (fo=1, routed)           2.178     5.760    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[29]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[29]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[29])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.760    
+  -------------------------------------------------------------------
+                         slack                                 -0.666    
+
+Slack (VIOLATED) :        -0.664ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/C[38]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.600ns  (logic 0.434ns (16.694%)  route 2.166ns (83.306%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.293ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.733ns = ( 6.733 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.156ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.862     3.156    system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/s_axi_aclk
+    DSP48_X3Y32          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y32          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.590 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.166     5.755    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/C[38]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.554     6.733    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/s_axi_aclk
+    DSP48_X2Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.862    
+                         clock uncertainty           -0.070     6.793    
+    DSP48_X2Y30          DSP48E1 (Setup_dsp48e1_CLK_C[38])
+                                                     -1.701     5.092    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.092    
+                         arrival time                          -5.755    
+  -------------------------------------------------------------------
+                         slack                                 -0.664    
+
+Slack (VIOLATED) :        -0.664ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/C[45]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.600ns  (logic 0.434ns (16.694%)  route 2.166ns (83.306%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.293ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.733ns = ( 6.733 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.156ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.862     3.156    system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/s_axi_aclk
+    DSP48_X3Y32          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y32          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.590 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[0].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.166     5.755    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg_3[31]
+    DSP48_X2Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/C[45]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.554     6.733    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/s_axi_aclk
+    DSP48_X2Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.862    
+                         clock uncertainty           -0.070     6.793    
+    DSP48_X2Y30          DSP48E1 (Setup_dsp48e1_CLK_C[45])
+                                                     -1.701     5.092    system_i/mac/inst/u_core/u_array/g_r[6].g_c[0].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.092    
+                         arrival time                          -5.755    
+  -------------------------------------------------------------------
+                         slack                                 -0.664    
+
+Slack (VIOLATED) :        -0.660ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[38]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.596ns  (logic 0.434ns (16.719%)  route 2.162ns (83.281%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.294ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.760ns = ( 6.760 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.183ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.889     3.183    system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/s_axi_aclk
+    DSP48_X3Y16          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y16          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.617 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.162     5.778    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg_5[31]
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[38]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.581     6.760    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/s_axi_aclk
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.889    
+                         clock uncertainty           -0.070     6.819    
+    DSP48_X2Y14          DSP48E1 (Setup_dsp48e1_CLK_C[38])
+                                                     -1.701     5.118    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.118    
+                         arrival time                          -5.778    
+  -------------------------------------------------------------------
+                         slack                                 -0.660    
+
+Slack (VIOLATED) :        -0.660ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[46]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.596ns  (logic 0.434ns (16.719%)  route 2.162ns (83.281%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.294ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.760ns = ( 6.760 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.183ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.889     3.183    system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/s_axi_aclk
+    DSP48_X3Y16          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y16          DSP48E1 (Prop_dsp48e1_CLK_P[31])
+                                                      0.434     3.617 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/P[31]
+                         net (fo=17, routed)          2.162     5.778    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg_5[31]
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[46]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.581     6.760    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/s_axi_aclk
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.889    
+                         clock uncertainty           -0.070     6.819    
+    DSP48_X2Y14          DSP48E1 (Setup_dsp48e1_CLK_C[46])
+                                                     -1.701     5.118    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.118    
+                         arrival time                          -5.778    
+  -------------------------------------------------------------------
+                         slack                                 -0.660    
+
+Slack (VIOLATED) :        -0.660ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[1]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.595ns  (logic 0.434ns (16.722%)  route 2.161ns (83.278%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.294ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.760ns = ( 6.760 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.183ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.889     3.183    system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/s_axi_aclk
+    DSP48_X3Y16          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y16          DSP48E1 (Prop_dsp48e1_CLK_P[1])
+                                                      0.434     3.617 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[4].u_pe/g_wrap.psum_out_reg/P[1]
+                         net (fo=1, routed)           2.161     5.778    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg_5[1]
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/C[1]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.581     6.760    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/s_axi_aclk
+    DSP48_X2Y14          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.889    
+                         clock uncertainty           -0.070     6.819    
+    DSP48_X2Y14          DSP48E1 (Setup_dsp48e1_CLK_C[1])
+                                                     -1.701     5.118    system_i/mac/inst/u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.118    
+                         arrival time                          -5.778    
+  -------------------------------------------------------------------
+                         slack                                 -0.660    
+
+Slack (VIOLATED) :        -0.657ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[25]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.603ns  (logic 0.434ns (16.671%)  route 2.169ns (83.329%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.283ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.736ns = ( 6.736 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.149ns
+    Clock Pessimism Removal (CPR):    0.129ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.855     3.149    system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/s_axi_aclk
+    DSP48_X3Y30          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y30          DSP48E1 (Prop_dsp48e1_CLK_P[25])
+                                                      0.434     3.583 r  system_i/mac/inst/u_core/u_array/g_r[5].g_c[2].u_pe/g_wrap.psum_out_reg/P[25]
+                         net (fo=1, routed)           2.169     5.752    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg_3[25]
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/C[25]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.557     6.736    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/s_axi_aclk
+    DSP48_X2Y28          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.129     6.865    
+                         clock uncertainty           -0.070     6.796    
+    DSP48_X2Y28          DSP48E1 (Setup_dsp48e1_CLK_C[25])
+                                                     -1.701     5.095    system_i/mac/inst/u_core/u_array/g_r[6].g_c[2].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.095    
+                         arrival time                          -5.752    
+  -------------------------------------------------------------------
+                         slack                                 -0.657    
+
+Slack (VIOLATED) :        -0.655ns  (required time - arrival time)
+  Source:                 system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[21]
+                            (rising edge-triggered cell DSP48E1 clocked by clk_fpga_0  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_fpga_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_fpga_0 rise@4.000ns - clk_fpga_0 rise@0.000ns)
+  Data Path Delay:        2.597ns  (logic 0.434ns (16.711%)  route 2.163ns (83.289%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.288ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.765ns = ( 6.765 - 4.000 ) 
+    Source Clock Delay      (SCD):    3.168ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.070ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.120ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  
+    PS7_X0Y0             PS7                          0.000     0.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.874     3.168    system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/s_axi_aclk
+    DSP48_X3Y20          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+  -------------------------------------------------------------------    -------------------
+    DSP48_X3Y20          DSP48E1 (Prop_dsp48e1_CLK_P[21])
+                                                      0.434     3.602 r  system_i/mac/inst/u_core/u_array/g_r[3].g_c[6].u_pe/g_wrap.psum_out_reg/P[21]
+                         net (fo=1, routed)           2.163     5.765    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg_4[21]
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/C[21]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      4.000     4.000 r  
+    PS7_X0Y0             PS7                          0.000     4.000 r  system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     5.088    system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     5.179 r  system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=3399, routed)        1.586     6.765    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/s_axi_aclk
+    DSP48_X2Y18          DSP48E1                                      r  system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg/CLK
+                         clock pessimism              0.115     6.880    
+                         clock uncertainty           -0.070     6.810    
+    DSP48_X2Y18          DSP48E1 (Setup_dsp48e1_CLK_C[21])
+                                                     -1.701     5.109    system_i/mac/inst/u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg
+  -------------------------------------------------------------------
+                         required time                          5.109    
+                         arrival time                          -5.765    
+  -------------------------------------------------------------------
+                         slack                                 -0.655    
+
+
+
+

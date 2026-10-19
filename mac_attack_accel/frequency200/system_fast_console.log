@@ -1,0 +1,76 @@
+
+****** Vivado v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source build_system_fast.tcl
+# set root [file dirname [file normalize [info script]]]
+# if {[file exists $root/zed200/mac_zed_200.xpr]} {
+#     open_project $root/zed200/mac_zed_200.xpr
+# } else {
+#     open_project -read_only C:/mac_attack_accel/zed/mac_zed_project/mac_zed.xpr
+#     save_project_as mac_zed_200 $root/zed200 -exclude_run_results
+# }
+Scanning sources...
+Finished scanning sources
+WARNING: [filemgmt 56-3] IPUserFilesDir: Could not find the directory 'C:/mac_attack_accel/frequency200/zed200/mac_zed_200.ip_user_files'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+# foreach f [get_files -quiet *] {
+#     if {[file tail $f] in {mm_core.sv pe.sv systolic_array.sv}} { remove_files $f }
+# }
+# add_files -norecurse [list $root/rtl_fast/mm_core.sv $root/rtl_fast/pe.sv $root/rtl_fast/systolic_array.sv]
+# update_compile_order -fileset sources_1
+# set bd [get_files */system.bd]
+# if {![string match "$root/zed200/*" [file normalize $bd]]} { error "BD is not isolated: $bd" }
+# open_bd_design $bd
+Adding component instance block -- xilinx.com:ip:processing_system7:5.5 - ps7
+Adding component instance block -- xilinx.com:ip:axi_interconnect:2.1 - axi_ic
+Adding component instance block -- xilinx.com:ip:axi_protocol_converter:2.1 - auto_pc
+Adding component instance block -- xilinx.com:ip:proc_sys_reset:5.0 - rst_fclk0
+Adding component instance block -- xilinx.com:module_ref:mac_axi:1.0 - mac
+Successfully read diagram <system> from BD file <C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/system.bd>
+# update_module_reference [get_ips system_mac_0]
+INFO: [IP_Flow 19-1976] HDL Parser: Replacing 'ACC' by 32 for port or parameter 'core_rd_data'
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi_aclk' of definition 'xilinx.com:signal:clock:1.0' (from X_INTERFACE_INFO parameter from HDL file).
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi_aclk' of definition 'xilinx.com:signal:clock:1.0' (from 'X_INTERFACE_INFO' attribute).
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi_aresetn' of definition 'xilinx.com:signal:reset:1.0' (from X_INTERFACE_INFO parameter from HDL file).
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi_aresetn' of definition 'xilinx.com:signal:reset:1.0' (from 'X_INTERFACE_INFO' attribute).
+INFO: [IP_Flow 19-5107] Inferred bus interface 's_axi' of definition 'xilinx.com:interface:aximm:1.0' (from Xilinx Repository).
+INFO: [IP_Flow 19-4728] Bus Interface 's_axi_aclk': Added interface parameter 'ASSOCIATED_BUSIF' with value 's_axi'.
+INFO: [IP_Flow 19-4728] Bus Interface 's_axi_aclk': Added interface parameter 'ASSOCIATED_RESET' with value 's_axi_aresetn'.
+INFO: [IP_Flow 19-4728] Bus Interface 's_axi_aresetn': Added interface parameter 'POLARITY' with value 'ACTIVE_LOW'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+Upgrading 'C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/system.bd'
+INFO: [IP_Flow 19-3420] Updated system_mac_0 to use current project options
+Wrote  : <C:\mac_attack_accel\frequency200\zed200\mac_zed_200.srcs\sources_1\bd\system\system.bd> 
+# set_property CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 200 [get_bd_cells ps7]
+# validate_bd_design
+WARNING: [BD 41-927] Following properties on pin /mac/s_axi_aclk have been updated from connected ip. They may not be synchronized with cell properties. You can set property on pin directly to confirm the value and resolve the warning.
+	CLK_DOMAIN=system_ps7_0_FCLK_CLK0 
+# save_bd_design
+Wrote  : <C:\mac_attack_accel\frequency200\zed200\mac_zed_200.srcs\sources_1\bd\system\system.bd> 
+# reset_target all $bd
+# generate_target all $bd
+INFO: [BD 41-1662] The design 'system.bd' is already validated. Therefore parameter propagation will not be re-run.
+VHDL Output written to : C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/synth/system.v
+VHDL Output written to : C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/sim/system.v
+VHDL Output written to : C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/hdl/system_wrapper.v
+INFO: [BD 41-1029] Generation completed for the IP Integrator block ps7 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block mac .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block rst_fclk0 .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'c:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/ip/system_auto_pc_0/system_auto_pc_0_ooc.xdc'
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_ic/s00_couplers/auto_pc .
+Exporting to file C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/hw_handoff/system.hwh
+Generated Block Design Tcl file C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/hw_handoff/system_bd.tcl
+Generated Hardware Definition File C:/mac_attack_accel/frequency200/zed200/mac_zed_200.srcs/sources_1/bd/system/synth/system.hwdef
+generate_target: Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 541.375 ; gain = 195.145
+# set_property strategy Performance_Explore [get_runs impl_1]
+# reset_run synth_1
+# reset_run system_mac_0_synth_1
+WARNING: [Vivado 12-821] No runs matched 'system_mac_0_synth_1'
+ERROR: [Common 17-162] Invalid option value specified for '-runs'.
+INFO: [Common 17-206] Exiting Vivado at Sat Oct 17 17:42:30 2026...

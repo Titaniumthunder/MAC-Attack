@@ -1,0 +1,32 @@
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_axi_p4 -s tb_axi_p4 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.delay_line(DEPTH=3)
+Compiling module work.pe(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=32,DEPTH=3)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=7)
+Compiling module work.systolic_array(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=5)
+Compiling module work.mm_core(P=4)
+Compiling module work.mac_axi(P=4)
+Compiling module work.tb_axi(P=4)
+Compiling module work.tb_axi_p4
+Built simulation snapshot tb_axi_p4
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/mac_attack_accel/frequency200/simulation_staged/xsim.dir/tb_axi_p4/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sun Oct 18 00:55:21 2026...

@@ -1,0 +1,43 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sat Oct 17 00:32:10 2026
+# Process ID: 12044
+# Current directory: C:/mac_attack_accel/frequency200/simulation
+# Command line: xsim.exe -log tb_axi.log -mode tcl -source {xsim.dir/tb_axi/xsim_script.tcl}
+# Log file: C:/mac_attack_accel/frequency200/simulation/tb_axi.log
+# Journal file: C:/mac_attack_accel/frequency200/simulation\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb_axi/xsim_script.tcl
+# xsim {tb_axi} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ mac_axi on a 8x8 array: the ARM's view over AXI4-Lite (50 MHz)
+==================================================================
+  ID   = 0x4d414331  (MAC1)
+  INFO = P 8, 8-bit inputs, 32-bit sums, matrices up to 64
+  DIMS write then read back: 0x050607    (ok)
+
+  PASS                   small numbers  4x 4x 4    16/  16 correct  passes   1 (eq   1)  cycles    26 (eq    26)  bus: load     58, run    42, read    100 clocks
+  PASS          random INT8, one 16x16 16x16x16   256/ 256 correct  passes   4 (eq   4)  cycles   152 (eq   152)  bus: load    778, run   168, read   1540 clocks
+  PASS       random INT8, 64x64 folded 64x64x64  4096/4096 correct  passes  64 (eq  64)  cycles  5504 (eq  5504)  bus: load  12298, run  5520, read  24580 clocks
+  PASS          odd sizes (edge tiles) 37x50x23   851/ 851 correct  passes  21 (eq  21)  cycles  1239 (eq  1239)  bus: load   4516, run  1254, read   5110 clocks
+  PASS                    one row of A  1x64x64    64/  64 correct  passes  64 (eq  64)  cycles  1472 (eq  1472)  bus: load   6250, run  1488, read    388 clocks
+  PASS                every input -128 16x16x16   256/ 256 correct  passes   4 (eq   4)  cycles   152 (eq   152)  bus: load    778, run   168, read   1540 clocks
+  PASS                 every input 127 16x16x16   256/ 256 correct  passes   4 (eq   4)  cycles   152 (eq   152)  bus: load    778, run   168, read   1540 clocks
+  PASS                    B = identity 16x16x16   256/ 256 correct  passes   4 (eq   4)  cycles   152 (eq   152)  bus: load    778, run   168, read   1540 clocks
+  PASS  load during a run is dropped and flagged (STATUS = 0x6)
+
+  Clocks over all 8 multiplies: loading 26234, computing 8976, reading 36338
+  Moving data takes 7.0x as long as the computing, even with an ideal bus.
+
+==================================================================
+ ALL AXI TESTS PASSED (12/12)
+==================================================================
+$finish called at time : 1543900 ns : File "C:/mac_attack_accel/frequency200/tb/tb_axi.sv" Line 183
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 00:32:16 2026...

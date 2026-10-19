@@ -1,0 +1,63 @@
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_extras -s tb_extras 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4328] File: C:/mac_attack_accel/frequency200/tb/tb_extras.sv Line: 92 : Sensitivity on input argument "c" of task "sat_run" may never get triggered.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.delay_line(DEPTH=3)
+Compiling module work.pe(ACC=16)
+Compiling module work.delay_line(WIDTH=16,DEPTH=3)
+Compiling module work.delay_line(WIDTH=16,DEPTH=2)
+Compiling module work.delay_line(WIDTH=16)
+Compiling module work.delay_line(WIDTH=1,DEPTH=7)
+Compiling module work.systolic_array(ACC=16)
+Compiling module work.delay_line(WIDTH=1,DEPTH=6)
+Compiling module work.mm_core(P=4,ACC=16)
+Compiling module work.pe(ACC=16,SAT=1)
+Compiling module work.systolic_array(ACC=16,SAT=1)
+Compiling module work.mm_core(P=4,ACC=16,SAT=1)
+Compiling module work.postproc_default
+Compiling module work.uart_rx(CLKS_PER_BIT=4)
+Compiling module work.uart_tx(CLKS_PER_BIT=4)
+Compiling module work.host_if
+Compiling module work.delay_line(DEPTH=4)
+Compiling module work.delay_line(DEPTH=5)
+Compiling module work.delay_line(DEPTH=6)
+Compiling module work.delay_line(DEPTH=7)
+Compiling module work.delay_line(DEPTH=8)
+Compiling module work.delay_line(DEPTH=9)
+Compiling module work.delay_line(DEPTH=10)
+Compiling module work.delay_line(DEPTH=11)
+Compiling module work.delay_line(DEPTH=12)
+Compiling module work.delay_line(DEPTH=13)
+Compiling module work.delay_line(DEPTH=14)
+Compiling module work.delay_line(DEPTH=15)
+Compiling module work.pe_default
+Compiling module work.delay_line(WIDTH=32,DEPTH=15)
+Compiling module work.delay_line(WIDTH=32,DEPTH=14)
+Compiling module work.delay_line(WIDTH=32,DEPTH=13)
+Compiling module work.delay_line(WIDTH=32,DEPTH=12)
+Compiling module work.delay_line(WIDTH=32,DEPTH=11)
+Compiling module work.delay_line(WIDTH=32,DEPTH=10)
+Compiling module work.delay_line(WIDTH=32,DEPTH=9)
+Compiling module work.delay_line(WIDTH=32,DEPTH=8)
+Compiling module work.delay_line(WIDTH=32,DEPTH=7)
+Compiling module work.delay_line(WIDTH=32,DEPTH=6)
+Compiling module work.delay_line(WIDTH=32,DEPTH=5)
+Compiling module work.delay_line(WIDTH=32,DEPTH=4)
+Compiling module work.delay_line(WIDTH=32,DEPTH=3)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=31)
+Compiling module work.systolic_array(P=16)
+Compiling module work.delay_line(WIDTH=1,DEPTH=30)
+Compiling module work.mm_core_default
+Compiling module work.chip_top(CLKS_PER_BIT=4)
+Compiling module work.tb_extras
+Built simulation snapshot tb_extras

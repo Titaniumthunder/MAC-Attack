@@ -1,0 +1,17 @@
+Final verification, 2026-10-18, Vivado 2019.1
+Part: xc7z020clg484-1, P=8, BITS=8, ACC=32, MAXD=64, SAT=0
+Clock: clk_fpga_0, 5.000 ns, 200.000 MHz
+Setup WNS +0.007 ns; hold WHS +0.043 ns; pulse width WPWS +1.520 ns
+TNS/THS/TPWS zero. No failing endpoints. No unconstrained internal endpoints.
+
+Core P=16/P=2/P=3: 8/8 each
+MAXD=255 P=7 dimension checks: 3/3
+AXI P=4/P=8/P=16: 12/12 each
+Extras: all parts passed
+64x64 matrix products P=4/P=8/P=16: all sizes passed
+See simulation_staged/*.log for individual output.
+
+Installed RTL hashes match rtl_200mhz source snapshot.
+Block hierarchy, nets, interface nets and addressing unchanged.
+Only intended BD configuration change: PS FCLK0 = 200 MHz.
+No bitstream generation or hardware programming performed.

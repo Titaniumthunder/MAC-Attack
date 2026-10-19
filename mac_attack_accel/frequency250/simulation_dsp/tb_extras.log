@@ -1,0 +1,75 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sun Oct 18 21:50:35 2026
+# Process ID: 32076
+# Current directory: C:/mac_attack_accel/frequency250/simulation_dsp
+# Command line: xsim.exe -log tb_extras.log -mode tcl -source {xsim.dir/tb_extras/xsim_script.tcl}
+# Log file: C:/mac_attack_accel/frequency250/simulation_dsp/tb_extras.log
+# Journal file: C:/mac_attack_accel/frequency250/simulation_dsp\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb_extras/xsim_script.tcl
+# xsim {tb_extras} -autoloadwcfg -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+run -all
+
+==================================================================
+ Part 1: overflow versus saturation (4x4 array, INT8, 16-bit accumulators)
+==================================================================
+  Every input is -128 and K = 8, so each output is 8 x 16,384 = 131072
+  True answer (no limit)               131072
+  Hardware, wrapping accumulators           0   (as expected)
+  Hardware, saturating accumulators     32767   (as expected)
+  Wrapping turns 131,072 into 0. Saturating stops at the largest 16-bit value:
+  still wrong, but by the least possible amount, and the sign never flips.
+
+  Random 32x32 times 32x32: 327 of 1024 true answers do not fit in 16 bits.
+    wrapping:   327 wrong, worst error 131072
+    saturating: 468 wrong, worst error 70704
+  Saturation also broke 141 results whose final value fits in 16 bits: a partial
+  sum overflowed on the way and was clamped. Wrapping gets those right because the
+  overflows cancel out. So saturation bounds the error but depends on the order.
+  PASS  wrapping hardware matches its model (1024/1024)
+  PASS  saturating hardware matches its model (1024/1024)
+
+==================================================================
+ Part 2: post-processing unit (bias + requantize + ReLU)
+   y = clamp( round( (acc + bias) x 16384 / 2^22 ), lo, 127 )   scale = 1/256
+==================================================================
+  PASS  ReLU on : 400/400 outputs correct
+  PASS  ReLU off: 400/400 outputs correct
+
+        acc + bias   exact value   ReLU off   ReLU on
+                 0          0.00          0         0
+               128          0.50          1         1
+               384          1.50          2         2
+              -128         -0.50          0         0
+              -384         -1.50         -1         0
+        1073741824    4194304.00        127       127
+       -1073741824   -4194304.00       -128         0
+               255          1.00          1         1
+              4632         18.09         18        18
+            -30330       -118.48       -118         0
+  Halves round up (0.5 -> 1, -0.5 -> 0). Results outside -128..127 are clamped,
+  and ReLU sets negatives to 0. One result per clock; 3 pipeline stages.
+
+==================================================================
+ Part 3: whole chip over a serial line: laptop <-> UART <-> host interface <-> 16x16 core
+==================================================================
+  laptop sends               chip replies
+  'I'  (identify)            'MAC'  P=16 BITS=8 ACC=32 MAXD=64
+          'D' 8 8 8  (sizes) 'k'
+              'A' + 64 bytes 'k'
+              'B' + 64 bytes 'k'
+  'G'  (run)                 'g'  passes=1 cycles=54 total=57
+  'C'  (read result)         256 bytes = 64 results
+  PASS  64/64 results correct; cycles 54, equation 54
+
+==================================================================
+ ALL PARTS PASSED
+==================================================================
+$finish called at time : 329615 ns : File "C:/mac_attack_accel/frequency250/tb/tb_extras.sv" Line 330
+exit
+INFO: [Common 17-206] Exiting xsim at Sun Oct 18 21:50:43 2026...

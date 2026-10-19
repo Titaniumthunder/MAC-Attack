@@ -1,0 +1,40 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sun Oct 18 21:47:46 2026
+# Process ID: 30280
+# Current directory: C:/mac_attack_accel/frequency250
+# Command line: vivado.exe -mode batch -source inspect_dsp.tcl -log inspect_dsp.log -journal inspect_dsp.jou
+# Log file: C:/mac_attack_accel/frequency250/inspect_dsp.log
+# Journal file: C:/mac_attack_accel/frequency250\inspect_dsp.jou
+#-----------------------------------------------------------
+source inspect_dsp.tcl
+# open_checkpoint C:/mac_attack_accel/frequency250/zed_dsp/mac_zed_dsp.runs/system_mac_0_synth_1/system_mac_0.dcp
+Command: open_checkpoint C:/mac_attack_accel/frequency250/zed_dsp/mac_zed_dsp.runs/system_mac_0_synth_1/system_mac_0.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.033 . Memory (MB): peak = 296.844 ; gain = 0.000
+INFO: [Device 21-403] Loading part xc7z020clg484-1
+INFO: [Netlist 29-17] Analyzing 194 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2019.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 656.285 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2019.1 (64-bit) build 2552052
+open_checkpoint: Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 657.027 ; gain = 360.184
+# set links [get_nets -of_objects [get_pins -hierarchical -filter {REF_PIN_NAME =~ PCIN*}]]
+WARNING: [Vivado 12-508] No pins matched 'get_pins -of_objects [get_nets -of_objects [get_pins -hierarchical -filter {REF_PIN_NAME =~ PCIN*}]] -filter {DIRECTION == OUT && REF_PIN_NAME =~ PCOUT*}'.
+# set drivers [get_pins -of_objects $links -filter {DIRECTION == OUT && REF_PIN_NAME =~ PCOUT*}]
+WARNING: [Vivado 12-180] No cells matched 'get_cells -of_objects [get_pins -of_objects [get_nets -of_objects [get_pins -hierarchical -filter {REF_PIN_NAME =~ PCIN*}]] -filter {DIRECTION == OUT && REF_PIN_NAME =~ PCOUT*}]'.
+# puts "CASCADE_SOURCE_DSPS [llength [get_cells -of_objects $drivers]]"
+CASCADE_SOURCE_DSPS 0
+# puts "CASCADE_BITS [llength $drivers]"
+CASCADE_BITS 0
+# puts "TOTAL_DSPS [llength [get_cells -hierarchical -filter {REF_NAME == DSP48E1}]]"
+TOTAL_DSPS 64
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 18 21:47:57 2026...

@@ -1,0 +1,1965 @@
+
+****** Vivado v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source route_staged.tcl
+# set root [file dirname [file normalize [info script]]]
+# create_project -in_memory -part xc7z020clg484-1
+# read_verilog -sv [glob $root/rtl_200mhz/*.sv]
+# read_verilog $root/mac_axi_200mhz.v
+# synth_design -top mac_axi -part xc7z020clg484-1 -generic P=8 -mode out_of_context
+Command: synth_design -top mac_axi -part xc7z020clg484-1 -generic P=8 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 6908 
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 470.055 ; gain = 170.629
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'mac_axi' [C:/mac_attack_accel/frequency200/mac_axi_200mhz.v:31]
+	Parameter P bound to: 8 - type: integer 
+	Parameter MAXD bound to: 64 - type: integer 
+	Parameter BITS bound to: 8 - type: integer 
+	Parameter ACC bound to: 32 - type: integer 
+	Parameter INFO_WORD bound to: 32'b01000000001000000000100000001000 
+	Parameter A_CTRL bound to: 6'b000000 
+	Parameter A_STATUS bound to: 6'b000100 
+	Parameter A_DIMS bound to: 6'b001000 
+	Parameter A_LOAD_PTR bound to: 6'b001100 
+	Parameter A_LOAD_DATA bound to: 6'b010000 
+	Parameter A_RES_PTR bound to: 6'b010100 
+	Parameter A_RES_DATA bound to: 6'b011000 
+	Parameter A_PASSES bound to: 6'b011100 
+	Parameter A_CYCLES bound to: 6'b100000 
+	Parameter A_TOTAL bound to: 6'b100100 
+	Parameter A_INFO bound to: 6'b101000 
+	Parameter A_ID bound to: 6'b101100 
+INFO: [Synth 8-6157] synthesizing module 'mm_core' [C:/mac_attack_accel/frequency200/rtl_200mhz/mm_core.sv:27]
+	Parameter P bound to: 8 - type: integer 
+	Parameter BITS bound to: 8 - type: integer 
+	Parameter ACC bound to: 32 - type: integer 
+	Parameter SAT bound to: 32'sb00000000000000000000000000000000 
+	Parameter MAXD bound to: 64 - type: integer 
+	Parameter TM bound to: 32'sb00000000000000000000000000001000 
+	Parameter DEPTH bound to: 32'sb00000000000000000000001000000000 
+	Parameter TW bound to: 32'sb00000000000000000000000000000100 
+	Parameter CW bound to: 32'sb00000000000000000000000000000111 
+	Parameter DW bound to: 32'sb00000000000000000000000000000111 
+	Parameter EARLY bound to: 32'sb00000000000000000000000000000010 
+	Parameter AW bound to: 32'sb00000000000000000000000000001001 
+	Parameter IXW bound to: 32'sb00000000000000000000000000000111 
+	Parameter MAXV bound to: 33'sb001111111111111111111111111111111 
+	Parameter MINV bound to: 33'sb110000000000000000000000000000000 
+INFO: [Synth 8-6157] synthesizing module 'systolic_array' [C:/mac_attack_accel/frequency200/rtl_200mhz/systolic_array.sv:14]
+	Parameter P bound to: 8 - type: integer 
+	Parameter BITS bound to: 8 - type: integer 
+	Parameter ACC bound to: 32 - type: integer 
+	Parameter EARLY_MAC bound to: 32'sb00000000000000000000000000000010 
+	Parameter SAT bound to: 32'sb00000000000000000000000000000000 
+INFO: [Synth 8-6157] synthesizing module 'delay_line' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000001 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line' (1#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized0' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000010 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized0' (1#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized1' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000011 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized1' (1#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized2' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000100 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized2' (1#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized3' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000101 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized3' (1#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized4' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000110 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized4' (1#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized5' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000111 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized5' (1#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'pe' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:11]
+	Parameter BITS bound to: 8 - type: integer 
+	Parameter ACC bound to: 32 - type: integer 
+	Parameter EARLY_MAC bound to: 32'sb00000000000000000000000000000010 
+	Parameter SAT bound to: 32'sb00000000000000000000000000000000 
+	Parameter MAXV bound to: 33'sb001111111111111111111111111111111 
+	Parameter MINV bound to: 33'sb110000000000000000000000000000000 
+INFO: [Synth 8-4471] merging register 'a_out_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:76]
+WARNING: [Synth 8-6014] Unused sequential element a_out_reg was removed.  [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:76]
+INFO: [Synth 8-6155] done synthesizing module 'pe' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:11]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized6' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000111 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized6' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized7' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000110 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized7' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized8' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000101 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized8' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized9' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000100 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized9' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized10' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000011 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized10' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized11' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000010 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized11' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized12' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32 - type: integer 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000000001 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized12' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized13' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32'sb00000000000000000000000000000001 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000001111 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized13' (2#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'systolic_array' (3#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/systolic_array.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'delay_line__parameterized14' [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+	Parameter WIDTH bound to: 32'sb00000000000000000000000000000001 
+	Parameter DEPTH bound to: 32'sb00000000000000000000000000001101 
+INFO: [Synth 8-6155] done synthesizing module 'delay_line__parameterized14' (3#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/delay_line.sv:3]
+WARNING: [Synth 8-6014] Unused sequential element kt_reg was removed.  [C:/mac_attack_accel/frequency200/rtl_200mhz/mm_core.sv:293]
+WARNING: [Synth 8-6014] Unused sequential element nt_reg was removed.  [C:/mac_attack_accel/frequency200/rtl_200mhz/mm_core.sv:293]
+WARNING: [Synth 8-6014] Unused sequential element t_reg was removed.  [C:/mac_attack_accel/frequency200/rtl_200mhz/mm_core.sv:293]
+INFO: [Synth 8-6155] done synthesizing module 'mm_core' (4#1) [C:/mac_attack_accel/frequency200/rtl_200mhz/mm_core.sv:27]
+INFO: [Synth 8-4471] merging register 'axi_wready_reg' into 'axi_awready_reg' [C:/mac_attack_accel/frequency200/mac_axi_200mhz.v:116]
+WARNING: [Synth 8-6014] Unused sequential element axi_wready_reg was removed.  [C:/mac_attack_accel/frequency200/mac_axi_200mhz.v:116]
+INFO: [Synth 8-6155] done synthesizing module 'mac_axi' (5#1) [C:/mac_attack_accel/frequency200/mac_axi_200mhz.v:31]
+WARNING: [Synth 8-3917] design mac_axi has port s_axi_bresp[1] driven by constant 0
+WARNING: [Synth 8-3917] design mac_axi has port s_axi_bresp[0] driven by constant 0
+WARNING: [Synth 8-3917] design mac_axi has port s_axi_rresp[1] driven by constant 0
+WARNING: [Synth 8-3917] design mac_axi has port s_axi_rresp[0] driven by constant 0
+WARNING: [Synth 8-3331] design mm_core has unconnected port dim_m[7]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_awprot[2]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_awprot[1]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_awprot[0]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_wstrb[3]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_wstrb[2]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_wstrb[1]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_wstrb[0]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_arprot[2]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_arprot[1]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_arprot[0]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 534.633 ; gain = 235.207
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 534.633 ; gain = 235.207
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg484-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 534.633 ; gain = 235.207
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7z020clg484-1
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'mm_core'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  S_IDLE |                              000 |                              000
+                 S_PRIME |                              100 |                              001
+                   S_RUN |                              011 |                              010
+                  S_LAST |                              010 |                              011
+                  S_DONE |                              001 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'mm_core'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:06 . Memory (MB): peak = 588.410 ; gain = 288.984
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     32 Bit       Adders := 11    
+	   2 Input     11 Bit       Adders := 2     
+	   3 Input      9 Bit       Adders := 1     
+	   2 Input      9 Bit       Adders := 2     
+	   3 Input      8 Bit       Adders := 14    
+	   2 Input      8 Bit       Adders := 7     
+	   2 Input      7 Bit       Adders := 9     
+	   2 Input      4 Bit       Adders := 4     
+	   2 Input      3 Bit       Adders := 1     
+	   2 Input      2 Bit       Adders := 1     
++---Registers : 
+	              256 Bit    Registers := 2     
+	               64 Bit    Registers := 2     
+	               32 Bit    Registers := 34    
+	                9 Bit    Registers := 2     
+	                8 Bit    Registers := 237   
+	                7 Bit    Registers := 13    
+	                6 Bit    Registers := 1     
+	                4 Bit    Registers := 24    
+	                3 Bit    Registers := 1     
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 41    
++---RAMs : 
+	             128K Bit         RAMs := 1     
+	              32K Bit         RAMs := 2     
++---Muxes : 
+	   2 Input     64 Bit        Muxes := 28    
+	   2 Input     32 Bit        Muxes := 15    
+	   5 Input     32 Bit        Muxes := 3     
+	  11 Input     32 Bit        Muxes := 1     
+	   2 Input      9 Bit        Muxes := 8     
+	   4 Input      9 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 38    
+	   2 Input      7 Bit        Muxes := 6     
+	   5 Input      7 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 4     
+	   5 Input      4 Bit        Muxes := 2     
+	   5 Input      3 Bit        Muxes := 2     
+	   2 Input      3 Bit        Muxes := 3     
+	   2 Input      1 Bit        Muxes := 67    
+	   5 Input      1 Bit        Muxes := 11    
+	   4 Input      1 Bit        Muxes := 1     
+	   3 Input      1 Bit        Muxes := 1     
+	   6 Input      1 Bit        Muxes := 9     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module mac_axi 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      8 Bit       Adders := 7     
+	   2 Input      3 Bit       Adders := 1     
+	   2 Input      2 Bit       Adders := 1     
++---Registers : 
+	               32 Bit    Registers := 3     
+	                8 Bit    Registers := 9     
+	                6 Bit    Registers := 1     
+	                3 Bit    Registers := 1     
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 9     
++---Muxes : 
+	  11 Input     32 Bit        Muxes := 1     
+	   2 Input     32 Bit        Muxes := 3     
+	   2 Input      8 Bit        Muxes := 12    
+	   2 Input      3 Bit        Muxes := 3     
+	   2 Input      1 Bit        Muxes := 34    
+	   6 Input      1 Bit        Muxes := 9     
+Module delay_line__parameterized13 
+Detailed RTL Component Info : 
++---Registers : 
+	                1 Bit    Registers := 15    
+Module delay_line 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 1     
+Module delay_line__parameterized0 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 2     
+Module delay_line__parameterized1 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 3     
+Module delay_line__parameterized2 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 4     
+Module delay_line__parameterized3 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 5     
+Module delay_line__parameterized4 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 6     
+Module delay_line__parameterized5 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 7     
+Module delay_line__parameterized6 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 7     
+Module delay_line__parameterized7 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 6     
+Module delay_line__parameterized8 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 5     
+Module delay_line__parameterized9 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+Module delay_line__parameterized10 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 3     
+Module delay_line__parameterized11 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 2     
+Module delay_line__parameterized12 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 1     
+Module pe 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 3     
+Module delay_line__parameterized14 
+Detailed RTL Component Info : 
++---Registers : 
+	                1 Bit    Registers := 13    
+Module mm_core 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     32 Bit       Adders := 11    
+	   2 Input     11 Bit       Adders := 2     
+	   3 Input      9 Bit       Adders := 1     
+	   2 Input      9 Bit       Adders := 2     
+	   3 Input      8 Bit       Adders := 14    
+	   2 Input      7 Bit       Adders := 9     
+	   2 Input      4 Bit       Adders := 4     
++---Registers : 
+	              256 Bit    Registers := 2     
+	               64 Bit    Registers := 2     
+	               32 Bit    Registers := 3     
+	                9 Bit    Registers := 2     
+	                8 Bit    Registers := 8     
+	                7 Bit    Registers := 13    
+	                4 Bit    Registers := 24    
+	                1 Bit    Registers := 4     
++---RAMs : 
+	             128K Bit         RAMs := 1     
+	              32K Bit         RAMs := 2     
++---Muxes : 
+	   2 Input     64 Bit        Muxes := 28    
+	   2 Input     32 Bit        Muxes := 12    
+	   5 Input     32 Bit        Muxes := 3     
+	   2 Input      9 Bit        Muxes := 8     
+	   4 Input      9 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 26    
+	   2 Input      7 Bit        Muxes := 6     
+	   5 Input      7 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 4     
+	   5 Input      4 Bit        Muxes := 2     
+	   5 Input      3 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 33    
+	   5 Input      1 Bit        Muxes := 11    
+	   4 Input      1 Bit        Muxes := 1     
+	   3 Input      1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+Warning: Parallel synthesis criteria is not met 
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+INFO: [Synth 8-4471] merging register 'w_reg[7:0]' into 'w_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:56]
+INFO: [Synth 8-4471] merging register 'g_a_pipeline.mac_a_reg[7:0]' into 'g_a_pipeline.mac_a_reg[7:0]' [C:/mac_attack_accel/frequency200/rtl_200mhz/pe.sv:36]
+INFO: [Common 17-14] Message 'Synth 8-4471' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: Generating DSP g_wrap.psum_out_reg, operation Mode is: (C+(A2*B2)')'.
+DSP Report: register w_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_a_pipeline.mac_a_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_wrap.psum_out_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: register g_product_pipeline.product_q_reg is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator psum_out0 is absorbed into DSP g_wrap.psum_out_reg.
+DSP Report: operator product_q0 is absorbed into DSP g_wrap.psum_out_reg.
+WARNING: [Synth 8-3917] design mac_axi has port s_axi_bresp[1] driven by constant 0
+WARNING: [Synth 8-3917] design mac_axi has port s_axi_bresp[0] driven by constant 0
+WARNING: [Synth 8-3917] design mac_axi has port s_axi_rresp[1] driven by constant 0
+WARNING: [Synth 8-3917] design mac_axi has port s_axi_rresp[0] driven by constant 0
+WARNING: [Synth 8-3331] design mm_core has unconnected port wr_row[7]
+WARNING: [Synth 8-3331] design mm_core has unconnected port wr_row[6]
+WARNING: [Synth 8-3331] design mm_core has unconnected port dim_m[7]
+WARNING: [Synth 8-3331] design mm_core has unconnected port rd_row[7]
+WARNING: [Synth 8-3331] design mm_core has unconnected port rd_row[6]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_awprot[2]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_awprot[1]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_awprot[0]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_wstrb[3]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_wstrb[2]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_wstrb[1]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_wstrb[0]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_arprot[2]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_arprot[1]
+WARNING: [Synth 8-3331] design mac_axi has unconnected port s_axi_arprot[0]
+INFO: [Synth 8-3886] merging instance 'u_core/a_first_reg[0]' (FDSE) to 'u_core/a_first_reg[2]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_first_reg[1]' (FDRE) to 'u_core/a_first_reg[6]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[0]' (FDRE) to 'u_core/a_addr_reg[0]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[1]' (FDRE) to 'u_core/a_addr_reg[1]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[2]' (FDRE) to 'u_core/a_addr_reg[2]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[7]' (FDRE) to 'u_core/a_addr_reg[7]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[6]' (FDRE) to 'u_core/a_addr_reg[6]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[5]' (FDRE) to 'u_core/a_addr_reg[5]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[4]' (FDRE) to 'u_core/a_addr_reg[4]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[3]' (FDRE) to 'u_core/a_addr_reg[3]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_addr_reg_rep[8]' (FDRE) to 'u_core/a_addr_reg[8]'
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (u_core/\a_first_reg[2] )
+INFO: [Synth 8-3886] merging instance 'u_core/a_first_reg[3]' (FDRE) to 'u_core/a_first_reg[6]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_first_reg[4]' (FDRE) to 'u_core/a_first_reg[6]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_first_reg[5]' (FDRE) to 'u_core/a_first_reg[6]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (u_core/\a_first_reg[6] )
+INFO: [Synth 8-3886] merging instance 'u_core/next_b_first_reg[3]' (FDRE) to 'u_core/next_b_first_reg[4]'
+INFO: [Synth 8-3886] merging instance 'u_core/next_b_first_reg[4]' (FDRE) to 'u_core/next_b_first_reg[5]'
+INFO: [Synth 8-3886] merging instance 'u_core/t_before_last_reg[1]' (FDRE) to 'u_core/m_reg[1]'
+INFO: [Synth 8-3886] merging instance 'u_core/m_last_reg[0]' (FDRE) to 'u_core/t_last_reg[0]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_last_reg[0]' (FDSE) to 'u_core/m_reg[0]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_last_reg[1]' (FDRE) to 'u_core/m_reg[1]'
+INFO: [Synth 8-3886] merging instance 'u_core/a_last_reg[3]' (FDRE) to 'u_core/t_before_last_reg[3]'
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:19 ; elapsed = 00:00:18 . Memory (MB): peak = 776.277 ; gain = 476.852
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Preliminary Mapping  Report (see note below)
++------------+--------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name | RTL Object               | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++------------+--------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|mm_core:    | cmem_reg                 | 512 x 256(READ_FIRST)  | W |   | 512 x 256(WRITE_FIRST) |   | R | Port A and B     | 0      | 4      | 
+|mm_core:    | g_write_lane[1].bmem_reg | 512 x 64(READ_FIRST)   | W |   | 512 x 64(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|mm_core:    | g_write_lane[1].amem_reg | 512 x 64(READ_FIRST)   | W |   | 512 x 64(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
++------------+--------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+
+DSP: Preliminary Mapping  Report (see note below)
++------------+---------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name | DSP Mapping   | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------+---------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
+|pe          | (C+(A2*B2)')' | 8      | 8      | 32     | -      | 32     | 1    | 1    | 0    | -    | -     | 1    | 1    | 
++------------+---------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6837] The timing for the instance u_core/i_42/cmem_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/i_42/cmem_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/i_42/cmem_reg_2 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/i_42/cmem_reg_3 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/i_86/g_write_lane[1].bmem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/i_90/g_write_lane[1].amem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:19 ; elapsed = 00:00:18 . Memory (MB): peak = 776.277 ; gain = 476.852
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping  Report
++------------+--------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name | RTL Object               | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++------------+--------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|mm_core:    | cmem_reg                 | 512 x 256(READ_FIRST)  | W |   | 512 x 256(WRITE_FIRST) |   | R | Port A and B     | 0      | 4      | 
+|mm_core:    | g_write_lane[1].bmem_reg | 512 x 64(READ_FIRST)   | W |   | 512 x 64(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|mm_core:    | g_write_lane[1].amem_reg | 512 x 64(READ_FIRST)   | W |   | 512 x 64(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
++------------+--------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6837] The timing for the instance u_core/cmem_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/cmem_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/cmem_reg_2 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/cmem_reg_3 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/g_write_lane[1].bmem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Synth 8-6837] The timing for the instance u_core/g_write_lane[1].amem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:20 ; elapsed = 00:00:19 . Memory (MB): peak = 776.301 ; gain = 476.875
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6064] Net \u_core/w_load  is driving 120 big block pins (URAM, BRAM and DSP loads). Created 30 replicas of its driver. 
+INFO: [Synth 8-4618] Found max_fanout attribute set to 8 on net \u_core/w_load . Fanout reduced from 504 to 8 by creating 77 replicas.
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:22 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:22 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Static Shift Register Report:
++------------+------------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name | RTL Name                                             | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++------------+------------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|mac_axi     | u_core/u_next/sh_reg[12][0]                          | 13     | 1     | YES          | NO                 | YES               | 1      | 0       | 
+|mac_axi     | u_core/u_array/g_out[0].g_dly.u_deskew/sh_reg[6][31] | 7      | 32    | YES          | NO                 | YES               | 32     | 0       | 
+|mac_axi     | u_core/u_array/g_out[1].g_dly.u_deskew/sh_reg[5][31] | 6      | 32    | YES          | NO                 | YES               | 32     | 0       | 
+|mac_axi     | u_core/u_array/g_out[2].g_dly.u_deskew/sh_reg[4][31] | 5      | 32    | YES          | NO                 | YES               | 32     | 0       | 
+|mac_axi     | u_core/u_array/g_out[3].g_dly.u_deskew/sh_reg[3][31] | 4      | 32    | YES          | NO                 | YES               | 32     | 0       | 
+|mac_axi     | u_core/u_array/g_skew[4].g_dly.u_skew/sh_reg[3][7]   | 4      | 8     | YES          | NO                 | YES               | 8      | 0       | 
+|mac_axi     | u_core/u_array/g_skew[5].g_dly.u_skew/sh_reg[4][7]   | 5      | 8     | YES          | NO                 | YES               | 8      | 0       | 
+|mac_axi     | u_core/u_array/g_skew[6].g_dly.u_skew/sh_reg[5][7]   | 6      | 8     | YES          | NO                 | YES               | 8      | 0       | 
+|mac_axi     | u_core/u_array/g_skew[7].g_dly.u_skew/sh_reg[6][7]   | 7      | 8     | YES          | NO                 | YES               | 8      | 0       | 
++------------+------------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |CARRY4   |    94|
+|2     |DSP48E1  |    64|
+|3     |LUT1     |     6|
+|4     |LUT2     |   378|
+|5     |LUT3     |   131|
+|6     |LUT4     |    82|
+|7     |LUT5     |   140|
+|8     |LUT6     |   677|
+|9     |MUXF7    |    32|
+|10    |RAMB36E1 |     6|
+|11    |SRL16E   |   161|
+|12    |FDRE     |  2422|
+|13    |FDSE     |     4|
++------+---------+------+
+
+Report Instance Areas: 
++------+--------------------------------+----------------------------+------+
+|      |Instance                        |Module                      |Cells |
++------+--------------------------------+----------------------------+------+
+|1     |top                             |                            |  4197|
+|2     |  u_core                        |mm_core                     |  3852|
+|3     |    u_array                     |systolic_array              |  2086|
+|4     |      \g_out[0].g_dly.u_deskew  |delay_line__parameterized6  |   136|
+|5     |      \g_out[1].g_dly.u_deskew  |delay_line__parameterized7  |   136|
+|6     |      \g_out[2].g_dly.u_deskew  |delay_line__parameterized8  |   136|
+|7     |      \g_out[3].g_dly.u_deskew  |delay_line__parameterized9  |   136|
+|8     |      \g_out[4].g_dly.u_deskew  |delay_line__parameterized10 |   137|
+|9     |      \g_out[5].g_dly.u_deskew  |delay_line__parameterized11 |   104|
+|10    |      \g_out[6].g_dly.u_deskew  |delay_line__parameterized12 |    72|
+|11    |      \g_r[0].g_c[0].u_pe       |pe                          |    25|
+|12    |      \g_r[0].g_c[1].u_pe       |pe_0                        |    17|
+|13    |      \g_r[0].g_c[2].u_pe       |pe_1                        |    17|
+|14    |      \g_r[0].g_c[3].u_pe       |pe_2                        |    17|
+|15    |      \g_r[0].g_c[4].u_pe       |pe_3                        |    17|
+|16    |      \g_r[0].g_c[5].u_pe       |pe_4                        |    17|
+|17    |      \g_r[0].g_c[6].u_pe       |pe_5                        |     9|
+|18    |      \g_r[0].g_c[7].u_pe       |pe_6                        |     9|
+|19    |      \g_r[1].g_c[0].u_pe       |pe_7                        |    17|
+|20    |      \g_r[1].g_c[1].u_pe       |pe_8                        |    17|
+|21    |      \g_r[1].g_c[2].u_pe       |pe_9                        |    17|
+|22    |      \g_r[1].g_c[3].u_pe       |pe_10                       |    17|
+|23    |      \g_r[1].g_c[4].u_pe       |pe_11                       |    17|
+|24    |      \g_r[1].g_c[5].u_pe       |pe_12                       |    17|
+|25    |      \g_r[1].g_c[6].u_pe       |pe_13                       |     9|
+|26    |      \g_r[1].g_c[7].u_pe       |pe_14                       |     9|
+|27    |      \g_r[2].g_c[0].u_pe       |pe_15                       |    17|
+|28    |      \g_r[2].g_c[1].u_pe       |pe_16                       |    17|
+|29    |      \g_r[2].g_c[2].u_pe       |pe_17                       |    17|
+|30    |      \g_r[2].g_c[3].u_pe       |pe_18                       |    17|
+|31    |      \g_r[2].g_c[4].u_pe       |pe_19                       |    17|
+|32    |      \g_r[2].g_c[5].u_pe       |pe_20                       |    17|
+|33    |      \g_r[2].g_c[6].u_pe       |pe_21                       |     9|
+|34    |      \g_r[2].g_c[7].u_pe       |pe_22                       |     9|
+|35    |      \g_r[3].g_c[0].u_pe       |pe_23                       |    17|
+|36    |      \g_r[3].g_c[1].u_pe       |pe_24                       |    17|
+|37    |      \g_r[3].g_c[2].u_pe       |pe_25                       |    17|
+|38    |      \g_r[3].g_c[3].u_pe       |pe_26                       |    17|
+|39    |      \g_r[3].g_c[4].u_pe       |pe_27                       |    17|
+|40    |      \g_r[3].g_c[5].u_pe       |pe_28                       |    17|
+|41    |      \g_r[3].g_c[6].u_pe       |pe_29                       |     9|
+|42    |      \g_r[3].g_c[7].u_pe       |pe_30                       |     9|
+|43    |      \g_r[4].g_c[0].u_pe       |pe_31                       |    17|
+|44    |      \g_r[4].g_c[1].u_pe       |pe_32                       |    17|
+|45    |      \g_r[4].g_c[2].u_pe       |pe_33                       |    17|
+|46    |      \g_r[4].g_c[3].u_pe       |pe_34                       |    17|
+|47    |      \g_r[4].g_c[4].u_pe       |pe_35                       |    17|
+|48    |      \g_r[4].g_c[5].u_pe       |pe_36                       |    17|
+|49    |      \g_r[4].g_c[6].u_pe       |pe_37                       |     9|
+|50    |      \g_r[4].g_c[7].u_pe       |pe_38                       |     9|
+|51    |      \g_r[5].g_c[0].u_pe       |pe_39                       |    17|
+|52    |      \g_r[5].g_c[1].u_pe       |pe_40                       |    17|
+|53    |      \g_r[5].g_c[2].u_pe       |pe_41                       |    17|
+|54    |      \g_r[5].g_c[3].u_pe       |pe_42                       |    17|
+|55    |      \g_r[5].g_c[4].u_pe       |pe_43                       |    17|
+|56    |      \g_r[5].g_c[5].u_pe       |pe_44                       |    17|
+|57    |      \g_r[5].g_c[6].u_pe       |pe_45                       |     9|
+|58    |      \g_r[5].g_c[7].u_pe       |pe_46                       |     9|
+|59    |      \g_r[6].g_c[0].u_pe       |pe_47                       |     9|
+|60    |      \g_r[6].g_c[1].u_pe       |pe_48                       |     9|
+|61    |      \g_r[6].g_c[2].u_pe       |pe_49                       |     9|
+|62    |      \g_r[6].g_c[3].u_pe       |pe_50                       |     9|
+|63    |      \g_r[6].g_c[4].u_pe       |pe_51                       |     9|
+|64    |      \g_r[6].g_c[5].u_pe       |pe_52                       |     9|
+|65    |      \g_r[6].g_c[6].u_pe       |pe_53                       |     1|
+|66    |      \g_r[6].g_c[7].u_pe       |pe_54                       |     1|
+|67    |      \g_r[7].g_c[0].u_pe       |pe_55                       |     9|
+|68    |      \g_r[7].g_c[1].u_pe       |pe_56                       |     9|
+|69    |      \g_r[7].g_c[2].u_pe       |pe_57                       |     9|
+|70    |      \g_r[7].g_c[3].u_pe       |pe_58                       |     9|
+|71    |      \g_r[7].g_c[4].u_pe       |pe_59                       |     9|
+|72    |      \g_r[7].g_c[5].u_pe       |pe_60                       |     9|
+|73    |      \g_r[7].g_c[6].u_pe       |pe_61                       |     1|
+|74    |      \g_r[7].g_c[7].u_pe       |pe_62                       |    41|
+|75    |      \g_skew[1].g_dly.u_skew   |delay_line                  |     8|
+|76    |      \g_skew[2].g_dly.u_skew   |delay_line__parameterized0  |    16|
+|77    |      \g_skew[3].g_dly.u_skew   |delay_line__parameterized1  |    24|
+|78    |      \g_skew[4].g_dly.u_skew   |delay_line__parameterized2  |    24|
+|79    |      \g_skew[5].g_dly.u_skew   |delay_line__parameterized3  |    24|
+|80    |      \g_skew[6].g_dly.u_skew   |delay_line__parameterized4  |    24|
+|81    |      \g_skew[7].g_dly.u_skew   |delay_line__parameterized5  |    24|
+|82    |      u_valid                   |delay_line__parameterized13 |    45|
+|83    |    u_next                      |delay_line__parameterized14 |    19|
++------+--------------------------------+----------------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 39 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+Synthesis Optimization Complete : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 776.301 ; gain = 476.875
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 196 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 851.344 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+189 Infos, 39 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:29 ; elapsed = 00:00:29 . Memory (MB): peak = 851.344 ; gain = 551.918
+# create_clock -name clk -period 5.0 [get_ports s_axi_aclk]
+# set_property HD.CLK_SRC BUFGCTRL_X0Y16 [get_ports s_axi_aclk]
+INFO: [Vivado 12-4761] HD.CLK_SRC property is set on port s_axi_aclk. The net connecting to the port drives either clock PIN or hierarchical black box. Use the create_clock constraint to create a clock on this port prior to setting HD.CLK_SRC. 
+# set_input_delay 1.0 -clock clk [get_ports -filter {DIRECTION == IN && NAME != s_axi_aclk}]
+# set_output_delay 1.0 -clock clk [get_ports -filter {DIRECTION == OUT}]
+# opt_design
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7z020'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.840 . Memory (MB): peak = 851.344 ; gain = 0.000
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 1027bfab3
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 1306.852 ; gain = 455.508
+
+Starting Logic Optimization Task
+
+Phase 1 Retarget
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 1 Retarget | Checksum: 1027bfab3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.298 . Memory (MB): peak = 1444.145 ; gain = 0.000
+INFO: [Opt 31-389] Phase Retarget created 0 cells and removed 0 cells
+
+Phase 2 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 2 Constant propagation | Checksum: 1027bfab3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.404 . Memory (MB): peak = 1444.145 ; gain = 0.000
+INFO: [Opt 31-389] Phase Constant propagation created 0 cells and removed 0 cells
+
+Phase 3 Sweep
+Phase 3 Sweep | Checksum: 78841f60
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.587 . Memory (MB): peak = 1444.145 ; gain = 0.000
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 0 cells
+
+Phase 4 BUFG optimization
+Phase 4 BUFG optimization | Checksum: 78841f60
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.627 . Memory (MB): peak = 1444.145 ; gain = 0.000
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 5 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 5 Shift Register Optimization | Checksum: 78841f60
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.725 . Memory (MB): peak = 1444.145 ; gain = 0.000
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 6 Post Processing Netlist
+Phase 6 Post Processing Netlist | Checksum: 78841f60
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.771 . Memory (MB): peak = 1444.145 ; gain = 0.000
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |               0  |               0  |                                              0  |
+|  Constant propagation         |               0  |               0  |                                              0  |
+|  Sweep                        |               0  |               0  |                                              0  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                              0  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 1444.145 ; gain = 0.000
+Ending Logic Optimization Task | Checksum: 55a4cb6c
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.897 . Memory (MB): peak = 1444.145 ; gain = 0.000
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Pwropt 34-9] Applying IDT optimizations ...
+INFO: [Pwropt 34-10] Applying ODC optimizations ...
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=0.108 | TNS=0.000 |
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+
+
+Starting PowerOpt Patch Enables Task
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 6 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+INFO: [Pwropt 34-201] Structural ODC has moved 0 WE to EN ports
+Number of BRAM Ports augmented: 0 newly gated: 0 Total Ports: 12
+Ending PowerOpt Patch Enables Task | Checksum: 55a4cb6c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.057 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Ending Power Optimization Task | Checksum: 55a4cb6c
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1580.859 ; gain = 136.715
+
+Starting Final Cleanup Task
+Ending Final Cleanup Task | Checksum: 55a4cb6c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Ending Netlist Obfuscation Task | Checksum: 55a4cb6c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1580.859 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+23 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:19 ; elapsed = 00:00:17 . Memory (MB): peak = 1580.859 ; gain = 729.516
+# place_design
+Command: place_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+Starting Placer Task
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 2 CPUs
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: 1727d846
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: 6b6fdc9e
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 79639759
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 79639759
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Phase 1 Placer Initialization | Checksum: 79639759
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 1436dfece
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:04 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 2.2 Global Placement Core
+
+Phase 2.2.1 Physical Synthesis In Placer
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-117] Net u_core/w_row[55] could not be optimized because driver u_core/w[7]_i_1__5 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[49] could not be optimized because driver u_core/w[1]_i_1__5 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[53] could not be optimized because driver u_core/w[5]_i_1__5 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[50] could not be optimized because driver u_core/w[2]_i_1__5 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[54] could not be optimized because driver u_core/w[6]_i_1__5 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[48] could not be optimized because driver u_core/w[0]_i_1__5 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[51] could not be optimized because driver u_core/w[3]_i_1__5 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[9] could not be optimized because driver u_core/w[1]_i_1__0 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[23] could not be optimized because driver u_core/w[7]_i_1__1 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[15] could not be optimized because driver u_core/w[7]_i_1__0 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[52] could not be optimized because driver u_core/w[4]_i_1__5 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[7] could not be optimized because driver u_core/w[7]_i_1 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[11] could not be optimized because driver u_core/w[3]_i_1__0 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[13] could not be optimized because driver u_core/w[5]_i_1__0 could not be replicated
+INFO: [Physopt 32-117] Net u_core/w_row[12] could not be optimized because driver u_core/w[4]_i_1__0 could not be replicated
+INFO: [Physopt 32-68] No nets found for critical-cell optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-457] Pass 1. Identified 18 candidate cells for DSP register optimization.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[7].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[1].g_c[6].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[6].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[1].g_c[7].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[1].g_c[2].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[1].g_c[1].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[1].g_c[4].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[4].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[2].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[1].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[0].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[3].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[1].g_c[3].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[1].g_c[0].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-666] Processed cell u_core/u_array/g_r[4].g_c[4].u_pe/g_wrap.psum_out_reg. No change.
+INFO: [Physopt 32-666] Processed cell u_core/u_array/g_r[4].g_c[6].u_pe/g_wrap.psum_out_reg. No change.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[1].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-665] Processed cell u_core/u_array/g_r[0].g_c[5].u_pe/g_wrap.psum_out_reg. 8 registers were pushed out.
+INFO: [Physopt 32-775] End 2 Pass. Optimized 16 nets or cells. Created 128 new cells, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.039 . Memory (MB): peak = 1580.859 ; gain = 0.000
+INFO: [Physopt 32-670] No setup violation found.  Shift Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  BRAM Register Optimization was not performed.
+INFO: [Physopt 32-949] No candidate nets found for HD net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                  |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+----------------------------------------------------------------------------------------------------------------------------------------
+|  Very High Fanout              |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Critical Cell                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                  |          128  |              0  |                    16  |           0  |           1  |  00:00:04  |
+|  Shift Register                |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  BRAM Register                 |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  HD Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                         |          128  |              0  |                    16  |           0  |           4  |  00:00:04  |
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.2.1 Physical Synthesis In Placer | Checksum: a518d8fb
+
+Time (s): cpu = 00:00:21 ; elapsed = 00:00:15 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Phase 2.2 Global Placement Core | Checksum: 1b83e60ef
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:15 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Phase 2 Global Placement | Checksum: 1b83e60ef
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:15 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: 1c6150107
+
+Time (s): cpu = 00:00:23 ; elapsed = 00:00:15 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: d0d3b461
+
+Time (s): cpu = 00:00:24 ; elapsed = 00:00:16 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: 195a42dfa
+
+Time (s): cpu = 00:00:24 ; elapsed = 00:00:16 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 18e28e401
+
+Time (s): cpu = 00:00:24 ; elapsed = 00:00:16 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 3.5 Fast Optimization
+Phase 3.5 Fast Optimization | Checksum: 1110f5bdf
+
+Time (s): cpu = 00:00:25 ; elapsed = 00:00:17 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 3.6 Small Shape Detail Placement
+Phase 3.6 Small Shape Detail Placement | Checksum: 20c2c85de
+
+Time (s): cpu = 00:00:26 ; elapsed = 00:00:18 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 3.7 Re-assign LUT pins
+Phase 3.7 Re-assign LUT pins | Checksum: 1748745ae
+
+Time (s): cpu = 00:00:26 ; elapsed = 00:00:18 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 3.8 Pipeline Register Optimization
+Phase 3.8 Pipeline Register Optimization | Checksum: 18b2ae4d9
+
+Time (s): cpu = 00:00:26 ; elapsed = 00:00:18 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Phase 3 Detail Placement | Checksum: 18b2ae4d9
+
+Time (s): cpu = 00:00:26 ; elapsed = 00:00:18 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 1f0791307
+
+Phase 4.1.1.1 BUFG Insertion
+INFO: [Place 46-33] Processed net u_core/u_array/g_out[4].g_dly.u_deskew/s_axi_aresetn_0, BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-56] BUFG insertion identified 1 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 1, Skipped due to Timing Degradation: 0, Skipped due to Illegal Netlist: 0.
+Phase 4.1.1.1 BUFG Insertion | Checksum: 1f0791307
+
+Time (s): cpu = 00:00:29 ; elapsed = 00:00:20 . Memory (MB): peak = 1580.859 ; gain = 0.000
+INFO: [Place 30-746] Post Placement Timing Summary WNS=0.502. For the most accurate timing information please run report_timing.
+Phase 4.1.1 Post Placement Optimization | Checksum: 282cfa95b
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:37 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Phase 4.1 Post Commit Optimization | Checksum: 282cfa95b
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:37 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 282cfa95b
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:37 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 4.3 Placer Reporting
+Phase 4.3 Placer Reporting | Checksum: 282cfa95b
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:37 . Memory (MB): peak = 1580.859 ; gain = 0.000
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Phase 4.4 Final Placement Cleanup | Checksum: 1cf5eb1f8
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:37 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: 1cf5eb1f8
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:37 . Memory (MB): peak = 1580.859 ; gain = 0.000
+Ending Placer Task | Checksum: d3d5faf7
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:37 . Memory (MB): peak = 1580.859 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+59 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:00:47 ; elapsed = 00:00:38 . Memory (MB): peak = 1580.859 ; gain = 0.000
+# phys_opt_design -directive AggressiveExplore
+Command: phys_opt_design -directive AggressiveExplore
+Attempting to get a license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [Vivado_Tcl 4-137] Directive used for phys_opt_design is: AggressiveExplore
+INFO: [Vivado_Tcl 4-383] Design worst setup slack (WNS) is greater than or equal to 0.500 ns. Skipping all physical synthesis optimizations.
+INFO: [Vivado_Tcl 4-232] No setup violation found. The netlist was not modified.
+INFO: [Common 17-83] Releasing license: Implementation
+5 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+phys_opt_design completed successfully
+# route_design -directive Explore
+Command: route_design -directive Explore
+Attempting to get a license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7z020'
+Running DRC as a precondition to command route_design
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+
+Starting Routing Task
+INFO: [Route 35-270] Using Router directive 'Explore'.
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 2 CPUs
+Checksum: PlaceDB: 928a031d ConstDB: 0 ShapeSum: 414bf7da RouteDB: 0
+
+Phase 1 Build RT Design
+WARNING: [Route 35-198] Port "s_axi_aresetn" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_aresetn". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[8]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[8]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[9]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[9]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[12]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[12]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[13]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[13]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[15]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[15]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[11]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[11]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[25]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[25]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[3]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[3]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[7]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[7]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_rready" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_rready". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[18]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[18]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[10]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[10]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[14]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[14]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_awaddr[3]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_awaddr[3]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_awaddr[4]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_awaddr[4]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_awaddr[0]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_awaddr[0]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_awaddr[2]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_awaddr[2]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[17]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[17]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[19]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[19]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[21]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[21]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[27]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[27]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[29]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[29]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[2]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[2]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[5]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[5]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_arvalid" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_arvalid". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[16]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[16]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[22]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[22]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[23]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[23]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[30]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[30]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[31]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[31]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[4]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[4]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[1]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[1]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[20]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[20]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[24]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[24]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[28]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[28]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[6]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[6]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[0]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[0]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wdata[26]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wdata[26]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_araddr[0]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_araddr[0]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_araddr[2]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_araddr[2]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_araddr[1]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_araddr[1]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_araddr[3]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_araddr[3]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_araddr[4]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_araddr[4]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_araddr[5]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_araddr[5]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_awvalid" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_awvalid". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_wvalid" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_wvalid". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_awaddr[1]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_awaddr[1]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_awaddr[5]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_awaddr[5]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "s_axi_bready" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "s_axi_bready". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+Phase 1 Build RT Design | Checksum: 137ae7a82
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:31 . Memory (MB): peak = 1608.664 ; gain = 27.805
+Post Restoration Checksum: NetGraph: 94079f62 NumContArr: a3a6db20 Constraints: 0 Timing: 0
+
+Phase 2 Router Initialization
+
+Phase 2.1 Create Timer
+Phase 2.1 Create Timer | Checksum: 137ae7a82
+
+Time (s): cpu = 00:00:37 ; elapsed = 00:00:32 . Memory (MB): peak = 1631.461 ; gain = 50.602
+
+Phase 2.2 Fix Topology Constraints
+Phase 2.2 Fix Topology Constraints | Checksum: 137ae7a82
+
+Time (s): cpu = 00:00:37 ; elapsed = 00:00:32 . Memory (MB): peak = 1631.461 ; gain = 50.602
+
+Phase 2.3 Pre Route Cleanup
+Phase 2.3 Pre Route Cleanup | Checksum: 137ae7a82
+
+Time (s): cpu = 00:00:37 ; elapsed = 00:00:32 . Memory (MB): peak = 1631.461 ; gain = 50.602
+ Number of Nodes with overlaps = 0
+
+Phase 2.4 Update Timing
+Phase 2.4 Update Timing | Checksum: 1700e1a04
+
+Time (s): cpu = 00:00:39 ; elapsed = 00:00:33 . Memory (MB): peak = 1631.461 ; gain = 50.602
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.395  | TNS=0.000  | WHS=-0.211 | THS=-105.133|
+
+Phase 2 Router Initialization | Checksum: 1639f1882
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:34 . Memory (MB): peak = 1656.301 ; gain = 75.441
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0 %
+  Global Horizontal Routing Utilization  = 0 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 5625
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 5625
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+
+Phase 3 Initial Routing
+Phase 3 Initial Routing | Checksum: 29f084466
+
+Time (s): cpu = 00:00:42 ; elapsed = 00:00:36 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 4 Rip-up And Reroute
+
+Phase 4.1 Global Iteration 0
+ Number of Nodes with overlaps = 561
+ Number of Nodes with overlaps = 129
+ Number of Nodes with overlaps = 54
+ Number of Nodes with overlaps = 30
+ Number of Nodes with overlaps = 25
+ Number of Nodes with overlaps = 5
+ Number of Nodes with overlaps = 3
+ Number of Nodes with overlaps = 2
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.110  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 4.1 Global Iteration 0 | Checksum: 228cca97e
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+Phase 4 Rip-up And Reroute | Checksum: 228cca97e
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 5 Delay and Skew Optimization
+
+Phase 5.1 Delay CleanUp
+
+Phase 5.1.1 Update Timing
+Phase 5.1.1 Update Timing | Checksum: 19656f189
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.133  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.1 Delay CleanUp | Checksum: 19656f189
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 5.2 Clock Skew Optimization
+Phase 5.2 Clock Skew Optimization | Checksum: 19656f189
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+Phase 5 Delay and Skew Optimization | Checksum: 19656f189
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 6 Post Hold Fix
+
+Phase 6.1 Hold Fix Iter
+
+Phase 6.1.1 Update Timing
+Phase 6.1.1 Update Timing | Checksum: 23bb462bd
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.133  | TNS=0.000  | WHS=-0.180 | THS=-4.670 |
+
+Phase 6.1 Hold Fix Iter | Checksum: 1c21e24cc
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+Phase 6 Post Hold Fix | Checksum: 26c395b9c
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:42 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 7 Timing Verification
+
+Phase 7.1 Update Timing
+Phase 7.1 Update Timing | Checksum: 1d2f5196f
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:43 . Memory (MB): peak = 1670.949 ; gain = 90.090
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.133  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 7 Timing Verification | Checksum: 1d2f5196f
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:43 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 8 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 1.75215 %
+  Global Horizontal Routing Utilization  = 3.0688 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 8 Route finalize | Checksum: 1d2f5196f
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:43 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 9 Verifying routed nets
+
+ Verification completed successfully
+Phase 9 Verifying routed nets | Checksum: 1d2f5196f
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:43 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 10 Depositing Routes
+Phase 10 Depositing Routes | Checksum: 17551fc6d
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:43 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Phase 11 Post Router Timing
+INFO: [Route 35-20] Post Routing Timing Summary | WNS=0.134  | TNS=0.000  | WHS=-0.180 | THS=-4.670 |
+
+CRITICAL WARNING: [Route 35-39] The design did not meet timing requirements. Please run report_timing_summary for detailed reports.
+Resolution: Verify that the timing was met or had small violations at all previous steps (synthesis, placement, power_opt, and phys_opt). Run report_timing_summary and analyze individual timing paths.
+INFO: [Route 35-253] TNS is the sum of the worst slack violation on every endpoint in the design. Review the paths with the biggest WNS violations in the timing reports and modify your constraints or your design to improve both WNS and TNS.
+Phase 11 Post Router Timing | Checksum: 1671ec91f
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:45 . Memory (MB): peak = 1670.949 ; gain = 90.090
+INFO: [Route 35-16] Router Completed Successfully
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:45 . Memory (MB): peak = 1670.949 ; gain = 90.090
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Implementation
+15 Infos, 50 Warnings, 1 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:00:58 ; elapsed = 00:00:46 . Memory (MB): peak = 1670.949 ; gain = 90.090
+# report_timing_summary -file $root/staged_timing.rpt
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+# report_timing -max_paths 20 -file $root/staged_paths.rpt
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-78] ReportTimingParams: -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+# report_utilization -file $root/staged_util.rpt
+# write_checkpoint -force $root/staged.dcp
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1670.949 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Writing placer database...
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Write XDEF Complete: Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.828 . Memory (MB): peak = 1670.949 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/mac_attack_accel/frequency200/staged.dcp' has been generated.
+# puts "CANDIDATE_WNS [get_property SLACK [get_timing_paths -setup -max_paths 1]]"
+CANDIDATE_WNS 0.134
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 18 00:50:10 2026...

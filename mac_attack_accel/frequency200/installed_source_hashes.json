@@ -1,0 +1,22 @@
+[
+  {
+    "Algorithm": "SHA256",
+    "Hash": "9F792D39831BE0A3FC00F9E361D4A3FE95C68C7B324BA622E6EF1527AFE4EAD1",
+    "Path": "C:\\mac_attack_accel\\rtl\\mm_core.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "0383086E19F4141A2AC0483B392E0A2D904212F606B34ECCED69BEF0F3AD9A7F",
+    "Path": "C:\\mac_attack_accel\\rtl\\pe.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "5806DA7B5343C126C92ACAC64AB21A7CF030AAB114299E91C7922BD17E8DB654",
+    "Path": "C:\\mac_attack_accel\\rtl\\systolic_array.sv"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "58DC08F09A99247FADE6441B22C4C75B2590753F10CD7B310D5ADA4CEA88CB05",
+    "Path": "C:\\mac_attack_accel\\zed\\mac_axi.v"
+  }
+]

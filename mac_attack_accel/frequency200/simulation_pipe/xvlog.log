@@ -1,0 +1,30 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/chip_top.sv" into library work
+INFO: [VRFC 10-311] analyzing module chip_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/delay_line.sv" into library work
+INFO: [VRFC 10-311] analyzing module delay_line
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/host_if.sv" into library work
+INFO: [VRFC 10-311] analyzing module host_if
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/mm_core.sv" into library work
+INFO: [VRFC 10-311] analyzing module mm_core
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/pe.sv" into library work
+INFO: [VRFC 10-311] analyzing module pe
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/postproc.sv" into library work
+INFO: [VRFC 10-311] analyzing module postproc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/systolic_array.sv" into library work
+INFO: [VRFC 10-311] analyzing module systolic_array
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/uart_rx.sv" into library work
+INFO: [VRFC 10-311] analyzing module uart_rx
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/rtl_pipe/uart_tx.sv" into library work
+INFO: [VRFC 10-311] analyzing module uart_tx
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb/tb_selfcheck.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_selfcheck
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb/tb_extras.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_extras
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/mac_axi.v" into library work
+INFO: [VRFC 10-311] analyzing module mac_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb/tb_axi.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb_selfcheck3.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_selfcheck3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb_counter_limits.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_counter_limits

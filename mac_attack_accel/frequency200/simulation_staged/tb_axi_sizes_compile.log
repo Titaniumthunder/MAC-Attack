@@ -1,0 +1,3 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/mac_attack_accel/frequency200/tb_axi_sizes.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi_p4
+INFO: [VRFC 10-311] analyzing module tb_axi_p16

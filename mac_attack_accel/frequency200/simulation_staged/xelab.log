@@ -1,0 +1,48 @@
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe work.tb_axi_p16 -s tb_axi_p16 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.delay_line
+Compiling module work.delay_line(DEPTH=2)
+Compiling module work.delay_line(DEPTH=3)
+Compiling module work.delay_line(DEPTH=4)
+Compiling module work.delay_line(DEPTH=5)
+Compiling module work.delay_line(DEPTH=6)
+Compiling module work.delay_line(DEPTH=7)
+Compiling module work.delay_line(DEPTH=8)
+Compiling module work.delay_line(DEPTH=9)
+Compiling module work.delay_line(DEPTH=10)
+Compiling module work.delay_line(DEPTH=11)
+Compiling module work.delay_line(DEPTH=12)
+Compiling module work.delay_line(DEPTH=13)
+Compiling module work.delay_line(DEPTH=14)
+Compiling module work.delay_line(DEPTH=15)
+Compiling module work.pe(EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=32,DEPTH=15)
+Compiling module work.delay_line(WIDTH=32,DEPTH=14)
+Compiling module work.delay_line(WIDTH=32,DEPTH=13)
+Compiling module work.delay_line(WIDTH=32,DEPTH=12)
+Compiling module work.delay_line(WIDTH=32,DEPTH=11)
+Compiling module work.delay_line(WIDTH=32,DEPTH=10)
+Compiling module work.delay_line(WIDTH=32,DEPTH=9)
+Compiling module work.delay_line(WIDTH=32,DEPTH=8)
+Compiling module work.delay_line(WIDTH=32,DEPTH=7)
+Compiling module work.delay_line(WIDTH=32,DEPTH=6)
+Compiling module work.delay_line(WIDTH=32,DEPTH=5)
+Compiling module work.delay_line(WIDTH=32,DEPTH=4)
+Compiling module work.delay_line(WIDTH=32,DEPTH=3)
+Compiling module work.delay_line(WIDTH=32,DEPTH=2)
+Compiling module work.delay_line(WIDTH=32)
+Compiling module work.delay_line(WIDTH=1,DEPTH=31)
+Compiling module work.systolic_array(P=16,EARLY_MAC=2)
+Compiling module work.delay_line(WIDTH=1,DEPTH=29)
+Compiling module work.mm_core_default
+Compiling module work.mac_axi(P=16)
+Compiling module work.tb_axi(P=16)
+Compiling module work.tb_axi_p16
+Built simulation snapshot tb_axi_p16

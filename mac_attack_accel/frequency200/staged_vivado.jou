@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sun Oct 18 00:47:52 2026
+# Process ID: 27308
+# Current directory: C:/mac_attack_accel/frequency200
+# Command line: vivado.exe -mode batch -source route_staged.tcl -log staged_vivado.log -journal staged_vivado.jou
+# Log file: C:/mac_attack_accel/frequency200/staged_vivado.log
+# Journal file: C:/mac_attack_accel/frequency200\staged_vivado.jou
+#-----------------------------------------------------------
+source route_staged.tcl
