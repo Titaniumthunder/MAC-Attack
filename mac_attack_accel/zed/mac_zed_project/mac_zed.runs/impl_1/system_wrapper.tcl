@@ -60,26 +60,26 @@ proc step_failed { step } {
   close $ch
 }
 
+set_msg_config -id {HDL-1065} -limit 10000
 
 start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
-  set_param chipscope.maxJobs 6
-  set_param xicom.use_bs_reader 1
+  set_param chipscope.maxJobs 4
   create_project -in_memory -part xc7z020clg484-1
   set_property board_part em.avnet.com:zed:part0:1.4 [current_project]
   set_property design_mode GateLvl [current_fileset]
   set_param project.singleFileAddWarning.threshold 0
-  set_property webtalk.parent_dir C:/School/MAC_Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.cache/wt [current_project]
-  set_property parent.project_path C:/School/MAC_Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.xpr [current_project]
-  set_property ip_output_repo C:/School/MAC_Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.cache/ip [current_project]
+  set_property webtalk.parent_dir C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.cache/wt [current_project]
+  set_property parent.project_path C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.xpr [current_project]
+  set_property ip_output_repo C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
   set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
-  add_files -quiet C:/School/MAC_Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.runs/synth_1/system_wrapper.dcp
+  add_files -quiet C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.runs/synth_1/system_wrapper.dcp
   set_msg_config -source 4 -id {BD 41-1661} -limit 0
   set_param project.isImplRun true
-  add_files C:/School/MAC_Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.srcs/sources_1/bd/system/system.bd
+  add_files C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.srcs/sources_1/bd/system/system.bd
   set_param project.isImplRun false
   set_param project.isImplRun true
   link_design -top system_wrapper -part xc7z020clg484-1
@@ -99,7 +99,7 @@ start_step opt_design
 set ACTIVE_STEP opt_design
 set rc [catch {
   create_msg_db opt_design.pb
-  opt_design 
+  opt_design -directive Explore
   write_checkpoint -force system_wrapper_opt.dcp
   create_report "impl_1_opt_report_drc_0" "report_drc -file system_wrapper_drc_opted.rpt -pb system_wrapper_drc_opted.pb -rpx system_wrapper_drc_opted.rpx"
   close_msg_db -file opt_design.pb
@@ -119,7 +119,7 @@ set rc [catch {
   if { [llength [get_debug_cores -quiet] ] > 0 }  { 
     implement_debug_core 
   } 
-  place_design 
+  place_design -directive Explore
   write_checkpoint -force system_wrapper_placed.dcp
   create_report "impl_1_place_report_io_0" "report_io -file system_wrapper_io_placed.rpt"
   create_report "impl_1_place_report_utilization_0" "report_utilization -file system_wrapper_utilization_placed.rpt -pb system_wrapper_utilization_placed.pb"
@@ -134,17 +134,34 @@ if {$rc} {
   unset ACTIVE_STEP 
 }
 
+start_step phys_opt_design
+set ACTIVE_STEP phys_opt_design
+set rc [catch {
+  create_msg_db phys_opt_design.pb
+  phys_opt_design -directive Explore
+  write_checkpoint -force system_wrapper_physopt.dcp
+  close_msg_db -file phys_opt_design.pb
+} RESULT]
+if {$rc} {
+  step_failed phys_opt_design
+  return -code error $RESULT
+} else {
+  end_step phys_opt_design
+  unset ACTIVE_STEP 
+}
+
+  set_msg_config -source 4 -id {Route 35-39} -severity "critical warning" -new_severity warning
 start_step route_design
 set ACTIVE_STEP route_design
 set rc [catch {
   create_msg_db route_design.pb
-  route_design 
+  route_design -directive Explore -tns_cleanup
   write_checkpoint -force system_wrapper_routed.dcp
   create_report "impl_1_route_report_drc_0" "report_drc -file system_wrapper_drc_routed.rpt -pb system_wrapper_drc_routed.pb -rpx system_wrapper_drc_routed.rpx"
   create_report "impl_1_route_report_methodology_0" "report_methodology -file system_wrapper_methodology_drc_routed.rpt -pb system_wrapper_methodology_drc_routed.pb -rpx system_wrapper_methodology_drc_routed.rpx"
   create_report "impl_1_route_report_power_0" "report_power -file system_wrapper_power_routed.rpt -pb system_wrapper_power_summary_routed.pb -rpx system_wrapper_power_routed.rpx"
   create_report "impl_1_route_report_route_status_0" "report_route_status -file system_wrapper_route_status.rpt -pb system_wrapper_route_status.pb"
-  create_report "impl_1_route_report_timing_summary_0" "report_timing_summary -max_paths 10 -file system_wrapper_timing_summary_routed.rpt -pb system_wrapper_timing_summary_routed.pb -rpx system_wrapper_timing_summary_routed.rpx -warn_on_violation "
+  create_report "impl_1_route_report_timing_summary_0" "report_timing_summary -max_paths 10 -file system_wrapper_timing_summary_routed.rpt -pb system_wrapper_timing_summary_routed.pb -rpx system_wrapper_timing_summary_routed.rpx"
   create_report "impl_1_route_report_incremental_reuse_0" "report_incremental_reuse -file system_wrapper_incremental_reuse_routed.rpt"
   create_report "impl_1_route_report_clock_utilization_0" "report_clock_utilization -file system_wrapper_clock_utilization_routed.rpt"
   create_report "impl_1_route_report_bus_skew_0" "report_bus_skew -warn_on_violation -file system_wrapper_bus_skew_routed.rpt -pb system_wrapper_bus_skew_routed.pb -rpx system_wrapper_bus_skew_routed.rpx"
@@ -156,6 +173,28 @@ if {$rc} {
   return -code error $RESULT
 } else {
   end_step route_design
+  unset ACTIVE_STEP 
+}
+
+start_step post_route_phys_opt_design
+set ACTIVE_STEP post_route_phys_opt_design
+set rc [catch {
+  set tool_flow [get_property -quiet TOOL_FLOW [current_project -quiet]]
+  if {$tool_flow eq {SDx}} {send_msg_id {101-1} {status} {Starting optional post-route physical design optimization.} }
+  create_msg_db post_route_phys_opt_design.pb
+  phys_opt_design -directive Explore
+  write_checkpoint -force system_wrapper_postroute_physopt.dcp
+  create_report "impl_1_post_route_phys_opt_report_timing_summary_0" "report_timing_summary -max_paths 10 -warn_on_violation -file system_wrapper_timing_summary_postroute_physopted.rpt -pb system_wrapper_timing_summary_postroute_physopted.pb -rpx system_wrapper_timing_summary_postroute_physopted.rpx"
+  create_report "impl_1_post_route_phys_opt_report_bus_skew_0" "report_bus_skew -warn_on_violation -file system_wrapper_bus_skew_postroute_physopted.rpt -pb system_wrapper_bus_skew_postroute_physopted.pb -rpx system_wrapper_bus_skew_postroute_physopted.rpx"
+  close_msg_db -file post_route_phys_opt_design.pb
+  set tool_flow [get_property TOOL_FLOW [current_project]]
+  if {$tool_flow eq {SDx}} {send_msg_id {101-1} {status} {Finished optional post-route physical design optimization.} }
+} RESULT]
+if {$rc} {
+  step_failed post_route_phys_opt_design
+  return -code error $RESULT
+} else {
+  end_step post_route_phys_opt_design
   unset ACTIVE_STEP 
 }
 

@@ -66,6 +66,13 @@
 //       (DIMS only while idle; the counters only during a run, read after done).
 //   zed/mac_zed_cdc.xdc tells Vivado the two clocks are asynchronous.
 //   CORE_CLK = 0: one clock, exactly as before (core_clk and core_locked are not used).
+// Step 14 (18 Oct 2026), for one clock at 250 MHz. Same results:
+//   * HREAD_REG = 1 (the default): the core registers the C word once more before the lane select
+//     (see mm_core.sv), so a register read waits 4 clocks instead of 3 (RD_WAIT). HREAD_REG = 0 is
+//     the step 13 read timing.
+//   * The loader's position flags (inside the matrix, last column, last row) are flip-flops worked
+//     out one step ahead, so the row and column counters' enables come straight from registers.
+//     Every byte goes to the same place in the same clock as before.
 module mac_axi #(
     parameter P         = 8,   // array size (P x P PEs)
     parameter MAXD      = 64,  // largest M, K or N
@@ -73,7 +80,8 @@ module mac_axi #(
     parameter MEM_REG   = 2,   // registers after the block-RAM reads (see mm_core.sv)
     parameter EXACT_ACC = 1,   // 1 = accumulators 2*8 + clog2(MAXD) bits (exact), 0 = 32 bits
     parameter CORE_CLK  = 0,   // 1 = the core runs on core_clk (step 12); 0 = everything on s_axi_aclk
-    parameter PE_PRIM   = 1    // 1 = each PE is one DSP48E1 placed directly (zed/pe_dsp48.sv, PIPE = 2); 0 = pe.sv
+    parameter PE_PRIM   = 1,   // 1 = each PE is one DSP48E1 placed directly (zed/pe_dsp48.sv, PIPE = 2); 0 = pe.sv
+    parameter HREAD_REG = 1    // 1 = one more register on the read of C (step 14, read waits 4 clocks); 0 = step 13 (3 clocks)
 )(
     (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 s_axi_aclk CLK" *)
     (* X_INTERFACE_PARAMETER = "ASSOCIATED_BUSIF s_axi, ASSOCIATED_RESET s_axi_aresetn" *)
@@ -144,7 +152,7 @@ module mac_axi #(
             // One clock: the core runs on s_axi_aclk, as before
             wire core_busy, core_done;
             mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(0), .MAXD(MAXD), .PIPE(PIPE_EFF), .MEM_REG(MEM_REG),
-                      .HCLK_SEP(0), .PE_PRIM(PE_PRIM)) u_core (
+                      .HCLK_SEP(0), .PE_PRIM(PE_PRIM), .HREAD_REG(HREAD_REG)) u_core (
                 .clk(clk), .hclk(clk), .rst(rst),
                 .wr_en(core_wr_en), .wr_sel(core_wr_sel), .wr_row(core_wr_row), .wr_col(core_wr_col), .wr_data(core_wr_data),
                 .start(core_start), .dim_m(dim_m), .dim_k(dim_k), .dim_n(dim_n),
@@ -184,7 +192,7 @@ module mac_axi #(
             always @(posedge core_clk) c_ready <= !c_rst;
 
             mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(0), .MAXD(MAXD), .PIPE(PIPE_EFF), .MEM_REG(MEM_REG),
-                      .HCLK_SEP(1), .PE_PRIM(PE_PRIM)) u_core (
+                      .HCLK_SEP(1), .PE_PRIM(PE_PRIM), .HREAD_REG(HREAD_REG)) u_core (
                 .clk(core_clk), .hclk(clk), .rst(c_rst),
                 .wr_en(core_wr_en), .wr_sel(core_wr_sel), .wr_row(core_wr_row), .wr_col(core_wr_col), .wr_data(core_wr_data),
                 .start(c_start), .dim_m(dim_m), .dim_k(dim_k), .dim_n(dim_n),
@@ -224,12 +232,46 @@ module mac_axi #(
     reg  [7:0]  ld_rows;                 // rows of the matrix being loaded
     reg  [7:0]  ld_rowlen;               // row length
     reg  [7:0]  ld_collast;              // row length - 1 (the last column)
+    reg  [7:0]  ld_collast_m1;           // row length - 2
+    reg  [7:0]  ld_rows_m1, ld_rows_m2;  // rows - 1 (the last row), rows - 2
     always @(posedge clk) begin
-        ld_rows    <= ld_sel ? dim_k : dim_m;
-        ld_rowlen  <= ld_sel ? dim_n : dim_k;
-        ld_collast <= (ld_sel ? dim_n : dim_k) - 8'd1;
+        ld_rows       <= ld_sel ? dim_k : dim_m;
+        ld_rowlen     <= ld_sel ? dim_n : dim_k;
+        ld_collast    <= (ld_sel ? dim_n : dim_k) - 8'd1;
+        ld_collast_m1 <= (ld_sel ? dim_n : dim_k) - 8'd2;
+        ld_rows_m1    <= (ld_sel ? dim_k : dim_m) - 8'd1;
+        ld_rows_m2    <= (ld_sel ? dim_k : dim_m) - 8'd2;
     end
-    wire        ld_inside = (ld_row < ld_rows) && (ld_col < ld_rowlen);
+    // Step 14: three flags about the current load position, kept in flip-flops so that the row and
+    // column counters' enables come straight from registers (at 250 MHz the compare ld_col ==
+    // ld_collast in front of ld_row's enable failed timing):
+    //   ld_inside   = (ld_row < ld_rows) && (ld_col < ld_rowlen)   the byte lands inside the matrix
+    //   ld_col_last = (ld_col == ld_collast)                        it is the last byte of a row
+    //   ld_row_last = (ld_row == ld_rows - 1)                       it is in the last row
+    // While no byte is written they are worked out from the registers every clock. LOAD_PTR and DIMS
+    // change ld_row, ld_col and the sizes (ld_rows ... one clock later) at least 3 clocks before the
+    // first byte of the next LOAD_DATA write: the write is taken at the earliest 3 clocks after the
+    // previous one, and its first byte is written the clock after that. So the flags are right when
+    // the bytes start. While bytes are written, the flags step with the position, one step ahead
+    // (8-bit arithmetic, any size):
+    //   to the next column:  ld_col_last = (ld_col == row length - 2); the other two stay
+    //   to the next row:     ld_inside = !ld_row_last, ld_col_last = (row length == 1),
+    //                        ld_row_last = (ld_row == rows - 2)
+    reg         ld_inside, ld_col_last, ld_row_last;
+    wire        ld_step = (ld_left != 3'd0) && ld_inside;   // this clock writes a byte and moves on
+    always @(posedge clk) begin
+        if (!ld_step) begin
+            ld_inside   <= (ld_row < ld_rows) && (ld_col < ld_rowlen);
+            ld_col_last <= (ld_col == ld_collast);
+            ld_row_last <= (ld_row == ld_rows_m1);
+        end else if (ld_col_last) begin
+            ld_inside   <= !ld_row_last;
+            ld_col_last <= (ld_collast == 8'd0);
+            ld_row_last <= (ld_row == ld_rows_m2);
+        end else begin
+            ld_col_last <= (ld_col == ld_collast_m1);
+        end
+    end
     // One byte per clock into the core, through a register stage
     always @(posedge clk) begin
         if (rst) core_wr_en <= 1'b0;
@@ -267,7 +309,8 @@ module mac_axi #(
     reg        axi_arready, axi_rvalid;
     reg [31:0] axi_rdata;
     reg [5:0]  rd_addr;
-    reg [1:0]  rd_wait;                  // clocks until the read data is ready
+    localparam [2:0] RD_WAIT = (HREAD_REG != 0) ? 3'd4 : 3'd3;   // clocks from the read address to the data
+    reg [2:0]  rd_wait;                  // clocks until the read data is ready
     assign s_axi_arready = axi_arready;
     assign s_axi_rvalid  = axi_rvalid;
     assign s_axi_rdata   = axi_rdata;
@@ -293,7 +336,7 @@ module mac_axi #(
         if (rst) begin
             axi_awready <= 1'b0; axi_wready <= 1'b0; axi_bvalid <= 1'b0;
             axi_arready <= 1'b0; axi_rvalid <= 1'b0; axi_rdata <= 32'd0;
-            rd_addr <= 6'd0; rd_wait <= 2'd0;
+            rd_addr <= 6'd0; rd_wait <= 3'd0;
             core_start <= 1'b0; dim_m <= 8'd0; dim_k <= 8'd0; dim_n <= 8'd0;
             ld_sel <= 1'b0; ld_row <= 8'd0; ld_col <= 8'd0; ld_word <= 32'd0; ld_left <= 3'd0;
             rd_row <= 8'd0; rd_col <= 8'd0;
@@ -307,7 +350,7 @@ module mac_axi #(
                 ld_word <= {8'd0, ld_word[31:8]};
                 ld_left <= ld_left - 3'd1;
                 if (ld_inside) begin
-                    if (ld_col == ld_collast) begin
+                    if (ld_col_last) begin
                         ld_col <= 8'd0;
                         ld_row <= ld_row + 8'd1;
                     end else begin
@@ -357,19 +400,19 @@ module mac_axi #(
             end
             if (axi_bvalid && s_axi_bready) axi_bvalid <= 1'b0;
 
-            // ---- read channel: wait three clocks so the core's memory read (1) and the
-            //      registered read data (1) are ready
-            if (!axi_arready && s_axi_arvalid && !axi_rvalid && rd_wait == 2'd0)
+            // ---- read channel: wait RD_WAIT clocks so the core's memory read (1), the extra
+            //      register with HREAD_REG = 1 (1) and the registered read data (1) are ready
+            if (!axi_arready && s_axi_arvalid && !axi_rvalid && rd_wait == 3'd0)
                 axi_arready <= 1'b1;
             else
                 axi_arready <= 1'b0;
             if (ar_fire) begin
                 rd_addr <= s_axi_araddr;
-                rd_wait <= 2'd3;
+                rd_wait <= RD_WAIT;
             end
-            if (rd_wait != 2'd0) begin
-                rd_wait <= rd_wait - 2'd1;
-                if (rd_wait == 2'd1) begin
+            if (rd_wait != 3'd0) begin
+                rd_wait <= rd_wait - 3'd1;
+                if (rd_wait == 3'd1) begin
                     axi_rvalid <= 1'b1;
                     if (rd_addr == A_RES_DATA) begin       // move to the next C value
                         if (rd_col_last) begin

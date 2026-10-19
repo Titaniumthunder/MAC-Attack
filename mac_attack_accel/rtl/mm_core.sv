@@ -99,6 +99,13 @@
 //     use the block RAM's own output register: about 0.9 ns clock-to-out instead of 2.45 ns) and
 //     the lane mask is applied in the second register (with the masks delayed one cycle to match).
 //     Same two registers, same read latency.
+//
+// Step 14 (18 Oct 2026, for one clock at 250 MHz): HREAD_REG = 1 puts a register on the host's
+// read of C between the C block RAM and the lane select. At 250 MHz the path block RAM ->
+// lane select -> the wrapper's register failed by 0.263 ns (the block RAM has no output register
+// here because its read port also feeds the accumulator). rd_data then appears 2 cycles after
+// rd_row/rd_col instead of 1, so the wrapper waits one clock more per read. HREAD_REG = 0 (the
+// default) is the design exactly as before, for every other user of this module.
 module mm_core #(
     parameter int P       = 16,  // array size
     parameter int BITS    = 8,   // operand width
@@ -108,7 +115,8 @@ module mm_core #(
     parameter int PIPE    = 1,   // PE pipeline: 0, 1 or 2 (see pe.sv); needs PIPE <= P
     parameter int MEM_REG = 1,   // registers after the A and B block-RAM reads: 0, 1 or 2
     parameter int HCLK_SEP = 0,  // 1 = hclk is a separate clock (step 12); 0 = hclk is clk
-    parameter int PE_PRIM  = 0   // 1 = PEs as DSP48E1 primitives (zed/pe_dsp48.sv, FPGA only; PIPE must be 2)
+    parameter int PE_PRIM  = 0,  // 1 = PEs as DSP48E1 primitives (zed/pe_dsp48.sv, FPGA only; PIPE must be 2)
+    parameter int HREAD_REG = 0  // 1 = one more register on the host's C read (rd_data 2 cycles later)
 )(
     input  logic             clk,          // core clock
     input  logic             hclk,         // host clock: load port and C read port (connect to clk for one clock)
@@ -126,7 +134,7 @@ module mm_core #(
     input  logic [7:0]       dim_n,
     output logic             busy,
     output logic             done,         // one-cycle pulse when C is complete
-    // result read port: C[rd_row][rd_col] appears on rd_data one cycle later (while idle)
+    // result read port: C[rd_row][rd_col] appears on rd_data 1 + HREAD_REG cycles later (while idle)
     input  logic [7:0]       rd_row,
     input  logic [7:0]       rd_col,
     output logic [ACC-1:0]   rd_data,
@@ -484,14 +492,30 @@ module mm_core #(
             assign hq1 = hq;
         end
     endgenerate
-    // Host read: pick lane rd_lane of the C word. Written as a P-to-1 mux of whole lanes, so it
+    // Step 14: with HREAD_REG = 1 the C word and its lane number are registered once more (on
+    // hclk) before the lane select, so the select starts from flip-flops instead of from the
+    // block RAM's output.
+    logic [P*ACC-1:0] hq_sel;                 // the C word the lane select uses
+    logic [LP-1:0]    rd_lane_sel;            // and its lane
+    generate
+        if (HREAD_REG != 0) begin : g_hreadreg
+            always_ff @(posedge hclk) begin
+                hq_sel      <= hq1;
+                rd_lane_sel <= rd_lane;
+            end
+        end else begin : g_hreaddirect
+            assign hq_sel      = hq1;
+            assign rd_lane_sel = rd_lane;
+        end
+    endgenerate
+    // Host read: pick lane rd_lane_sel of the C word. Written as a P-to-1 mux of whole lanes, so it
     // stays a plain mux when ACC is not a power of two (a part-select at rd_lane * ACC becomes
     // a general shifter when ACC = 22).
     logic [ACC-1:0] hq1_lane [P];
     for (genvar j = 0; j < P; j++) begin : g_rdlane
-        assign hq1_lane[j] = hq1[j*ACC +: ACC];
+        assign hq1_lane[j] = hq_sel[j*ACC +: ACC];
     end
-    assign rd_data = hq1_lane[rd_lane];
+    assign rd_data = hq1_lane[rd_lane_sel];
 
     // ---------------------------------------------------------------- sequencer
     // idle_q follows the state register: it is 1 exactly when state == S_IDLE (the same next-state

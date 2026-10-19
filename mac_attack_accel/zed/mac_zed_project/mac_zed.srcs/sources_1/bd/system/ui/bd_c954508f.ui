@@ -12,8 +12,8 @@ preplace netloc ps7_FCLK_CLK0 1 0 2 10 280 450
 preplace netloc ps7_FCLK_RESET0_N 1 1 1 460 170n
 preplace netloc rst_fclk0_interconnect_aresetn 1 0 3 40 290 NJ 290 810
 preplace netloc rst_fclk0_peripheral_aresetn 1 0 3 30 300 NJ 300 800
-preplace netloc ps7_DDR 1 1 2 460J 50 NJ
 preplace netloc ps7_FIXED_IO 1 1 2 NJ 80 NJ
+preplace netloc ps7_DDR 1 1 2 460J 50 NJ
 preplace netloc ps7_M_AXI_GP0 1 0 2 20 0 450
 preplace netloc axi_ic_M00_AXI 1 0 2 50 310 460
 levelinfo -pg 1 -10 250 630 830

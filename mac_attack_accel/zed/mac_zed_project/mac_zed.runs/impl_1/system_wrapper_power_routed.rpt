@@ -1,8 +1,8 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-| Date             : Sun Oct 18 21:20:23 2026
-| Host             : Alex running 64-bit major release  (build 9200)
+| Date             : Mon Oct 19 15:28:01 2026
+| Host             : ALEXSALAMAT56FC running 64-bit major release  (build 9200)
 | Command          : report_power -file system_wrapper_power_routed.rpt -pb system_wrapper_power_summary_routed.pb -rpx system_wrapper_power_routed.rpx
 | Design           : system_wrapper
 | Device           : xc7z020clg484-1
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 1.884        |
+| Total On-Chip Power (W)  | 1.940        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 1.737        |
-| Device Static (W)        | 0.147        |
+| Dynamic (W)              | 1.792        |
+| Device Static (W)        | 0.149        |
 | Effective TJA (C/W)      | 11.5         |
-| Max Ambient (C)          | 63.3         |
-| Junction Temperature (C) | 46.7         |
+| Max Ambient (C)          | 62.6         |
+| Junction Temperature (C) | 47.4         |
 | Confidence Level         | Medium       |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -52,20 +52,20 @@ Table of Contents
 +-------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                 | Power (W) | Used     | Available | Utilization (%) |
 +-------------------------+-----------+----------+-----------+-----------------+
-| Clocks                  |     0.029 |        3 |       --- |             --- |
-| Slice Logic             |     0.009 |     4568 |       --- |             --- |
-|   LUT as Logic          |     0.005 |     1036 |     53200 |            1.95 |
-|   Register              |     0.003 |     2792 |    106400 |            2.62 |
+| Clocks                  |     0.037 |        3 |       --- |             --- |
+| Slice Logic             |     0.010 |     4815 |       --- |             --- |
+|   LUT as Logic          |     0.006 |     1113 |     53200 |            2.09 |
+|   Register              |     0.004 |     2998 |    106400 |            2.82 |
 |   CARRY4                |    <0.001 |       86 |     13300 |            0.65 |
-|   F7/F8 Muxes           |    <0.001 |       22 |     53200 |            0.04 |
 |   LUT as Shift Register |    <0.001 |       60 |     17400 |            0.34 |
+|   F7/F8 Muxes           |    <0.001 |       22 |     53200 |            0.04 |
 |   Others                |     0.000 |      348 |       --- |             --- |
-| Signals                 |     0.042 |     7742 |       --- |             --- |
-| Block RAM               |     0.028 |      4.5 |       140 |            3.21 |
-| DSPs                    |     0.098 |       64 |       220 |           29.09 |
-| PS7                     |     1.531 |        1 |       --- |             --- |
-| Static Power            |     0.147 |          |           |                 |
-| Total                   |     1.884 |          |           |                 |
+| Signals                 |     0.053 |     7981 |       --- |             --- |
+| Block RAM               |     0.035 |      4.5 |       140 |            3.21 |
+| DSPs                    |     0.123 |       64 |       220 |           29.09 |
+| PS7                     |     1.532 |        1 |       --- |             --- |
+| Static Power            |     0.149 |          |           |                 |
+| Total                   |     1.940 |          |           |                 |
 +-------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -75,7 +75,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.221 |       0.205 |      0.016 |
+| Vccint    |       1.000 |     0.275 |       0.258 |      0.017 |
 | Vccaux    |       1.800 |     0.016 |       0.000 |      0.016 |
 | Vcco33    |       3.300 |     0.000 |       0.000 |      0.000 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -88,7 +88,7 @@ Table of Contents
 | MGTAVcc   |       1.000 |     0.000 |       0.000 |      0.000 |
 | MGTAVtt   |       1.200 |     0.000 |       0.000 |      0.000 |
 | MGTVccaux |       1.800 |     0.000 |       0.000 |      0.000 |
-| Vccpint   |       1.000 |     0.753 |       0.720 |      0.033 |
+| Vccpint   |       1.000 |     0.754 |       0.721 |      0.033 |
 | Vccpaux   |       1.800 |     0.061 |       0.051 |      0.010 |
 | Vccpll    |       1.800 |     0.017 |       0.014 |      0.003 |
 | Vcco_ddr  |       1.500 |     0.459 |       0.457 |      0.002 |
@@ -138,7 +138,7 @@ Table of Contents
 +------------+------------------------------------------+-----------------+
 | Clock      | Domain                                   | Constraint (ns) |
 +------------+------------------------------------------+-----------------+
-| clk_fpga_0 | system_i/ps7/inst/FCLK_CLK_unbuffered[0] |             5.0 |
+| clk_fpga_0 | system_i/ps7/inst/FCLK_CLK_unbuffered[0] |             4.0 |
 +------------+------------------------------------------+-----------------+
 
 
@@ -151,14 +151,14 @@ Table of Contents
 +--------------------+-----------+
 | Name               | Power (W) |
 +--------------------+-----------+
-| system_wrapper     |     1.737 |
-|   system_i         |     1.737 |
-|     axi_ic         |     0.009 |
-|       s00_couplers |     0.009 |
-|     mac            |     0.196 |
-|       inst         |     0.196 |
-|     ps7            |     1.532 |
-|       inst         |     1.532 |
+| system_wrapper     |     1.792 |
+|   system_i         |     1.792 |
+|     axi_ic         |     0.011 |
+|       s00_couplers |     0.011 |
+|     mac            |     0.247 |
+|       inst         |     0.247 |
+|     ps7            |     1.533 |
+|       inst         |     1.533 |
 +--------------------+-----------+
 
 

@@ -5,6 +5,7 @@ proc init_gui { IPINST } {
   set Page_0 [ipgui::add_page $IPINST -name "Page 0"]
   ipgui::add_param $IPINST -name "CORE_CLK" -parent ${Page_0}
   ipgui::add_param $IPINST -name "EXACT_ACC" -parent ${Page_0}
+  ipgui::add_param $IPINST -name "HREAD_REG" -parent ${Page_0}
   ipgui::add_param $IPINST -name "MAXD" -parent ${Page_0}
   ipgui::add_param $IPINST -name "MEM_REG" -parent ${Page_0}
   ipgui::add_param $IPINST -name "P" -parent ${Page_0}
@@ -29,6 +30,15 @@ proc update_PARAM_VALUE.EXACT_ACC { PARAM_VALUE.EXACT_ACC } {
 
 proc validate_PARAM_VALUE.EXACT_ACC { PARAM_VALUE.EXACT_ACC } {
 	# Procedure called to validate EXACT_ACC
+	return true
+}
+
+proc update_PARAM_VALUE.HREAD_REG { PARAM_VALUE.HREAD_REG } {
+	# Procedure called to update HREAD_REG when any of the dependent parameters in the arguments change
+}
+
+proc validate_PARAM_VALUE.HREAD_REG { PARAM_VALUE.HREAD_REG } {
+	# Procedure called to validate HREAD_REG
 	return true
 }
 
@@ -111,5 +121,10 @@ proc update_MODELPARAM_VALUE.CORE_CLK { MODELPARAM_VALUE.CORE_CLK PARAM_VALUE.CO
 proc update_MODELPARAM_VALUE.PE_PRIM { MODELPARAM_VALUE.PE_PRIM PARAM_VALUE.PE_PRIM } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.PE_PRIM}] ${MODELPARAM_VALUE.PE_PRIM}
+}
+
+proc update_MODELPARAM_VALUE.HREAD_REG { MODELPARAM_VALUE.HREAD_REG PARAM_VALUE.HREAD_REG } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.HREAD_REG}] ${MODELPARAM_VALUE.HREAD_REG}
 }
 

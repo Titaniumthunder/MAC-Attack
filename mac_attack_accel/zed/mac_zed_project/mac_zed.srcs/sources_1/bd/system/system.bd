@@ -105,7 +105,7 @@
             "value": "10.000000"
           },
           "PCW_ACT_FPGA0_PERIPHERAL_FREQMHZ": {
-            "value": "200.000000"
+            "value": "250.000000"
           },
           "PCW_ACT_FPGA1_PERIPHERAL_FREQMHZ": {
             "value": "10.000000"
@@ -162,7 +162,7 @@
             "value": "666.666667"
           },
           "PCW_CLK0_FREQ": {
-            "value": "200000000"
+            "value": "250000000"
           },
           "PCW_CLK1_FREQ": {
             "value": "10000000"
@@ -225,7 +225,7 @@
             "value": "1"
           },
           "PCW_FPGA0_PERIPHERAL_FREQMHZ": {
-            "value": "210"
+            "value": "250"
           },
           "PCW_FPGA1_PERIPHERAL_FREQMHZ": {
             "value": "150.000000"
@@ -1006,16 +1006,16 @@
               }
             },
             "interface_nets": {
-              "s00_couplers_to_auto_pc": {
-                "interface_ports": [
-                  "S_AXI",
-                  "auto_pc/S_AXI"
-                ]
-              },
               "auto_pc_to_s00_couplers": {
                 "interface_ports": [
                   "M_AXI",
                   "auto_pc/M_AXI"
+                ]
+              },
+              "s00_couplers_to_auto_pc": {
+                "interface_ports": [
+                  "S_AXI",
+                  "auto_pc/S_AXI"
                 ]
               }
             },
@@ -1124,7 +1124,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "200000000",
+                "value": "250000000",
                 "value_src": "user_prop"
               },
               "HAS_BRESP": {
@@ -1324,7 +1324,7 @@
                 "value_src": "default_prop"
               },
               "FREQ_HZ": {
-                "value": "200000000",
+                "value": "250000000",
                 "value_src": "user_prop"
               }
             }
@@ -1348,7 +1348,7 @@
                 "value_src": "default_prop"
               },
               "FREQ_HZ": {
-                "value": "200000000",
+                "value": "250000000",
                 "value_src": "user_prop"
               }
             }
@@ -1360,18 +1360,6 @@
       }
     },
     "interface_nets": {
-      "ps7_FIXED_IO": {
-        "interface_ports": [
-          "FIXED_IO",
-          "ps7/FIXED_IO"
-        ]
-      },
-      "ps7_DDR": {
-        "interface_ports": [
-          "DDR",
-          "ps7/DDR"
-        ]
-      },
       "ps7_M_AXI_GP0": {
         "interface_ports": [
           "ps7/M_AXI_GP0",
@@ -1382,6 +1370,18 @@
         "interface_ports": [
           "axi_ic/M00_AXI",
           "mac/s_axi"
+        ]
+      },
+      "ps7_FIXED_IO": {
+        "interface_ports": [
+          "FIXED_IO",
+          "ps7/FIXED_IO"
+        ]
+      },
+      "ps7_DDR": {
+        "interface_ports": [
+          "DDR",
+          "ps7/DDR"
         ]
       }
     },

@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
--- Date        : Sun Oct 18 19:52:09 2026
+-- Date        : Sat Oct 17 20:26:39 2026
 -- Host        : ALEXSALAMAT56FC running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode synth_stub
---               C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.srcs/sources_1/bd/system/ip/system_ps7_0/system_ps7_0_stub.vhdl
+-- Command     : write_vhdl -force -mode synth_stub -rename_top system_ps7_0 -prefix
+--               system_ps7_0_ system_ps7_0_stub.vhdl
 -- Design      : system_ps7_0
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7z020clg484-1

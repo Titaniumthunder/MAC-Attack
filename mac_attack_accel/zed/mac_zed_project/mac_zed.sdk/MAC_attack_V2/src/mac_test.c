@@ -50,7 +50,7 @@
 /* PL clock (FCLK_CLK0) in Hz. Use the value from Vivado's Clock Summary, not the one you asked
  * for: asking the Zynq for 80 MHz gives 76.929 MHz (period 12.999 ns). */
 #ifndef FCLK_HZ
-#define FCLK_HZ 200000000u   /* 200.000 MHz: step 7c build (asked for 190, the Zynq gave 200) */
+#define FCLK_HZ 250000000u   /* 250.000 MHz: IO PLL 1000 / 4 (step 14 build, one clock). Was 200000000u */
 #endif
 /* Clock of the matrix core in Hz. One clock (CORE_CLK = 0): the same as FCLK_HZ. With the core on
  * its own clock (step 12, CORE_CLK = 1): the Clocking Wizard's actual output frequency. The "array"

@@ -52,6 +52,8 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 18 Oct | ARM-side speed-ups in SDK `MAC_attack_V2/src/mac_test.c` (no FPGA change): (1) posted writes: the accelerator's 1 MB section remapped as Device memory, with a flush (dsb + L2 cache sync, as Linux `wmb()`) before the start, after the start, after RESULT_PTR and before time stamps; (2) loading copies 4 bytes as one word when a row is a multiple of 4 bytes; (3) two layer tests: weights loaded once, then 64 input rows, 1 or 8 per run; (4) every test runs in both bus modes on the same matrices, with a before/after summary. Checked on a PC against a register model whose posted writes are delivered late and overtaken by reads: 24/24, and removing any of the 4 needed flushes makes tests fail. Compiles against the BSP headers. | `mac_test.c`; PC model |
 | 18 Oct | **New `mac_test.c` on the board, 200 MHz, Release: ALL BOARD TESTS PASSED (24/24)**, measured clock 198.11 MHz. 64x64: 799 -> **335 us** (load 263 -> 61, read 508 -> 245), accelerator **2.8x -> 6.6x** faster than the ARM. Layer, weights once, 8 rows per run: 855 -> **390 us**, **5.7x** faster than the ARM. | SDK terminal (screenshot, 18 Oct 22:56) |
 | 19 Oct | **Step 14 written** (for one clock at 250 MHz): host read of C registered before the lane select (`mm_core.sv` `HREAD_REG`, reads wait 4 clocks) and the loader's flags from flip-flops (`mac_axi.v`). Simulation: lockstep against step 13 identical in every clock, read logs identical, `tb_axi` 14/14 (P = 4, 8, 16) and 15/15 (two clocks), team testbenches byte-identical, 3 planted bugs caught. Files in `Alex/step14/`, not in the build yet. | section 5, step 14 |
+| 19 Oct | **Step 14 built at 250.000 MHz** (one clock, branch `try_250MHz`, Alex's VM, default implementation strategy): fails by 0.081 ns, WNS -0.081 ns, TNS -0.231 ns, **6 failing** of 10,833 endpoints (was 45 at 250 MHz on 17 Oct), WHS +0.051 ns. LUT 1,170, FF 2,997, BRAM 4.5, DSP 64, power 1.940 W. The host read of C and the loader no longer fail. Left: the Xilinx protocol converter (2), the C working copy's block RAM -> `cq2` (2), loader write data -> B block RAM (1), the accumulator add (1). Reports copied to `Alex/timing_summary_v8.rpt`, `Alex/utilization_v8.rpt`. Next: the same build with `Performance_ExplorePostRoutePhysOpt`. | `impl_1` reports (19 Oct 15:17) |
+| 19 Oct | **250.000 MHz met timing** (step 14, one clock, branch `try_250MHz`, Alex's VM): same RTL, implementation strategy `Performance_ExplorePostRoutePhysOpt`. After routing WNS -0.003 ns (2 endpoints); the post-route physical optimization then gave **WNS +0.008 ns, TNS 0, 0 failing of 10,835 endpoints, WHS +0.019 ns**. Bitstream written, 0 critical warnings. LUT 1,170, FF 2,997, BRAM 4.5, DSP 64, power 1.940 W. The closest paths are all inside the Xilinx protocol converter. Reports copied to `Alex/timing_summary_v9.rpt` (post-route physopt), `Alex/utilization_v9.rpt`. Not run on the board yet (the board is at home). | `impl_1` reports (19 Oct 15:28) |
 | 16 Oct | `docs/systolic_dataflow.html`: animated cycle-by-cycle view of data moving from the A/B buffers through the array to C (1-stage / 2-stage PE, MEM_REG on/off). Its model matches `systolic_array.sv` + `pe.sv` in Icarus cycle for cycle (every PE partial-sum register, `c_row`, `out_valid`; P = 2, 3, 4, PIPE = 0 and 1). | Icarus Verilog 12 |
 
 (Add a row each time work is finished.)
@@ -99,7 +101,7 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 - NOT done: step 12 (two clocks) built in Vivado.
 - (Done) Board runs above 50 MHz: 76.93 MHz on 16 Oct (James, Release) and 200 MHz on 18 Oct (Debug), section 4.
 - [done] Release (-O2) build on the board: 76.93 MHz (16 Oct, James) and 200 MHz (18 Oct), section 4. At 200 MHz the accelerator is 2.6x faster than the ARM for 64x64x64.
-- [done] Step 14 in simulation (section 5); not built. Files in `Alex/step14/`.
+- [done] Step 14 in simulation (section 5) and built at **250 MHz: timing met** (WNS +0.008 ns, branch `try_250MHz`, 19 Oct). NOT run on the board yet.
 - [done] ARM-side bus changes (posted writes, word copies, weights loaded once): 64x64x64 6.6x faster than the ARM; one 64x64 layer over 64 rows, 8 rows per run, 5.7x (section 4).
 - NOT done: INT8 and INT4 AUC on real data. Nothing trained yet.
 - NOT done: audio front end.
@@ -227,6 +229,8 @@ running at 50 MHz until the SDK hardware platform (ps7_init) is updated (section
 | 12 | - | AXI 200, core 250 + | not built | - | - | The core on its own clock (Clocking Wizard), `CORE_CLK = 1` | same as 10b + 11, in core cycles | - |
 | 13 (one clock) | 18 Oct | 200.000 | **yes**, board 10/10 | +0.259 / +0.037 | 4.74 ns / 211 MHz | Last-row flags, `idle_q`, A/B feed registers swapped (MEM_REG = 2); one clock (`CORE_CLK = 0`). Worst paths on the bus side | same as 10b + 11 | 1,096 / 2,792 / 4.5 / 64 |
 | 14 | - | 250.000 (one clock) | not built | - | - | Host C read registered before the lane select (`HREAD_REG = 1`); loader flags from flip-flops | same cycles per pass; reads 1 clock longer | - |
+| 14 (one clock) | 19 Oct | 250.000 | **no** | -0.081 / +0.051 | 4.08 ns / 245 MHz | Host read of C registered (`HREAD_REG`), loader flags from flip-flops; default implementation strategy | +1 bus clock per register read | 1,170 / 2,997 / 4.5 / 64 |
+| 14 (one clock), Explore | 19 Oct | **250.000** | **yes** | +0.008 / +0.019 | 3.99 ns / 250 MHz | Same RTL; strategy `Performance_ExplorePostRoutePhysOpt` (post-route physical optimization closed the last 2 endpoints) | +1 bus clock per register read | 1,170 / 2,997 / 4.5 / 64 |
 | 12 + 13 | - | AXI 200, core 250 | not built | - | - | Two clocks with the step 13 core | same as 10b + 11, in core cycles | - |
 
 ### Step 0 -> 1: 50 to 76.9 MHz (clock setting only, 15 Oct)
@@ -878,6 +882,31 @@ offers the next transfer as soon as the previous one is accepted, with random ga
 Next: on branch `try-250MHz`, copy the two files into `rtl/` and `zed/`, FCLK_CLK0 = 250 MHz, build; then `mac_test.c`
 `FCLK_HZ` = 250000000. If only the Xilinx protocol converter fails, try Performance_ExplorePostRoutePhysOpt.
 
+Built 19 Oct (branch `try_250MHz`; `rtl/mm_core.sv` and `zed/mac_axi.v` replaced by the files above; FCLK_CLK0 250.000
+MHz; `mac_test.c` `FCLK_HZ` 250000000; default implementation strategy, because the strategy setting was not found):
+WNS -0.081 ns, TNS -0.231 ns, 6 failing endpoints of 10,833, WHS +0.051 ns. LUT 1,170, FF 2,997, BRAM 4.5, DSP 64,
+1.940 W. Neither the host read of C nor the loader is among the failing paths any more.
+
+| Slack (ns) | From -> to | Levels | Data path (ns) | What it is |
+|---|---|---|---|---|
+| -0.081 | `auto_pc` `bid_fifo` (SRL) -> `bresp_cnt` reset | 3 | 3.462 | Xilinx protocol converter, write response |
+| -0.074, -0.003 | `cmem` block RAM -> `cq2[149]`, `cq2[171]` | 0 | 3.965, 3.729 (2.454 is the block RAM's clock-to-out) | C working copy read; the block RAM output now also feeds the step 14 register (fanout 2) |
+| -0.059 | `auto_pc` `bid_fifo` `cnt_read` -> `axaddr_incr` | 5 | 3.998 | Xilinx protocol converter, write address |
+| -0.013 | `core_wr_data[1]` -> `bmem` data input | 0 | 2.972 (2.553 wire, fanout 11) | Loader's byte to the B block RAM (one byte goes to all 8 lanes) |
+| -0.002 | `cq2[167]` -> `wq[175]` | 4 (3 CARRY4) | 3.901 | The C accumulator add |
+
+Next: the same RTL with the `Performance_ExplorePostRoutePhysOpt` implementation strategy (implementation only). If
+the C working copy still fails: give the host its own C copy read through the block RAM's output register, so the
+working copy's block RAM drives only `cq2` again.
+
+Second build, 19 Oct: same RTL, strategy `Performance_ExplorePostRoutePhysOpt` (Design Runs > impl_1 > Change Run
+Settings > Strategy; or `set_property strategy Performance_ExplorePostRoutePhysOpt [get_runs impl_1]`). After routing:
+WNS -0.003 ns, 2 endpoints. The post-route physical optimization then closed them: **WNS +0.008 ns, TNS 0, 0 failing
+endpoints, WHS +0.019 ns: 250 MHz met.** Bitstream written, 0 critical warnings. Same resources as the first build.
+All the closest paths are inside the Xilinx protocol converter; the C working copy, the loader byte and the accumulator
+add all passed. The margin is small (8 ps), so any later change must be re-checked at 250 MHz, and the board run is
+still to do (`mac_test.c` already has `FCLK_HZ` 250000000).
+
 ### Planted bugs for steps 10b, 11 and 12
 
 All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` fail, and the one that does not
@@ -949,6 +978,7 @@ All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` f
 | Timing, 200.000 MHz, steps 9 + 10 (best so far) | WNS +0.529 ns, WHS +0.014 ns; LUT 2,192, FF 3,847, BRAM 4.5, DSP 64, CARRY4 398; power 1.935 W | Vivado |
 | Timing, 250.000 MHz, step 11b (one clock) | WNS -0.263 ns (fails), TNS -3.113 ns, 45 of 10,707 endpoints, WHS +0.037 ns; LUT 1,119, FF 2,895, BRAM 4.5, DSP 64, CARRY4 86; power 1.940 W | Vivado |
 | Timing, 200.000 MHz, step 13 (one clock) | WNS +0.259 ns, WHS +0.037 ns, 0 failing of 10,627; LUT 1,096, FF 2,792, BRAM 4.5, DSP 64; power 1.884 W | Vivado |
+| Timing, 250.000 MHz, step 14 (one clock), Performance_ExplorePostRoutePhysOpt | WNS +0.008 ns, TNS 0, WHS +0.019 ns, 0 failing of 10,835; LUT 1,170, FF 2,997, BRAM 4.5, DSP 64; power 1.940 W | Vivado |
 | Board, 76.93 MHz, Release build (James, 16 Oct) | 8/8; 64x64: ARM software 2,080 us, accelerator 1,509 us (1.4x); 1x64x64: ARM 32 us, accelerator 304 us (ARM 9.5x); measured clock 76.45 MHz | SDK terminal (James) |
 | Board, 200 MHz, step 13 (Release build) | 10/10; 64x64: accelerator 855 us (load 320, run 27, read 508) against ARM 2,227 us (2.6x); 1x64x64: ARM 5.2x faster; measured clock 198.13 MHz | SDK terminal, 18 Oct 22:33 |
 | Board, 200 MHz, Release, posted writes (new `mac_test.c`) | 24/24; 64x64: 335 us (load 61, run 27, read 245) against ARM 2,227 us (6.6x); layer, weights once, 8 rows per run: 390 us (5.7x); 30 ns per write, 60 ns per read | SDK terminal, 18 Oct 22:56 |

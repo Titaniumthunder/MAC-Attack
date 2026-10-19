@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-| Date         : Sun Oct 18 19:52:16 2026
+| Date         : Mon Oct 19 15:15:27 2026
 | Host         : ALEXSALAMAT56FC running 64-bit major release  (build 9200)
 | Command      : report_utilization -file system_mac_0_utilization_synth.rpt -pb system_mac_0_utilization_synth.pb
 | Design       : system_mac_0
@@ -30,11 +30,11 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| Slice LUTs*             |  716 |     0 |     53200 |  1.35 |
-|   LUT as Logic          |  716 |     0 |     53200 |  1.35 |
+| Slice LUTs*             |  749 |     0 |     53200 |  1.41 |
+|   LUT as Logic          |  749 |     0 |     53200 |  1.41 |
 |   LUT as Memory         |    0 |     0 |     17400 |  0.00 |
-| Slice Registers         | 2331 |     0 |    106400 |  2.19 |
-|   Register as Flip Flop | 2331 |     0 |    106400 |  2.19 |
+| Slice Registers         | 2536 |     0 |    106400 |  2.38 |
+|   Register as Flip Flop | 2536 |     0 |    106400 |  2.38 |
 |   Register as Latch     |    0 |     0 |    106400 |  0.00 |
 | F7 Muxes                |   22 |     0 |     26600 |  0.08 |
 | F8 Muxes                |    0 |     0 |     13300 |  0.00 |
@@ -57,7 +57,7 @@ Table of Contents
 | 0     |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
 | 35    |          Yes |         Set |            - |
-| 2296  |          Yes |       Reset |            - |
+| 2501  |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -149,12 +149,12 @@ Table of Contents
 +----------+------+---------------------+
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
-| FDRE     | 2296 |        Flop & Latch |
-| LUT2     |  302 |                 LUT |
-| LUT6     |  192 |                 LUT |
-| LUT3     |  127 |                 LUT |
-| LUT5     |  106 |                 LUT |
-| LUT4     |   82 |                 LUT |
+| FDRE     | 2501 |        Flop & Latch |
+| LUT2     |  298 |                 LUT |
+| LUT6     |  216 |                 LUT |
+| LUT3     |  133 |                 LUT |
+| LUT5     |  123 |                 LUT |
+| LUT4     |   78 |                 LUT |
 | CARRY4   |   74 |          CarryLogic |
 | DSP48E1  |   64 |    Block Arithmetic |
 | FDSE     |   35 |        Flop & Latch |

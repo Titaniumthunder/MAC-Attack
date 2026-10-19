@@ -331,3 +331,9 @@ con
 ----------------End of Script----------------
 
 22:56:22 INFO  : Disconnected from the channel tcfchan#7.
+15:34:04 INFO  : Registering command handlers for SDK TCF services
+15:34:06 INFO  : Launching XSCT server: xsct.bat -interactive C:\Users\alexsalamati\Xilinx\Lab\MAC-Attack\mac_attack_accel\zed\mac_zed_project\mac_zed.sdk\temp_xsdb_launch_script.tcl
+15:34:09 INFO  : XSCT server has started successfully.
+15:34:12 INFO  : Processing command line option -hwspec C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.sdk/system_wrapper.hdf.
+15:34:12 INFO  : Successfully done setting XSCT server connection channel  
+15:34:12 INFO  : Successfully done setting SDK workspace  
