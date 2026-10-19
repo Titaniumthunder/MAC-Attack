@@ -19,6 +19,7 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 15 Oct | **First board run: ALL BOARD TESTS PASSED (8/8)** at 50 MHz. Every pass and cycle count equals the equation. | SDK terminal (screenshot) |
 | 15 Oct | Clock raised: FCLK_CLK0 requested 80 MHz, Zynq PLL gives **76.929 MHz** (12.999 ns). Implementation meets timing: WNS +0.135 ns, WHS +0.022 ns. | Vivado Design Runs |
 | 15 Oct | Board run with the 76.9 MHz build still measured **49.77 MHz** (new clock check in `mac_test.c`): the SDK hardware platform (ps7_init) was stale, so the clock stayed at 50 MHz. | SDK terminal (screenshot) |
+| 16 Oct | (James, on the PC) **Board run at 76.93 MHz, Release (-O2) build: ALL BOARD TESTS PASSED (8/8)**, measured clock 76.45 MHz, so the hardware platform was updated this time. First fair ARM baseline: 64x64 ARM software 2,080 us (Debug: 11,223 us); accelerator 1,509 us (load 531, run 72, read 906) = 1.4x. Logged on 18 Oct from James's screenshot. | SDK terminal (screenshot, James) |
 | 16 Oct | Exploration build at 100 MHz: fails timing (WNS -2.263 ns, 1,060 of 11,522 endpoints fail). Used to rank what limits the clock. | `Alex/design_analysis_100.rpt`, `Alex/timing_paths_100.rpt`, `Alex/timing_others_100.rpt` |
 | 16 Oct | Confirmed: the B buffer (`bmem`, only 512 x 64 bits) is built from **64 BRAMs** (READ_WIDTH_B = 18). | Tcl Console |
 | 16 Oct | Fixes 1-3 written in `rtl/mm_core.sv` (one BRAM per buffer, read-side counters one cycle ahead, lane masks per run). Simulation: every test log byte-identical to the old RTL, every cycle of the core identical after reset, 60/60 NumPy suite pass, plus 7 extra large/INT4/saturating cases at MAXD = 255. | Icarus Verilog 12; Yosys estimate below |
@@ -44,6 +45,13 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 18 Oct | Committed and pushed on `Alex_edit` ("200MHz clock", 0409010). | git |
 | 18 Oct | **Step 13, one clock, rebuilt at 200.000 MHz** (Alex's VM): WNS +0.259 ns, WHS +0.037 ns, 0 failing of 10,627 endpoints; bitstream written with 0 critical warnings. LUT 1,096, FF 2,792, BRAM 4.5, DSP 64, power 1.884 W. The worst paths are the Xilinx AXI interconnect and the loader in `mac_axi.v` (bus side); none in the core. Reports copied to `Alex/timing_summary_v7.rpt`, `Alex/utilization_v7.rpt`. Not run on the board yet. | `impl_1` reports (18 Oct 19:55) |
 | 18 Oct | `.gitignore` changed so the Vivado project is tracked (block design, run results with the bitstream, SDK projects); `zed/README.md` section 0 says how a teammate opens it and runs the board without rebuilding. | `.gitignore`, `zed/README.md` |
+| 18 Oct | Committed and pushed on `Alex_edit` ("vivado project tracked", f698a1e): the project with the step 13 bitstream, but not the SDK `.hdf`, hardware platform or BSP. Pulled on the PC. | git |
+| 18 Oct | On the PC, Vivado re-ran synthesis and implementation of the pulled project (the two IP runs were not redone; finished 21:20): same result, WNS +0.259 ns, WHS +0.037 ns. Hardware exported with the bitstream; SDK hardware platform and BSP updated (ps7_init FCLK0 = IO PLL 1000 / 5 = 200 MHz; the PC's old platform from 16 Oct was 1000 / 13 = 76.9 MHz). | `impl_1` reports (18 Oct 21:20), `mac_zed.sdk/system_wrapper.hdf` |
+| 18 Oct | **Step 8 done: ALL BOARD TESTS PASSED (10/10) at 200 MHz** with the step 13 build (PIPE 2, MEM_REG 2, one DSP48E1 per PE, one clock). Every pass and cycle count equals the equation. Clock check: CORE_HZ 200.00 MHz, measured 197.81 MHz (the 1.1% gap is ARM time inside the measured window, section 4). 64x64: array 27.5 us, accelerator total 1,559 us, ARM software 11,615 us. Debug (-O0) build. | SDK terminal (screenshot, 18 Oct 21:25) |
+| 18 Oct | **Release build at 200 MHz: ALL BOARD TESTS PASSED (10/10)**, measured clock 198.13 MHz. 64x64: load 320, run 27, read 508 us; accelerator 855 us against ARM 2,227 us = **2.6x faster** (1.4x at 76.93 MHz Release). The bus got 1.7-1.8x faster with the clock, so part of every bus transfer runs on the PL clock (section 4). | SDK terminal (screenshot, 18 Oct 22:33) |
+| 18 Oct | ARM-side speed-ups in SDK `MAC_attack_V2/src/mac_test.c` (no FPGA change): (1) posted writes: the accelerator's 1 MB section remapped as Device memory, with a flush (dsb + L2 cache sync, as Linux `wmb()`) before the start, after the start, after RESULT_PTR and before time stamps; (2) loading copies 4 bytes as one word when a row is a multiple of 4 bytes; (3) two layer tests: weights loaded once, then 64 input rows, 1 or 8 per run; (4) every test runs in both bus modes on the same matrices, with a before/after summary. Checked on a PC against a register model whose posted writes are delivered late and overtaken by reads: 24/24, and removing any of the 4 needed flushes makes tests fail. Compiles against the BSP headers. | `mac_test.c`; PC model |
+| 18 Oct | **New `mac_test.c` on the board, 200 MHz, Release: ALL BOARD TESTS PASSED (24/24)**, measured clock 198.11 MHz. 64x64: 799 -> **335 us** (load 263 -> 61, read 508 -> 245), accelerator **2.8x -> 6.6x** faster than the ARM. Layer, weights once, 8 rows per run: 855 -> **390 us**, **5.7x** faster than the ARM. | SDK terminal (screenshot, 18 Oct 22:56) |
+| 19 Oct | **Step 14 written** (for one clock at 250 MHz): host read of C registered before the lane select (`mm_core.sv` `HREAD_REG`, reads wait 4 clocks) and the loader's flags from flip-flops (`mac_axi.v`). Simulation: lockstep against step 13 identical in every clock, read logs identical, `tb_axi` 14/14 (P = 4, 8, 16) and 15/15 (two clocks), team testbenches byte-identical, 3 planted bugs caught. Files in `Alex/step14/`, not in the build yet. | section 5, step 14 |
 | 16 Oct | `docs/systolic_dataflow.html`: animated cycle-by-cycle view of data moving from the A/B buffers through the array to C (1-stage / 2-stage PE, MEM_REG on/off). Its model matches `systolic_array.sv` + `pe.sv` in Icarus cycle for cycle (every PE partial-sum register, `c_row`, `out_valid`; P = 2, 3, 4, PIPE = 0 and 1). | Icarus Verilog 12 |
 
 (Add a row each time work is finished.)
@@ -76,6 +84,7 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 - [done] AXI wrapper `tb_axi` 12/12 in XSim 2019.1.
 - [done] ZedBoard block design, bitstream, timing met at 50 MHz and at 76.9 MHz.
 - [done] Board: 8/8 tests pass at 50 MHz.
+- [done] Board: 10/10 tests pass at **200 MHz** (step 13 build, 18 Oct); measured clock 197.81 MHz. Debug build.
 - [done] Fixes 1-3: timing met at 100 MHz in Vivado (WNS +1.095 ns). Not yet run on the board at 100 MHz.
 - [done] 2-stage PE: timing met at 142.857 MHz in Vivado (WNS +0.456 ns). Not yet run on the board.
 - [done] Fixes for the four 142.857 MHz paths: timing met at 166.667 MHz (WNS +0.176 ns). Not yet run on the board.
@@ -86,16 +95,20 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 - [done] Steps 9 + 10 built together: timing met at 200.000 MHz with WNS +0.529 ns (floor about 224 MHz). Not yet run on the board.
 - [done] Steps 10b, 11, 12 in simulation (section 5).
 - [done] Step 11b built at 250 MHz, one clock: 64 DSPs, timing fails by 0.263 ns, no array path among the worst (section 5). Not run on the board.
-- [done] Step 13 in simulation (section 5). Not built.
+- [done] Step 13: simulation (section 5); built at 200 MHz (WNS +0.259 ns, on the VM and again on the PC with the same result); run on the board (10/10).
 - NOT done: step 12 (two clocks) built in Vivado.
-- NOT done: board run that actually runs at 76.9 MHz (needs the SDK hardware platform updated; see section 6).
-- NOT done: Release (-O2) build of `mac_test.c`; the ARM software times so far are from the Debug build.
+- (Done) Board runs above 50 MHz: 76.93 MHz on 16 Oct (James, Release) and 200 MHz on 18 Oct (Debug), section 4.
+- [done] Release (-O2) build on the board: 76.93 MHz (16 Oct, James) and 200 MHz (18 Oct), section 4. At 200 MHz the accelerator is 2.6x faster than the ARM for 64x64x64.
+- [done] Step 14 in simulation (section 5); not built. Files in `Alex/step14/`.
+- [done] ARM-side bus changes (posted writes, word copies, weights loaded once): 64x64x64 6.6x faster than the ARM; one 64x64 layer over 64 rows, 8 rows per run, 5.7x (section 4).
 - NOT done: INT8 and INT4 AUC on real data. Nothing trained yet.
 - NOT done: audio front end.
 
-## 4. Board results (50 MHz, Debug build)
+## 4. Board results
 
 All times in microseconds. Speedup = ARM software / (load + run + read).
+
+### 50 MHz (15 Oct, original RTL, Debug build)
 
 | Test | Array (calc) | Load | Run | Read | ARM software | Winner |
 |---|---|---|---|---|---|---|
@@ -106,8 +119,80 @@ All times in microseconds. Speedup = ARM software / (load + run + read).
 | 1x64x64 | 29 | 586 | 29 | 24 | 175 | ARM, 3.7x |
 
 - 64x64: moving data is 96% of the time; (load + read) / array = 24.5x, against 6.7x in the ideal-bus simulation.
-- [claim] The ARM software time is a steady ~43 ns per multiply-add, which suggests an unoptimised (Debug, -O0) build. Re-measure with Release before quoting any speedup.
+- [claim] The ARM software time is a steady ~43 ns per multiply-add, which suggests an unoptimised (Debug, -O0) build. Re-measure with Release before quoting any speedup. (Confirmed 16 Oct: the Release build takes 2,080 us, 5.4x less; see 76.93 MHz below.)
 - [claim] The 1x64x64 case is the autoencoder's shape (one row at a time). Reloading all weights per inference would take ~37 ms (estimate), longer than a 32 ms audio hop, so weights must stay in the FPGA.
+
+### 76.93 MHz (16 Oct, James; Release build; 76.9 MHz bitstream with 32-bit sums)
+
+ALL BOARD TESTS PASSED (8/8); every pass and cycle count equals the equation. Measured clock 76.45 MHz (FCLK_HZ 76.93).
+
+| Test | Array (calc) | Load | Run | Read | ARM software | Winner |
+|---|---|---|---|---|---|---|
+| 4x4x4 | 0.3 | 3 | 0 | 3 | 0 | ARM (6 vs 0) |
+| 16x16x16 | 2.0 | 33 | 2 | 56 | 33 | ARM, 2.8x |
+| 64x64x64 | 71.5 | 531 | 72 | 906 | 2,080 | Accelerator, 1.4x |
+| 37x50x23 | 16.1 | 197 | 16 | 189 | 343 | ARM, 1.2x |
+| 1x64x64 | 19.1 | 271 | 19 | 14 | 32 | ARM, 9.5x |
+
+- This is the fair baseline. The Release ARM software is 5.4x faster than Debug at 64x64 (2,080 against 11,223 us): about 7.9 ns, or 5.3 ARM clocks at 666.7 MHz, per multiply-add.
+- Against the Release ARM the accelerator wins only at 64x64, by 1.4x. Moving data is 95% of the accelerator's time (1,437 of 1,509 us); (load + read) / array = 20x.
+- The 1x64x64 shape (one input row through a 64x64 layer, the autoencoder's case) loses 9.5x: loading the 64x64 weights (271 us) alone takes 8x the ARM's whole job (32 us).
+
+### 200 MHz (18 Oct, step 13 build: PIPE 2, MEM_REG 2, one DSP48E1 per PE, one clock; Debug build)
+
+ALL BOARD TESTS PASSED (10/10); every pass and cycle count equals the equation. Array (calc) = cycles / 200 MHz.
+
+| Test | Array (calc) | Load | Run | Read | ARM software | Winner | At 50 MHz |
+|---|---|---|---|---|---|---|---|
+| 4x4x4 | 0.13 | 4 | 0 | 3 | 4 | ARM, 1.8x | ARM, 3.3x |
+| 16x16x16 | 0.76 | 48 | 1 | 49 | 194 | Accelerator, 2.0x | Accelerator, 1.1x |
+| 64x64x64 | 27.5 | 755 | 27 | 777 | 11,615 | Accelerator, 7.5x | Accelerator, 4.0x |
+| 37x50x23 | 6.2 | 278 | 6 | 162 | 1,896 | Accelerator, 4.3x | Accelerator, 2.4x |
+| 1x64x64 | 7.4 | 383 | 7 | 12 | 181 | ARM, 2.2x | ARM, 3.7x |
+
+- The other 5 tests (every input -128, every input 127, B = identity at 16x16x16; every input -128, and A = 127 with B = -128, at 64x64x64) gave the same times as the random test of the same size.
+- The array got 4x faster (64x64: 110 -> 27.5 us) but the bus only 1.5-2x (load 1,153 -> 755 us, read 1,549 -> 777 us). [claim, wrong] Most of each bus word's time is ARM time, which the PL clock does not speed up. (These were Debug numbers. In Release the bus gets 1.7-1.8x faster from 76.93 to 200 MHz; see the Release table below.) 64x64: moving data is now 98% of the time; (load + read) / array = 56x (24.5x at 50 MHz).
+- Clock check: CORE_HZ says 200.00 MHz, measured 197.81 MHz. [claim] Not a slower clock: FCLK0 = IO PLL 1000 / 5 = 200 MHz. The measured window (t1 to t2 in `mac_test.c`) also holds the start write, the polling reads after the run ends and the timer reads: about 0.3 us per 64x64 run (5,511 cycles = 27.56 us at 200 MHz; 197.81 MHz implies 27.86 us). So it reads about 1% low; the warning threshold is 5%.
+- Debug (-O0) build: the ARM software and the bus loops are both slower than in Release. The Winner column is against a Debug ARM and overstates the gain: 64x64 shows 7.5x here, but 1.4x against the Release ARM (76.93 MHz table). Re-measure with Release (section 5, step 8, item 6).
+- Same 64x64 run, 76.93 MHz Release against 200 MHz Debug: run 72 -> 27 us (2.6x, the clock ratio), read 906 -> 777 us (mostly waiting on the FPGA, so the clock helps), load 531 -> 755 us (4 bytes packed by ARM code before every write, so Debug hurts more than the clock helps), ARM software 2,080 -> 11,615 us (Debug only).
+
+### 200 MHz (18 Oct, step 13 build, Release build)
+
+ALL BOARD TESTS PASSED (10/10); every pass and cycle count equals the equation. Measured clock 198.13 MHz.
+
+| Test | Array (calc) | Load | Run | Read | ARM software | Winner | At 76.93 MHz, Release |
+|---|---|---|---|---|---|---|---|
+| 4x4x4 | 0.13 | 1 | 0 | 2 | 0 | ARM (3 vs 0) | ARM (6 vs 0) |
+| 16x16x16 | 0.76 | 20 | 1 | 31 | 35 | ARM, 1.5x | ARM, 2.8x |
+| 64x64x64 | 27.5 | 320 | 27 | 508 | 2,227 | Accelerator, 2.6x | Accelerator, 1.4x |
+| 37x50x23 | 6.2 | 119 | 6 | 106 | 367 | Accelerator, 1.6x | ARM, 1.2x |
+| 1x64x64 | 7.4 | 162 | 7 | 8 | 34 | ARM, 5.2x | ARM, 9.5x |
+
+- Same 64x64 run, both Release, 76.93 -> 200 MHz: run 72 -> 27 us (2.6x, the clock ratio), load 531 -> 320 us (1.7x), read 906 -> 508 us (1.8x), total 1,509 -> 855 us (1.8x). ARM software 2,080 -> 2,227 us (it does not use the PL clock; the 7% difference is not explained).
+- So the bus also speeds up with the PL clock: the AXI interconnect, the protocol converter and `mac_axi` all run on FCLK_CLK0. [claim] Fitting t = a + n / f_PL to the two runs: a write costs about 92 ns on the ARM side plus about 13 PL cycles, a read about 64 ns plus about 12 PL cycles. Only two points, from two hardware versions (the 16 Oct bitstream had the older `mac_axi`), so this is an estimate.
+- Moving data is still 97% of the accelerator's time at 64x64: (320 + 508) / 855; (load + read) / array = 30x.
+- 1x64x64: loading the 64x64 weights is 162 of the 177 us.
+
+### 200 MHz, Release, new `mac_test.c`: both bus modes (18 Oct)
+
+ALL BOARD TESTS PASSED (24/24), every pass and cycle count equal to the equation, in both modes. Same matrices in both modes. Times in us.
+
+| Test | Strongly ordered: load / run / read = total | Posted writes: load / run / read = total | ARM software | Before -> after |
+|---|---|---|---|---|
+| 16x16x16 | 17 / 1 / 31 = 49 | 4 / 1 / 15 = 20 | 36 | ARM 1.4x -> accelerator 1.8x |
+| 64x64x64 | 263 / 27 / 508 = 799 | 61 / 27 / 245 = 335 | 2,227 | accelerator 2.8x -> 6.6x |
+| 37x50x23 | 119 / 6 / 106 = 231 | 27 / 6 / 51 = 84 | 367 | accelerator 1.6x -> 4.3x |
+| 1x64x64, weights sent again | 134 / 7 / 8 = 149 | 31 / 7 / 4 = 42 | 34 | ARM 4.4x -> ARM 1.3x |
+| Layer: weights once, 64 rows, 1 per run | weights 132, rows 1,159 (18.1 per row) = 1,291 | weights 30, rows 795 (12.4 per row) = 826 | 2,228 | accelerator 1.7x -> 2.7x |
+| Layer: weights once, 64 rows, 8 per run | weights 132, rows 723 (11.2 per row) = 855 | weights 30, rows 359 (5.6 per row) = 390 | 2,227 | accelerator 2.6x -> 5.7x |
+
+- Word copies alone (strongly ordered mode against the earlier 200 MHz Release run): 64x64 load 320 -> 263 us. 37x50x23 is unchanged because rows that are not a multiple of 4 bytes still use the byte-by-byte path.
+- Posted writes: 2,048 writes in 61 us = 30 ns = 6 PL cycles per write. [claim] That is `mac_axi`'s own limit: it accepts one write, then writes its 4 bytes one per clock before it accepts the next.
+- Reads also got 2x faster: 508 -> 245 us, 124 -> 60 ns (about 12 PL cycles) per read. [claim] With Device memory the ARM can have several reads in flight; with strongly ordered memory each read must finish before the next one starts. So reads now wait on `mac_axi` and the AXI interconnect, not on the ARM.
+- Both directions are now set by the FPGA side, so the PL clock matters for the bus again (a faster FCLK, or fewer cycles per transfer in `mac_axi`).
+- 64x64 with posted writes: load 61 (18%), run 27 (8%), read 245 (74%).
+- The single 1x64x64 test still sends the 4 KB of weights every time, so the ARM still wins it; the layer tests are the real use (one row through a layer: 177 us before, 12.4 us now with weights kept, 5.6 us per row in batches of 8).
+- 24/24 in posted mode means the 4 flush points keep the ordering correct on the board, as the PC model predicted.
 
 ## 5. Clock speed history (step by step)
 
@@ -122,7 +207,7 @@ How to read a timing result:
 Zynq PL clocks come from one of the PS PLLs divided by whole numbers. From the 1000 MHz IO PLL: 1000/13 = 76.9,
 /10 = 100, /7 = 142.9, /6 = 166.7, /5 = 200. Other values come from another PLL: asking for 180 MHz gave 187.512 MHz.
 Always use the Actual Frequency Vivado shows (or the Clocking Wizard for exact values). The board itself keeps
-running at 50 MHz until the SDK hardware platform (ps7_init) is updated (section 6).
+running at 50 MHz until the SDK hardware platform (ps7_init) is updated (section 6). (Updated: the board ran at 76.93 MHz on 16 Oct and at 200 MHz on 18 Oct, section 4.)
 
 | Step | Date | Clock (MHz) | Met? | WNS / WHS (ns) | Worst path / floor | What changed | Run cycles | LUT / FF / BRAM tiles / DSP |
 |---|---|---|---|---|---|---|---|---|
@@ -140,7 +225,8 @@ running at 50 MHz until the SDK hardware platform (ps7_init) is updated (section
 | 10b + 11 | 17 Oct | 250.000 | synthesis only | - | - | `w_load` from a flip-flop; `PIPE = 2` (add inside the DSP): Vivado made 2 DSPs per PE | +1 per run: `perf_total = perf_cycles + 7` | mac block: 704 / 2,377 / 4.5 / **128** (synthesis) |
 | 11b | 17 Oct | 250.000 | **no** | -0.263 / +0.037 | 4.26 ns / 235 MHz | Each PE as one DSP48E1 placed directly (`PE_PRIM = 1`) | same as 10b + 11 | 1,119 / 2,895 / 4.5 / **64** |
 | 12 | - | AXI 200, core 250 + | not built | - | - | The core on its own clock (Clocking Wizard), `CORE_CLK = 1` | same as 10b + 11, in core cycles | - |
-| 13 (one clock) | 18 Oct | 200.000 | **yes** | +0.259 / +0.037 | 4.74 ns / 211 MHz | Last-row flags, `idle_q`, A/B feed registers swapped (MEM_REG = 2); one clock (`CORE_CLK = 0`). Worst paths on the bus side | same as 10b + 11 | 1,096 / 2,792 / 4.5 / 64 |
+| 13 (one clock) | 18 Oct | 200.000 | **yes**, board 10/10 | +0.259 / +0.037 | 4.74 ns / 211 MHz | Last-row flags, `idle_q`, A/B feed registers swapped (MEM_REG = 2); one clock (`CORE_CLK = 0`). Worst paths on the bus side | same as 10b + 11 | 1,096 / 2,792 / 4.5 / 64 |
+| 14 | - | 250.000 (one clock) | not built | - | - | Host C read registered before the lane select (`HREAD_REG = 1`); loader flags from flip-flops | same cycles per pass; reads 1 clock longer | - |
 | 12 + 13 | - | AXI 200, core 250 | not built | - | - | Two clocks with the step 13 core | same as 10b + 11, in core cycles | - |
 
 ### Step 0 -> 1: 50 to 76.9 MHz (clock setting only, 15 Oct)
@@ -313,7 +399,7 @@ Paths at 166.667 MHz that needed more than 5.0 ns, and what was changed:
   "Needs" here is the clock period minus the slack. Only 10 paths are in the summary report, so paths with slack
   between +0.387 and about +0.5 ns are not visible. Next build: also write the worst 100 paths (Tcl in step 9).
 
-### Step 8: board run at 200 MHz (prepared 17 Oct, not done)
+### Step 8: board run at 200 MHz (prepared 17 Oct, done 18 Oct with the step 13 build)
 
 Why: since 15 Oct every result above 50 MHz is a timing report only. The board has only ever run at 50 MHz, because
 the SDK kept the old ps7_init (problem table, 15 Oct, still open). A speed claim needs the board run.
@@ -340,6 +426,11 @@ Procedure (Vivado and SDK 2019.1):
    Run ps7_post_config. Run, with the terminal on J14 at 115200 8N1.
 8. Pass: `PL clock: FCLK_HZ says 200.00 MHz, measured on the board 200.xx MHz` (no WARNING) and
    `ALL BOARD TESTS PASSED (10/10)`. Save a screenshot of the whole terminal and add the times to section 4.
+
+Result (18 Oct, PC, step 13 build): `ALL BOARD TESTS PASSED (10/10)` and `Core clock: CORE_HZ says 200.00 MHz,
+measured on the board 197.81 MHz` (no warning). Differences from the procedure: the clock line now says `Core clock`
+and `CORE_HZ` (the program also supports two clocks, step 12); the first run was Debug; the Release run followed the same evening (section 4);
+the measured value reads about 1% low by design (section 4). Times in section 4.
 
 ### Step 9: control-path fixes (written 17 Oct, built with step 10 on 17 Oct)
 
@@ -722,6 +813,71 @@ The bus-side paths (not changed; options for later):
   this path runs on the 200 MHz bus clock with about 0.7 ns to spare.
 - Suggested order: step 13, then step 12 (bus 200 MHz, core 250 MHz; build plan item 3 below).
 
+### Step 14: one clock at 250 MHz (agreed 18 Oct; (a) and (b) written and simulated 19 Oct, not built)
+
+Why: with posted writes (section 4) the bus is set by the FPGA side (6 PL cycles per write, about 12 per read). With
+one clock, a faster FCLK speeds up the bus as well as the array; step 12 (a faster core clock only) would speed up only
+the array's 8% share of a 64x64 run. FCLK_CLK0 = 250 MHz is IO PLL 1000 / 4 (exact) and the most the PS-PL AXI port
+allows (DS187, Table 19).
+
+Closest paths in the step 13 build at 200 MHz (`impl_1` timing summary, 18 Oct, PC re-run; same as Alex's VM build):
+
+| Slack at 200 MHz (ns) | From -> to | Logic levels | Data path (ns): logic / route | What it is |
+|---|---|---|---|---|
+| +0.259, +0.348, +0.382 | `auto_pc` write channel: `bid_fifo` `cnt_read` -> `incr_cmd` `axaddr_incr` | 6 (2 CARRY4) | 4.291: 2.015 / 2.276 | Xilinx protocol converter (AXI3 -> AXI4-Lite). Not our RTL |
+| +0.295, +0.295, +0.460 | `ld_col` -> `ld_row` clock enable | 3 (LUT5, 2 LUT6) | 4.392: 0.890 / 3.502 | Loader in `mac_axi.v` |
+| +0.337, +0.407 | `w_load_q` replica -> DSP `CEB2` (row 7) | 0 | 4.127: 0.456 / 3.671 | Weight-load enable, fanout to 64 DSPs |
+| +0.461 | `auto_pc` read channel: `axlen_cnt` -> `axlen_cnt` reset | 3 | 3.873: 1.257 / 2.616 | Xilinx protocol converter |
+
+- At 250 MHz the period is 1 ns shorter. From the step 11b build at 250 MHz, the failing groups that step 13 did not
+  change are the host read of C (15 endpoints, -0.263 ns), the protocol converter (4, -0.225 ns) and the loader
+  (6, -0.038 ns). (At 250 MHz Vivado placed the `w_load` replicas well enough; that path did not fail in 11b.)
+
+Proposed order:
+1. Commit the working 200 MHz state, then on a new branch set FCLK_CLK0 to 250 MHz and build step 13 unchanged, to get
+   the current failing list (no RTL change; a build takes a few minutes).
+2. RTL fixes for what fails: (a) host read of C: register the 8-lane C word before the lane select, `mac_axi.v` waits
+   4 clocks per register read instead of 3 (176 FFs, one more clock per read); (b) loader: the last-column and
+   inside-the-matrix flags worked out one step ahead (as step 13 (a)), so `ld_row`'s enable comes from a flip-flop;
+   (c) protocol converter: Vivado implementation strategy Performance_ExplorePostRoutePhysOpt first (no RTL).
+3. `mac_test.c`: `FCLK_HZ` 250000000.
+
+Expected (estimate): 64x64 with posted writes 335 -> about 285 us (write 6 x 4 ns = 24 ns, read about 13 x 4 ns =
+52 ns, array 22 us).
+
+Written (19 Oct), files in `Alex/step14/` (not yet in `rtl/` and `zed/`, so the 200 MHz build is unchanged):
+- `mm_core.sv`: new parameter `HREAD_REG` (default 0 = exactly as before, for the UART/Arty top, OpenLane and the
+  team testbenches). With 1, the C word and its lane number are registered once more (on hclk) before the lane
+  select, so `rd_data` comes 2 cycles after `rd_row`/`rd_col` instead of 1. 176 + 3 FFs.
+- `mac_axi.v`: `HREAD_REG = 1` passed to the core; a register read waits `RD_WAIT` = 4 clocks instead of 3
+  (keeps the old margin: even a read taken in the same clock as a RESULT_PTR write gets the new value).
+  Loader: `ld_inside`, `ld_col_last`, `ld_row_last` are flip-flops. While no byte is written they are worked out
+  from the registers; while bytes are written they step one step ahead (next column: last = col == len - 2; next row:
+  inside = !row_last, col_last = (len == 1), row_last = row == rows - 2). LOAD_PTR/DIMS change the position at least
+  3 clocks and the sizes 2 clocks before the next first byte, so the flags are right when bytes start (1 clock to spare).
+  `ld_row`'s enable is then (ld_left != 0) & ld_inside & ld_col_last, all flip-flops.
+
+Checked (Icarus Verilog 12, Verilator 5.020, Xilinx DSP48E1 model), with a new testbench `tb_s14.sv` whose AXI master
+offers the next transfer as soon as the previous one is accepted, with random gaps and random bready/rready:
+- Lockstep, step 13 `mac_axi` against the new one with `HREAD_REG = 0`: every AXI output, the loader position, the
+  core's load port, the read pointer, DIMS, flags and counters equal in **every clock**: 7 runs (P = 4, 8, 16; 4 seeds;
+  one with no gaps), 183,887 to 282,168 clocks each, 0 differences.
+- Loader flags against their definitions in every clock a byte is written: 0 mismatches in every run (43,000 to
+  77,000 checks per `tb_s14` run, 33,820 per `tb_axi` run).
+- Same transfers on the step 13 design and on the new one with `HREAD_REG = 1`: the logs of every timing-independent
+  read are **identical** (P = 4: 12,817 reads; P = 8: 15,334, 25,156 and 25,189; P = 16: 15,419).
+- `zed/tb_axi.sv` on the new RTL with DSP48E1 PEs: 14/14 at P = 4, 8, 16; two clocks (core at 40, 250 and 400 MHz): 15/15.
+- Team testbenches (`tb_selfcheck`, `tb_compare`, `tb_extras`, `tb_mm`, `tb_chip`, `tb_postproc`): byte-identical to step 13.
+- Verilator lint `-Wall`: clean for HREAD_REG 0/1 x CORE_CLK 0/1.
+- Planted bugs: next-row `ld_col_last` forced to 0 (caught, 827 and 7,869 differences); `ld_row_last` stepped with
+  rows - 1 (caught, 51 and 149); rows - 1 two clocks late (caught, 4 and 9: the tests reach the shortest LOAD_PTR ->
+  first byte gap). Rows - 1 one clock late is not a bug (it uses the 1 clock to spare) and passes, as expected.
+- A first version of the old-against-new log compare differed in 4 reads: the testbench let a read finish after the
+  next write. Fixed in the testbench (a write now waits for earlier reads, as on the ARM); not an RTL problem.
+
+Next: on branch `try-250MHz`, copy the two files into `rtl/` and `zed/`, FCLK_CLK0 = 250 MHz, build; then `mac_test.c`
+`FCLK_HZ` = 250000000. If only the Xilinx protocol converter fails, try Performance_ExplorePostRoutePhysOpt.
+
 ### Planted bugs for steps 10b, 11 and 12
 
 All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` fail, and the one that does not
@@ -759,7 +915,7 @@ All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` f
 | 13 Oct | Re-running the Tcl script: "Project mac_zed is currently open". | Open the existing `mac_zed.xpr` instead (File > Open Project); one project per Vivado window. |
 | 15 Oct | SDK "Program FPGA failed: Could not find FPGA device" (Windows in a Parallels VM). Hardware Manager showed `localhost (0)`. | Pass the Digilent and Cypress USB devices to Windows; install the Digilent cable driver from `C:\Xilinx\Vivado\2019.1\data\xicom\cable_drivers\nt64`. |
 | 15 Oct | Asking FCLK for 80 MHz gave 76.929 MHz. | The Zynq PLL only makes certain frequencies; use the Actual Frequency (or the Clocking Wizard for exact values). Set `FCLK_HZ` in `mac_test.c` to the actual value. |
-| 15 Oct | Board still ran at 50 MHz after the 76.9 MHz bitstream. | The PL clock is set by ps7_init from the SDK hardware platform. Re-export hardware (with bitstream), update/recreate the hardware platform, check `ps7_init.html`, check Run Configuration > Target Setup. **Open.** Step-by-step procedure written in section 5, step 8 (17 Oct). |
+| 15 Oct | Board still ran at 50 MHz after the 76.9 MHz bitstream. | The PL clock is set by ps7_init from the SDK hardware platform. Re-export hardware (with bitstream), update/recreate the hardware platform, check `ps7_init.html`, check Run Configuration > Target Setup. Step-by-step procedure in section 5, step 8 (17 Oct). **Fixed** on the PC: James's 16 Oct run measured 76.45 MHz with the 76.9 MHz build, and the 18 Oct run measured 197.81 MHz with the 200 MHz build. |
 | 16 Oct | Tcl report files would not write ("Directory ... does not exist"): space in "MAC Attack", and Vivado was on another machine. | Repo folder renamed to `MAC_Attack`; write reports with a path relative to the project. |
 | 16 Oct | Zynq Clock Configuration "Input Frequency" was set to 100 by mistake. | Must stay 33.333333 MHz (the ZedBoard crystal). The PL clock is set under PL Fabric Clocks > FCLK_CLK0. |
 | 16 Oct | `report_design_analysis -timing` failed. | Run implementation and open the implemented design first. |
@@ -768,12 +924,14 @@ All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` f
 | 17 Oct | Vivado built 2 DSPs per PE from `pe.sv` with PIPE = 2 (step 11). | Step 11b: the PE written as one DSP48E1 (`zed/pe_dsp48.sv`). |
 | 17 Oct | Critical warning [BD 41-759]: `/mac/core_locked` not connected, tied to 0. | Harmless with `CORE_CLK = 0` (the pin is not used). To silence it: add a Constant IP (value 1) and connect it to `core_locked`. |
 | 17 Oct | Step 11b at 250 MHz: mac synthesis stopped, [Synth 8-439] module 'pe_dsp48' not found (then [Synth 8-196] and [Synth 8-6156] on `systolic_array.sv`). No implementation ran. | `zed/pe_dsp48.sv` was not in the project (`mac_zed.xpr` lists only the older files). Add it: Add Sources > design sources > `zed/pe_dsp48.sv` (do not copy into the project), or in the Tcl console `add_files -norecurse <repo>/mac_attack_accel/zed/pe_dsp48.sv` and `update_compile_order -fileset sources_1`; then Refresh Changed Modules and run synthesis again. |
+| 18 Oct | After pulling the tracked project on the PC, `mac_zed.sdk` still held the PC's own old files (16 Oct `.hdf` and hardware platform at 76.9 MHz, BSP), plus old run folders (`system_auto_pc_0_synth_1/`, `system_rst_fclk0_0_synth_1/`). With the new `.gitignore` they showed up in GitHub Desktop as changes. | Export Hardware with the bitstream (overwrites the `.hdf`), let the SDK update the platform, regenerate the BSP. Do not commit the two old run folders. |
+| 18 Oct | Running `zed/create_zed_project.tcl` now would delete the tracked project (`create_project ... -force` into `mac_zed_project`). | Open `mac_zed.xpr`; run the Tcl only to rebuild a broken project. |
 
 ## 7. Numbers to remember
 
 | Quantity | Value | Source |
 |---|---|---|
-| Cycles per pass | M + 3P - 2 | Simulation and board (8/8) |
+| Cycles per pass | M + 3P - 2 | Simulation and board (8/8 at 50 MHz, 10/10 at 200 MHz) |
 | Passes | ceil(K/P) * ceil(N/P) | Same |
 | XC7Z020 resources | 220 DSPs, 140 BRAM36, 0 high-speed transceivers | Xilinx cost-optimized selection guide [done] |
 | Utilization, P = 8 | LUT 7,577 (14%), FF 3,573 (3%), BRAM 68 of 140 (4 RAMB36 + 128 RAMB18), DSP 0 | Vivado, 76.9 MHz build |
@@ -791,12 +949,16 @@ All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` f
 | Timing, 200.000 MHz, steps 9 + 10 (best so far) | WNS +0.529 ns, WHS +0.014 ns; LUT 2,192, FF 3,847, BRAM 4.5, DSP 64, CARRY4 398; power 1.935 W | Vivado |
 | Timing, 250.000 MHz, step 11b (one clock) | WNS -0.263 ns (fails), TNS -3.113 ns, 45 of 10,707 endpoints, WHS +0.037 ns; LUT 1,119, FF 2,895, BRAM 4.5, DSP 64, CARRY4 86; power 1.940 W | Vivado |
 | Timing, 200.000 MHz, step 13 (one clock) | WNS +0.259 ns, WHS +0.037 ns, 0 failing of 10,627; LUT 1,096, FF 2,792, BRAM 4.5, DSP 64; power 1.884 W | Vivado |
+| Board, 76.93 MHz, Release build (James, 16 Oct) | 8/8; 64x64: ARM software 2,080 us, accelerator 1,509 us (1.4x); 1x64x64: ARM 32 us, accelerator 304 us (ARM 9.5x); measured clock 76.45 MHz | SDK terminal (James) |
+| Board, 200 MHz, step 13 (Release build) | 10/10; 64x64: accelerator 855 us (load 320, run 27, read 508) against ARM 2,227 us (2.6x); 1x64x64: ARM 5.2x faster; measured clock 198.13 MHz | SDK terminal, 18 Oct 22:33 |
+| Board, 200 MHz, Release, posted writes (new `mac_test.c`) | 24/24; 64x64: 335 us (load 61, run 27, read 245) against ARM 2,227 us (6.6x); layer, weights once, 8 rows per run: 390 us (5.7x); 30 ns per write, 60 ns per read | SDK terminal, 18 Oct 22:56 |
+| Board, 200 MHz, step 13 (Debug build) | 10/10; 64x64: array 27.5 us, load 755 us, read 777 us, ARM software 11,615 us (7.5x); measured clock 197.81 MHz | SDK terminal, 18 Oct |
 | Block RAM minimum clock period (XC7Z020-1) | RAMB36E1 2.576 ns (388 MHz) for the A/B buffers, 2.944 ns (340 MHz) for the C buffer's mode, so the core clock cannot go past about 340 MHz without changing the C buffer | Vivado's own Pulse Width check in the 18 Oct timing report |
 | Zynq FCLK options on this board | [claim] FCLK = one PS PLL / two whole-number dividers. PLLs here: IO 1000 MHz, ARM 1333.3 MHz (CPU 666.7), DDR 1066.7 MHz (DDR 533.3). Near our range: 200 (IO/5), 213.3 (DDR/5), 222.2 (ARM/6), 250 (IO/4). The Actual Frequency in the Zynq dialog is what counts (asking 180 once gave 187.512, which this rule does not explain) | Zynq block design settings |
 | Exact accumulator width | ACC >= 2*BITS + ceil(log2 MAXD): 22 bits for INT8 with MAXD = 64 (largest sum 1,048,576 = 64 x 16,384) | Proof in section 5, step 10 |
 | PS-PL AXI interface, fastest clock | 250 MHz (all speed grades listed as FAXI_MAX) | Zynq-7000 data sheet DS187, Table 19 |
 | Accumulator bits for K = 640 | INT4: 17, INT8: 25 | `first-rtl-results.md` (derived, check proof) |
-| Data movement vs compute, 64x64 | 6.7x (simulation, ideal bus), 24.5x (board, 50 MHz) | Simulation / board |
+| Data movement vs compute, 64x64 | 6.7x (simulation, ideal bus), 24.5x (board, 50 MHz, Debug), 20x (board, 76.93 MHz, Release), 56x (board, 200 MHz, Debug), 30x (board, 200 MHz, Release) | Simulation / board |
 | Assumed autoencoder at P = 8, M = 1 | 264,192 MACs; 4,128 passes x 23 = 94,944 cycles | [claim] hand-computed by Claude |
 
 ## 8. AI-assistance verification checklist
@@ -825,6 +987,10 @@ Claims that turned out wrong (kept here on purpose):
 - "Zynq PL clocks are always 1000 MHz divided by a whole number": asking for 180 MHz gave 187.512 MHz, from another PS PLL.
 - "`use_dsp` on the multiply only will stop the add getting its own DSP" (step 6): it did not; `use_dsp = "no"` on the add did (step 7).
 - "The step 7 RTL cannot make 200 MHz" (7a failed): asking for 190 MHz gave 200.000 MHz and met timing (7c). Same clock period; the placement differed.
+- "The board has only ever run at 50 MHz" (step 8, 17 Oct) and "first board run above 50 MHz" (18 Oct): James had run the 76.9 MHz build on 16 Oct (measured 76.45 MHz); it was not logged.
+- "At 200 MHz the accelerator is 7.5x faster than the ARM" (Claude, 18 Oct): that was against the Debug ARM time. Against the Release ARM it is about 1.4x (76.93 MHz run; 200 MHz Release not measured yet).
+- "Most of each bus word's time is ARM time, which the PL clock does not speed up", "at 200 MHz in Release expect about 1.4x" and "a clock above 200 MHz would save under 0.5% of the job" (Claude, 18 Oct, also in the Google Doc): the 200 MHz Release run gave 2.6x, because load and read got 1.7-1.8x faster with the clock. With one clock, a faster FCLK speeds up the bus too; with step 12 (bus 200 MHz, core faster) only the array speeds up.
+- "Reads cannot be made faster from the ARM side" and "64x64 about 3.5x after the ARM changes" (Claude, 18 Oct): with Device memory the reads overlap and got 2x faster, and 64x64 reached 6.6x.
 
 ## 9. Open questions
 
@@ -840,6 +1006,10 @@ Claims that turned out wrong (kept here on purpose):
 - v2 array size on the board: P = 8 or 12 (both fit in DSPs; 14 x 14 is the maximum)?
 - Model size: DCASE baseline shape, or something smaller for a 64 x 64 core?
 - Where are mel features computed first: PC or ARM?
+- Why did Vivado re-run synthesis and implementation on the PC after the pull (18 Oct)? If a fresh clone always shows the runs as out-of-date, start the demo from the SDK (the hardware platform holds the bitstream), or allow a few minutes for the re-run.
+- (Answered 18 Oct) Release board run at 200 MHz: 64x64x64 is 2.6x faster than the ARM, 1x64x64 is 5.2x slower.
+- (Answered 18 Oct) Posted writes keep the order of start, status and results when flushed at the 4 points: 24/24 on the board.
+- Next limits are in `mac_axi` (FPGA side): 6 PL cycles per write (bytes written one per clock) and about 12 per read (one read at a time, 3 wait cycles). Options: write the 4 bytes in one clock; let reads overlap; AXI DMA over an HP port for bursts.
 
 ## 10. Template for a new timeline row
 

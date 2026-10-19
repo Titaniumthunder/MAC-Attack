@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.runs/synth_1'
+HD_PWD='C:/School/MAC_Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.runs/synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
