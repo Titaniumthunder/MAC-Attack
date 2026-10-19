@@ -337,3 +337,6 @@ con
 15:34:12 INFO  : Processing command line option -hwspec C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel/zed/mac_zed_project/mac_zed.sdk/system_wrapper.hdf.
 15:34:12 INFO  : Successfully done setting XSCT server connection channel  
 15:34:12 INFO  : Successfully done setting SDK workspace  
+15:53:49 INFO  : The new hardware specification file contains the same information as the current specification file. No changes were done to the workspace.
+15:56:35 INFO  : The new hardware specification file contains the same information as the current specification file. No changes were done to the workspace.
+16:00:12 INFO  : The new hardware specification file contains the same information as the current specification file. No changes were done to the workspace.
