@@ -58,6 +58,16 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 19 Oct | **Board run at 250 MHz (James): ALL BOARD TESTS PASSED (24/24)**, Release, both bus modes; every C value correct and every pass and cycle count equal to the equation. Measured clock 247.55 MHz (CORE_HZ 250.00; the same ~1% gap as at 200 MHz). 64x64x64 with posted writes: 335 -> **293 us**, accelerator **7.6x** faster than the ARM (6.6x at 200 MHz). Layer, 8 rows per run: 390 -> **337 us**, **6.6x** (5.7x). | SDK terminal output (James, 19 Oct) |
 | 16 Oct | `docs/systolic_dataflow.html`: animated cycle-by-cycle view of data moving from the A/B buffers through the array to C (1-stage / 2-stage PE, MEM_REG on/off). Its model matches `systolic_array.sv` + `pe.sv` in Icarus cycle for cycle (every PE partial-sum register, `c_row`, `out_valid`; P = 2, 3, 4, PIPE = 0 and 1). | Icarus Verilog 12 |
 
+| 20 Oct | Meeting with the professor (Pocket recording "TPU Clock Speed and FPGA Update", 12:08): 250 MHz shown; he asked for the chip's size (which technology, how many Tiny Tapeout tiles; "keep redesigning until we meet the size of the chip"); **approved the multi-task MLP on vibration, temperature and RPM** ("you have to train the model first ... and import the inference in the TPU"); a better FPGA can be ordered ("search about four or five options, and then we can convince Dr. J"); federated learning across laptops mentioned as a later idea. | Pocket recording, 20 Oct |
+| 21 Oct | **On-chip MLP agreed** (section 2, section 5 step 15): one CTRL write runs a whole MLP of up to 4 layers on the FPGA. Weights in 4 slots of the B buffer, every channel's bias, m0 and shift in a scale memory, 8 postproc units write each layer's INT8 output back into A; the last layer's raw sums are read as before and the ARM adds that layer's bias. | section 5, step 15 |
+| 21 Oct | **On-chip MLP written and simulated** (not built): new `rtl/mlp_ctrl.sv`; `mm_core.sv` (weight slots, A word write, writeback read of C), `postproc.sv` (per-channel scale fix, 7-stage option), `mac_axi.v` (registers 0x34-0x50, 7-bit AXI address), SDK `mac_test.c` (model tests), new tests. Simulation: 160 random whole models (P = 4, 8, 16; 1 to 8 postproc units; DSP48E1 PEs too), each run twice, bit-exact against `mac.py` `golden_mlp()` with every counter equal to the equation; `tb_axi` 20/20; `mac_test.c` against the RTL 30/30; old tests identical to step 14 and a lockstep with step 14 identical in every clock; 13/13 planted bugs caught. Not built in Vivado yet. | section 5, step 15 |
+| 22 Oct | **Step 15 (on-chip MLP) built at 250.000 MHz** (`mac_attack_accel_MLP`, Alex's PC, strategy `Performance_ExplorePostRoutePhysOpt`, finished 10:17): `tb_axi` 20/20 in XSim; timing **fails by 0.156 ns**: WNS -0.156 ns, TNS -1.436 ns, 34 of 20,659 endpoints, WHS +0.011 ns (floor about 241 MHz). LUT 4,403, FF 6,221, BRAM 7.5, DSP 80, power 2.180 W, as step 15 predicted. Worst 10 paths: the Xilinx protocol converter in the AXI interconnect (6; the same paths passed by only 0.008 ns in step 14) and `pw_layer` -> the write address of every lane's scale memory (4, new). Bitstream written but not to be used. Reports copied to `Alex/timing_summary_v10.rpt` (post-route physopt), `Alex/utilization_v10.rpt`. | `impl_1` reports (22 Oct 10:17), Design Runs (screenshot) |
+| 22 Oct | **Step 15b written and simulated** (not built): each lane registers its own copy of the scale-memory write (`mlp_ctrl.sv`), and an AXI Register Slice sits between the interconnect and `mac` (block design, `zed/create_zed_project.tcl`). Same 250 MHz, every result unchanged. Simulation: 110 random models bit-exact against `golden_mlp()` (P = 4, 8, 16; 1, 2 and 8 postproc units; 3- and 7-stage postproc), `tb_axi` 20/20 with DSP48E1 PEs, Verilator lint clean, planted wrong-lane bug caught. | section 5, step 15b |
+| 22 Oct | **Step 15b built at 250.000 MHz** (register slice `mac_rs` in the block design, address still 0x43C00000 / 64K; finished 11:05): timing **fails by 0.175 ns**: WNS -0.175 ns (-0.185 after routing), TNS -1.556 ns, 36 of 21,261 endpoints, WHS +0.020 ns. LUT 4,470, FF 6,571 (+350, as expected), BRAM 7.5, DSP 80, power 2.182 W. **Both targeted paths are gone** (scale-memory write address; `mac_axi` -> converter). The 10 worst are now: inside the Xilinx protocol converter (1, the worst), the postproc shift and clamp stages in lanes 0, 2, 4, 6 (8), the model's cycle-sum adder (1). Reports copied to `Alex/timing_summary_v11.rpt`, `Alex/utilization_v11.rpt`. | `impl_1` reports (22 Oct 11:05), Design Runs (screenshot) |
+| 22 Oct | **Step 15c written and simulated** (not built): postproc in 9 stages (`PPIPE = 2`: the shift in two steps, by a multiple of 8 then by 0-7; the clamp in two, its three tests then the choice), the model's counter sums added from local copies one clock after each layer's done (`mlp_ctrl.sv`), CONFIG bit 29 = 9-stage postproc and `PP_PIPE = 2` by default (`mac_axi.v`); SDK `mac_test.c`, `tb_axi.sv` and `mac.py` take the stages from CONFIG. Every output identical; a model takes 2 clocks more per layer boundary (64-64-64-6, 1 row: 3,194 -> 3,198). Simulation: lockstep of the 9-stage unit against the old 7- and 3-stage units, 842,802 inputs at ACC 22 and at ACC 32 (every shift 0-63): all identical; 200 random models bit-exact (P = 4, 8, 16; 1, 2, 4, 8 units; 3, 7, 9 stages; HREAD_REG 0 and 1); `tb_axi` 20/20; SDK `mac_test.c` against the RTL in Verilator 30/30; 9/9 planted bugs caught. | section 5, step 15c |
+| 22 Oct | **Step 15c built at 250.000 MHz** (impl_1, `Performance_ExplorePostRoutePhysOpt`, finished 12:45, stopped after the post-route physical optimization): timing **fails by 0.029 ns** (was 0.175): WNS -0.029 ns (-0.038 after routing), TNS -0.088 ns, **6** of 21,824 endpoints, WHS +0.037 ns. LUT 4,440, FF 7,147 (+576, the extra postproc stages and counter copies), BRAM 7.5, DSP 80, power 2.187 W. The postproc and cycle-sum paths are gone. Left: inside the Xilinx protocol converter (2), the host's C read address `rd_row` -> C block RAM (3), the C block RAM -> `hq_sel` (1); all within 0.03 ns. Reports copied to `Alex/timing_summary_v12.rpt`, `Alex/utilization_v12.rpt`. | `impl_1` reports (22 Oct 12:45), Design Runs (screenshot) |
+| 22 Oct | Step 15c at 250 MHz, four implementation runs, each with post-route physical optimization `AggressiveExplore`: impl_1 (`Performance_ExplorePostRoutePhysOpt`) WNS -0.029 ns (no gain), impl_2 (`Performance_ExtraTimingOpt`) -0.097 ns, impl_4 (`Performance_WLBlockPlacement`) -0.103 ns, impl_3 (`Performance_NetDelay_high`) not finished. **250 MHz not met** (best -0.029 ns, 6 endpoints). | Design Runs (screenshot, 13:2x) |
+| 22 Oct | **Step 15c met timing at 214.286 MHz** (Alex: FCLK_CLK0 asked for 225 MHz, Actual Frequency 214.285706 MHz, Clock Summary 214.316 MHz / 4.666 ns; same RTL): impl_1 WNS **+0.081 ns**, TNS 0, **0 failing** of 21,781 endpoints, WHS +0.024 ns; impl_2 +0.061, impl_4 +0.068. Bitstream written. LUT 4,402, FF 7,048, BRAM 7.5, DSP 80, power 2.118 W. Closest path: the writeback token -> the scale memory read (LUT RAM, 87% wire). `mac_test.c` FCLK_HZ = 214285714. Reports copied to `Alex/timing_summary_v13.rpt`, `Alex/utilization_v13.rpt`. Not run on the board yet. | `impl_1` reports (22 Oct 13:18), Design Runs (screenshot) |
 (Add a row each time work is finished.)
 
 ## 2. Decisions and reasons
@@ -81,6 +91,15 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 17 Oct | Step 13 before the step 12 build: three core fixes, every cycle and result unchanged. | The worst 100 paths at 250 MHz had 20 failing core endpoints, and the core stays at 250 MHz in step 12. | agreed |
 | 17 Oct | Fallback for Monday: the 200 MHz build (steps 9 + 10) if 250 MHz does not pass; a core clock of 240 MHz from the wizard if it misses by a little. | Step 13 changes no result or cycle, so it can stay in either case. | agreed |
 | 18 Oct | The Vivado project `zed/mac_zed_project` is tracked in git with its results and SDK projects; `create_zed_project.tcl` stays as the way to rebuild it. Only builds that met timing and passed on the board are pushed, by one person at a time. | Teammates and the professor can program the board without the 20-minute build. | agreed |
+| 20 Oct | The model is a multi-task MLP on three sensors (vibration, temperature, RPM), trained first, then run on the accelerator. | The professor approved it in the 20 Oct meeting. The written proposal was acoustic (DCASE autoencoder); dataset still to pick (Paderborn or KAIST have these signals). | agreed (professor) |
+| 21 Oct | Next RTL work: the on-chip MLP; the second clock (step 12) waits for a faster board. | Two clocks only help the FPGA (Tiny Tapeout has one clock pin, about 66 MHz) and compute is about 8% of a 64 x 64 run. Running the model on the chip removes most of the bus traffic and carries over to a chip. | agreed |
+| 21 Oct | Model rules for the hardware: at most 64 inputs (e.g. 62 vibration bins + temperature + RPM), at most 4 layers, every width at most 64 (multiples of 8 keep every lane busy), linear heads on a shared trunk merged into one last layer (e.g. 5 fault classes + 1 anomaly score = 6 outputs), INT8 symmetric, 32-bit biases, one scale (m0, shift) per output channel, rounding as `postproc.sv` (halves up). James's NumPy model must match `mac.py` `requantize()` and `golden_mlp()` bit for bit. | One chain of layers keeps the sequencer simple; per-channel scales keep the accuracy (and INT4 later). | agreed |
+| 21 Oct | The last layer's raw sums are read through RESULT_DATA as before; the ARM adds that layer's bias (32-bit logits). | No new read path into A (the A read address is one of the slowest paths at 250 MHz), and logits are better than INT8 for an anomaly score. | agreed |
+| 21 Oct | Postproc units: a parameter; 8 on the FPGA (one C word per clock), 1 for a chip. | 8 units cost about 16 DSPs (156 are free); a chip cannot afford 8 multipliers and shifters. | agreed |
+| 21 Oct | Weights: a fixed 64 x 64 slot per layer; the slot number is the top bits of the weight address. | No adder in front of the weight block RAM's address at 250 MHz. Costs 16 KB (4 RAMB36) instead of about 9 KB. | agreed |
+| 21 Oct | K of layer l is N of layer l-1 (taken from the layer table by the hardware); K of layer 0 is DIMS.K. | A layer's input is always exactly the previous layer's output; the C program cannot make them disagree. | done |
+| 21 Oct | AXI address 6 -> 7 bits, for 8 new registers. | The 6-bit map (0x00-0x3C) had only 3 free registers. Vivado needs Refresh Changed Modules. | done |
+| 22 Oct | The on-chip MLP build runs at 214.286 MHz for now (FCLK_CLK0 asked for 225); design 1 (`mac_attack_accel`) stays at 250 MHz. | 250 MHz missed by 0.029 ns after steps 15b and 15c and four implementation strategies; the last 6 paths are inside the Xilinx protocol converter and the C block RAM read. A working build first, to run the model on the board; 250 MHz (or the highest clock the Zynq can make below it) stays the goal. | decided (Alex) |
 
 ## 3. Current status (what is and is not proven)
 
@@ -105,6 +124,10 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 - [done] Release (-O2) build on the board: 76.93 MHz (16 Oct, James) and 200 MHz (18 Oct), section 4. At 200 MHz the accelerator is 2.6x faster than the ARM for 64x64x64.
 - [done] Step 14 in simulation (section 5), built at **250 MHz: timing met** (WNS +0.008 ns, branch `try_250MHz`, 19 Oct), and **run on the board: 24/24 at 250 MHz** (measured 247.55 MHz, James, 19 Oct). Not merged into `Alex_edit` yet.
 - [done] ARM-side bus changes (posted writes, word copies, weights loaded once): 64x64x64 6.6x faster than the ARM; one 64x64 layer over 64 rows, 8 rows per run, 5.7x (section 4).
+- [done] On-chip MLP in simulation (21 Oct, section 5 step 15): 160 random models bit-exact against `golden_mlp()` (P = 4, 8, 16), `tb_axi` 20/20, `mac_test.c` against the RTL 30/30; plain multiplies unchanged (lockstep with step 14 identical in every clock, old test outputs identical).
+- [done] On-chip MLP built in Vivado at 250 MHz (22 Oct): `tb_axi` 20/20 in XSim, resources as predicted, but timing fails by 0.156 ns (section 5, step 15b). Step 15b (two timing fixes, same clock) built 22 Oct: its two paths are gone, but timing still fails by 0.175 ns (converter inside, postproc shift and clamp, cycle-sum adder).
+- [done] Step 15c (postproc in 9 stages, counter sums from local copies, same clock, every output identical) written and simulated: `tb_axi` 20/20, SDK `mac_test.c` against the RTL 30/30. Built 22 Oct: fails by 0.029 ns at 250 MHz (6 endpoints: converter, C block RAM read); **meets timing at 214.286 MHz** (WNS +0.081 ns). Not run on the board yet.
+- NOT done: on-chip MLP meeting timing at 250 MHz and run on the board. NOT done: a trained model to run on it.
 - NOT done: INT8 and INT4 AUC on real data. Nothing trained yet.
 - NOT done: audio front end.
 
@@ -256,6 +279,10 @@ running at 50 MHz until the SDK hardware platform (ps7_init) is updated (section
 | 14 (one clock) | 19 Oct | 250.000 | **no** | -0.081 / +0.051 | 4.08 ns / 245 MHz | Host read of C registered (`HREAD_REG`), loader flags from flip-flops; default implementation strategy | +1 bus clock per register read | 1,170 / 2,997 / 4.5 / 64 |
 | 14 (one clock), Explore | 19 Oct | **250.000** | **yes**, board 24/24 | +0.008 / +0.019 | 3.99 ns / 250 MHz | Same RTL; strategy `Performance_ExplorePostRoutePhysOpt` (post-route physical optimization closed the last 2 endpoints) | +1 bus clock per register read | 1,170 / 2,997 / 4.5 / 64 |
 | 12 + 13 | - | AXI 200, core 250 | not built | - | - | Two clocks with the step 13 core | same as 10b + 11, in core cycles | - |
+| 15 (one clock), Explore | 22 Oct | 250.000 | **no** | -0.156 / +0.011 | 4.16 ns / 241 MHz | On-chip MLP (`MLP = 1`: weight slots, scale memory, 8 postproc units with 7 stages, layer sequencer); same strategy. Worst paths: the Xilinx protocol converter and the scale-memory write address | plain multiplies as step 14; model runs: `MODEL_CYCLES` equation (step 15) | 4,403 / 6,221 / 7.5 / 80 |
+| 15b | 22 Oct | 250.000 (one clock) | **no** | -0.175 / +0.020 | 4.18 ns / 239 MHz | Per-lane scale-memory write registers; AXI register slice in front of `mac`. Those paths are gone; worst now: inside the protocol converter, postproc shift and clamp, cycle-sum adder | as step 15; about +2 bus clocks per AXI access | 4,470 / 6,571 / 7.5 / 80 |
+| 15c | 22 Oct | 250.000 (one clock) | **no** | -0.029 / +0.037 | 4.03 ns / 248 MHz | Postproc in 9 stages (shift and clamp each split in two); model counter sums from local copies | model: +2 clocks per layer boundary (drain RL + 9 + 1 = 12); plain multiplies unchanged | - |
+| 15c | 22 Oct | **214.286** (asked 225) | **yes** | +0.081 / +0.024 | 4.59 ns / 218 MHz | Same RTL as the 250 MHz build; clock setting only (250 MHz missed by 0.029 ns with four strategies) | as 15c | 4,402 / 7,048 / 7.5 / 80 |
 
 ### Step 0 -> 1: 50 to 76.9 MHz (clock setting only, 15 Oct)
 
@@ -962,6 +989,368 @@ All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` f
 4. Board run for each speed (step 8 procedure): `FCLK_HZ` = the AXI clock, `CORE_HZ` = the core clock (two-clock
    mode), Release build. Pass: the measured core clock matches CORE_HZ and ALL BOARD TESTS PASSED (10/10).
 
+### Step 15: on-chip MLP (agreed 21 Oct, written and simulated 21 Oct, not built)
+
+**Why.** The professor approved a multi-task MLP on vibration, temperature and RPM (20 Oct) and asked us to
+train it first and then run its inference on the accelerator. Until now the accelerator does one matrix
+multiply per command, so for an MLP the ARM would read C back after every layer, add the bias, requantize,
+apply ReLU and send the result back in. On the board one 64 x 64 layer over 64 rows took 337 us at 250 MHz,
+mostly bus time (reads are 75% of a 64 x 64 run). Running the whole model on the FPGA removes the traffic
+between layers, and it is the same RTL a chip would need (its pins are slower still).
+
+**What changed.** The PE array, the folding controller and the buffers are unchanged; the new parts sit around them.
+
+| Part | File | Change |
+|---|---|---|
+| Weight slots | `rtl/mm_core.sv` | `NL` (4): B holds one 64 x 64 matrix per layer, 2,048 x 64 bits (16 KB) instead of 512 x 64. The slot is the top address bits (`{layer, kb, k, nb}`), taken at start like the sizes (`run_layer`); loading B picks the slot (`wr_layer`). |
+| A word write | `rtl/mm_core.sv` | `AWR = 1`: a whole A word (i, blk) in one clock (`aw_*`), sharing the A block RAM's write port with the loader (they are never used together; the word write wins). |
+| C word read | `rtl/mm_core.sv` | `rd_word`: the whole C word the read port fetched (same timing as `rd_data`). `wb_rd`, `wb_row`, `wb_blk`: the writeback's read address goes into the existing C address mux straight from bit fields (no adder), so this path is no longer than in step 14. |
+| Postproc | `rtl/postproc.sv` | m0, shift and relu now travel down the pipeline with the data (the fix in section 6). `PPIPE = 1`: 7 stages (bias add; multiply plus 2 registers for the two DSPs a 33 x 17 multiply needs; add the rounding constant; shift; clamp). Same numbers as 3 stages. |
+| Sequencer, scale memory, writeback | `rtl/mlp_ctrl.sv` (new) | Wraps `mm_core`. Layer table (N and ReLU per layer), a scale memory (32-bit bias, 16-bit m0, 6-bit shift per channel per layer, in LUT RAM), 8 postproc units, the state machine below. Plain multiplies go straight through. |
+| Registers | `zed/mac_axi.v` | `MLP = 1` (default) puts `mlp_ctrl` between the AXI side and `mm_core`; `MLP = 0` builds the step 14 design. CTRL bit 1, slot fields in DIMS and LOAD_PTR, registers 0x34-0x50 (below), AXI address 7 bits. CONFIG bits 18-28 describe the model hardware. |
+| Board program | SDK `MAC_attack_V2/src/mac_test.c` | 3 model tests per bus mode (1, 8 and 64 rows per run) with the same integer model on the ARM as reference and baseline; skipped when CONFIG bit 18 is 0. 30 tests in all. |
+| Tests | `tb/tb_mlp.sv` (new), `tb/tb_postproc.sv`, `zed/tb_axi.sv`, `mac.py` | `mac.py`: `requantize()`, `scale_to_m0_shift()`, `golden_mlp()`, `mlp_equation()`, command `python mac.py mlp`; `postproc` now also tests a new scale every clock. |
+| Tie-offs | `rtl/chip_top.sv`, `tb/tb_mm.sv`, `tb_selfcheck.sv`, `tb_compare.sv`, `tb_extras.sv` | The new `mm_core` ports tied to 0; nothing else changed. |
+
+**Per layer** (layer l = 0 .. L-1, M rows; K_0 = DIMS.K, K_l = N_(l-1), N_l from LAYERl):
+
+    C = A x W_l                                                  exact 22-bit sums, as before
+    l < L-1:  A <- clamp( ((C + bias) * m0 + 2^(shift-1)) >> shift,  relu ? 0 : -128,  127 )   per output channel
+    l = L-1:  C stays in the C buffer; RESULT_DATA returns it; the ARM adds the bias (logits)
+
+Writeback: C word (i, nb) holds C[i][8nb .. 8nb+7] and A word (i, nb) holds A[i][8nb ..], and layer l's N is
+layer l+1's K, so A word (i, nb) = postproc(C word (i, nb)): one word per clock with 8 units, M x ceil(N/8)
+clocks, channel 8nb + j in lane j. With fewer units each word takes 8 / units clocks.
+
+**State machine** (`mlp_ctrl`): set up (the layer's K, N and slot go to `mm_core` through registers) -> start ->
+wait for done -> writeback (one word per clock) -> drain -> next layer; after the last layer, done. One
+writeback word made in clock c: its C read goes out in c, the word arrives in c + 2 (RL = 1 + HREAD_REG), enters
+the postproc units in c + 3, comes out in c + 10 and is written into A in c + 11. The drain (RL + 7 clocks)
+waits until the last word is written and the scale memory is no longer read with this layer's number; without
+it most multi-layer models fail (planted bug below). Is C final when the writeback starts? The last C word is
+written in the clock before `done` (traced in `mm_core`), and the first writeback read comes two clocks after
+`done`, so even a 1-row, 1-block layer is safe; tested ("one row, one block per layer", "one value per layer").
+
+**Registers** (also at the top of `mac_axi.v`):
+
+| Offset | Name | R/W | Bits |
+|---|---|---|---|
+| 0x00 | CTRL | W | [0] one multiply, [1] run the model (wins over [0]) |
+| 0x08 | DIMS | RW | as before, plus [25:24] weight slot a multiply uses. For a model run: M = rows, K = inputs, N = the last layer's N (RESULT_DATA steps by it) |
+| 0x0C | LOAD_PTR | RW | as before, plus [25:24] weight slot that B is loaded into |
+| 0x1C-0x24 | PERF_* | R | after a model run: sums over its layers |
+| 0x30 | CONFIG | R | as before, plus [18] model hardware built, [19] 7-stage postproc, [22:20] weight slots, [23] HREAD_REG, [28:24] postproc units |
+| 0x34 | MODEL | RW | [1:0] number of layers - 1 |
+| 0x38-0x44 | LAYER0-3 | RW | [7:0] N, [8] ReLU after the layer |
+| 0x48 | PARAM_PTR | RW | [7:0] channel, [9:8] layer, [16] field (0 = bias, 1 = m0 and shift) |
+| 0x4C | PARAM_DATA | W | field 0: bias; field 1: [15:0] m0, [21:16] shift (1 .. 48). Then the pointer moves on (bias, scale, next channel), so a layer's scales are one stream. Dropped and flagged (LOAD_ERR) while busy |
+| 0x50 | MODEL_CYCLES | R | clocks of the last model run, start to done |
+
+C program (`load_model`, `run_model_test` in `mac_test.c`): once, for each layer: DIMS = (1, K_l, N_l),
+LOAD_PTR = B in slot l, stream W_l; PARAM_PTR = (layer l, channel 0, bias), stream bias 0, {shift, m0} 0,
+bias 1, ...; LAYERl = N_l | ReLU << 8; then MODEL = L - 1. For every batch: DIMS = (M, K_0, N_last),
+LOAD_PTR = A, stream the rows, CTRL = 2, poll STATUS, RESULT_PTR = 0, read M x N_last values.
+
+**Cycles** (checked in every simulated run and by `mac_test.c` on the board):
+
+    per layer:       Np (M + 3P - 2) + 3 + PIPE + MEM_REG        (the matrix core, as before)
+                     + 3                                          (set up, start, done)
+    between layers:  M ceil(N/P) (P / units) + RL + PPD + 1       (writeback + drain; M ceil(N/8) + 10 here)
+    MODEL_CYCLES = the sum
+
+| 64-64-64-6 model, 250 MHz (simulation) | Model clocks | Time | Per row | Clocks in passes |
+|---|---|---|---|---|
+| 1 row per run | 3,194 | 12.8 us | 12.8 us | 3,128 |
+| 8 rows per run | 4,258 | 17.0 us | 2.1 us | 4,080 |
+| 64 rows per run | 12,770 | 51.1 us | 0.8 us | 11,696 |
+
+[claim] ARM estimate, not measured: 8,576 multiply-adds per row, at 8.5 ns each (2,227 us for 262,144 on the
+18 Oct board run) about 73 us per row. The board test measures it (it times the same model on the ARM).
+
+**Resources (Yosys `synth_xilinx` estimate of `mac_axi` with MLP = 0 and MLP = 1, not Vivado; to check in Vivado):**
+
+| | Step 14 (MLP = 0) | On-chip MLP (MLP = 1) | XC7Z020 |
+|---|---|---|---|
+| LUT (logic) | 842 | 3,874 | 53,200 |
+| LUT as memory (scale memory, RAM32M x 4) | 0 | 320 | 17,400 |
+| FF | 1,950 | 4,999 | 106,400 |
+| DSP48E1 | 64 | 80 (2 per postproc unit) | 220 |
+| Block RAM tiles | 4.5 | 7.5 (B is 16 KB) | 140 |
+
+Most of the new logic is the 8 postproc units (each a 33-bit and a 50-bit adder, a 50-bit shifter and 7 stages
+of registers). Vivado counted 1,170 LUT and 2,997 FF for the step 14 build (it includes the AXI interconnect),
+so expect roughly 4,500 LUT and 6,000 FF: under 10% of the chip. If the chip version needs it smaller, the
+postproc's internal widths can shrink (the shift range we use is far below 48).
+
+**Timing risks at 250 MHz** (each one more LUT than in step 14; each can be fixed with a register without
+changing a result): (1) the A write address now has a mux (loader or writeback) after the loader's address
+adder; (2) the loader's write data now reaches 5 block RAMs (A and 4 for B) instead of 2, and a write-data path
+into B was within 0.05 ns at 250 MHz on 17 Oct; (3) the AXI read mux has 21 registers instead of 13; (4) `start`
+is OR'ed with the sequencer's start. The postproc multiply and shift were pipelined for 250 MHz, and the C read
+address got its own input on the existing mux.
+
+**Verification** (Icarus Verilog 12 and Verilator 5.020; runs with PE_PRIM = 1 use Yosys's DSP48E1 simulation model):
+
+| Check | Result |
+|---|---|
+| Old tests on the new RTL: `mac.py test` (60 cases), `compare`, `saturate`, `uart`, `tb_extras`, `tb_selfcheck` | output identical to step 14, line for line |
+| Lockstep: the step 14 `mac_axi` and the new one (MLP = 1) get the same random AXI traffic on the old registers, with random delays on every valid and ready | every AXI output identical in every clock: 6 seeds, 500 transactions each, 265,051 clocks |
+| `postproc`, new against old with one scale per stream: every shift 0-63, both ReLU settings, extreme inputs | 115,141 values identical; the 3-stage unit also cycle for cycle |
+| `postproc`, a new scale every clock (`mac.py postproc`), full input ranges | 2,000/2,000 with 3 stages and with 7 (the old unit: 942/2,000) |
+| `mac.py mlp`: random whole models (1-4 layers, sizes 1-64, M 1-64, ReLU on and off, saturating scales, extreme 32-bit biases), each run twice with new inputs and the same weights; the last layer's sums, the last layer's INT8 inputs read out of A, and all four counters against Python | P = 8: 38 models; 1, 2 and 4 postproc units; 3-stage postproc with HREAD_REG 0; P = 4; P = 16 (18 models each): all 146 pass |
+| The same with each PE as a DSP48E1 (the board build) | 14/14 |
+| `tb_axi` (the ARM's view over AXI, Icarus) | 20/20: the 14 old tests + 6 model tests (8 rows, 1 row, PARAM_PTR stepping, a multiply from slot 2 and from slot 0 after the model, loads during a model run dropped and flagged) |
+| SDK `mac_test.c` compiled on a PC and run against the RTL in Verilator (each `Xil_Out32` / `Xil_In32` an AXI transaction) | ALL BOARD TESTS PASSED (30/30): the 24 old tests + 3 model tests in each bus mode; model clocks 3,194 / 4,258 / 12,770, equal to the equation |
+| Verilator `-Wall` lint | no warnings: `mm_core`, `mlp_ctrl`, `mac_axi` (MLP 0 and 1, one and two clocks, NL 1-4), `chip_top` |
+
+**Planted bugs** (each one alone, `python mac.py mlp` with 11 models):
+
+| Planted bug | Result | Models failing |
+|---|---|---|
+| writeback lanes reversed | caught | 9 of 11 models fail |
+| scale memory address + 1 | caught | 9 of 11 models fail |
+| scales always from layer 0 | caught | 6 of 11 models fail |
+| K of every layer = DIMS.K | caught | 5 of 11 models fail |
+| ReLU never applied | caught | 5 of 11 models fail |
+| C word taken 1 clock early | caught | 7 of 11 models fail |
+| last block of a row not written back | caught | 9 of 11 models fail |
+| no drain before the next layer | caught | 9 of 11 models fail |
+| per-layer done passed on | caught | simulation error: The simulation reported an error. |
+| writeback reads the host's C address | caught | 7 of 11 models fail |
+| weight slot ignored (always slot 0) | caught | 9 of 11 models fail |
+| postproc rounds with the next shift | caught | 7 of 11 models fail |
+| A word write: lane 0 only | caught | 8 of 11 models fail |
+
+The models that still pass under a planted bug are the one-layer ones (no writeback). The drain bug fails
+on data, not only on the clock count: words still in flight would use the next layer's scales.
+
+**Build plan** (the same Vivado project, on a new branch from `try_250MHz`):
+1. Pull. Tcl console: `add_files -norecurse <repo>/mac_attack_accel/rtl/mlp_ctrl.sv`, then
+   `update_compile_order -fileset sources_1` (`postproc.sv` is in the project already).
+2. Block design: Refresh Changed Modules on `mac`; critical warning [Coretcl 2-1280] is expected (the AXI
+   address is 7 bits now). Check the `mac` block: MLP 1, NL 4, PP_LANES 0, PP_PIPE 1, HREAD_REG 1, PE_PRIM 1,
+   CORE_CLK 0. Validate Design. The Address Editor range stays as it is.
+3. Synthesis first: about 80 DSPs and 7.5 BRAM tiles; the step 13 Tcl check should show `bmem` as 4 RAMB36.
+4. Implementation with `Performance_ExplorePostRoutePhysOpt` at 250 MHz; reports to `Alex/` as `_v10`. If it
+   fails, the worst 100 paths (`report_timing -max_paths 100 -nworst 1 -unique_pins -file ...`).
+5. `tb_axi` in XSim: 20/20 (14 as before + 6 model tests).
+6. Export Hardware with the bitstream, update the SDK hardware platform (check `ps7_init.html` still says 250 MHz;
+   section 6 if the SDK says "no changes"), build `MAC_attack_V2` Release and run it: ALL BOARD TESTS PASSED (30/30).
+
+Not in this step: a trained model (the tests use random models whose per-channel scales are fitted to the data,
+so the outputs use the whole INT8 range and some channels saturate on purpose), INT4, the chip version (its
+weights would need about 2-3 mm2 of flip-flops; a Tiny Tapeout tile is about 0.016 mm2).
+
+### Step 15b: two timing fixes for 250 MHz (agreed and written 22 Oct, not built)
+
+**Step 15 built (22 Oct, Alex's PC).** Project `mac_attack_accel_MLP/zed/mac_zed_project`: a copy of the step 14
+project (FCLK_CLK0 250 MHz, `Performance_ExplorePostRoutePhysOpt`), `rtl/mlp_ctrl.sv` added, `mac` refreshed
+(defaults: MLP 1, NL 4, PP_PIPE 1, HREAD_REG 1, PE_PRIM 1, CORE_CLK 0), `core_locked` tied to a Constant 1 (section 6,
+17 Oct). `tb_axi` in XSim: ALL AXI TESTS PASSED (20/20). Implementation **fails by 0.156 ns**: WNS -0.156 ns,
+TNS -1.436 ns, 34 of 20,659 endpoints, WHS +0.011 ns (worst path at most 4.156 ns, floor about 241 MHz).
+LUT 4,403 (4,022 logic + 381 as memory), FF 6,221, BRAM 7.5, DSP 80, power 2.180 W: what step 15 predicted
+(about 4,500 / 6,000 / 7.5 / 80). The bitstream was written, but with failing timing it is not guaranteed to
+compute correctly, so it is not used. Reports: `Alex/timing_summary_v10.rpt` (post-route physopt),
+`Alex/utilization_v10.rpt`.
+
+The 10 worst paths (the report lists 10 of the 34 endpoints):
+
+| Paths | Slack (ns) | From -> to | Logic | Whose |
+|---|---|---|---|---|
+| 4 | -0.156 to -0.079 | `mac_axi` `axi_awready` -> protocol converter `axaddr_incr` | 5 levels (2 CARRY4), about 2.1 ns of wire | Xilinx converter's next-address adder, started by our handshake register |
+| 1 | -0.113 | converter `aw_cmd_fsm` state -> `wrap_cnt_r` | 4 LUTs, 3.1 ns of wire (76%) | inside the converter |
+| 1 | -0.111 | converter B FIFO `cnt_read` -> its replica | 3 LUTs, clock skew -0.42 ns | inside the converter (the replica was made by physical optimization) |
+| 4 | -0.068 | `mac_axi` `pw_layer[0]` -> lane 4's bias memory, write address (RAM32M WADR3) | 0 levels, 3.3 ns of wire (88%) | ours: one register drives the write address of every lane's scale memory |
+
+The converter paths are the ones that were closest in step 14 at 250 MHz (they passed by +0.008 ns,
+`Alex/timing_summary_v9.rpt`). The MLP adds about 3,200 LUTs around them and the margin is gone. The scale-memory
+path is new in step 15: the scale memory is about 80 RAM32M (LUT RAM) spread over the 8 lanes, each lane next to
+its postproc DSPs, and one flip-flop in `mac_axi` drove all their write addresses.
+
+**What changed** (rule: same 250 MHz clock, every result unchanged).
+
+| Part | File | Change |
+|---|---|---|
+| Scale memory write | `rtl/mlp_ctrl.sv` | Each lane registers its own copy of the write (its enable, field, address, data: `lw_*`) and writes its LUT RAM from that copy, so each copy can be placed next to its lane. `(* keep *)` stops synthesis merging the 8 identical copies back into one. The write lands 1 clock later. Nothing can read the word in between: scale writes are dropped while busy, a model reads the scale memory only after its first layer's matrix passes, and back-to-back writes stay in order (it is a pipeline). About 8 x 39 = 312 more flip-flops. |
+| AXI register slice | block design (`mac_rs`), `zed/create_zed_project.tcl` | AXI Register Slice (AXI4-Lite, every channel fully registered, `REG_* = 1`) between `axi_ic/M00_AXI` and `mac/s_axi`. No path is left from `mac_axi`'s handshake registers (`awready` and the others) into the converter, and the converter can sit next to the ARM. About +2 clocks per bus access (8 ns on about 100 ns per access); no change to any result or to `MODEL_CYCLES`. |
+
+The converter's internal paths (2 of the 10) cannot be edited (Xilinx IP). The two changes take away the other
+paths, so the converter is left alone near the ARM. If it still fails: the worst 100 paths, then a Pblock that
+keeps the interconnect next to the PS7 (same clock).
+
+**Verification of the `mlp_ctrl.sv` change** (Icarus Verilog 12, Verilator 5.020; the register slice is Xilinx IP
+and is not in these simulations, `tb_axi` drives `mac_axi` directly):
+
+| Check | Result |
+|---|---|
+| `mac.py mlp`, P = 8, seeds 1 and 7 | 20/20 and 28/28 models bit-exact, every counter equal to the equation |
+| P = 4; P = 16 | 20/20; 14/14 |
+| 2 postproc units; 1 unit; 3-stage postproc | 20/20; 14/14; 14/14 |
+| `tb_axi` with each PE as a DSP48E1 (Yosys simulation model) | ALL AXI TESTS PASSED (20/20) |
+| Verilator `--lint-only -Wall`, `mlp_ctrl` | no warnings |
+| Planted bug: lane g writes lane g+1's memory | caught: 9 of 11 models fail (the 2 that pass have one layer, so no writeback) |
+
+**Build plan** (the same project, `mac_attack_accel_MLP/zed/mac_zed_project`):
+1. Pull. Block design: Refresh Changed Modules on `mac` (no port changes).
+2. Tcl console (Vivado logs these; `create_zed_project.tcl` has the same in `build_block_design`):
+
+        open_bd_design [get_files system.bd]
+        delete_bd_objs [get_bd_intf_nets axi_ic_M00_AXI]
+        set rs [create_bd_cell -type ip -vlnv [lindex [lsort [get_ipdefs -all xilinx.com:ip:axi_register_slice:*]] end] mac_rs]
+        set_property -dict [list CONFIG.PROTOCOL {AXI4LITE} CONFIG.REG_AW {1} CONFIG.REG_AR {1} CONFIG.REG_W {1} CONFIG.REG_R {1} CONFIG.REG_B {1}] $rs
+        connect_bd_intf_net [get_bd_intf_pins axi_ic/M00_AXI] [get_bd_intf_pins mac_rs/S_AXI]
+        connect_bd_intf_net [get_bd_intf_pins mac_rs/M_AXI] [get_bd_intf_pins mac/s_axi]
+        connect_bd_net [get_bd_pins ps7/FCLK_CLK0] [get_bd_pins mac_rs/aclk]
+        connect_bd_net [get_bd_pins rst_fclk0/peripheral_aresetn] [get_bd_pins mac_rs/aresetn]
+        assign_bd_address
+        validate_bd_design
+        save_bd_design
+        foreach s [get_bd_addr_segs -of_objects [get_bd_addr_spaces ps7/Data]] { puts "[get_property NAME $s] [get_property OFFSET $s] [get_property RANGE $s]" }
+
+   The last line must print `SEG_mac_reg0 0x43C00000 64K` (MAC_BASE in `mac_test.c`). `assign_bd_address` may say
+   there is nothing to assign; that is fine.
+3. Generate Bitstream (synthesis and implementation run again), 250 MHz, same strategy. Expect about 6,550 FF.
+4. Reports to `Alex/` as `_v11`. If it fails: `report_timing -max_paths 100 -nworst 1 -unique_pins -file <repo>/Alex/timing_paths_v11.rpt`.
+5. Then step 15 build plan 5-6: `tb_axi` in XSim 20/20, Export Hardware with the bitstream, SDK (BSP `MAC_attack_V2_bsp`),
+   `MAC_attack_V2` Release: ALL BOARD TESTS PASSED (30/30), with no "model tests are skipped" line.
+
+Note: `zed/create_zed_project.tcl` still sets FCLK_MHZ 200 and does not set the implementation strategy; the
+tracked project (250 MHz, `Performance_ExplorePostRoutePhysOpt`) is the reference.
+
+**Result (22 Oct, built 11:05).** Register slice in (`mac_rs`, AXI4-Lite, every channel `REG_* = 1`; address
+`SEG_mac_reg0` 0x43C00000 / 64K). Timing **fails by 0.175 ns**: WNS -0.175 ns (-0.185 ns after routing, the
+post-route physical optimization gained 0.010), TNS -1.556 ns, 36 of 21,261 endpoints, WHS +0.020 ns (worst path at
+most 4.175 ns, floor about 239 MHz). LUT 4,470, FF 6,571 (+350, the per-lane copies), BRAM 7.5, DSP 80, power
+2.182 W. Reports: `Alex/timing_summary_v11.rpt`, `Alex/utilization_v11.rpt`.
+
+Both paths this step was for are gone: no scale-memory write address and no `mac_axi` -> converter path among the
+failing ones. The next layer of paths is now on top (each was hidden below the previous worst):
+
+| Paths | Slack (ns) | From -> to | Logic | Whose |
+|---|---|---|---|---|
+| 1 | -0.175 | converter `s_axburst_eq1` -> `axaddr_incr[7]` | 6 levels (2 CARRY4), 2.1 ns of wire | inside the Xilinx protocol converter |
+| 3 | -0.156 to -0.069 | postproc `t5` / `sh5` -> `y6` (lanes 2 and 4) | 3 LUTs, 2.9-3.1 ns of wire (72-79%) | ours: stage 6, the 50-bit shift by 0-63 in one clock |
+| 5 | -0.129 to -0.049 | postproc `y6` -> `out_q` set pins (lanes 0 and 6) | 7 levels (6 CARRY4) | ours: stage 7, the 50-bit compares of the clamp and the output select in one clock |
+| 1 | -0.088 | `u_core` `perf_total` -> `sum_total` | 5 levels (3 CARRY4), 1.9 ns of wire | ours: the model's cycle sum, a 32-bit add across modules |
+
+The step 15 resource and power numbers are unchanged, so the design is at the edge of the XC7Z020-1 at 250 MHz:
+several paths of 3 or more logic levels with long wires each miss by 0.05-0.18 ns.
+
+### Step 15c: postproc in 9 stages, counter sums from local copies (agreed and written 22 Oct, not built)
+
+**Why.** Step 15b at 250 MHz: 8 of the 10 worst paths are in the postproc units' stage 6 (a 50-bit shift by 0-63 in
+one clock: 3 LUT levels and about 3 ns of wire) and stage 7 (three 50-bit comparisons and the output choice in one
+clock: 6 CARRY4), and 1 is the model's cycle sum (a 32-bit add from `mm_core`'s counter across the chip). The worst
+one is inside the Xilinx protocol converter, which we cannot change (build plan step 6). Rule: same 250 MHz, every
+result unchanged.
+
+**What changed.**
+
+| Part | File | Change |
+|---|---|---|
+| Postproc, 9 stages | `rtl/postproc.sv` | `PPIPE = 2` (new): stages 1-5 as `PPIPE = 1`; stage 6 shifts by `shift[5:3] x 8`, stage 7 by `shift[2:0]`; stage 8 registers the clamp's three tests (y > 127, y < 0, y < -128) and y's low 8 bits; stage 9 picks the output. Same numbers for every input: t >>> s = (t >>> 8a) >>> b for s = 8a + b (a shift past the top fills with the sign either way), and stages 8-9 are `clamp()` with its comparisons registered. `PPIPE = 0` and `1` unchanged. About 64 more flip-flops per unit (about 512 for 8). |
+| Latency | `rtl/mlp_ctrl.sv` | `PPD` = 3, 7 or 9; default `PPIPE = 2`. The drain between layers is RL + PPD + 1 = 12 clocks (was 10). |
+| Counter sums | `rtl/mlp_ctrl.sv` | `mm_core`'s three counters are copied every clock (`cq_*`); a layer's counts are added one clock after its done (`sum_add`), from the copies, next to the sum registers. Same sums; they are final one clock after the model's done. The host reads them many clocks later, after it has seen done in STATUS (`tb_axi` and `mac_test.c` check every sum, with random bus delays in `tb_axi`). |
+| Registers | `zed/mac_axi.v` | `PP_PIPE = 2` by default; CONFIG bit 29 = 9-stage postproc (bit 19 still = more than 3 stages). |
+| Board program | SDK `MAC_attack_V2/src/mac_test.c` | `pp_stages(cfg)`: 9 if bit 29, else 7 if bit 19, else 3; used in the model clock equation and the printout. Also right for older bitstreams. |
+| Tests | `zed/tb_axi.sv`, `tb/tb_postproc.sv`, `tb/tb_mlp.sv`, `mac.py` | `tb_axi` takes the drain from CONFIG as `mac_test.c` does; `mac.py`: `pp_stages()`, `--ppipe 2` (default), `postproc` checks all three pipelines. |
+| Docs | `zed/README.md` | CONFIG bit 29 in the register table. |
+
+**Cycles.** Only the model's drain between layers changes: MODEL_CYCLES + 2 per layer boundary. 64-64-64-6 model
+(2 boundaries): 1 row 3,194 -> **3,198**, 8 rows 4,258 -> **4,262**, 64 rows 12,770 -> **12,774** clocks. Plain
+multiplies and the PERF counters are unchanged.
+
+**Verification** (Icarus Verilog 12, Verilator 5.020):
+
+| Check | Result |
+|---|---|
+| Lockstep: the new 9-stage unit against the old file's 7-stage and 3-stage units, the same inputs every clock. Directed: m0 = 1, every shift 0-63, values at every output limit and every rounding tie, both ReLU settings. Random: new acc, bias, m0, shift (0-63) and ReLU every clock, extreme values, valid 15 of 16 clocks. ACC = 22 and ACC = 32 | 842,802 outputs each, all identical; `out_valid` exactly 9 clocks after `in_valid` |
+| `mac.py postproc` (a new scale every clock, full ranges) | 2,000/2,000 for 3, 7 and 9 stages; 400/400 with one scale |
+| `mac.py mlp`, default (P = 8, 9 stages), seeds 1, 7, 11 | 20/20, 28/28, 28/28 models |
+| P = 4; P = 16; 1, 2, 4 postproc units; 7 and 3 stages; HREAD_REG 0 | 20/20; 14/14; 14/14, 20/20, 14/14; 14/14, 14/14; 14/14 |
+| `tb_axi` with each PE as a DSP48E1 (Yosys model) | ALL AXI TESTS PASSED (20/20), "9-stage postproc", model 3,542 and 2,646 clocks = equation |
+| SDK `mac_test.c` compiled on a PC and run against the RTL in Verilator (each `Xil_Out32` / `Xil_In32` one AXI transaction; PE_PRIM = 0) | ALL BOARD TESTS PASSED (30/30), "9-stage postproc", model clocks 3,198 / 4,262 / 12,774 = equation |
+| The same program on the step 15b RTL (7 stages) | 30/30 (it reads the stages from CONFIG) |
+| The step 15b program on the new RTL | 24/30: every output right, model clocks 4 more than its equation. **Rebuild the SDK app.** |
+| Old tests: `mac.py test --quick`, `saturate`, `uart 8 8 8`, `compare 32 32 32` | all pass |
+| Verilator `--lint-only -Wall`: `postproc` (PPIPE 0, 1, 2), `mlp_ctrl` (PPIPE 0-2; NL 1, 2, 4 with 1 and 2 units), `mac_axi` (MLP 0 and 1 x PP_PIPE 0-2) | no warnings |
+
+**Planted bugs** (each alone):
+
+| Planted bug | Caught by | Result |
+|---|---|---|
+| Stage 9 takes ReLU one stage early | lockstep | 39,063 outputs differ |
+| Stage 7 shifts by the unregistered `shift[2:0]` | lockstep | 30,653 differ |
+| Stage 6 shifts by multiples of 4 | lockstep | 381,705 differ |
+| Low clamp test off by one (y < -129) | lockstep | 10,371 differ |
+| `out_valid` one stage early | lockstep | 232,401 differ, latency wrong |
+| Counter sums never added | `mac.py mlp` | 11 of 11 models fail |
+| Sums added from the copies in the done clock (one clock early) | `mac.py mlp` | 11 of 11 fail |
+| `PPD` left at 7 with the 9-stage unit | `mlp_ctrl`'s own simulation check | simulation error: postproc valid and writeback token out of step |
+| CONFIG bit 29 missing | SDK program against the RTL | 24/30 (model clock counts) |
+
+**Build plan** (the same project, `mac_attack_accel_MLP/zed/mac_zed_project`):
+1. Block design: Refresh Changed Modules on `mac`; double-click it: `PP_PIPE` must be 2. Validate Design.
+2. Four implementation runs at once (Tcl console). impl_1 keeps `Performance_ExplorePostRoutePhysOpt`; impl_2-4 try
+   other strategies, each with post-route physical optimization:
+
+        set flow [get_property FLOW [get_runs impl_1]]
+        foreach {r s} {impl_2 Performance_ExtraTimingOpt impl_3 Performance_NetDelay_high impl_4 Performance_WLBlockPlacement} {
+            if {[llength [get_runs -quiet $r]] == 0} { create_run $r -parent_run synth_1 -flow $flow -strategy $s }
+            set_property strategy $s [get_runs $r]
+            set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs $r]
+        }
+        reset_run synth_1
+        launch_runs synth_1 -jobs 4
+        wait_on_run synth_1
+        launch_runs impl_1 impl_2 impl_3 impl_4 -to_step write_bitstream -jobs 4
+
+3. Use a run with WNS >= 0 (Design Runs window): right-click it, Make Active, then Export Hardware with the bitstream.
+   Reports to `Alex/` as `_v12`.
+4. `tb_axi` in XSim: ALL AXI TESTS PASSED (20/20), "9-stage postproc".
+5. SDK: update the hardware platform (check `ps7_init.html` says 250 MHz), rebuild `MAC_attack_V2` Release (the new
+   `mac_test.c`), run: ALL BOARD TESTS PASSED (30/30), "9-stage postproc", model clocks 3,198 / 4,262 / 12,774.
+6. If no run meets timing: the worst 100 paths of the best run (`open_run impl_N`, then
+   `report_timing -max_paths 100 -nworst 1 -unique_pins -file <repo>/Alex/timing_paths_v12.rpt`). If only the
+   protocol converter is left: step 15d, the bus (ARM, interconnect) on its own 200 MHz clock with a Xilinx AXI
+   Clock Converter in front of `mac`, which stays at 250 MHz (the fallback discussed 22 Oct).
+
+**Result (22 Oct, built 12:45, impl_1 only, `Performance_ExplorePostRoutePhysOpt`).** Timing **fails by 0.029 ns**:
+WNS -0.029 ns (-0.038 ns after routing), TNS -0.088 ns, 6 of 21,824 endpoints, WHS +0.037 ns (worst path at most
+4.029 ns, floor about 248 MHz). LUT 4,440, FF 7,147, BRAM 7.5, DSP 80, power 2.187 W. Reports:
+`Alex/timing_summary_v12.rpt`, `Alex/utilization_v12.rpt`. The run stopped after the post-route physical
+optimization (no bitstream). No postproc and no cycle-sum path fails any more. The 6 left:
+
+| Paths | Slack (ns) | From -> to | Logic | Whose |
+|---|---|---|---|---|
+| 2 | -0.029, -0.008 | inside the protocol converter (`axaddr_incr`, `wrap_cnt_r`) | 4-6 levels, 2-3 ns of wire | Xilinx IP |
+| 3 | -0.016, -0.013, -0.008 | `mac_axi` `rd_row` -> C block RAM read address (host read and writeback share it) | 2 LUTs, 2.5 ns of wire | ours, the same as in step 14 |
+| 1 | -0.015 | C block RAM (no output register, 2.45 ns clock-to-out) -> `hq_sel` | 0 levels | ours, the same as in step 14 |
+
+These paths were also the closest ones in step 14 at 250 MHz (`Alex/timing_summary_v8.rpt`, `_v9.rpt`), where the
+post-route physical optimization closed them. At 0.03 ns this is placement, not logic: next, the four-strategy
+build (build plan step 2) and the post-route optimization with `AggressiveExplore`, before any RTL change (an
+output register on the C block RAM would add a clock to every C read and change the cycle equations).
+
+**Result at 250 MHz, four strategies** (each with post-route physical optimization `AggressiveExplore`): impl_1
+`Performance_ExplorePostRoutePhysOpt` -0.029 ns (unchanged), impl_2 `Performance_ExtraTimingOpt` -0.097 ns, impl_4
+`Performance_WLBlockPlacement` -0.103 ns, impl_3 `Performance_NetDelay_high` not finished. 250 MHz not met.
+
+**Result at 214.286 MHz (Alex, 22 Oct 13:18).** FCLK_CLK0 asked for 225 MHz; the Zynq gives 214.285706 MHz (Clock
+Summary 214.316 MHz, period 4.666 ns). Same RTL. impl_1: WNS **+0.081 ns**, TNS 0, 0 failing of 21,781 endpoints,
+WHS +0.024 ns (worst path at most 4.585 ns); impl_2 +0.061 ns, impl_4 +0.068 ns. LUT 4,402, FF 7,048, BRAM 7.5,
+DSP 80, power 2.118 W. Bitstream written. Reports: `Alex/timing_summary_v13.rpt`, `Alex/utilization_v13.rpt`.
+`mac_test.c` FCLK_HZ = 214285714 (CORE_HZ follows it). The worst path is now new and far from the limit of the
+250 MHz build: the tool only works as hard as the clock asks (section 5, "How to read a timing result").
+
+Board steps at 214.286 MHz: Export Hardware with the bitstream; update the SDK hardware platform and check that
+`ps7_init.html` shows FCLK0 at about 214.29 MHz (section 6, 19 Oct: SDK may say "no changes"); rebuild `MAC_attack_V2`
+Release; run: ALL BOARD TESTS PASSED (30/30), "9-stage postproc", model clocks 3,198 / 4,262 / 12,774, and the
+clock line "measured on the board" about 214 MHz with no WARNING.
+
+Back towards 250 MHz: the 250 MHz build's worst path was at most 4.029 ns (floor about 248 MHz), so a clock between
+214 and 248 MHz should also meet timing, if the Zynq can make it (check the Actual Frequency column before building).
+
 ## 6. Problems and fixes
 
 | Date | Problem | Fix |
@@ -981,6 +1370,11 @@ All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` f
 | 17 Oct | Step 11b at 250 MHz: mac synthesis stopped, [Synth 8-439] module 'pe_dsp48' not found (then [Synth 8-196] and [Synth 8-6156] on `systolic_array.sv`). No implementation ran. | `zed/pe_dsp48.sv` was not in the project (`mac_zed.xpr` lists only the older files). Add it: Add Sources > design sources > `zed/pe_dsp48.sv` (do not copy into the project), or in the Tcl console `add_files -norecurse <repo>/mac_attack_accel/zed/pe_dsp48.sv` and `update_compile_order -fileset sources_1`; then Refresh Changed Modules and run synthesis again. |
 | 18 Oct | After pulling the tracked project on the PC, `mac_zed.sdk` still held the PC's own old files (16 Oct `.hdf` and hardware platform at 76.9 MHz, BSP), plus old run folders (`system_auto_pc_0_synth_1/`, `system_rst_fclk0_0_synth_1/`). With the new `.gitignore` they showed up in GitHub Desktop as changes. | Export Hardware with the bitstream (overwrites the `.hdf`), let the SDK update the platform, regenerate the BSP. Do not commit the two old run folders. |
 | 18 Oct | Running `zed/create_zed_project.tcl` now would delete the tracked project (`create_project ... -force` into `mac_zed_project`). | Open `mac_zed.xpr`; run the Tcl only to rebuild a broken project. |
+| 21 Oct | `postproc.sv` used m0 and relu one clock after the data and shift two clocks after: right only while they stay constant. The tests held them constant (400/400 and 800/800 passed). With a new scale every clock, as one scale per output channel needs, the old unit gave 942 of 2,000 right. | m0, shift and relu now enter with the data and travel down the pipeline. Constant scales give the same results as before (115,141 values with every shift 0-63, both ReLU settings: identical, cycle for cycle). New test with a new scale every clock: 2,000/2,000 in both pipelines. |
+| 21 Oct | First AXI test of the model run: 0/48 outputs right, counters right. | A testbench bug, not the hardware: the model's inputs were made but `load_matrix` sent the old A matrix. Fixed in `tb_axi.sv`; then 48/48. |
+| 21 Oct | Found while testing (already in step 14, not new): DIMS with **M = 0 makes the core stay busy forever** (S_LAST waits for row M - 1, which never comes), so the ARM would poll STATUS forever. K = 0 or N = 0 finish (they count as 256 and wrap). Checked on the step 14 `mm_core`: M = 0 still busy after 200,000 clocks. | Not fixed (it would change step 14). The C program never uses 0. Open question in section 9: reject a size of 0 in `mac_axi`. |
+| 22 Oct | Step 15 at 250 MHz fails by 0.156 ns (simulation passes): the Xilinx protocol converter in the AXI interconnect (it passed by only 0.008 ns in step 14) and one `mac_axi` register driving the write address of every lane's scale memory. | Step 15b: per-lane write registers in `mlp_ctrl.sv` and an AXI register slice in front of `mac` (section 5). Behavioral simulation has no wire delays: it checks the logic, timing is checked only by implementation. |
+| 22 Oct | `docs/log.md` on Alex's computer lost the 11:22 entries (the step 15b build result): the file on disk was the 10:49 version again. | Written again with the step 15c entries, and the file on disk checked after writing. Cause not known (an editor saving an older copy, as on 17 Oct, or the copy to the computer). Reload the log in any open editor before saving it. |
 
 ## 7. Numbers to remember
 
@@ -1016,6 +1410,9 @@ All in the step 10b, 11 and 12 sections above: 8 planted bugs, 7 make `tb_axi` f
 | Accumulator bits for K = 640 | INT4: 17, INT8: 25 | `first-rtl-results.md` (derived, check proof) |
 | Data movement vs compute, 64x64 | 6.7x (simulation, ideal bus), 24.5x (board, 50 MHz, Debug), 20x (board, 76.93 MHz, Release), 56x (board, 200 MHz, Debug), 30x (board, 200 MHz, Release) | Simulation / board |
 | Assumed autoencoder at P = 8, M = 1 | 264,192 MACs; 4,128 passes x 23 = 94,944 cycles | [claim] hand-computed by Claude |
+| On-chip MLP clocks (step 15) | per layer Np (M + 3P - 2) + 3 + PIPE + MEM_REG + 3; between layers M ceil(N/P) (P / units) + RL + PPD + 1 (= M ceil(N/8) + 10 on the ZedBoard build) | RTL; every simulated model run |
+| 64-64-64-6 model at 250 MHz | 1 row: 3,194 clocks = 12.8 us; 8 rows: 4,258 = 17.0 us (2.1 us per row); 64 rows: 12,770 = 51.1 us (0.8 us per row) | Simulation (Icarus; `mac_test.c` on the RTL in Verilator) |
+| Postproc | 7 stages (PPIPE = 1) or 3; one result per clock per unit; 8 units; y = clamp(((acc + bias) m0 + 2^(s-1)) >> s) | RTL |
 
 ## 8. AI-assistance verification checklist
 
@@ -1030,6 +1427,8 @@ The professor warned: every equation needs a proof or a citation. Nothing below 
 - [x] PS-PL AXI interface at most 250 MHz: DS187 (Zynq-7000 DC and AC switching characteristics), Table 19.
 - [ ] Fabric limits of the XC7Z020-1 (DSP48E1, block RAM, global clock buffer maximum frequency): look up in the data sheet. Claude quoted about 464 / 388 / 464 MHz from memory, not checked. (Block RAM: Vivado's own report gives 2.576 ns = 388 MHz, and 2.944 ns = 340 MHz in the C buffer's mode, 18 Oct; DSP and clock buffer still not checked.)
 - [ ] ZedBoard audio codec ADAU1761 (I2C control, I2S audio) and its sample rates: check the ZedBoard manual and ADAU1761 datasheet.
+- [ ] On-chip MLP clock equation (section 7): derive from the RTL. It matches every simulated model run so far.
+- [ ] The requantize rounding in James's export is `mac.py` `requantize()` (halves up), not PyTorch's or TFLite's.
 
 Claims that turned out wrong (kept here on purpose):
 - "INT4 saves no energy because the DSP48 multiplier is fixed-width": this build uses 0 DSPs (LUT multipliers), so INT4 should shrink them on this FPGA.
@@ -1047,6 +1446,8 @@ Claims that turned out wrong (kept here on purpose):
 - "At 200 MHz the accelerator is 7.5x faster than the ARM" (Claude, 18 Oct): that was against the Debug ARM time. Against the Release ARM it is about 1.4x (76.93 MHz run; 200 MHz Release not measured yet).
 - "Most of each bus word's time is ARM time, which the PL clock does not speed up", "at 200 MHz in Release expect about 1.4x" and "a clock above 200 MHz would save under 0.5% of the job" (Claude, 18 Oct, also in the Google Doc): the 200 MHz Release run gave 2.6x, because load and read got 1.7-1.8x faster with the clock. With one clock, a faster FCLK speeds up the bus too; with step 12 (bus 200 MHz, core faster) only the array speeds up.
 - "Reads cannot be made faster from the ARM side" and "64x64 about 3.5x after the ARM changes" (Claude, 18 Oct): with Device memory the reads overlap and got 2x faster, and 64x64 reached 6.6x.
+- "`postproc.sv` is written and tested on its own; it just is not connected yet" (Claude, 20 Oct): it was only right with one scale for the whole stream; fixed 21 Oct (section 6).
+- "The writeback might read a C word before its last write lands, for M = 1 and N <= 8" (Claude, 21 Oct spec): no; the last C word is written the clock before `done`, and the first writeback read is two clocks after `done`.
 
 ## 9. Open questions
 
@@ -1066,6 +1467,10 @@ Claims that turned out wrong (kept here on purpose):
 - (Answered 18 Oct) Release board run at 200 MHz: 64x64x64 is 2.6x faster than the ARM, 1x64x64 is 5.2x slower.
 - (Answered 18 Oct) Posted writes keep the order of start, status and results when flushed at the 4 points: 24/24 on the board.
 - Next limits are in `mac_axi` (FPGA side): 6 PL cycles per write (bytes written one per clock) and about 12 per read (one read at a time, 3 wait cycles). Options: write the 4 bytes in one clock; let reads overlap; AXI DMA over an HP port for bursts.
+- The dataset and the tasks (fault classes, plus an anomaly or severity output) for the multi-task MLP.
+- Chip version of the on-chip MLP: 16 KB of weights in flip-flops is about 2-3 mm2 (a Tiny Tapeout tile is about 0.016 mm2): stream the weights in, or a much smaller model?
+- `zed/mac_test.c` is the 13 Oct version; the SDK copy `MAC_attack_V2/src/mac_test.c` is the current one. Replace the old one?
+- Reject a size of 0 (DIMS M, K or N, or a layer's N) in `mac_axi`, so a wrong value cannot hang the core (section 6, 21 Oct)?
 
 ## 10. Template for a new timeline row
 

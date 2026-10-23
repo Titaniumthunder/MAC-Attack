@@ -1,0 +1,8 @@
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
+|       Launch Clock       |      Capture Clock       |                                                 Pin                                                      |
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
+|               clk_fpga_0 |               clk_fpga_0 |                                         system_i/mac/inst/g_mlp.u_mlp/g_lane[2].u_pp/g_pp9.out_q_reg[4]/D|
+|               clk_fpga_0 |               clk_fpga_0 |                                         system_i/mac/inst/g_mlp.u_mlp/g_lane[1].u_pp/g_pp9.out_q_reg[7]/D|
+|               clk_fpga_0 |               clk_fpga_0 |system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/RD.ar_channel_0/cmd_translator_0/wrap_cmd_0/axaddr_wrap_reg[1]/D|
+|               clk_fpga_0 |               clk_fpga_0 |system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/RD.ar_channel_0/cmd_translator_0/wrap_cmd_0/axaddr_wrap_reg[6]/D|
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
