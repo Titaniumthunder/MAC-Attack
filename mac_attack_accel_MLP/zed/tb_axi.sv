@@ -162,6 +162,7 @@ module tb_axi #(
     int     Xin [MAXD][MAXD];                   // input rows
     longint Cm [MAXD][MAXD];                    // the last layer's raw sums, computed here
     int     act [MAXD][MAXD];                   // a layer's INT8 output, computed here
+    int     Cmid [MAXD][MAXD];                  // a hidden layer's INT8 output, before it becomes act
     localparam int NLAY = 3;
     int     Kl [NLAY];                          // K of each layer (layer 0: inputs per row): 40, 64, 64
     int     Nl [NLAY];                          // N of each layer: 64, 64, 6
@@ -219,7 +220,6 @@ module tb_axi #(
             if (l < NLAY - 1) for (int i = 0; i < M; i++) for (int j = 0; j < Nl[l]; j++) act[i][j] = Cmid[i][j];
         end
     endtask
-    int Cmid [MAXD][MAXD];
 
     // The model's weights, scales and layer table, once
     task automatic load_model();

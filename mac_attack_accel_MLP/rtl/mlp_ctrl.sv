@@ -128,6 +128,14 @@ module mlp_ctrl #(
     logic [7:0]       aw_row, aw_blk;
     logic [P*BITS-1:0] aw_data;
     logic [31:0]      c_passes, c_cycles, c_total;
+    // Declared before mm_core because its port list uses them (the writeback read address); strict
+    // tools (Vivado's xvlog without --relax, slang) reject a use before the declaration.
+    logic             m_busy;                   // a model run is going on
+    // writeback token (row, block, part) and its valid flag
+    logic             tk_v;
+    logic [MW-1:0]    tk_i;
+    logic [KW-1:0]    tk_nb;
+    logic [SW-1:0]    tk_s;
 
     mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD), .PIPE(PIPE), .MEM_REG(MEM_REG),
               .HCLK_SEP(0), .PE_PRIM(PE_PRIM), .HREAD_REG(HREAD_REG), .NL(NL), .AWR(1)) u_core (
@@ -144,7 +152,6 @@ module mlp_ctrl #(
     // ================================================================ layer sequencer
     typedef enum logic [2:0] {Q_IDLE, Q_SETUP, Q_GO, Q_RUN, Q_WB, Q_DRAIN} qstate_t;
     qstate_t        q;
-    logic           m_busy;                     // a model run is going on
     logic           m_done;                     // one-clock pulse at the end of a model run
     logic           go;                         // starts mm_core for the current layer
     logic           m_last;                     // the last command was a model run (performance outputs)
@@ -153,11 +160,6 @@ module mlp_ctrl #(
     logic [KW-1:0]  nt_m1;                      // ceil(N_l / P) - 1 for the current layer
     logic           relu_q;                     // ReLU for the current layer's writeback
     logic [7:0]     drain;
-    // writeback token (row, block, part) and its valid flag
-    logic           tk_v;
-    logic [MW-1:0]  tk_i;
-    logic [KW-1:0]  tk_nb;
-    logic [SW-1:0]  tk_s;
     logic [31:0]    sum_passes, sum_cycles, sum_total, mcyc;
     logic           sum_add;                // add the layer that finished last clock (step 15c)
 

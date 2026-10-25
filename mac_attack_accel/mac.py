@@ -77,8 +77,15 @@ class Simulator:
         return name
 
     def _call(self, cmd, cwd, what):
+        # Vivado's tools are .bat files on Windows, and cmd.exe splits a batch file's arguments at
+        # '=' (-generic_top P=2 arrives as P and 2, -testplusarg N=400 as N and 400). So there each
+        # argument with '=' or a space goes in double quotes, and the command line is passed as one
+        # string, which subprocess passes on unchanged (24 Oct 2026).
+        run = cmd
+        if os.name == "nt" and str(cmd[0]).lower().endswith(".bat"):
+            run = " ".join(f'"{a}"' if any(ch in str(a) for ch in " =") else str(a) for a in cmd)
         try:
-            r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+            r = subprocess.run(run, cwd=cwd, capture_output=True, text=True)
         except OSError as e:
             sys.exit(f"Could not start {cmd[0]}: {e}")
         if r.returncode != 0:

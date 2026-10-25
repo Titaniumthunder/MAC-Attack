@@ -68,6 +68,11 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 22 Oct | **Step 15c built at 250.000 MHz** (impl_1, `Performance_ExplorePostRoutePhysOpt`, finished 12:45, stopped after the post-route physical optimization): timing **fails by 0.029 ns** (was 0.175): WNS -0.029 ns (-0.038 after routing), TNS -0.088 ns, **6** of 21,824 endpoints, WHS +0.037 ns. LUT 4,440, FF 7,147 (+576, the extra postproc stages and counter copies), BRAM 7.5, DSP 80, power 2.187 W. The postproc and cycle-sum paths are gone. Left: inside the Xilinx protocol converter (2), the host's C read address `rd_row` -> C block RAM (3), the C block RAM -> `hq_sel` (1); all within 0.03 ns. Reports copied to `Alex/timing_summary_v12.rpt`, `Alex/utilization_v12.rpt`. | `impl_1` reports (22 Oct 12:45), Design Runs (screenshot) |
 | 22 Oct | Step 15c at 250 MHz, four implementation runs, each with post-route physical optimization `AggressiveExplore`: impl_1 (`Performance_ExplorePostRoutePhysOpt`) WNS -0.029 ns (no gain), impl_2 (`Performance_ExtraTimingOpt`) -0.097 ns, impl_4 (`Performance_WLBlockPlacement`) -0.103 ns, impl_3 (`Performance_NetDelay_high`) not finished. **250 MHz not met** (best -0.029 ns, 6 endpoints). | Design Runs (screenshot, 13:2x) |
 | 22 Oct | **Step 15c met timing at 214.286 MHz** (Alex: FCLK_CLK0 asked for 225 MHz, Actual Frequency 214.285706 MHz, Clock Summary 214.316 MHz / 4.666 ns; same RTL): impl_1 WNS **+0.081 ns**, TNS 0, **0 failing** of 21,781 endpoints, WHS +0.024 ns; impl_2 +0.061, impl_4 +0.068. Bitstream written. LUT 4,402, FF 7,048, BRAM 7.5, DSP 80, power 2.118 W. Closest path: the writeback token -> the scale memory read (LUT RAM, 87% wire). `mac_test.c` FCLK_HZ = 214285714. Reports copied to `Alex/timing_summary_v13.rpt`, `Alex/utilization_v13.rpt`. Not run on the board yet. | `impl_1` reports (22 Oct 13:18), Design Runs (screenshot) |
+| 23 Oct | Committed (Alex): `on_chip_MLP_215MHz` on `Alex_edit` (the two design folders, design 1 without the MLP files, one log). | git history |
+| 24 Oct | Tools on Alex's PC (Windows on ARM; set up by Claude): Python 3.12 (ARM64) with numpy and pyserial; MSYS2 with Icarus Verilog 13.0 (ARM64). Local-only git exclude (`.git/info/exclude`) for each design's `run/` and `zed/mac_zed_project/reports_presentation/`. No tracked file changed. | `reports_presentation/tests_icarus/timings.txt` |
+| 24 Oct | Measurement pass on the PC (Claude): `mac.py --sim vivado` stopped before any test in both designs (Windows splits `-generic_top P=2` at '='; strict `xvlog` rejects `mlp_ctrl.sv`'s use-before-declaration). With Icarus 13: design 1 `test` 60/60, `compare`, `saturate`, `postproc` pass; design 2 the same, but `mac.py mlp` did not compile (same declaration order). `tb_axi` in XSim with `--relax` (as the Vivado project): 14/14 (design 1), 20/20 (design 2, model 3,542 / 2,646 clocks = equation). Vivado reports from both impl_1 runs, opened read-only (timing, utilization, power). Energy computed and rechecked independently (section 11). | `zed/mac_zed_project/reports_presentation/` (both designs, local only) |
+| 24 Oct | **Fixes** (Claude): `mlp_ctrl.sv` declares `m_busy` and the writeback token before `mm_core` uses them; the MLP `tb_axi.sv` declares `Cmid` before its task; both `mac.py` quote '=' arguments for Vivado's `.bat` tools on Windows. No logic change. Checked: slang (strict) 0 errors for every design and testbench of both designs; Icarus 12: design 1 `test` 60/60, `compare`, `saturate`, `uart`, `postproc` pass; design 2 `test` 60/60, `mlp` 48/48 models, `postproc` 3/7/9 stages 2,000/2,000 each, `uart` pass; `tb_axi` 20/20; SDK `mac_test.c` (FCLK_HZ 214285714) against the RTL in Verilator 30/30. Not yet run on the PC's Icarus 13 or with `--sim vivado`. | section 6, 24 Oct |
+| 24 Oct | Section 11 written: energy estimates (Vivado power x simulated or measured time), with what can and cannot be claimed. | section 11 |
 (Add a row each time work is finished.)
 
 ## 2. Decisions and reasons
@@ -126,7 +131,7 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 - [done] ARM-side bus changes (posted writes, word copies, weights loaded once): 64x64x64 6.6x faster than the ARM; one 64x64 layer over 64 rows, 8 rows per run, 5.7x (section 4).
 - [done] On-chip MLP in simulation (21 Oct, section 5 step 15): 160 random models bit-exact against `golden_mlp()` (P = 4, 8, 16), `tb_axi` 20/20, `mac_test.c` against the RTL 30/30; plain multiplies unchanged (lockstep with step 14 identical in every clock, old test outputs identical).
 - [done] On-chip MLP built in Vivado at 250 MHz (22 Oct): `tb_axi` 20/20 in XSim, resources as predicted, but timing fails by 0.156 ns (section 5, step 15b). Step 15b (two timing fixes, same clock) built 22 Oct: its two paths are gone, but timing still fails by 0.175 ns (converter inside, postproc shift and clamp, cycle-sum adder).
-- [done] Step 15c (postproc in 9 stages, counter sums from local copies, same clock, every output identical) written and simulated: `tb_axi` 20/20, SDK `mac_test.c` against the RTL 30/30. Built 22 Oct: fails by 0.029 ns at 250 MHz (6 endpoints: converter, C block RAM read); **meets timing at 214.286 MHz** (WNS +0.081 ns). Not run on the board yet.
+- [done] Step 15c (postproc in 9 stages, counter sums from local copies, same clock, every output identical) written and simulated: `tb_axi` 20/20, SDK `mac_test.c` against the RTL 30/30. Built 22 Oct: fails by 0.029 ns at 250 MHz (6 endpoints: converter, C block RAM read); **meets timing at 214.286 MHz** (WNS +0.081 ns). Not run on the board yet. Strict-compile fixes 24 Oct (section 6); energy estimates in section 11.
 - NOT done: on-chip MLP meeting timing at 250 MHz and run on the board. NOT done: a trained model to run on it.
 - NOT done: INT8 and INT4 AUC on real data. Nothing trained yet.
 - NOT done: audio front end.
@@ -1343,9 +1348,11 @@ DSP 80, power 2.118 W. Bitstream written. Reports: `Alex/timing_summary_v13.rpt`
 `mac_test.c` FCLK_HZ = 214285714 (CORE_HZ follows it). The worst path is now new and far from the limit of the
 250 MHz build: the tool only works as hard as the clock asks (section 5, "How to read a timing result").
 
-Board steps at 214.286 MHz: Export Hardware with the bitstream; update the SDK hardware platform and check that
-`ps7_init.html` shows FCLK0 at about 214.29 MHz (section 6, 19 Oct: SDK may say "no changes"); rebuild `MAC_attack_V2`
-Release; run: ALL BOARD TESTS PASSED (30/30), "9-stage postproc", model clocks 3,198 / 4,262 / 12,774, and the
+Board steps at 214.286 MHz: Export Hardware with the bitstream (since 24 Oct `mlp_ctrl.sv` is newer than the build,
+so Vivado calls the runs out of date; the logic is the same, so export the existing bitstream); Launch SDK (the MLP
+folder's `mac_zed.sdk` has only the apps: SDK makes the hardware platform, then File > New > Board Support Package
+named exactly `MAC_attack_V2_bsp`, OS standalone); check that `ps7_init.html` shows FCLK0 at about 214.29 MHz (section
+6, 19 Oct: SDK may say "no changes"); rebuild `MAC_attack_V2` Release; run: ALL BOARD TESTS PASSED (30/30), "9-stage postproc", model clocks 3,198 / 4,262 / 12,774, and the
 clock line "measured on the board" about 214 MHz with no WARNING.
 
 Back towards 250 MHz: the 250 MHz build's worst path was at most 4.029 ns (floor about 248 MHz), so a clock between
@@ -1375,6 +1382,8 @@ Back towards 250 MHz: the 250 MHz build's worst path was at most 4.029 ns (floor
 | 21 Oct | Found while testing (already in step 14, not new): DIMS with **M = 0 makes the core stay busy forever** (S_LAST waits for row M - 1, which never comes), so the ARM would poll STATUS forever. K = 0 or N = 0 finish (they count as 256 and wrap). Checked on the step 14 `mm_core`: M = 0 still busy after 200,000 clocks. | Not fixed (it would change step 14). The C program never uses 0. Open question in section 9: reject a size of 0 in `mac_axi`. |
 | 22 Oct | Step 15 at 250 MHz fails by 0.156 ns (simulation passes): the Xilinx protocol converter in the AXI interconnect (it passed by only 0.008 ns in step 14) and one `mac_axi` register driving the write address of every lane's scale memory. | Step 15b: per-lane write registers in `mlp_ctrl.sv` and an AXI register slice in front of `mac` (section 5). Behavioral simulation has no wire delays: it checks the logic, timing is checked only by implementation. |
 | 22 Oct | `docs/log.md` on Alex's computer lost the 11:22 entries (the step 15b build result): the file on disk was the 10:49 version again. | Written again with the step 15c entries, and the file on disk checked after writing. Cause not known (an editor saving an older copy, as on 17 Oct, or the copy to the computer). Reload the log in any open editor before saving it. |
+| 24 Oct | `mac.py mlp` did not compile on Icarus 13 (and strict `xvlog` rejects it): `mlp_ctrl.sv` used `m_busy`, `tk_i` and `tk_nb` in `mm_core`'s port list before declaring them (since step 15). Icarus 12, Verilator and the Vivado project (`xvlog --relax`) accept it, so the earlier checks missed it. The MLP `tb_axi.sv` had the same with `Cmid`. | Declarations moved up, no logic change. A strict front end (slang) now checks every design and testbench: 0 errors. |
+| 24 Oct | `mac.py --sim vivado` on Windows: `ERROR: [XSIM 43-3225] Cannot find design unit work.2`. `cmd.exe` splits a batch file's arguments at '=', so `xelab.bat` got `-generic_top P 2`; `xsim.bat -testplusarg N=400` would split the same way. Never seen before because the earlier runs used Icarus or Verilator. | `mac.py` (both designs): on Windows, arguments with '=' or a space go in double quotes and the command line is passed as one string, the form Vivado's own scripts use (`-generic_top "P=2"`). Not yet run on Windows; `--sim icarus` works in any case. |
 
 ## 7. Numbers to remember
 
@@ -1404,15 +1413,18 @@ Back towards 250 MHz: the 250 MHz build's worst path was at most 4.029 ns (floor
 | Board, 200 MHz, Release, posted writes (new `mac_test.c`) | 24/24; 64x64: 335 us (load 61, run 27, read 245) against ARM 2,227 us (6.6x); layer, weights once, 8 rows per run: 390 us (5.7x); 30 ns per write, 60 ns per read | SDK terminal, 18 Oct 22:56 |
 | Board, 200 MHz, step 13 (Debug build) | 10/10; 64x64: array 27.5 us, load 755 us, read 777 us, ARM software 11,615 us (7.5x); measured clock 197.81 MHz | SDK terminal, 18 Oct |
 | Block RAM minimum clock period (XC7Z020-1) | RAMB36E1 2.576 ns (388 MHz) for the A/B buffers, 2.944 ns (340 MHz) for the C buffer's mode, so the core clock cannot go past about 340 MHz without changing the C buffer | Vivado's own Pulse Width check in the 18 Oct timing report |
-| Zynq FCLK options on this board | [claim] FCLK = one PS PLL / two whole-number dividers. PLLs here: IO 1000 MHz, ARM 1333.3 MHz (CPU 666.7), DDR 1066.7 MHz (DDR 533.3). Near our range: 200 (IO/5), 213.3 (DDR/5), 222.2 (ARM/6), 250 (IO/4). The Actual Frequency in the Zynq dialog is what counts (asking 180 once gave 187.512, which this rule does not explain) | Zynq block design settings |
+| Zynq FCLK options on this board | [claim] FCLK = one PS PLL / two whole-number dividers. PLLs here: IO 1000 MHz, ARM 1333.3 MHz (CPU 666.7), DDR 1066.7 MHz (DDR 533.3). Near our range: 200 (IO/5), 213.3 (DDR/5), 222.2 (ARM/6), 250 (IO/4). Vivado can also move a PLL: asking 225 MHz (22 Oct) gave 214.2857 MHz = IO PLL **1500** / 7, and asking 180 once gave 187.512. The Actual Frequency in the Zynq dialog is what counts | Zynq block design settings; MLP build's PS7 settings (24 Oct report) |
 | Exact accumulator width | ACC >= 2*BITS + ceil(log2 MAXD): 22 bits for INT8 with MAXD = 64 (largest sum 1,048,576 = 64 x 16,384) | Proof in section 5, step 10 |
 | PS-PL AXI interface, fastest clock | 250 MHz (all speed grades listed as FAXI_MAX) | Zynq-7000 data sheet DS187, Table 19 |
 | Accumulator bits for K = 640 | INT4: 17, INT8: 25 | `first-rtl-results.md` (derived, check proof) |
 | Data movement vs compute, 64x64 | 6.7x (simulation, ideal bus), 24.5x (board, 50 MHz, Debug), 20x (board, 76.93 MHz, Release), 56x (board, 200 MHz, Debug), 30x (board, 200 MHz, Release) | Simulation / board |
 | Assumed autoencoder at P = 8, M = 1 | 264,192 MACs; 4,128 passes x 23 = 94,944 cycles | [claim] hand-computed by Claude |
-| On-chip MLP clocks (step 15) | per layer Np (M + 3P - 2) + 3 + PIPE + MEM_REG + 3; between layers M ceil(N/P) (P / units) + RL + PPD + 1 (= M ceil(N/8) + 10 on the ZedBoard build) | RTL; every simulated model run |
-| 64-64-64-6 model at 250 MHz | 1 row: 3,194 clocks = 12.8 us; 8 rows: 4,258 = 17.0 us (2.1 us per row); 64 rows: 12,770 = 51.1 us (0.8 us per row) | Simulation (Icarus; `mac_test.c` on the RTL in Verilator) |
-| Postproc | 7 stages (PPIPE = 1) or 3; one result per clock per unit; 8 units; y = clamp(((acc + bias) m0 + 2^(s-1)) >> s) | RTL |
+| On-chip MLP clocks (step 15) | per layer Np (M + 3P - 2) + 3 + PIPE + MEM_REG + 3; between layers M ceil(N/P) (P / units) + RL + PPD + 1 (= M ceil(N/8) + 12 on the ZedBoard build since step 15c, 9-stage postproc; + 10 with 7 stages) | RTL; every simulated model run |
+| 64-64-64-6 model, step 15c, at 214.286 MHz | 1 row: 3,198 clocks = 14.9 us; 8 rows: 4,262 = 19.9 us (2.5 us per row); 64 rows: 12,774 = 59.6 us (0.93 us per row). (Step 15 at 250 MHz: 3,194 / 4,258 / 12,770 clocks.) | Simulation (Icarus; `mac_test.c` on the RTL in Verilator); clock from the MLP build |
+| Postproc | 9 stages (PPIPE = 2, ZedBoard since step 15c), 7 (PPIPE = 1) or 3; one result per clock per unit; 8 units; y = clamp(((acc + bias) m0 + 2^(s-1)) >> s) | RTL |
+| Timing, 214.286 MHz, step 15c (on-chip MLP) | WNS +0.081 ns, TNS 0, WHS +0.024 ns, 0 failing of 21,781; LUT 4,402 (4,410 after the post-route optimization), FF 7,048, BRAM 7.5, DSP 80; power 2.118 W | Vivado |
+| Power, Vivado estimate (no activity file) | Design 1 (250 MHz): 1.942 W (static 0.149, ARM side 1.533, `mac` 0.248). Design 2 (MLP, 214.286 MHz): 2.118 W (static 0.154, ARM side 1.539, `mac` 0.411 = matrix core 0.236 + 8 postproc units 0.143 + rest 0.032) | `report_power`, 24 Oct (section 11) |
+| Energy, 64x64x64, whole chip | accelerator 565 uJ vs ARM alone 3,746 uJ: **6.6x** less energy (both times measured on the board, power estimated) | section 11 |
 
 ## 8. AI-assistance verification checklist
 
@@ -1471,7 +1483,56 @@ Claims that turned out wrong (kept here on purpose):
 - Chip version of the on-chip MLP: 16 KB of weights in flip-flops is about 2-3 mm2 (a Tiny Tapeout tile is about 0.016 mm2): stream the weights in, or a much smaller model?
 - `zed/mac_test.c` is the 13 Oct version; the SDK copy `MAC_attack_V2/src/mac_test.c` is the current one. Replace the old one?
 - Reject a size of 0 (DIMS M, K or N, or a layer's N) in `mac_axi`, so a wrong value cannot hang the core (section 6, 21 Oct)?
+- The ARM's time for the 64-64-64-6 model: still the estimate (73 us per row). The MLP board run measures it (`mac_test.c` times the same model on the ARM); then update section 11.
+- Power with real switching activity instead of the vectorless estimate: a SAIF file from `tb_axi` in `report_power`, or a current measurement on the board's supply.
+- Back towards 250 MHz for the MLP build: 250 MHz missed by 0.029 ns (inside the Xilinx protocol converter and the C block RAM read); the bus on its own 200 MHz clock would take the converter off the core clock.
 
 ## 10. Template for a new timeline row
 
 | YYYY-MM-DD | What was finished (one line) | File, log, or screenshot that proves it |
+
+## 11. Energy (estimates, 24 Oct)
+
+**How.** Energy = power x time, E = P t. The power comes from Vivado's `report_power` on each finished build (impl_1),
+opened read-only. These are vectorless estimates: no activity file, default switching rates, "Confidence: Medium". They
+are estimates, not measurements. The time comes from the exact cycle counts or from the board's timer (the 250 MHz design,
+19 Oct). Scripts (local, not in git): `mac_attack_accel/zed/mac_zed_project/reports_presentation/energy/energy.py`, and an
+independent recheck `energy/check/recheck.py` that read the reports again and got every number to the last digit.
+
+**Power (W, Vivado estimate).**
+
+| | Design 1: matrix multiplier, 250 MHz (step 14) | Design 2: on-chip MLP, 214.286 MHz (step 15c) |
+|---|---|---|
+| Total on chip | 1.942 | 2.118 |
+| Static | 0.149 | 0.154 |
+| ARM side (PS7) | 1.533 (CPU rail 0.721, DDR I/O 0.686) | 1.539 |
+| Accelerator block `mac` (dynamic) | 0.248 | 0.411: matrix core 0.236, 8 postproc units 0.143, rest of `mlp_ctrl` 0.026, `mac_axi` 0.006 |
+| AXI interconnect (and register slice) | 0.012 | 0.011 + 0.002 |
+
+**Energy.**
+
+    E_core  = P_mac x cycles / f                       the accelerator block while it computes
+    E_chip  = (P_static + P_PS7 + P_mac) x t_board     the whole chip while the ARM uses the accelerator
+    E_ARM   = (P_static + P_PS7) x t_ARM               the whole chip while the ARM computes alone
+    pJ per multiply-add = E / MACs;  GOPS/W = 2 MACs / E
+
+| Case | Accelerator | ARM alone | ARM / accelerator |
+|---|---|---|---|
+| 64x64x64 multiply (262,144 MACs), design 1, whole chip; both times measured on the board (19 Oct: 293 us and 2,227 us) | 1.930 W x 293 us = 565 uJ (2,157 pJ/MAC) | 1.682 W x 2,227 us = 3,746 uJ (14,289 pJ/MAC) | **6.6x** less energy (7.6x faster) |
+| Same multiply, accelerator block only, while it computes (5,504 clocks = 22.0 us) | 0.248 W x 22.0 us = 5.46 uJ = **20.8 pJ/MAC** (96 GOPS/W) | | |
+| 64-64-64-6 model (8,576 MACs per row), design 2, accelerator block only, model clocks at 214.286 MHz | 1 row: 6.13 uJ (715 pJ/MAC); 8 rows: 8.17 uJ = 1.02 uJ per row (119 pJ/MAC); 64 rows: 24.5 uJ = **0.38 uJ per row** (44.6 pJ/MAC) | [claim] estimated 73 us per row (8.5 ns per MAC, from the 64x64x64 board run); whole chip 1.693 W: 123 uJ per row | whole chip, compute time only: 31.4 / 41.8 / 125 uJ against 123 / 987 / 7,894 uJ = 3.9x (1 row), 23.6x (8 rows), 62.9x (64 rows): **estimate**, see below |
+
+**What can be claimed, and what not.**
+- Fair headline: the whole-chip **6.6x** for the 64x64x64 multiply. Both times are measured; only the power is estimated.
+- Do not use the 625x the script also prints (0.248 W block against the whole ARM side including the DDR I/O): it compares a
+  part with a whole. With only the ARM's CPU rail it would be 6,125 pJ/MAC for the ARM, still not like for like.
+- The model ratios use the estimated ARM time and leave out the bus time (loading inputs, reading results), so they are
+  optimistic. The MLP board run measures both; then replace the estimate here.
+- Vectorless power counts the whole MLP block as active even during a plain multiply (design 2, 64x64x64: 40.3 pJ/MAC with
+  the whole block, 23.1 with the matrix core only).
+- Batch size matters: with 1 row per run 4% of the PEs do useful work, with 64 rows 67% (64x64x64: 74%).
+- These are FPGA numbers. A chip's energy comes from the OpenLane/SKY130 flow later.
+
+**After the MLP board run.** Put in the measured ARM time for the model (`mac_test.c` prints "ARM software ... us"), the
+accelerator's time for 64 rows including the bus, and recompute the model rows of the table.
+
