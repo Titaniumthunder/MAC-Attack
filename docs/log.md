@@ -73,6 +73,7 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 24 Oct | Measurement pass on the PC (Claude): `mac.py --sim vivado` stopped before any test in both designs (Windows splits `-generic_top P=2` at '='; strict `xvlog` rejects `mlp_ctrl.sv`'s use-before-declaration). With Icarus 13: design 1 `test` 60/60, `compare`, `saturate`, `postproc` pass; design 2 the same, but `mac.py mlp` did not compile (same declaration order). `tb_axi` in XSim with `--relax` (as the Vivado project): 14/14 (design 1), 20/20 (design 2, model 3,542 / 2,646 clocks = equation). Vivado reports from both impl_1 runs, opened read-only (timing, utilization, power). Energy computed and rechecked independently (section 11). | `zed/mac_zed_project/reports_presentation/` (both designs, local only) |
 | 24 Oct | **Fixes** (Claude): `mlp_ctrl.sv` declares `m_busy` and the writeback token before `mm_core` uses them; the MLP `tb_axi.sv` declares `Cmid` before its task; both `mac.py` quote '=' arguments for Vivado's `.bat` tools on Windows. No logic change. Checked: slang (strict) 0 errors for every design and testbench of both designs; Icarus 12: design 1 `test` 60/60, `compare`, `saturate`, `uart`, `postproc` pass; design 2 `test` 60/60, `mlp` 48/48 models, `postproc` 3/7/9 stages 2,000/2,000 each, `uart` pass; `tb_axi` 20/20; SDK `mac_test.c` (FCLK_HZ 214285714) against the RTL in Verilator 30/30. Not yet run on the PC's Icarus 13 or with `--sim vivado`. | section 6, 24 Oct |
 | 24 Oct | Section 11 written: energy estimates (Vivado power x simulated or measured time), with what can and cannot be claimed. | section 11 |
+| 24 Oct | **On-chip MLP on the board at 214.286 MHz (Alex): ALL BOARD TESTS PASSED (30/30)**, Release, both bus modes, "9-stage postproc"; every output and every count equal to the equation (model 3,198 / 4,262 / 12,774 clocks). Measured clock 212.29 MHz. 64-64-64-6 model, 64 rows, posted writes: **113 us at 64 rows per run (47.9x faster than the ARM's 5,416 us)**, 216 us at 8 per run (25.1x), 1,040 us at 1 per run (5.2x); model loaded once in 71 us. 64x64x64: 341 us (6.5x; 293 us at 250 MHz). ARM time for the model measured: 84.6 us per row (the estimate was 73). Section 11 updated with the measured times. | SDK terminal (24 Oct 23:32, screenshot) |
 (Add a row each time work is finished.)
 
 ## 2. Decisions and reasons
@@ -131,8 +132,8 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 - [done] ARM-side bus changes (posted writes, word copies, weights loaded once): 64x64x64 6.6x faster than the ARM; one 64x64 layer over 64 rows, 8 rows per run, 5.7x (section 4).
 - [done] On-chip MLP in simulation (21 Oct, section 5 step 15): 160 random models bit-exact against `golden_mlp()` (P = 4, 8, 16), `tb_axi` 20/20, `mac_test.c` against the RTL 30/30; plain multiplies unchanged (lockstep with step 14 identical in every clock, old test outputs identical).
 - [done] On-chip MLP built in Vivado at 250 MHz (22 Oct): `tb_axi` 20/20 in XSim, resources as predicted, but timing fails by 0.156 ns (section 5, step 15b). Step 15b (two timing fixes, same clock) built 22 Oct: its two paths are gone, but timing still fails by 0.175 ns (converter inside, postproc shift and clamp, cycle-sum adder).
-- [done] Step 15c (postproc in 9 stages, counter sums from local copies, same clock, every output identical) written and simulated: `tb_axi` 20/20, SDK `mac_test.c` against the RTL 30/30. Built 22 Oct: fails by 0.029 ns at 250 MHz (6 endpoints: converter, C block RAM read); **meets timing at 214.286 MHz** (WNS +0.081 ns). Not run on the board yet. Strict-compile fixes 24 Oct (section 6); energy estimates in section 11.
-- NOT done: on-chip MLP meeting timing at 250 MHz and run on the board. NOT done: a trained model to run on it.
+- [done] Step 15c (postproc in 9 stages, counter sums from local copies, same clock, every output identical) written and simulated: `tb_axi` 20/20, SDK `mac_test.c` against the RTL 30/30. Built 22 Oct: fails by 0.029 ns at 250 MHz (6 endpoints: converter, C block RAM read); **meets timing at 214.286 MHz** (WNS +0.081 ns). **Run on the board 24 Oct: 30/30** (section 4). Strict-compile fixes 24 Oct (section 6); energy in section 11.
+- NOT done: on-chip MLP at 250 MHz (it meets timing and runs on the board at 214.286 MHz). NOT done: a trained model to run on it.
 - NOT done: INT8 and INT4 AUC on real data. Nothing trained yet.
 - NOT done: audio front end.
 
@@ -247,6 +248,34 @@ modes. Measured clock 247.55 MHz (CORE_HZ 250.00 MHz). Times in us.
   shorten. The estimate before the run (section 5, step 14) was 285 us for 64x64; measured 293 us.
 - 37x50x23 load is unchanged (27 us): its rows are not a multiple of 4 bytes, so they go byte by byte from the ARM.
 - 64x64 with posted writes: load 49 (17%), run 22 (8%), read 221 (75%). Reads are now the largest share.
+
+### 214.286 MHz, on-chip MLP, Release, both bus modes (24 Oct, step 15c build; Alex ran it)
+
+ALL BOARD TESTS PASSED (30/30): "On-chip MLP: 4 weight slots, 8 postproc lanes, 9-stage postproc"; every C value and every
+model output correct, every pass, cycle and model clock count equal to the equation, in both modes. Measured clock
+212.29 MHz (CORE_HZ 214.29 MHz; the same gap of about 1% as at 200 and 250 MHz). Times in us; "x" = accelerator faster
+than the ARM (or the ARM faster, where marked).
+
+| Test | Strongly ordered | Posted writes | ARM software | Strongly ordered / posted |
+|---|---|---|---|---|
+| 64x64x64 | load 272, run 25, read 545 = 844 | load 57, run 26, read 258 = 341 | 2,227 | 2.6x / 6.5x |
+| 37x50x23 | load 123, run 6, read 115 | load 27, run 6, read 53 | 367 | 1.5x / 4.2x |
+| 1x64x64 (weights sent again) | load 138, run 7, read 8 | load 29, run 7, read 4 | 34 | ARM 4.5x / ARM 1.2x |
+| Layer, weights once, 64 rows, 1 per run | weights 136, rows 1,173 (18.3 per row) = 1,309 | weights 28, rows 778 (12.1 per row) = 807 | 2,228 | 1.7x / 2.8x |
+| Layer, weights once, 64 rows, 8 per run | weights 136, rows 759 (11.8 per row) = 896 | weights 28, rows 365 (5.7 per row) = 394 | 2,228 | 2.5x / 5.7x |
+| **Model 64-64-64-6**, loaded once, 64 rows, 1 per run | model 329; rows 1,184 (18.5 per row) | model 71; rows 1,040 (16.2 per row) | 5,416 | 4.6x / 5.2x |
+| Model, 64 rows, 8 per run | model 328; rows 353 (5.5 per row) | model 71; rows 216 (3.3 per row) | 5,416 | 15.3x / **25.1x** |
+| Model, 64 rows, 64 per run | model 328; rows 249 (3.8 per row) | model 71; rows 113 (1.7 per row) | 5,415 | 21.8x / **47.9x** |
+
+- The model's FPGA time per run equals MODEL_CYCLES / CORE_HZ: 3,198, 4,262 and 12,774 clocks = 14, 19 and 59 us (the C
+  program prints these). With 64 rows per run, posted writes, 113 us = about 60 us of compute + 53 us of bus (64 input
+  rows in, 384 sums out).
+- The ARM's time for the model is now measured: 5,416 us for 64 rows = 84.6 us per row (9.9 ns per multiply-add). The
+  estimate in section 11 was 73 us per row (8.5 ns per MAC, from the 64x64x64 run), 14% low.
+- Plain multiplies follow the clock, because the bus runs on it too: 64x64x64 posted 293 us at 250 MHz -> 341 us now
+  (293 x 250 / 214.29 = 342 predicted); 6.5x instead of 7.6x.
+- Batching matters most: 64 rows per run is 9.2x faster than 1 row per run (1,040 -> 113 us), because each run costs a
+  start, a status poll and the pipeline fill, and the PEs are 4% busy with 1 row against 67% with 64.
 
 ## 5. Clock speed history (step by step)
 
@@ -1358,6 +1387,8 @@ clock line "measured on the board" about 214 MHz with no WARNING.
 Back towards 250 MHz: the 250 MHz build's worst path was at most 4.029 ns (floor about 248 MHz), so a clock between
 214 and 248 MHz should also meet timing, if the Zynq can make it (check the Actual Frequency column before building).
 
+**Board run (24 Oct, Alex):** ALL BOARD TESTS PASSED (30/30) at 214.286 MHz (measured 212.29 MHz); section 4.
+
 ## 6. Problems and fixes
 
 | Date | Problem | Fix |
@@ -1425,6 +1456,8 @@ Back towards 250 MHz: the 250 MHz build's worst path was at most 4.029 ns (floor
 | Timing, 214.286 MHz, step 15c (on-chip MLP) | WNS +0.081 ns, TNS 0, WHS +0.024 ns, 0 failing of 21,781; LUT 4,402 (4,410 after the post-route optimization), FF 7,048, BRAM 7.5, DSP 80; power 2.118 W | Vivado |
 | Power, Vivado estimate (no activity file) | Design 1 (250 MHz): 1.942 W (static 0.149, ARM side 1.533, `mac` 0.248). Design 2 (MLP, 214.286 MHz): 2.118 W (static 0.154, ARM side 1.539, `mac` 0.411 = matrix core 0.236 + 8 postproc units 0.143 + rest 0.032) | `report_power`, 24 Oct (section 11) |
 | Energy, 64x64x64, whole chip | accelerator 565 uJ vs ARM alone 3,746 uJ: **6.6x** less energy (both times measured on the board, power estimated) | section 11 |
+| Board, 214.286 MHz, on-chip MLP (step 15c, Release) | 30/30; model 64-64-64-6, 64 rows, posted writes: 113 us at 64 rows per run (47.9x the ARM's 5,416 us), 216 us at 8 per run (25.1x), 1,040 us at 1 per run (5.2x); 64x64x64 341 us (6.5x); measured clock 212.29 MHz | SDK terminal, 24 Oct 23:32 |
+| Energy, 64-64-64-6 model, 64 rows per run, whole chip | accelerator 238 uJ (3.7 uJ per row) vs ARM alone 9,169 uJ (143 uJ per row): **38.6x** less energy (both times measured on the board, power estimated) | section 11 |
 
 ## 8. AI-assistance verification checklist
 
@@ -1483,7 +1516,7 @@ Claims that turned out wrong (kept here on purpose):
 - Chip version of the on-chip MLP: 16 KB of weights in flip-flops is about 2-3 mm2 (a Tiny Tapeout tile is about 0.016 mm2): stream the weights in, or a much smaller model?
 - `zed/mac_test.c` is the 13 Oct version; the SDK copy `MAC_attack_V2/src/mac_test.c` is the current one. Replace the old one?
 - Reject a size of 0 (DIMS M, K or N, or a layer's N) in `mac_axi`, so a wrong value cannot hang the core (section 6, 21 Oct)?
-- The ARM's time for the 64-64-64-6 model: still the estimate (73 us per row). The MLP board run measures it (`mac_test.c` times the same model on the ARM); then update section 11.
+- (Answered 24 Oct) The ARM's time for the 64-64-64-6 model: measured 5,416 us for 64 rows, 84.6 us per row (the estimate was 73). Section 11 uses it.
 - Power with real switching activity instead of the vectorless estimate: a SAIF file from `tb_axi` in `report_power`, or a current measurement on the board's supply.
 - Back towards 250 MHz for the MLP build: 250 MHz missed by 0.029 ns (inside the Xilinx protocol converter and the C block RAM read); the bus on its own 200 MHz clock would take the converter off the core clock.
 
@@ -1520,19 +1553,22 @@ independent recheck `energy/check/recheck.py` that read the reports again and go
 |---|---|---|---|
 | 64x64x64 multiply (262,144 MACs), design 1, whole chip; both times measured on the board (19 Oct: 293 us and 2,227 us) | 1.930 W x 293 us = 565 uJ (2,157 pJ/MAC) | 1.682 W x 2,227 us = 3,746 uJ (14,289 pJ/MAC) | **6.6x** less energy (7.6x faster) |
 | Same multiply, accelerator block only, while it computes (5,504 clocks = 22.0 us) | 0.248 W x 22.0 us = 5.46 uJ = **20.8 pJ/MAC** (96 GOPS/W) | | |
-| 64-64-64-6 model (8,576 MACs per row), design 2, accelerator block only, model clocks at 214.286 MHz | 1 row: 6.13 uJ (715 pJ/MAC); 8 rows: 8.17 uJ = 1.02 uJ per row (119 pJ/MAC); 64 rows: 24.5 uJ = **0.38 uJ per row** (44.6 pJ/MAC) | [claim] estimated 73 us per row (8.5 ns per MAC, from the 64x64x64 board run); whole chip 1.693 W: 123 uJ per row | whole chip, compute time only: 31.4 / 41.8 / 125 uJ against 123 / 987 / 7,894 uJ = 3.9x (1 row), 23.6x (8 rows), 62.9x (64 rows): **estimate**, see below |
+| 64-64-64-6 model (8,576 MACs per row), design 2, whole chip, 64 rows; both times measured on the board (24 Oct, posted writes, bus time included) | 64 rows per run: 2.104 W x 113 us = 238 uJ = **3.7 uJ per row** (433 pJ/MAC); 8 per run: 216 us, 455 uJ (7.1 uJ per row); 1 per run: 1,040 us, 2,188 uJ (34.2 uJ per row) | 1.693 W x 5,416 us = 9,169 uJ = 143 uJ per row (16,700 pJ/MAC) | **38.6x** (64 per run), 20.2x (8), 4.2x (1) less energy; 47.9x / 25.1x / 5.2x faster |
+| Same model, accelerator block only, while it computes (model clocks at 214.286 MHz) | 1 row: 6.13 uJ (715 pJ/MAC); 8 rows: 8.17 uJ = 1.02 uJ per row (119 pJ/MAC); 64 rows: 24.5 uJ = **0.38 uJ per row** (44.6 pJ/MAC) | | |
 
 **What can be claimed, and what not.**
-- Fair headline: the whole-chip **6.6x** for the 64x64x64 multiply. Both times are measured; only the power is estimated.
+- Fair headlines: the whole chip uses **6.6x** less energy than the ARM alone for the 64x64x64 multiply (design 1), and
+  **38.6x** less for the 64-64-64-6 model with 64 rows per run (design 2). All times are measured on the board; only the
+  power is estimated.
 - Do not use the 625x the script also prints (0.248 W block against the whole ARM side including the DDR I/O): it compares a
   part with a whole. With only the ARM's CPU rail it would be 6,125 pJ/MAC for the ARM, still not like for like.
-- The model ratios use the estimated ARM time and leave out the bus time (loading inputs, reading results), so they are
-  optimistic. The MLP board run measures both; then replace the estimate here.
+- The model's times are measured (24 Oct), the bus included (about 53 of the 113 us at 64 rows per run). The ARM takes
+  84.6 us per row; the earlier estimate of 73 us was 14% low.
 - Vectorless power counts the whole MLP block as active even during a plain multiply (design 2, 64x64x64: 40.3 pJ/MAC with
   the whole block, 23.1 with the matrix core only).
 - Batch size matters: with 1 row per run 4% of the PEs do useful work, with 64 rows 67% (64x64x64: 74%).
 - These are FPGA numbers. A chip's energy comes from the OpenLane/SKY130 flow later.
 
-**After the MLP board run.** Put in the measured ARM time for the model (`mac_test.c` prints "ARM software ... us"), the
-accelerator's time for 64 rows including the bus, and recompute the model rows of the table.
+**MLP board run (24 Oct).** Done (section 4); the model rows above use its measured times. Formulas as above, with
+P_static + P_PS7 + P_mac = 0.154 + 1.539 + 0.411 = 2.104 W and P_static + P_PS7 = 1.693 W for design 2.
 
