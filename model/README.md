@@ -1,7 +1,7 @@
 # Machine Guardian model (motor faults, University of Ottawa dataset)
 
 The model the on-chip MLP (`mac_attack_accel_MLP/`, step 15) runs: healthy or faulty, from the vibration of an electric
-motor. **Start with `report/Machine_Guardian_model_report.pdf`**: the whole system from the data to the chip, with every
+motor. **Start with `docs/Machine_Guardian_model_report.pdf`** (in the repo's top folder): the whole system from the data to the chip, with every
 result. Decisions and results are logged in `docs/log.md`, section 12.
 
 ## Setup (once per computer)
@@ -79,7 +79,7 @@ tables in `features/` without it.
 | `results/<E>/` | yes | `report.md` (the tables), `metrics.json`, `scores.csv` (every recording's score and decision) |
 | `results/H1/`, `results/ramps/` | yes | The health index's report and every recording's index; the ramp check figure |
 | `export/E3/` | yes | `W<l>.hex`, `Bias<l>.hex`, `Scl<l>.hex` (for `tb_mlp.sv`), `mg_model.h`, `vectors/`, `quant.json`, `report.md` |
-| `report/` | yes | `Machine_Guardian_model_report.pdf`, `make_report.py` and the charts in `figures/` |
+| `report/` | yes | `make_report.py` and the charts in `figures/`; it writes the PDF to `../docs/Machine_Guardian_model_report.pdf` |
 | `.venv/` | no | Python environment |
 
 The tables are in `features/`, not `data/`, because `.gitignore` ignores every `data/` folder.
