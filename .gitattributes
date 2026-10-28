@@ -1,2 +1,15 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Binary files: never convert line endings (a PDF whose bytes git takes for text gets corrupted on Windows)
+*.pdf binary
+*.png binary
+*.jpg binary
+*.pt binary
+*.bit binary
+*.dcp binary
+*.hdf binary
+*.xlsx binary
+*.docx binary
+*.pptx binary
+*.zip binary

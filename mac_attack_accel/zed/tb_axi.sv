@@ -7,8 +7,17 @@
 //
 // Besides correctness, it counts clock cycles for each phase (loading over the bus, computing,
 // reading back), which shows how much of the time is moving data rather than doing math.
+//
+// CORE_CLK = 1 (step 12): the core gets its own clock, with a half period of CORE_HALF_PS
+// picoseconds, unrelated to the 50 MHz bus clock here, and a "locked" signal that rises after
+// LOCK_NS. The bus clock counts for "run" then depend on the core clock; everything else is the same.
+// In Vivado: Simulation Settings > Elaboration > More options, e.g.
+//   -generic_top "CORE_CLK=1" -generic_top "CORE_HALF_PS=2000"
 module tb_axi #(
-    parameter int P = 8
+    parameter int P            = 8,
+    parameter int CORE_CLK     = 0,     // 1 = separate core clock (mac_axi CORE_CLK = 1)
+    parameter int CORE_HALF_PS = 2000,  // core clock half period in ps (2000 = 250 MHz)
+    parameter int LOCK_NS      = 700    // core clock "locked" this long after time 0
 );
     localparam int MAXD = 64;
     localparam logic [5:0] CTRL = 6'h00, STATUS = 6'h04, DIMS = 6'h08, LOAD_PTR = 6'h0C,
@@ -17,6 +26,9 @@ module tb_axi #(
 
     logic clk = 1'b0, aresetn = 1'b0;
     always #10 clk = ~clk;                       // 50 MHz, the planned ZedBoard clock
+    logic core_clk = 1'b0, core_locked = 1'b0;
+    always #(CORE_HALF_PS * 1.0ps) core_clk = ~core_clk;
+    initial #(LOCK_NS * 1.0ns) core_locked = 1'b1;
 
     logic [5:0]  awaddr = '0, araddr = '0;
     logic        awvalid = 1'b0, wvalid = 1'b0, bready = 1'b0, arvalid = 1'b0, rready = 1'b0;
@@ -25,13 +37,14 @@ module tb_axi #(
     wire [1:0]   bresp, rresp;
     wire [31:0]  rdata;
 
-    mac_axi #(.P(P), .MAXD(MAXD)) dut (
+    mac_axi #(.P(P), .MAXD(MAXD), .CORE_CLK(CORE_CLK)) dut (
         .s_axi_aclk(clk), .s_axi_aresetn(aresetn),
         .s_axi_awaddr(awaddr), .s_axi_awprot(3'b000), .s_axi_awvalid(awvalid), .s_axi_awready(awready),
         .s_axi_wdata(wdata), .s_axi_wstrb(4'hF), .s_axi_wvalid(wvalid), .s_axi_wready(wready),
         .s_axi_bresp(bresp), .s_axi_bvalid(bvalid), .s_axi_bready(bready),
         .s_axi_araddr(araddr), .s_axi_arprot(3'b000), .s_axi_arvalid(arvalid), .s_axi_arready(arready),
-        .s_axi_rdata(rdata), .s_axi_rresp(rresp), .s_axi_rvalid(rvalid), .s_axi_rready(rready));
+        .s_axi_rdata(rdata), .s_axi_rresp(rresp), .s_axi_rvalid(rvalid), .s_axi_rready(rready),
+        .core_clk(core_clk), .core_locked(core_locked));
 
     // ---------------------------------------------------------------- bus transactions
     int bus_errors = 0;
@@ -73,13 +86,13 @@ module tb_axi #(
         seed = seed ^ (seed << 13); seed = seed ^ (seed >> 17); seed = seed ^ (seed << 5);
         return int'(seed & 32'h7FFF_FFFF);
     endfunction
-    localparam int RANDOM = 0, SMALL = 1, MINV = 2, MAXV = 3, IDENT = 4;
+    localparam int RANDOM = 0, SMALL = 1, MINV = 2, MAXV = 3, IDENT = 4, MIXV = 5;   // MIXV: A = 127, B = -128
 
     task automatic make_data(input int kind, input int M, input int K, input int N);
         for (int i = 0; i < M; i++) for (int k = 0; k < K; k++)
-            A[i][k] = (kind == SMALL) ? next_rand() % 19 - 9 : (kind == MINV) ? -128 : (kind == MAXV) ? 127 : next_rand() % 256 - 128;
+            A[i][k] = (kind == SMALL) ? next_rand() % 19 - 9 : (kind == MINV) ? -128 : (kind == MAXV || kind == MIXV) ? 127 : next_rand() % 256 - 128;
         for (int k = 0; k < K; k++) for (int j = 0; j < N; j++)
-            B[k][j] = (kind == SMALL) ? next_rand() % 19 - 9 : (kind == MINV) ? -128 : (kind == MAXV) ? 127 :
+            B[k][j] = (kind == SMALL) ? next_rand() % 19 - 9 : (kind == MINV || kind == MIXV) ? -128 : (kind == MAXV) ? 127 :
                       (kind == IDENT) ? ((k == j) ? 1 : 0) : next_rand() % 256 - 128;
         for (int i = 0; i < M; i++) for (int j = 0; j < N; j++) begin
             Cexp[i][j] = 0;
@@ -147,6 +160,14 @@ module tb_axi #(
         axi_read(ID, v);
         $display("  ID   = 0x%08h %s", v, (v == 32'h4D414331) ? "(MAC1)" : "(WRONG)");
         tests_run++; if (v == 32'h4D414331) tests_passed++;
+        if (CORE_CLK != 0) begin                   // wait for the core clock (STATUS bit 3)
+            int waits;
+            waits = 0;
+            do begin axi_read(STATUS, st); waits++; end while (st[3] && waits < 10000);
+            $display("  core clock: half period %0d ps, ready after %0d STATUS reads %s", CORE_HALF_PS, waits,
+                     st[3] ? "(NEVER READY)" : "(ok)");
+            tests_run++; if (!st[3]) tests_passed++;
+        end
         axi_read(INFO, v);
         $display("  INFO = P %0d, %0d-bit inputs, %0d-bit sums, matrices up to %0d", v[7:0], v[15:8], v[23:16], v[31:24]);
         tests_run++; if (v[7:0] == P && v[31:24] == MAXD) tests_passed++;
@@ -175,6 +196,13 @@ module tb_axi #(
         $display("  Clocks over all 8 multiplies: loading %0d, computing %0d, reading %0d", t_load_total, t_comp_total, t_read_total);
         $display("  Moving data takes %0.1fx as long as the computing, even with an ideal bus.",
                  real'(t_load_total + t_read_total) / real'(t_comp_total));
+        $display("");
+        // The two largest sums possible with K = 64 (after the totals above, so those stay comparable
+        // with earlier runs). They need every accumulator bit: 64 x 16384 = 1,048,576 and
+        // 64 x (-16256) = -1,040,384, so a 21-bit accumulator fails the first one.
+        $display("  Largest possible sums (accumulator width check):");
+        run_test("every input -128, K = 64",      MINV,   64, 64, 64);
+        run_test("A = 127, B = -128, K = 64",     MIXV,   64, 64, 64);
         $display("");
         $display("==================================================================");
         if (tests_passed == tests_run && bus_errors == 0) $display(" ALL AXI TESTS PASSED (%0d/%0d)", tests_passed, tests_run);

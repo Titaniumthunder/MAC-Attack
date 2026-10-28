@@ -37,7 +37,7 @@ module tb_extras;
 
     for (genvar g = 0; g < 2; g++) begin : g_sat
         mm_core #(.P(SP), .BITS(8), .ACC(SACC), .SAT(g), .MAXD(MAXD)) u_core (
-            .clk(clk), .rst(rst),
+            .clk(clk), .hclk(clk), .rst(rst),
             .wr_en(s_wr_en[g]), .wr_sel(s_wr_sel[g]), .wr_row(s_wr_row[g]), .wr_col(s_wr_col[g]),
             .wr_data(s_wr_data[g]), .start(s_start[g]), .dim_m(s_m[g]), .dim_k(s_k[g]), .dim_n(s_n[g]),
             .busy(s_busy[g]), .done(s_done[g]), .rd_row(s_rd_row[g]), .rd_col(s_rd_col[g]),

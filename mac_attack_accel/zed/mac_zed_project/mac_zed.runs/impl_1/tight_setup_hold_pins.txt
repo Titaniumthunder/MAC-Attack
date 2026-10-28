@@ -1,0 +1,28 @@
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
+|       Launch Clock       |      Capture Clock       |                                                 Pin                                                      |
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIBDI[24]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/amem_reg/DIBDI[20]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/amem_reg/DIBDI[16]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                    system_i/mac/inst/g_one_clock.u_core/amem_reg/DIADI[4]|
+|               clk_fpga_0 |               clk_fpga_0 |system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/incr_cmd_0/axaddr_incr_reg[7]/D|
+|               clk_fpga_0 |               clk_fpga_0 |                                                    system_i/mac/inst/g_one_clock.u_core/amem_reg/DIADI[0]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIBDI[18]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/amem_reg/DIBDI[24]|
+|               clk_fpga_0 |               clk_fpga_0 |system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/incr_cmd_0/axaddr_incr_reg[4]/D|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIBDI[21]|
+|               clk_fpga_0 |               clk_fpga_0 |system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/SI_REG/r.r_pipe/m_payload_i_reg[21]/D|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/amem_reg/DIBDI[28]|
+|               clk_fpga_0 |               clk_fpga_0 |system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/incr_cmd_0/axaddr_incr_reg[6]/D|
+|               clk_fpga_0 |               clk_fpga_0 |system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/incr_cmd_0/axaddr_incr_reg[2]/D|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIADI[10]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/amem_reg/DIADI[10]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/amem_reg/DIBDI[26]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIADI[28]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                                         system_i/mac/inst/ld_inside_reg/D|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIADI[16]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                   system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIBDI[28]|
+|               clk_fpga_0 |               clk_fpga_0 |                                                    system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIADI[0]|
+|               clk_fpga_0 |               clk_fpga_0 |system_i/axi_ic/s00_couplers/auto_pc/inst/gen_axilite.gen_b2s_conv.axilite_b2s/WR.aw_channel_0/cmd_translator_0/incr_cmd_0/axaddr_incr_reg[1]/D|
+|               clk_fpga_0 |               clk_fpga_0 |                                                    system_i/mac/inst/g_one_clock.u_core/bmem_reg/DIADI[8]|
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+

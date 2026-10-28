@@ -1,0 +1,7 @@
+# python3 -m venv model/.venv && model/.venv/bin/pip install -r model/requirements.txt
+torch==2.14.1
+numpy==2.5.4
+scipy==1.18.1
+scikit-learn==1.9.1
+matplotlib==3.11.2
+reportlab==5.1.0      # report/make_report.py only (the PDF)

@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MAC Attack Dataflow</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Cycle-by-cycle view of data moving through the MAC Attack weight-stationary systolic array, with 1-stage and 2-stage PEs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  /* Layout: chip floorplan (memories on the left, datapath on the right) + cycle panel; Vivado-style waveform strip below */
+  --bg: #eef1f4;
+  --surface: #ffffff;
+  --surface-2: #f4f6f8;
+  --ink: #142029;
+  --muted: #55626e;
+  --line: #bcc6cf;
+  --line-strong: #7b8996;
+  --reg: #e5eaef;
+  --pe: #fbfcfd;
+  --focus: #1f5fd1;
+  --ok-bg: #bbf7d0; --ok-ink: #14532d;
+  --bad-bg: #fecaca; --bad-ink: #7f1d1d; --bad: #c81e1e;
+  /* data colours: 300 fills with 900 ink, identical in both themes */
+  --r0: #7dd3fc; --r0-ink: #0c4a6e;
+  --r1: #fcd34d; --r1-ink: #78350f;
+  --r2: #fda4af; --r2-ink: #881337;
+  --r3: #6ee7b7; --r3-ink: #064e3b;
+  --r4: #c4b5fd; --r4-ink: #4c1d95;
+  --r5: #fdba74; --r5-ink: #7c2d12;
+  --wt: #cbd5e1; --wt-ink: #0f172a;
+  /* waveform window: always dark, like the Vivado wave viewer */
+  --wave-bg: #0a0f0c; --wave-grid: #1d2722; --wave-trace: #45d483; --wave-text: #c9d4cd; --wave-dim: #7a8b81; --wave-cursor: #f2c94c;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-body: "Barlow", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1317; --surface: #151c22; --surface-2: #1b232a; --ink: #e2e8ed; --muted: #95a3b0;
+    --line: #36424d; --line-strong: #6b7a87; --reg: #212a32; --pe: #182027; --focus: #8db4ff; --bad: #f87171;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1317; --surface: #151c22; --surface-2: #1b232a; --ink: #e2e8ed; --muted: #95a3b0;
+  --line: #36424d; --line-strong: #6b7a87; --reg: #212a32; --pe: #182027; --focus: #8db4ff; --bad: #f87171;
+  color-scheme: dark;
+}
+.r0 { --f: var(--r0); --i: var(--r0-ink); }
+.r1 { --f: var(--r1); --i: var(--r1-ink); }
+.r2 { --f: var(--r2); --i: var(--r2-ink); }
+.r3 { --f: var(--r3); --i: var(--r3-ink); }
+.r4 { --f: var(--r4); --i: var(--r4-ink); }
+.r5 { --f: var(--r5); --i: var(--r5-ink); }
+.tw { --f: var(--wt); --i: var(--wt-ink); }
+
+*, *::before, *::after { box-sizing: border-box; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); -webkit-text-size-adjust: 100%; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--font-body); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+code { font: 500 0.88em var(--font-mono); background: var(--surface-2); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+
+/* header */
+header.top { padding-block: 28px 18px; }
+.eyebrow { font: 600 12px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+h1 { font: 700 40px/1.05 var(--font-display); margin: 0 0 10px; text-wrap: balance; }
+.lede { max-width: 76ch; margin: 0; }
+
+/* controls */
+.controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-block: 0 16px; }
+.ctl { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.cap { font: 600 11px/1 var(--font-display); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 7px; font: 600 14px/1 var(--font-display); letter-spacing: .02em; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); border-radius: 7px; padding: 0 12px; min-height: 36px; cursor: pointer; }
+.btn svg { width: 12px; height: 12px; fill: currentColor; }
+.btn:hover { border-color: var(--ink); }
+.btn.primary { background: var(--ink); color: var(--surface); border-color: var(--ink); min-width: 92px; justify-content: center; }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.seg input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.seg label { font: 600 13px/1 var(--font-display); letter-spacing: .02em; padding: 11px 11px; cursor: pointer; border-left: 1px solid var(--line); }
+.seg label:first-of-type { border-left: 0; }
+.seg input:checked + label { background: var(--ink); color: var(--surface); }
+.seg input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: -3px; }
+select { font: 600 13px var(--font-display); padding: 0 8px; border: 1px solid var(--line-strong); border-radius: 7px; background: var(--surface); color: var(--ink); min-height: 36px; }
+input[type=range] { width: 120px; accent-color: var(--ink); }
+.speedv { font: 500 12px var(--font-mono); color: var(--muted); min-width: 4.5em; font-variant-numeric: tabular-nums; }
+.tick { display: inline-flex; gap: 8px; align-items: center; font: 600 13px var(--font-display); cursor: pointer; min-height: 36px; }
+.tick input { width: 18px; height: 18px; accent-color: var(--ink); margin: 0; }
+
+/* stage: diagram + panel */
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
+@media (max-width: 1180px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+.diagram { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-width: 0; overflow: hidden; }
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#dia { display: block; width: 100%; height: auto; font-family: var(--font-mono); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 10px 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+.legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { display: inline-block; width: 22px; height: 14px; border-radius: 4px; border: 1px solid var(--i, var(--line)); background: var(--f, var(--reg)); }
+.sw.prod { border-style: dashed; border-radius: 2px; }
+.sws { display: inline-flex; gap: 2px; }
+.sws .sw { width: 12px; }
+
+/* panel */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.panel section { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.panel h3 { font: 700 12px/1.2 var(--font-display); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.cyc { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+.big { font: 600 38px/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.of { font: 500 14px var(--font-mono); color: var(--muted); margin-left: 4px; }
+.phase { font: 700 13px/1 var(--font-display); letter-spacing: .07em; text-transform: uppercase; padding: 7px 10px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface-2); white-space: nowrap; }
+.sigs { display: flex; gap: 6px; flex-wrap: wrap; }
+.sig { font: 500 12px var(--font-mono); padding: 4px 8px; border-radius: 5px; border: 1px solid var(--line); color: var(--muted); background: var(--surface-2); }
+.sig b { font-weight: 600; }
+.sig.hi { background: var(--ok-bg); color: var(--ok-ink); border-color: var(--ok-ink); }
+.events { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 1.45; }
+.chip { display: inline-block; min-width: 1.7em; text-align: center; font: 600 11px/1.55 var(--font-mono); border-radius: 4px; padding: 0 4px; border: 1px solid var(--i, var(--line)); background: var(--f, var(--surface-2)); color: var(--i, var(--ink)); vertical-align: 1px; }
+.meters { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 10px; align-items: center; font-size: 13px; }
+.bar { height: 8px; border-radius: 4px; background: var(--reg); overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--ink); width: 0; transition: width .25s; }
+.num { font: 500 12px var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; }
+.insp { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.insp th { text-align: left; font: 600 12px var(--font-display); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); padding: 6px 8px 6px 0; vertical-align: top; width: 64px; }
+.insp td { padding: 5px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.insp tr:first-child td, .insp tr:first-child th { border-top: 0; }
+.insp th { border-top: 1px solid var(--line); }
+.expr { font: 500 13px var(--font-mono); font-variant-numeric: tabular-nums; }
+.dim { color: var(--muted); }
+.hint { font-size: 13px; color: var(--muted); margin: 0; }
+.flight { font-size: 13px; border-left: 3px solid var(--ink); padding: 4px 0 4px 10px; margin: 0; }
+.nums { width: 100%; border-collapse: collapse; font-size: 13px; }
+.nums td { padding: 5px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.nums td + td { font: 500 12.5px var(--font-mono); text-align: right; white-space: nowrap; padding-left: 8px; font-variant-numeric: tabular-nums; }
+.nums tr:first-child td { border-top: 0; }
+.okline { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; margin: 0; }
+.badge { flex: none; font: 700 11px/1 var(--font-mono); padding: 4px 6px; border-radius: 4px; border: 1px solid; }
+.badge.ok { background: var(--ok-bg); color: var(--ok-ink); border-color: var(--ok-ink); }
+.badge.bad { background: var(--bad-bg); color: var(--bad-ink); border-color: var(--bad-ink); }
+.badge.wait { background: var(--surface-2); color: var(--muted); border-color: var(--line); }
+.refgrid { display: grid; gap: 3px; }
+.refgrid span { font: 500 12px/1 var(--font-mono); text-align: center; padding: 6px 0; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
+.refgrid span.ok { background: var(--ok-bg); color: var(--ok-ink); border-color: var(--ok-ink); }
+.refgrid span.bad { background: var(--bad-bg); color: var(--bad-ink); border-color: var(--bad-ink); }
+
+/* SVG diagram */
+.d-wire { stroke: var(--line-strong); stroke-width: 1.3; fill: none; }
+.d-chain { stroke: var(--line-strong); stroke-width: 1.2; stroke-dasharray: 3 3; fill: none; }
+.d-dot { fill: var(--line-strong); }
+.d-slot { fill: var(--reg); stroke: var(--line); stroke-width: 1; }
+.d-pslot { fill: var(--reg); stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 3 2; }
+.d-pe { fill: var(--pe); stroke: var(--line-strong); stroke-width: 1.2; }
+.pe { cursor: pointer; }
+.pe:hover .d-pe { stroke: var(--ink); }
+.pe.on .d-pe { stroke: var(--ink); stroke-width: 1.8; }
+.pe.sel .d-pe { stroke: var(--focus); stroke-width: 2.6; }
+.pe.bad .d-pe { stroke: var(--bad); stroke-width: 2.6; }
+.pe:focus { outline: none; }
+.pe:focus-visible .d-pe { stroke: var(--focus); stroke-width: 3; stroke-dasharray: 5 3; }
+.op circle { fill: var(--f, var(--surface)); stroke: var(--i, var(--line-strong)); stroke-width: 1.2; }
+.op text { fill: var(--i, var(--muted)); font: 600 13px var(--font-mono); }
+.d-lbl { font: 700 12px var(--font-display); letter-spacing: .08em; text-transform: uppercase; fill: var(--muted); }
+.d-sm { font: 500 10px var(--font-mono); fill: var(--muted); }
+.d-cell { fill: var(--surface-2); stroke: var(--line); stroke-width: 1; }
+.d-val { font: 500 12px var(--font-mono); fill: var(--ink); }
+.d-rd { fill: none; stroke: var(--ink); stroke-width: 2.2; }
+.rc rect { fill: var(--f); stroke: var(--i); }
+.rc text { fill: var(--i); font: 600 10px var(--font-mono); }
+.tok { pointer-events: none; }
+.tok rect { fill: var(--f); stroke: var(--i); stroke-width: 1.2; }
+.tok text { fill: var(--i); font: 600 13px var(--font-mono); }
+.tok.kx rect { stroke-dasharray: 3 2; }
+.tok.kx text { font-size: 11.5px; }
+
+/* waveform */
+.wave { margin-block: 16px; background: var(--wave-bg); color: var(--wave-text); border-radius: 10px; padding: 12px 14px 10px; border: 1px solid var(--wave-grid); }
+.wave-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 6px; }
+.wave h2 { font: 700 13px var(--font-display); letter-spacing: .09em; text-transform: uppercase; margin: 0; color: var(--wave-text); }
+.wave .sub { font-size: 13px; color: var(--wave-dim); margin: 0; }
+#wave { display: block; width: 100%; height: auto; cursor: pointer; font-family: var(--font-mono); }
+.w-grid { stroke: var(--wave-grid); stroke-width: 1; }
+.w-trace { stroke: var(--wave-trace); stroke-width: 1.6; fill: none; }
+.w-name { font: 500 11px var(--font-mono); fill: var(--wave-text); }
+.w-num { font: 500 9.5px var(--font-mono); fill: var(--wave-dim); }
+.w-z { stroke: var(--wave-dim); stroke-width: 1; opacity: .55; }
+.w-bus { fill: var(--f); stroke: var(--wave-trace); stroke-width: 1; }
+.w-bl { fill: var(--i); font: 600 10px var(--font-mono); }
+.w-cur { fill: var(--wave-cursor); opacity: .17; }
+.w-curl { stroke: var(--wave-cursor); stroke-width: 1.5; }
+
+/* notes */
+.notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; padding-block: 18px 40px; border-top: 1px solid var(--line); }
+@media (max-width: 980px) { .notes { grid-template-columns: minmax(0, 1fr); gap: 22px; } }
+.note { min-width: 0; }
+.note h2 { font: 700 21px/1.15 var(--font-display); margin: 0 0 10px; text-wrap: balance; }
+.note p, .note li { max-width: 65ch; }
+.note p { margin: 0 0 10px; }
+.note ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+.eq { font: 500 13px/1.7 var(--font-mono); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; margin: 0 0 10px; overflow-x: auto; }
+.eq var { font-style: italic; }
+@media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+@media (max-width: 560px) {
+  h1 { font-size: 32px; }
+  .controls { gap: 12px 16px; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">MAC Attack · weight-stationary systolic array · one clock edge per step</p>
+    <h1>MAC Attack Dataflow</h1>
+    <p class="lede">How one P×P tile of B and M rows of A travel from the on-chip buffers, through the array, into C. Every box on a wire is a register, and every step is one clock edge. The simulation follows the RTL: <code>pe.sv</code> (PIPE), <code>systolic_array.sv</code>, and the memory read stages in <code>mm_core.sv</code> (MEM_REG). Press Play, or step with the ← and → keys.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="controls" aria-label="Simulation controls">
+    <div class="ctl">
+      <span class="cap">Run</span>
+      <div class="row">
+        <button id="play" class="btn primary" type="button"></button>
+        <button id="back" class="btn" type="button" aria-label="Step back one cycle"><svg viewBox="0 0 12 12" aria-hidden="true"><rect x="1" y="1" width="2" height="10"/><path d="M11 1 L4 6 L11 11 Z"/></svg>Step</button>
+        <button id="fwd" class="btn" type="button" aria-label="Step forward one cycle">Step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1 L8 6 L1 11 Z"/><rect x="9" y="1" width="2" height="10"/></svg></button>
+        <button id="reset" class="btn" type="button">Start over</button>
+      </div>
+    </div>
+    <div class="ctl">
+      <label class="cap" for="speed">Speed</label>
+      <div class="row"><input id="speed" type="range" min="0.5" max="4" step="0.5" value="1.5"><span id="speedv" class="speedv">1.5 cyc/s</span></div>
+    </div>
+    <div class="ctl">
+      <span class="cap" id="cap-p">Array size P</span>
+      <div class="seg" role="radiogroup" aria-labelledby="cap-p">
+        <input type="radio" name="p" id="p2" value="2"><label for="p2">2×2</label>
+        <input type="radio" name="p" id="p3" value="3" checked><label for="p3">3×3</label>
+        <input type="radio" name="p" id="p4" value="4"><label for="p4">4×4</label>
+      </div>
+    </div>
+    <div class="ctl">
+      <label class="cap" for="m">Rows of A (M)</label>
+      <select id="m">
+        <option value="2">M = 2</option><option value="3">M = 3</option><option value="4" selected>M = 4</option><option value="5">M = 5</option><option value="6">M = 6</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <span class="cap" id="cap-pe">PE</span>
+      <div class="seg" role="radiogroup" aria-labelledby="cap-pe">
+        <input type="radio" name="pipe" id="pipe0" value="0"><label for="pipe0">1-stage (PIPE=0)</label>
+        <input type="radio" name="pipe" id="pipe1" value="1" checked><label for="pipe1">2-stage (PIPE=1)</label>
+      </div>
+    </div>
+    <div class="ctl">
+      <span class="cap">Memory</span>
+      <label class="tick" for="memreg"><input type="checkbox" id="memreg" checked>BRAM output reg (MEM_REG=1)</label>
+    </div>
+    <div class="ctl">
+      <span class="cap">Data</span>
+      <button id="reroll" class="btn" type="button">New numbers</button>
+    </div>
+  </section>
+
+  <div class="stage">
+    <figure class="diagram">
+      <div class="scroll"><svg id="dia" role="img" aria-label="Systolic array diagram: A, B and C buffers on the left, memory read registers, input skew, the PE array, output deskew and the C write bus"></svg></div>
+      <figcaption class="legend">
+        <span><span class="sws"><i class="sw r0"></i><i class="sw r1"></i><i class="sw r2"></i><i class="sw r3"></i><i class="sw r4"></i><i class="sw r5"></i></span>A row i, and the partial sums of C row i</span>
+        <span><i class="sw tw"></i>weight from B</span>
+        <span><i class="sw prod r1"></i>product register (2-stage PE)</span>
+        <span><i class="sw"></i>empty register</span>
+        <span>× multiplier · + adder (lit = working this cycle)</span>
+      </figcaption>
+    </figure>
+
+    <aside class="panel" aria-label="Cycle details">
+      <div class="cyc">
+        <div><span class="cap">Cycle</span><br><span id="cyc" class="big">0</span><span class="of">/ <span id="cycmax">0</span></span></div>
+        <span id="phase" class="phase">Memory read</span>
+      </div>
+      <div class="sigs" id="sigs">
+        <span class="sig" data-s="wl">w_load <b>0</b></span>
+        <span class="sig" data-s="iv">in_valid <b>0</b></span>
+        <span class="sig" data-s="ov">out_valid <b>0</b></span>
+      </div>
+      <section aria-live="polite">
+        <h3>This cycle</h3>
+        <ul id="events" class="events"></ul>
+      </section>
+      <section>
+        <h3>Busy hardware</h3>
+        <div class="meters">
+          <span>× multipliers</span><div class="bar"><span id="barm"></span></div><span id="nm" class="num">0/9</span>
+          <span>+ adders</span><div class="bar"><span id="bara"></span></div><span id="na" class="num">0/9</span>
+        </div>
+      </section>
+      <section>
+        <h3>Inspect PE <span id="insname"></span></h3>
+        <p class="hint">Click any PE in the diagram to inspect it.</p>
+        <table class="insp" id="insp"></table>
+        <p class="flight" id="flight" hidden></p>
+      </section>
+      <section>
+        <h3>This run</h3>
+        <table class="nums" id="nums"></table>
+      </section>
+      <section>
+        <h3>Check against A·B</h3>
+        <p class="okline" id="align"></p>
+        <p class="okline" id="cmatch"></p>
+        <div class="refgrid" id="refgrid" aria-label="Expected C = A times B"></div>
+      </section>
+    </aside>
+  </div>
+
+  <section class="wave" aria-label="Waveform">
+    <div class="wave-head"><h2>Waveform</h2><p class="sub">Signals at the array ports, one column per clock cycle. Click a column to jump to that cycle.</p></div>
+    <div class="scroll"><svg id="wave" role="img" aria-label="Waveform of clk, memory read, w_load, w_row, in_valid, a_row, out_valid and c_row"></svg></div>
+  </section>
+
+  <section class="notes">
+    <div class="note">
+      <h2>What to watch, in order</h2>
+      <ol>
+        <li><b>Weight load.</b> B is read one row per cycle, last row first. Each <code>w_load</code> cycle pushes every weight one PE down, so after P cycles PE (k, j) holds B[k][j] and keeps it for the whole pass.</li>
+        <li><b>Input skew.</b> A row of A is read as one word and turned sideways: lane k feeds PE row k. Row k waits k extra cycles, so the colours form a diagonal wavefront.</li>
+        <li><b>Multiply and add.</b> In each PE, × multiplies the value on the wire coming in from the left by the stored weight, and + adds the partial sum coming in from above. Activations move right one PE per clock; partial sums move down.</li>
+        <li><b>Output deskew.</b> Column j waits P − 1 − j cycles at the bottom, so all P values of a C row leave together when <code>out_valid</code> = 1 and are written into the C buffer.</li>
+      </ol>
+    </div>
+    <div class="note">
+      <h2>Why the 2-stage PE still adds the right numbers</h2>
+      <p>With PIPE = 1 the product goes into a register first and is added one cycle later. Every PE does this, so the partial sum arriving from the PE above is one cycle later too. Both inputs of the adder still belong to the same row of A:</p>
+      <p class="eq">row <var>i</var> reaches the adder of PE (<var>k</var>, <var>j</var>) at cycle<br><var>s</var> + <var>i</var> + <var>k</var> + <var>j</var> + PIPE &nbsp;from the left and from above</p>
+      <p>Here <var>s</var> is the cycle row 0 enters the array. The only visible change is latency: a row of C leaves 2P − 1 + PIPE cycles after its row of A goes in. The multiply still uses the weight in the same cycle as before, so loading the next tile does not disturb it and the pass length T = M + 3P − 2 stays the same. In the 2-stage view, watch × and + inside one PE: they often light in different colours, because two rows of A are in flight in the same PE.</p>
+    </div>
+    <div class="note">
+      <h2>What the extra registers buy</h2>
+      <p class="eq">T<sub>clk</sub> ≥ t<sub>clk→Q</sub> + t<sub>logic</sub> + t<sub>setup</sub> + t<sub>unc</sub><br>1-stage: t<sub>logic</sub> = t<sub>mult</sub> + t<sub>add</sub><br>2-stage: t<sub>logic</sub> = max(t<sub>mult</sub>, t<sub>add</sub>)</p>
+      <p>A DSP48E1 slice has a register after its multiplier (MREG) and after its adder (PREG), so a 2-stage PE fits in one slice; that is why <code>pe.sv</code> asks for <code>use_dsp</code>. In our Yosys check the default build used 64 DSP48E1, one per PE. The BRAM output register does the same job for memory reads. Together they cost 2 cycles per run: <code>perf_total</code> = <code>perf_cycles</code> + 3 + PIPE + MEM_REG.</p>
+      <p>Each register stage also pays a fixed overhead, about 0.42 + 0.566 + 0.154 ≈ 1.14 ns on the path in your 100 MHz report, so each further split gains less than the one before. The RTL uses the same structure at larger P; this picture stops at 4 so the numbers stay readable.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+'use strict';
+const NS = 'http://www.w3.org/2000/svg';
+const $ = s => document.querySelector(s);
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const fmt = v => (v < 0 ? '−' + (-v) : String(v));
+const chip = i => `<span class="chip r${i}">${i}</span>`;
+const reduceMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : {matches: false};
+
+/* geometry (SVG units) */
+const S = 88, G = 38, PITCH = S + G, TW = 34, TH = 22, QW = 26, QH = 18;
+const WX = 22, WY = 16, MX = 22, MY = 46, QX = 45, PX = 68, AY = 72, OPR = 8;
+const CW = 36, CH = 24, SKW = 40, FDX = 46, FDY = 34, DKY = 34;
+
+const st = {P: 3, M: 4, PIPE: 1, MEMREG: 1, seed: 11, t: 0, playing: false, speed: 1.5, sel: [1, 1]};
+let A, B, REF, frames = [], lay, tokLayer, peEls = [], rdA, rdB, wcur, wcurl, wgeo;
+const elems = new Map();
+
+/* ------------------------------------------------------------ data */
+function rng(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function randMat(r, rows, cols) {
+  return Array.from({length: rows}, () => Array.from({length: cols}, () => {
+    let v; do { v = Math.floor(r() * 10) - 4; } while (v === 0);
+    return v;
+  }));
+}
+function matmul(A, B) {
+  return A.map(row => B[0].map((_, j) => row.reduce((s, a, k) => s + a * B[k][j], 0)));
+}
+
+/* ------------------------------------------------------------ simulation
+   Register-level model of systolic_array.sv + pe.sv, fed by the memory read
+   stages of mm_core.sv. Every value carries a tag: the A row it belongs to
+   (activations, products, partial sums) or the B row (weights).            */
+function simulate(P, M, PIPE, MEMREG, A, B) {
+  const L = 1 + MEMREG, D = 2 * P - 1 + PIPE, last = L + 3 * P + M - 1 + PIPE;
+  const N0 = {v: 0, t: null};
+  const row = n => Array(n).fill(N0);
+  const grid = (r, c) => Array.from({length: r}, () => Array(c).fill(N0));
+  let memA = Array.from({length: L}, () => row(P)), memB = Array.from({length: L}, () => row(P));
+  let vA = Array(L).fill(false), vB = Array(L).fill(false);
+  let skew = Array.from({length: P}, (_, k) => row(k));
+  let w = grid(P, P), aout = grid(P, P), pq = grid(P, P), ps = grid(P, P);
+  let desk = Array.from({length: P}, (_, j) => row(P - 1 - j));
+  let vl = Array(D).fill(false);
+  let C = Array.from({length: M}, () => Array(P).fill(null));
+  let outRow = 0, mism = 0;
+  const out = [];
+  for (let t = 0; t <= last; t++) {
+    const rd = t < P ? {m: 'B', r: P - 1 - t} : (t < P + M ? {m: 'A', r: t - P} : null);
+    const wl = vB[L - 1], iv = vA[L - 1], wrow = memB[L - 1], arow = memA[L - 1];
+    const ah = grid(P, P), pin = grid(P, P), prod = grid(P, P), pu = grid(P, P), sum = grid(P, P), wv = grid(P, P);
+    let mulOn = 0, addOn = 0;
+    const bad = [];
+    for (let k = 0; k < P; k++) for (let j = 0; j < P; j++) {
+      const a = j > 0 ? aout[k][j - 1] : (k === 0 ? arow[0] : skew[k][k - 1]);
+      ah[k][j] = a;
+      wv[k][j] = k > 0 ? w[k - 1][j] : wrow[j];
+      pin[k][j] = k > 0 ? ps[k - 1][j] : N0;
+      prod[k][j] = {v: a.v * w[k][j].v, t: a.t, wr: w[k][j].t};
+      pu[k][j] = PIPE ? pq[k][j] : prod[k][j];
+      const p = pu[k][j], q = pin[k][j];
+      sum[k][j] = {v: q.v + p.v, t: p.t !== null ? p.t : q.t};
+      if (a.t !== null) mulOn++;
+      if (p.t !== null) addOn++;
+      if ((k > 0 && p.t !== q.t) || (p.t !== null && p.wr !== k)) bad.push([k, j]);
+    }
+    const crow = Array.from({length: P}, (_, j) => (j === P - 1 ? ps[P - 1][j] : desk[j][P - 2 - j]));
+    const ov = vl[D - 1];
+    if (ov && crow.some(c => c.t !== outRow)) bad.push([-1, -1]);
+    mism += bad.length;
+    out.push({t, last, L, rd, wl, iv, ov, wrow, arow, crow, outRow, memA, memB, skew, w, aout, pq, ps, desk, C,
+              ah, pin, prod, pu, sum, mulOn, addOn, bad, mism});
+    /* ---- clock edge ---- */
+    if (ov) { C = C.map(r => r.slice()); C[outRow] = crow.map(c => c.v); outRow++; }
+    const nA = memA.slice(), nB = memB.slice(), nvA = vA.slice(), nvB = vB.slice();
+    for (let s = L - 1; s > 0; s--) { nA[s] = memA[s - 1]; nB[s] = memB[s - 1]; nvA[s] = vA[s - 1]; nvB[s] = vB[s - 1]; }
+    nA[0] = rd && rd.m === 'A' ? A[rd.r].map(v => ({v, t: rd.r})) : row(P);
+    nvA[0] = !!(rd && rd.m === 'A');
+    nB[0] = rd && rd.m === 'B' ? B[rd.r].map(v => ({v, t: rd.r})) : row(P);
+    nvB[0] = !!(rd && rd.m === 'B');
+    memA = nA; memB = nB; vA = nvA; vB = nvB;
+    skew = skew.map((r, k) => (k === 0 ? r : [arow[k]].concat(r.slice(0, k - 1))));
+    if (wl) w = wv;
+    aout = ah; pq = prod;
+    desk = desk.map((r, j) => (r.length ? [ps[P - 1][j]].concat(r.slice(0, r.length - 1)) : r));
+    ps = sum;
+    vl = [iv].concat(vl.slice(0, D - 1));
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------ layout */
+function computeLayout(P, M, L) {
+  const y = {P, M, L};
+  y.bufX = 14; y.lblW = 26;
+  y.cellX0 = y.bufX + y.lblW;
+  y.bufRight = y.cellX0 + P * CW;
+  y.bY0 = 30;
+  y.aY0 = y.bY0 + P * CH + 40;
+  y.xBusA = y.bufRight + 24;
+  y.xFeed = [];
+  for (let s = 0; s < L; s++) y.xFeed.push(y.bufRight + 62 + s * FDX);
+  y.arrayLeft = y.xFeed[L - 1] + 66 + Math.max(0, P - 2) * SKW;
+  y.arrayTop = 112;
+  y.arrayW = P * S + (P - 1) * G;
+  y.arrayRight = y.arrayLeft + y.arrayW;
+  y.arrayBottom = y.arrayTop + y.arrayW;
+  y.colLeft = j => y.arrayLeft + j * PITCH;
+  y.rowTop = k => y.arrayTop + k * PITCH;
+  y.ay = k => y.rowTop(k) + AY;
+  y.yFeedB = [];
+  for (let s = 0; s < L; s++) y.yFeedB.push(y.arrayTop - 24 - (L - 1 - s) * FDY);
+  y.yBusB = y.yFeedB[0] - 24;
+  y.busY = y.arrayBottom + G / 2 + P * DKY;
+  y.cY0 = Math.max(y.aY0 + M * CH + 44, y.busY - M * CH - 6);
+  y.cRight = y.bufRight;
+  y.cBusX = y.cRight + 16;
+  y.W = y.arrayRight + G + 26;
+  y.H = Math.max(y.busY + 30, y.cY0 + M * CH + 18);
+  return y;
+}
+function posOf(l) {
+  switch (l.ty) {
+    case 'fa': return [lay.xFeed[l.s], lay.ay(l.k)];
+    case 'sk': return [lay.arrayLeft - 22 - (l.k - 1 - l.m) * SKW, lay.ay(l.k)];
+    case 'ao': return [lay.colLeft(l.j) + S + G / 2, lay.ay(l.k)];
+    case 'fb': return [lay.colLeft(l.j) + WX, lay.yFeedB[l.s]];
+    case 'w':  return [lay.colLeft(l.j) + WX, lay.rowTop(l.k) + WY];
+    case 'pq': return [lay.colLeft(l.j) + QX, lay.rowTop(l.k) + MY];
+    case 'ps': return [lay.colLeft(l.j) + PX, lay.rowTop(l.k) + S + G / 2];
+    case 'dk': return [lay.colLeft(l.j) + PX, lay.arrayBottom + G / 2 + (l.m + 1) * DKY];
+    case 'c':  return [lay.cellX0 + l.j * CW + CW / 2, lay.cY0 + l.i * CH + CH / 2];
+  }
+  return [0, 0];
+}
+
+/* ------------------------------------------------------------ tokens */
+function tokensOf(f) {
+  const m = new Map();
+  const add = (key, kind, tag, v, loc) => { const p = posOf(loc); m.set(key, {key, kind, tag, v, loc, x: p[0], y: p[1]}); };
+  f.memA.forEach((r, s) => r.forEach((c, k) => { if (c.t !== null) add(`a${c.t}_${k}`, 'a', c.t, c.v, {ty: 'fa', s, k}); }));
+  f.skew.forEach((r, k) => r.forEach((c, mm) => { if (c.t !== null) add(`a${c.t}_${k}`, 'a', c.t, c.v, {ty: 'sk', k, m: mm}); }));
+  f.aout.forEach((r, k) => r.forEach((c, j) => { if (c.t !== null) add(`a${c.t}_${k}`, 'a', c.t, c.v, {ty: 'ao', k, j}); }));
+  f.memB.forEach((r, s) => r.forEach((c, j) => { if (c.t !== null) add(`w${c.t}_${j}`, 'w', c.t, c.v, {ty: 'fb', s, j}); }));
+  f.w.forEach((r, k) => r.forEach((c, j) => { if (c.t !== null) add(`w${c.t}_${j}`, 'w', c.t, c.v, {ty: 'w', k, j}); }));
+  if (st.PIPE) f.pq.forEach((r, k) => r.forEach((c, j) => { if (c.t !== null) add(`x${c.t}_${k}_${j}`, 'x', c.t, c.v, {ty: 'pq', k, j}); }));
+  f.ps.forEach((r, k) => r.forEach((c, j) => { if (c.t !== null) add(`p${c.t}_${j}`, 'p', c.t, c.v, {ty: 'ps', k, j}); }));
+  f.desk.forEach((r, j) => r.forEach((c, mm) => { if (c.t !== null) add(`p${c.t}_${j}`, 'p', c.t, c.v, {ty: 'dk', j, m: mm}); }));
+  f.C.forEach((r, i) => r.forEach((v, j) => { if (v !== null) add(`p${i}_${j}`, 'p', i, v, {ty: 'c', i, j}); }));
+  return m;
+}
+function originOf(tk) {
+  const l = tk.loc;
+  if (tk.kind === 'a' && l.ty === 'fa') return [lay.cellX0 + l.k * CW + CW / 2, lay.aY0 + tk.tag * CH + CH / 2];
+  if (tk.kind === 'w' && l.ty === 'fb') return [lay.cellX0 + l.j * CW + CW / 2, lay.bY0 + tk.tag * CH + CH / 2];
+  if (tk.kind === 'p' && l.ty === 'ps') return [lay.colLeft(l.j) + PX, lay.rowTop(l.k) + MY];
+  if (tk.kind === 'x') return [lay.colLeft(l.j) + MX, lay.rowTop(l.k) + MY];
+  return [tk.x, tk.y];
+}
+function exitOf(tk) {
+  const l = tk.loc;
+  if (tk.kind === 'a' && l.ty === 'ao') return [tk.x + 28, tk.y];
+  if (tk.kind === 'x') return [lay.colLeft(l.j) + PX, lay.rowTop(l.k) + MY];
+  return [tk.x, tk.y];
+}
+function routeOf(p, n) {
+  if (n.kind === 'p' && n.loc.ty === 'c' && p.loc.ty !== 'c') {
+    return [[p.x, p.y], [p.x, lay.busY], [lay.cBusX, lay.busY], [lay.cBusX, n.y], [n.x, n.y]];
+  }
+  return [[p.x, p.y], [n.x, n.y]];
+}
+function makeTok(tk) {
+  const g = svgEl('g', {class: `tok ${tk.kind === 'w' ? 'tw' : 'r' + tk.tag} k${tk.kind}`});
+  const w = tk.kind === 'x' ? QW : TW, h = tk.kind === 'x' ? QH : TH;
+  svgEl('rect', {x: -w / 2, y: -h / 2, width: w, height: h, rx: tk.kind === 'x' ? 3 : 5}, g);
+  g._txt = svgEl('text', {x: 0, y: tk.kind === 'x' ? 4 : 4.6, 'text-anchor': 'middle'}, g);
+  g._v = null;
+  tokLayer.appendChild(g);
+  return g;
+}
+function tokEl(tk) {
+  let g = elems.get(tk.key);
+  if (!g) { g = makeTok(tk); elems.set(tk.key, g); }
+  return g;
+}
+function setTok(g, x, y, v, op) {
+  g.setAttribute('transform', `translate(${x.toFixed(1)},${y.toFixed(1)})`);
+  if (g._v !== v) { g._txt.textContent = fmt(v); g._v = v; }
+  g.style.opacity = op >= 0.999 ? '' : op.toFixed(3);
+}
+function along(path, e) {
+  if (path.length === 2) {
+    const a = path[0], b = path[1];
+    return [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e];
+  }
+  const segs = [];
+  let total = 0;
+  for (let i = 1; i < path.length; i++) {
+    const d = Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]);
+    segs.push(d); total += d;
+  }
+  let d = e * total;
+  for (let i = 0; i < segs.length; i++) {
+    if (d <= segs[i] || i === segs.length - 1) {
+      const f = segs[i] ? Math.min(1, d / segs[i]) : 1, a = path[i], b = path[i + 1];
+      return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+    }
+    d -= segs[i];
+  }
+  return path[path.length - 1];
+}
+const ease = u => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+
+/* ------------------------------------------------------------ diagram */
+function buildDiagram() {
+  const svg = $('#dia');
+  svg.textContent = '';
+  elems.clear();
+  const P = st.P, M = st.M, PIPE = st.PIPE, L = 1 + st.MEMREG;
+  lay = computeLayout(P, M, L);
+  svg.setAttribute('viewBox', `0 0 ${lay.W} ${lay.H}`);
+  svg.style.minWidth = Math.round(lay.W * 0.74) + 'px';
+  const gw = svgEl('g', null, svg), gp = svgEl('g', null, svg), gs = svgEl('g', null, svg), gl = svgEl('g', null, svg);
+  const line = (x1, y1, x2, y2, cls) => svgEl('line', {x1, y1, x2, y2, class: cls || 'd-wire'}, gw);
+  const path = d => svgEl('path', {d, class: 'd-wire'}, gw);
+  const dot = (cx, cy) => svgEl('circle', {cx, cy, r: 2.6, class: 'd-dot'}, gw);
+  const text = (x, y, s, cls, anchor) => { const t = svgEl('text', {x, y, class: cls, 'text-anchor': anchor || 'start'}, gl); t.textContent = s; return t; };
+  const slot = (x, y) => svgEl('rect', {x: x - TW / 2, y: y - TH / 2, width: TW, height: TH, rx: 5, class: 'd-slot'}, gs);
+  const regName = s => (s === 0 ? 'read reg' : 'out reg');
+
+  /* buffers */
+  const bMid = lay.bY0 + P * CH / 2, aMid = lay.aY0 + M * CH / 2, cMid = lay.cY0 + M * CH / 2;
+  text(lay.bufX, lay.bY0 - 10, 'B buffer', 'd-lbl');
+  text(lay.bufX, lay.aY0 - 10, 'A buffer', 'd-lbl');
+  text(lay.bufX, lay.cY0 - 10, 'C buffer', 'd-lbl');
+  const drawBuf = (mat, rows, y0, colored) => {
+    for (let i = 0; i < rows; i++) {
+      const y = y0 + i * CH;
+      if (colored) {
+        const c = svgEl('g', {class: 'rc r' + i}, gl);
+        svgEl('rect', {x: lay.bufX + 3, y: y + 5, width: 18, height: 14, rx: 3}, c);
+        const t = svgEl('text', {x: lay.bufX + 12, y: y + 15.5, 'text-anchor': 'middle'}, c);
+        t.textContent = i;
+      } else {
+        text(lay.bufX + 12, y + CH / 2 + 4, String(i), 'd-sm', 'middle');
+      }
+      for (let j = 0; j < P; j++) {
+        svgEl('rect', {x: lay.cellX0 + j * CW, y, width: CW, height: CH, class: 'd-cell'}, gw);
+        if (mat) text(lay.cellX0 + j * CW + CW / 2, y + CH / 2 + 4, fmt(mat[i][j]), 'd-val', 'middle');
+      }
+    }
+  };
+  drawBuf(B, P, lay.bY0, false);
+  drawBuf(A, M, lay.aY0, true);
+  drawBuf(null, M, lay.cY0, true);
+  rdB = svgEl('rect', {x: lay.cellX0 - 2, y: lay.bY0, width: P * CW + 4, height: CH + 2, rx: 4, class: 'd-rd', visibility: 'hidden'}, gl);
+  rdA = svgEl('rect', {x: lay.cellX0 - 2, y: lay.aY0, width: P * CW + 4, height: CH + 2, rx: 4, class: 'd-rd', visibility: 'hidden'}, gl);
+
+  /* B path: buffer -> bus -> read regs -> top of each column */
+  const laneX = j => lay.colLeft(j) + WX;
+  path(`M${lay.bufRight},${bMid} H${lay.bufRight + 10} V${lay.yBusB} H${laneX(P - 1)}`);
+  for (let j = 0; j < P; j++) {
+    line(laneX(j), lay.yBusB, laneX(j), lay.arrayTop);
+    if (j < P - 1) dot(laneX(j), lay.yBusB);
+    for (let s = 0; s < L; s++) slot(laneX(j), lay.yFeedB[s]);
+    for (let k = 0; k < P - 1; k++) line(laneX(j), lay.rowTop(k) + S, laneX(j), lay.rowTop(k + 1), 'd-chain');
+  }
+  for (let s = 0; s < L; s++) text(lay.arrayLeft - 8, lay.yFeedB[s] + 4, regName(s), 'd-sm', 'end');
+
+  /* A path: buffer -> bus -> read regs -> skew -> rows */
+  path(`M${lay.bufRight},${aMid} H${lay.xBusA}`);
+  line(lay.xBusA, Math.min(aMid, lay.ay(0)), lay.xBusA, Math.max(aMid, lay.ay(P - 1)));
+  for (let k = 0; k < P; k++) {
+    const y = lay.ay(k);
+    line(lay.xBusA, y, lay.arrayRight + G, y);
+    dot(lay.xBusA, y);
+    for (let s = 0; s < L; s++) slot(lay.xFeed[s], y);
+    for (let m = 0; m < k; m++) slot(lay.arrayLeft - 22 - (k - 1 - m) * SKW, y);
+  }
+  for (let s = 0; s < L; s++) text(lay.xFeed[s], lay.ay(0) - 20 - (L - 1 - s) * 14, regName(s), 'd-sm', 'middle');
+  text(lay.arrayLeft - 6, lay.arrayBottom + 17, 'input skew', 'd-sm', 'end');
+  text(lay.arrayLeft - 6, lay.arrayBottom + 30, 'row k waits k', 'd-sm', 'end');
+
+  /* partial-sum columns, deskew, C bus */
+  for (let j = 0; j < P; j++) {
+    const x = lay.colLeft(j) + PX;
+    line(x, lay.arrayTop - 12, x, lay.busY);
+    text(x, lay.arrayTop - 16, '0', 'd-sm', 'middle');
+    for (let k = 0; k < P; k++) slot(x, lay.rowTop(k) + S + G / 2);
+    for (let m = 0; m < P - 1 - j; m++) slot(x, lay.arrayBottom + G / 2 + (m + 1) * DKY);
+    if (j < P - 1) dot(x, lay.busY);
+  }
+  path(`M${lay.colLeft(P - 1) + PX},${lay.busY} H${lay.cBusX} V${cMid} H${lay.cRight}`);
+  text(lay.cBusX + 8, lay.busY - 7, 'c_row (out_valid)', 'd-sm');
+  text(lay.colLeft(0) + PX - 26, lay.arrayBottom + G / 2 + DKY + 4, 'output deskew', 'd-sm', 'end');
+  text(lay.colLeft(0) + PX - 26, lay.arrayBottom + G / 2 + DKY + 17, 'col j waits P−1−j', 'd-sm', 'end');
+
+  /* PEs */
+  peEls = [];
+  for (let k = 0; k < P; k++) {
+    peEls.push([]);
+    for (let j = 0; j < P; j++) {
+      const g = svgEl('g', {class: 'pe', transform: `translate(${lay.colLeft(j)},${lay.rowTop(k)})`, tabindex: '0', role: 'button', 'aria-label': `Inspect PE ${k},${j}`}, gp);
+      svgEl('rect', {x: 0, y: 0, width: S, height: S, rx: 7, class: 'd-pe'}, g);
+      const w = d => svgEl('path', {d, class: 'd-wire'}, g);
+      w(`M${WX},0 V${WY - TH / 2}`);
+      w(`M${MX},${WY + TH / 2} V${MY - OPR}`);
+      w(`M0,${AY} H${S}`);
+      w(`M${MX},${AY} V${MY + OPR}`);
+      svgEl('circle', {cx: MX, cy: AY, r: 2.6, class: 'd-dot'}, g);
+      w(`M${PX},0 V${MY - OPR} M${PX},${MY + OPR} V${S}`);
+      if (PIPE) {
+        w(`M${MX + OPR},${MY} H${QX - QW / 2} M${QX + QW / 2},${MY} H${PX - OPR}`);
+        svgEl('rect', {x: QX - QW / 2, y: MY - QH / 2, width: QW, height: QH, rx: 3, class: 'd-pslot'}, g);
+      } else {
+        w(`M${MX + OPR},${MY} H${PX - OPR}`);
+      }
+      svgEl('rect', {x: WX - TW / 2, y: WY - TH / 2, width: TW, height: TH, rx: 5, class: 'd-slot'}, g);
+      const mul = svgEl('g', {class: 'op'}, g);
+      svgEl('circle', {cx: MX, cy: MY, r: OPR}, mul);
+      svgEl('text', {x: MX, y: MY + 4.5, 'text-anchor': 'middle'}, mul).textContent = '×';
+      const add = svgEl('g', {class: 'op'}, g);
+      svgEl('circle', {cx: PX, cy: MY, r: OPR}, add);
+      svgEl('text', {x: PX, y: MY + 4.5, 'text-anchor': 'middle'}, add).textContent = '+';
+      svgEl('text', {x: 5, y: S - 4, class: 'd-sm', 'text-anchor': 'start'}, g).textContent = `${k},${j}`;
+      g.addEventListener('click', () => select(k, j));
+      g.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); select(k, j); }
+      });
+      peEls[k].push({g, mul, add});
+    }
+  }
+  tokLayer = svgEl('g', {class: 'tokens'}, svg);
+}
+
+function paintDiagram(f) {
+  const P = st.P;
+  for (let k = 0; k < P; k++) for (let j = 0; j < P; j++) {
+    const pe = peEls[k][j], a = f.ah[k][j].t, p = f.pu[k][j].t;
+    pe.mul.setAttribute('class', 'op' + (a === null ? '' : ' r' + a));
+    pe.add.setAttribute('class', 'op' + (p === null ? '' : ' r' + p));
+    pe.g.classList.toggle('on', a !== null || p !== null);
+    pe.g.classList.toggle('bad', f.bad.some(b => b[0] === k && b[1] === j));
+    pe.g.classList.toggle('sel', st.sel[0] === k && st.sel[1] === j);
+  }
+  const showRd = (r, y0, i) => {
+    if (i === null) { r.setAttribute('visibility', 'hidden'); return; }
+    r.setAttribute('y', y0 + i * CH - 1);
+    r.setAttribute('visibility', 'visible');
+  };
+  showRd(rdB, lay.bY0, f.rd && f.rd.m === 'B' ? f.rd.r : null);
+  showRd(rdA, lay.aY0, f.rd && f.rd.m === 'A' ? f.rd.r : null);
+}
+
+/* ------------------------------------------------------------ panel */
+function phaseOf(f) {
+  if (f.t === f.last) return 'Done';
+  if (f.wl) return 'Weight load';
+  if (f.iv) return 'Stream A';
+  if (f.t < f.L) return 'Memory read';
+  return 'Drain';
+}
+function eventsOf(f) {
+  const P = st.P, ev = [];
+  if (f.rd) {
+    ev.push(f.rd.m === 'B'
+      ? `Memory: read <b>B row ${f.rd.r}</b>${f.rd.r === P - 1 ? ' (the last row goes in first)' : ''}.`
+      : `Memory: read ${chip(f.rd.r)} <b>A row ${f.rd.r}</b>.`);
+  }
+  if (f.wl) ev.push(`<code>w_load</code> = 1: B row ${f.wrow[0].t} enters PE row 0; weights already inside move down one row.`);
+  else if (f.t === f.L + P) ev.push('Every weight is in place: PE (k, j) holds B[k][j] and keeps it.');
+  if (f.iv) ev.push(`<code>in_valid</code> = 1: ${chip(f.arow[0].t)} A row ${f.arow[0].t} enters. Lane k reaches PE row k after k cycles.`);
+  if (f.ov) ev.push(`<code>out_valid</code> = 1: ${chip(f.outRow)} C row ${f.outRow} leaves the array and is written to C at this clock edge.`);
+  if (f.t === f.last) ev.push('Done: every row of C is in the C buffer.');
+  else if (!f.rd && !f.wl && !f.iv && !f.ov) ev.push('No new input: partial sums keep moving down and through the deskew.');
+  if (f.t < f.L && f.rd) ev.push(`Read data needs ${f.L} cycle${f.L > 1 ? 's' : ''} to come out of the memory${f.L > 1 ? ' (read register, then output register)' : ''}.`);
+  return ev;
+}
+function inspectPE(f) {
+  const P = st.P, PIPE = st.PIPE;
+  let [k, j] = st.sel;
+  k = Math.min(k, P - 1); j = Math.min(j, P - 1); st.sel = [k, j];
+  $('#insname').textContent = `${k},${j}`;
+  const wr = f.w[k][j], a = f.ah[k][j], pr = f.prod[k][j], pu = f.pu[k][j], pin = f.pin[k][j], s = f.sum[k][j];
+  const rows = [];
+  rows.push(['Weight', wr.t === null
+    ? '<span class="dim">empty: not loaded yet</span>'
+    : `<span class="expr">w = ${fmt(wr.v)}</span> from B[${wr.t}][${j}]${wr.t !== k ? ' <span class="dim">(passing through during the load)</span>' : ''}`]);
+  rows.push(['×', a.t === null
+    ? '<span class="dim">idle</span>'
+    : `${chip(a.t)} <span class="expr">${fmt(a.v)} × ${fmt(wr.v)} = ${fmt(pr.v)}</span><br><span class="dim">A[${a.t}][${k}] times the weight, into the ${PIPE ? 'product register' : 'adder in the same cycle'}</span>`]);
+  const from = k === 0 ? 'the top edge (0)' : `PE ${k - 1},${j}`;
+  const to = k < P - 1 ? `PE ${k + 1},${j}` : (j === P - 1 ? 'c_row' : 'the output deskew');
+  rows.push(['+', pu.t === null
+    ? '<span class="dim">idle</span>'
+    : `${chip(pu.t)} <span class="expr">${fmt(pin.v)} + ${fmt(pu.v)} = ${fmt(s.v)}</span><br><span class="dim">partial sum from ${from} plus the ${PIPE ? 'registered product' : 'product'}; goes to ${to}</span>`]);
+  $('#insp').innerHTML = rows.map(r => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('');
+  const fl = $('#flight');
+  if (PIPE && a.t !== null && pu.t !== null && a.t !== pu.t) {
+    fl.innerHTML = `Two rows of A are in this PE at once: row ${a.t} is being multiplied while row ${pu.t} is being added.`;
+    fl.hidden = false;
+  } else fl.hidden = true;
+}
+function paintPanel(f) {
+  const P = st.P, PIPE = st.PIPE, M = st.M, L = f.L;
+  $('#cyc').textContent = f.t;
+  $('#cycmax').textContent = f.last;
+  $('#phase').textContent = phaseOf(f);
+  document.querySelectorAll('#sigs .sig').forEach(s => {
+    const on = !!f[s.dataset.s];
+    s.classList.toggle('hi', on);
+    s.querySelector('b').textContent = on ? '1' : '0';
+  });
+  $('#events').innerHTML = eventsOf(f).map(e => `<li>${e}</li>`).join('');
+  const n = P * P;
+  $('#barm').style.width = (100 * f.mulOn / n) + '%';
+  $('#bara').style.width = (100 * f.addOn / n) + '%';
+  $('#nm').textContent = `${f.mulOn}/${n}`;
+  $('#na').textContent = `${f.addOn}/${n}`;
+  inspectPE(f);
+  const D = 2 * P - 1 + PIPE;
+  $('#nums').innerHTML = [
+    ['Pass length in mm_core, T = M + 3P − 2', `${M} + ${3 * P} − 2 = ${M + 3 * P - 2}`],
+    ['Array latency, a_row to c_row: 2P − 1 + PIPE', `${2 * P - 1} + ${PIPE} = ${D}`],
+    ['Memory read latency: 1 + MEM_REG', `${L}`],
+    ['First C row written', `cycle ${L + P + D + 1}`],
+    ['C complete', `cycle ${f.last}`],
+  ].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+  /* checks */
+  const al = $('#align');
+  al.innerHTML = f.mism === 0
+    ? '<span class="badge ok">OK</span><span>Alignment: every add so far used a product and a partial sum from the same row of A, with the right weight.</span>'
+    : `<span class="badge bad">${f.mism}</span><span>Alignment errors so far.</span>`;
+  let written = 0, wrong = 0;
+  const cells = document.querySelectorAll('#refgrid span');
+  for (let i = 0; i < M; i++) for (let j = 0; j < P; j++) {
+    const v = f.C[i][j], cell = cells[i * P + j];
+    if (v === null) { cell.className = ''; continue; }
+    written++;
+    if (v === REF[i][j]) cell.className = 'ok'; else { cell.className = 'bad'; wrong++; }
+  }
+  const cm = $('#cmatch');
+  if (wrong) cm.innerHTML = `<span class="badge bad">${wrong}</span><span>${wrong} value${wrong > 1 ? 's' : ''} in C differ from A·B.</span>`;
+  else if (written === M * P) cm.innerHTML = `<span class="badge ok">OK</span><span>C = A·B: all ${written} values match.</span>`;
+  else cm.innerHTML = `<span class="badge wait">${written}/${M * P}</span><span>Values written to C so far; ${written ? 'all match' : 'none yet'}. Expected result:</span>`;
+  /* buttons and waveform cursor */
+  $('#back').disabled = f.t === 0;
+  $('#fwd').disabled = f.t === f.last;
+  if (wcur) {
+    const x = wgeo.LW + f.t * wgeo.CW;
+    wcur.setAttribute('x', x);
+    wcurl.setAttribute('x1', x + wgeo.CW / 2);
+    wcurl.setAttribute('x2', x + wgeo.CW / 2);
+  }
+}
+function buildRef() {
+  const g = $('#refgrid');
+  g.style.gridTemplateColumns = `repeat(${st.P}, minmax(0, 1fr))`;
+  g.innerHTML = REF.map(r => r.map(v => `<span>${fmt(v)}</span>`).join('')).join('');
+}
+function select(k, j) {
+  st.sel = [k, j];
+  peEls.forEach((r, kk) => r.forEach((p, jj) => p.g.classList.toggle('sel', kk === k && jj === j)));
+  inspectPE(frames[st.t]);
+}
+
+/* ------------------------------------------------------------ waveform */
+function buildWave() {
+  const svg = $('#wave');
+  svg.textContent = '';
+  const N = frames.length, LW = 80, CWv = 32, RH = 24, TOP = 22;
+  const sigs = [
+    {n: 'clk', ty: 'clk'},
+    {n: 'mem read', ty: 'bus', g: f => (f.rd ? {s: f.rd.m + f.rd.r, c: f.rd.m === 'A' ? 'r' + f.rd.r : 'tw'} : null)},
+    {n: 'w_load', ty: 'bit', g: f => f.wl},
+    {n: 'w_row', ty: 'bus', g: f => (f.wl ? {s: 'B' + f.wrow[0].t, c: 'tw'} : null)},
+    {n: 'in_valid', ty: 'bit', g: f => f.iv},
+    {n: 'a_row', ty: 'bus', g: f => (f.iv ? {s: 'A' + f.arow[0].t, c: 'r' + f.arow[0].t} : null)},
+    {n: 'out_valid', ty: 'bit', g: f => f.ov},
+    {n: 'c_row', ty: 'bus', g: f => (f.ov ? {s: 'C' + f.outRow, c: 'r' + f.outRow} : null)},
+  ];
+  const W = LW + N * CWv + 6, H = TOP + sigs.length * RH + 6;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.style.minWidth = Math.round(W * 0.82) + 'px';
+  wgeo = {LW, CW: CWv, N};
+  for (let t = 0; t <= N; t++) {
+    const x = LW + t * CWv;
+    svgEl('line', {x1: x, y1: TOP - 4, x2: x, y2: H - 2, class: 'w-grid'}, svg);
+    if (t < N) svgEl('text', {x: x + CWv / 2, y: 13, class: 'w-num', 'text-anchor': 'middle'}, svg).textContent = t;
+  }
+  wcur = svgEl('rect', {x: LW, y: TOP - 4, width: CWv, height: H - TOP + 2, class: 'w-cur'}, svg);
+  wcurl = svgEl('line', {x1: LW, y1: TOP - 4, x2: LW, y2: H - 2, class: 'w-curl'}, svg);
+  sigs.forEach((s, r) => {
+    const y0 = TOP + r * RH, hi = y0 + 4, lo = y0 + RH - 6, mid = (hi + lo) / 2;
+    svgEl('text', {x: 4, y: mid + 4, class: 'w-name'}, svg).textContent = s.n;
+    if (s.ty === 'clk') {
+      let d = '';
+      for (let t = 0; t < N; t++) {
+        const x = LW + t * CWv;
+        d += `${t ? 'L' : 'M'}${x},${lo} L${x},${hi} L${x + CWv / 2},${hi} L${x + CWv / 2},${lo} L${x + CWv},${lo} `;
+      }
+      svgEl('path', {d, class: 'w-trace'}, svg);
+    } else if (s.ty === 'bit') {
+      let y = s.g(frames[0]) ? hi : lo, d = `M${LW},${y}`;
+      for (let t = 0; t < N; t++) {
+        const ny = s.g(frames[t]) ? hi : lo, x = LW + t * CWv;
+        if (ny !== y) { d += ` L${x},${y} L${x},${ny}`; y = ny; }
+      }
+      d += ` L${LW + N * CWv},${y}`;
+      svgEl('path', {d, class: 'w-trace'}, svg);
+    } else {
+      for (let t = 0; t < N; t++) {
+        const v = s.g(frames[t]), x0 = LW + t * CWv, x1 = x0 + CWv;
+        if (!v) { svgEl('line', {x1: x0, y1: mid, x2: x1, y2: mid, class: 'w-z'}, svg); continue; }
+        svgEl('polygon', {points: `${x0 + 1},${mid} ${x0 + 5},${hi} ${x1 - 5},${hi} ${x1 - 1},${mid} ${x1 - 5},${lo} ${x0 + 5},${lo}`, class: 'w-bus ' + v.c}, svg);
+        svgEl('text', {x: (x0 + x1) / 2, y: mid + 3.6, class: 'w-bl ' + v.c, 'text-anchor': 'middle'}, svg).textContent = v.s;
+      }
+    }
+  });
+  svg.onclick = e => {
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return;
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX; pt.y = e.clientY;
+    const p = pt.matrixTransform(ctm.inverse());
+    const t = Math.floor((p.x - LW) / CWv);
+    if (t >= 0 && t < N) { pause(); show(t, false); }
+  };
+}
+
+/* ------------------------------------------------------------ playback */
+let raf = 0, finishAnim = null, timer = 0;
+function show(t, animate, dur) {
+  if (finishAnim) finishAnim();
+  t = Math.max(0, Math.min(frames.length - 1, t));
+  const prevT = st.t;
+  st.t = t;
+  const f = frames[t], cur = tokensOf(f);
+  paintPanel(f);
+  if (!(animate && !reduceMotion.matches && t === prevT + 1)) {
+    for (const [k, g] of elems) if (!cur.has(k)) { g.remove(); elems.delete(k); }
+    for (const tk of cur.values()) setTok(tokEl(tk), tk.x, tk.y, tk.v, 1);
+    paintDiagram(f);
+    return;
+  }
+  const prev = tokensOf(frames[prevT]);
+  const tracks = [], gone = [];
+  for (const tk of cur.values()) {
+    const p = prev.get(tk.key), g = tokEl(tk);
+    if (p) tracks.push({g, path: routeOf(p, tk), v0: p.v, v1: tk.v, o0: 1, o1: 1});
+    else tracks.push({g, path: [originOf(tk), [tk.x, tk.y]], v0: tk.v, v1: tk.v, o0: 0, o1: 1});
+  }
+  for (const p of prev.values()) {
+    if (cur.has(p.key)) continue;
+    const g = elems.get(p.key);
+    if (!g) continue;
+    tracks.push({g, path: [[p.x, p.y], exitOf(p)], v0: p.v, v1: p.v, o0: 1, o1: 0});
+    gone.push(p.key);
+  }
+  const apply = (tr, u) => {
+    const e = ease(u), xy = along(tr.path, e);
+    const op = tr.o1 > tr.o0 ? Math.min(1, u / 0.4) : (tr.o1 < tr.o0 ? 1 - u : 1);
+    setTok(tr.g, xy[0], xy[1], e < 0.5 ? tr.v0 : tr.v1, op);
+  };
+  let painted = false;
+  const t0 = performance.now(), D = dur || 450;
+  const done = () => {
+    cancelAnimationFrame(raf);
+    finishAnim = null;
+    for (const tr of tracks) apply(tr, 1);
+    for (const k of gone) { const g = elems.get(k); if (g) g.remove(); elems.delete(k); }
+    if (!painted) { paintDiagram(f); painted = true; }
+  };
+  finishAnim = done;
+  for (const tr of tracks) apply(tr, 0);
+  const tick = now => {
+    const u = Math.min(1, (now - t0) / D);
+    for (const tr of tracks) apply(tr, u);
+    if (!painted && u >= 0.55) { paintDiagram(f); painted = true; }
+    if (u < 1) raf = requestAnimationFrame(tick); else done();
+  };
+  raf = requestAnimationFrame(tick);
+}
+const playIcon = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1 L11 6 L2 11 Z"/></svg>Play';
+const pauseIcon = '<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="1" width="3" height="10"/><rect x="7" y="1" width="3" height="10"/></svg>Pause';
+function updPlay() {
+  const b = $('#play');
+  b.innerHTML = st.playing ? pauseIcon : playIcon;
+  b.setAttribute('aria-label', st.playing ? 'Pause' : 'Play');
+}
+function schedule(delay) {
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    if (!st.playing) return;
+    if (st.t >= frames.length - 1) { pause(); return; }
+    show(st.t + 1, true, Math.min(650, 720 / st.speed));
+    schedule(1000 / st.speed);
+  }, delay);
+}
+function play() {
+  if (st.t >= frames.length - 1) show(0, false);
+  st.playing = true; updPlay(); schedule(120);
+}
+function pause() { st.playing = false; clearTimeout(timer); updPlay(); }
+function step(d) { pause(); if (d > 0) show(st.t + 1, true, 420); else show(st.t - 1, false); }
+
+/* ------------------------------------------------------------ setup */
+function busiest() {
+  let best = 0, score = -1;
+  frames.forEach((f, i) => { const s = f.mulOn + f.addOn; if (s > score) { score = s; best = i; } });
+  return best;
+}
+function rebuild(firstTime) {
+  pause();
+  const r = rng(st.seed);
+  A = randMat(r, st.M, st.P);
+  B = randMat(r, st.P, st.P);
+  REF = matmul(A, B);
+  frames = simulate(st.P, st.M, st.PIPE, st.MEMREG, A, B);
+  buildDiagram();
+  buildWave();
+  buildRef();
+  const t = firstTime ? busiest() : Math.min(st.t, frames.length - 1);
+  st.t = t;
+  show(t, false);
+}
+$('#play').addEventListener('click', () => (st.playing ? pause() : play()));
+$('#back').addEventListener('click', () => step(-1));
+$('#fwd').addEventListener('click', () => step(1));
+$('#reset').addEventListener('click', () => { pause(); show(0, false); });
+$('#reroll').addEventListener('click', () => { st.seed++; rebuild(false); });
+$('#speed').addEventListener('input', e => {
+  st.speed = parseFloat(e.target.value);
+  $('#speedv').textContent = st.speed + ' cyc/s';
+  if (st.playing) schedule(1000 / st.speed);
+});
+document.querySelectorAll('input[name=p]').forEach(i => i.addEventListener('change', e => { st.P = +e.target.value; rebuild(false); }));
+document.querySelectorAll('input[name=pipe]').forEach(i => i.addEventListener('change', e => { st.PIPE = +e.target.value; rebuild(false); }));
+$('#m').addEventListener('change', e => { st.M = +e.target.value; rebuild(false); });
+$('#memreg').addEventListener('change', e => { st.MEMREG = e.target.checked ? 1 : 0; rebuild(false); });
+document.addEventListener('keydown', e => {
+  const tag = e.target && e.target.tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA' || tag === 'BUTTON') return;
+  if (e.key === ' ') { e.preventDefault(); st.playing ? pause() : play(); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+  else if (e.key === 'Home') { e.preventDefault(); pause(); show(0, false); }
+});
+window.__macDataflow = {simulate, matmul, randMat, rng};
+updPlay();
+rebuild(true);
+})();
+</script>
+</body>
+</html>

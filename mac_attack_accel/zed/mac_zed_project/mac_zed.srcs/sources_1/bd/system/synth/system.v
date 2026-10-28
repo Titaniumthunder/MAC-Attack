@@ -1,8 +1,8 @@
 //Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-//Date        : Fri Oct 16 12:20:18 2026
-//Host        : Alex running 64-bit major release  (build 9200)
+//Date        : Mon Oct 19 15:14:20 2026
+//Host        : ALEXSALAMAT56FC running 64-bit major release  (build 9200)
 //Command     : generate_target system.bd
 //Design      : system
 //Purpose     : IP block netlist
@@ -314,7 +314,7 @@ module s00_couplers_imp_NUHYXZ
         .s_axi_wvalid(s00_couplers_to_auto_pc_WVALID));
 endmodule
 
-(* CORE_GENERATION_INFO = "system,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=system,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=6,numReposBlks=4,numNonXlnxBlks=0,numHierBlks=2,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_ps7_cnt=1,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "system.hwdef" *) 
+(* CORE_GENERATION_INFO = "system,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=system,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=6,numReposBlks=4,numNonXlnxBlks=0,numHierBlks=2,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_clkrst_cnt=1,da_ps7_cnt=1,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "system.hwdef" *) 
 module system
    (DDR_addr,
     DDR_ba,
@@ -378,7 +378,6 @@ module system
   wire axi_ic_M00_AXI_WREADY;
   wire [3:0]axi_ic_M00_AXI_WSTRB;
   wire axi_ic_M00_AXI_WVALID;
-  wire clk_wiz_0_clk_out1;
   wire [14:0]ps7_DDR_ADDR;
   wire [2:0]ps7_DDR_BA;
   wire ps7_DDR_CAS_N;
@@ -394,6 +393,7 @@ module system
   wire ps7_DDR_RAS_N;
   wire ps7_DDR_RESET_N;
   wire ps7_DDR_WE_N;
+  wire ps7_FCLK_CLK0;
   wire ps7_FCLK_RESET0_N;
   wire ps7_FIXED_IO_DDR_VRN;
   wire ps7_FIXED_IO_DDR_VRP;
@@ -443,9 +443,9 @@ module system
   wire [0:0]rst_fclk0_peripheral_aresetn;
 
   system_axi_ic_0 axi_ic
-       (.ACLK(clk_wiz_0_clk_out1),
+       (.ACLK(ps7_FCLK_CLK0),
         .ARESETN(rst_fclk0_interconnect_aresetn),
-        .M00_ACLK(clk_wiz_0_clk_out1),
+        .M00_ACLK(ps7_FCLK_CLK0),
         .M00_ARESETN(rst_fclk0_peripheral_aresetn),
         .M00_AXI_araddr(axi_ic_M00_AXI_ARADDR),
         .M00_AXI_arprot(axi_ic_M00_AXI_ARPROT),
@@ -466,7 +466,7 @@ module system
         .M00_AXI_wready(axi_ic_M00_AXI_WREADY),
         .M00_AXI_wstrb(axi_ic_M00_AXI_WSTRB),
         .M00_AXI_wvalid(axi_ic_M00_AXI_WVALID),
-        .S00_ACLK(clk_wiz_0_clk_out1),
+        .S00_ACLK(ps7_FCLK_CLK0),
         .S00_ARESETN(rst_fclk0_peripheral_aresetn),
         .S00_AXI_araddr(ps7_M_AXI_GP0_ARADDR),
         .S00_AXI_arburst(ps7_M_AXI_GP0_ARBURST),
@@ -507,7 +507,9 @@ module system
         .S00_AXI_wstrb(ps7_M_AXI_GP0_WSTRB),
         .S00_AXI_wvalid(ps7_M_AXI_GP0_WVALID));
   system_mac_0 mac
-       (.s_axi_aclk(clk_wiz_0_clk_out1),
+       (.core_clk(ps7_FCLK_CLK0),
+        .core_locked(1'b0),
+        .s_axi_aclk(ps7_FCLK_CLK0),
         .s_axi_araddr(axi_ic_M00_AXI_ARADDR[5:0]),
         .s_axi_aresetn(rst_fclk0_peripheral_aresetn),
         .s_axi_arprot(axi_ic_M00_AXI_ARPROT),
@@ -546,10 +548,10 @@ module system
         .DDR_VRN(FIXED_IO_ddr_vrn),
         .DDR_VRP(FIXED_IO_ddr_vrp),
         .DDR_WEB(DDR_we_n),
-        .FCLK_CLK0(clk_wiz_0_clk_out1),
+        .FCLK_CLK0(ps7_FCLK_CLK0),
         .FCLK_RESET0_N(ps7_FCLK_RESET0_N),
         .MIO(FIXED_IO_mio[53:0]),
-        .M_AXI_GP0_ACLK(clk_wiz_0_clk_out1),
+        .M_AXI_GP0_ACLK(ps7_FCLK_CLK0),
         .M_AXI_GP0_ARADDR(ps7_M_AXI_GP0_ARADDR),
         .M_AXI_GP0_ARBURST(ps7_M_AXI_GP0_ARBURST),
         .M_AXI_GP0_ARCACHE(ps7_M_AXI_GP0_ARCACHE),
@@ -599,7 +601,7 @@ module system
         .interconnect_aresetn(rst_fclk0_interconnect_aresetn),
         .mb_debug_sys_rst(1'b0),
         .peripheral_aresetn(rst_fclk0_peripheral_aresetn),
-        .slowest_sync_clk(clk_wiz_0_clk_out1));
+        .slowest_sync_clk(ps7_FCLK_CLK0));
 endmodule
 
 module system_axi_ic_0
