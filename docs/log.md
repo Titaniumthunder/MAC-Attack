@@ -73,6 +73,10 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 24 Oct | Measurement pass on the PC (Claude): `mac.py --sim vivado` stopped before any test in both designs (Windows splits `-generic_top P=2` at '='; strict `xvlog` rejects `mlp_ctrl.sv`'s use-before-declaration). With Icarus 13: design 1 `test` 60/60, `compare`, `saturate`, `postproc` pass; design 2 the same, but `mac.py mlp` did not compile (same declaration order). `tb_axi` in XSim with `--relax` (as the Vivado project): 14/14 (design 1), 20/20 (design 2, model 3,542 / 2,646 clocks = equation). Vivado reports from both impl_1 runs, opened read-only (timing, utilization, power). Energy computed and rechecked independently (section 11). | `zed/mac_zed_project/reports_presentation/` (both designs, local only) |
 | 24 Oct | **Fixes** (Claude): `mlp_ctrl.sv` declares `m_busy` and the writeback token before `mm_core` uses them; the MLP `tb_axi.sv` declares `Cmid` before its task; both `mac.py` quote '=' arguments for Vivado's `.bat` tools on Windows. No logic change. Checked: slang (strict) 0 errors for every design and testbench of both designs; Icarus 12: design 1 `test` 60/60, `compare`, `saturate`, `uart`, `postproc` pass; design 2 `test` 60/60, `mlp` 48/48 models, `postproc` 3/7/9 stages 2,000/2,000 each, `uart` pass; `tb_axi` 20/20; SDK `mac_test.c` (FCLK_HZ 214285714) against the RTL in Verilator 30/30. Not yet run on the PC's Icarus 13 or with `--sim vivado`. | section 6, 24 Oct |
 | 24 Oct | Section 11 written: energy estimates (Vivado power x simulated or measured time), with what can and cannot be claimed. | section 11 |
+| 27 Oct | **Machine Guardian model, phase 1** (Claude, for Alex): branch `alex/machine-guardian-model` (from `Alex_edit`), `model/` (venv with torch 2.14.1), features of all 128 Ottawa motor recordings (each read once, 3.8 s), **E0 = James's baseline rebuilt: seed 42 test 18/28 faults found, 0/4 false alarms, ROC-AUC 0.875, the same as James**; seeds 43 and 44: 14/28 and 16/28, 0/4. Every missed fault is at speed code 1 (15 Hz). A second run is byte-identical; four independent checkers agree (81 checks). Not committed yet. | section 12, `model/results/E0/report.md` |
+| 27 Oct | Professor's advice (reported by Alex): instead of predicting the remaining life, two outputs: (1) the motor has started to deteriorate; (2) a quality score from 0 to 100% (100% = working perfectly, 50% = half its capability), measured over about the last 10 s of data. | Chat (Alex); section 9 |
+| 27 Oct | **Two outputs decided** (Alex): output 1 = the healthy/faulty flag over the last 10 s; output 2 = a health index (100% = inside the healthy motor's range at that speed, 0% = a typical faulty recording), a new experiment after E2. | Chat (Alex); sections 2, 9, 12 |
+| 27 Oct | **Machine Guardian model finished, phases 2-4** (Claude, for Alex, who asked to keep going until the model is finished; nothing committed): E1 (log amplitudes and log f) test 15/28; ramp check: 7 of the 64 ramp recordings did not follow the nominal ramp, so for those 7 each window's f is a ramp-and-hold command fitted to the shaft line (every other recording keeps the nominal commanded frequency); E2 (1-s windows) 24/28; **E3 (plus accelerometer 1) 27/28 faults found, 0/4 false alarms, ROC-AUC 1.000 (seed 42), proposed as the model (Alex to confirm; the validation criterion was set after the E2 and E3 test results were seen)**; health index H1 (output 2): test 30->60 Hz separated perfectly, validation ROC-AUC 0.955, but wrong at low speed (inverted on the 16.5-Hz validation windows, healthy 15-Hz test recordings 0%, test ROC-AUC 0.527); INT8: no decision changed; RTL (Icarus 13): every logit bit-exact, 566 cycles = 2.64 us per window at 214.286 MHz. | section 12, `model/export/E3/` |
 (Add a row each time work is finished.)
 
 ## 2. Decisions and reasons
@@ -105,6 +109,15 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 | 21 Oct | K of layer l is N of layer l-1 (taken from the layer table by the hardware); K of layer 0 is DIMS.K. | A layer's input is always exactly the previous layer's output; the C program cannot make them disagree. | done |
 | 21 Oct | AXI address 6 -> 7 bits, for 8 new registers. | The 6-bit map (0x00-0x3C) had only 3 free registers. Vivado needs Refresh Changed Modules. | done |
 | 22 Oct | The on-chip MLP build runs at 214.286 MHz for now (FCLK_CLK0 asked for 225); design 1 (`mac_attack_accel`) stays at 250 MHz. | 250 MHz missed by 0.029 ns after steps 15b and 15c and four implementation strategies; the last 6 paths are inside the Xilinx protocol converter and the C block RAM read. A working build first, to run the model on the board; 250 MHz (or the highest clock the Zynq can make below it) stays the goal. | decided (Alex) |
+| 27 Oct | The model's task: one output, healthy (`H_H`) or faulty (any of 7 fault classes), on the University of Ottawa electric motor dataset (128 CSV recordings), from accelerometers 2 and 3 (accelerometer 1 only in E3, if faults are still missed; no microphone, no temperature). This replaces the 20 Oct plan (multi-task on vibration, temperature and RPM; Paderborn or KAIST). First experiment: James's baseline rebuilt (E0). | Alex's spec (27 Oct). James's baseline used this dataset, these sensors and this split, so his result is the reference. | decided (Alex) |
+| 27 Oct | Fixed split by speed code: train 3, 4, 5, 8; val 2, 7; test 1, 6. Windows never leave their recording's split; standardizer and class weight from train only; experiments compared on validation only; every experiment's test result reported, and an experiment never changed after its test result has been seen. | The same split as James's report, so E0 can be compared with it; the test speeds are never seen in training. | decided (Alex) |
+| 27 Oct | `model/` holds the code, the feature tables (`model/features/`, 0.9 MB) and the trained weights; the dataset stays outside git and is passed with `--data`. Code imports `mac_attack_accel_MLP/mac.py` (never edits it or the RTL). | README rule 4; teammates can retrain and export without the 2.5 GB dataset. The tables are in `features/` because `.gitignore` ignores every `data/` folder. | decided (Alex) |
+| 27 Oct | Training details the spec leaves open (James's script is not in the repo): best-epoch weights kept at early stop, PyTorch default init seeded per run, threshold candidates = validation logits (section 12). | Alex (27 Oct): "make our own for right now", to be checked against James's code later. | [proposed] |
+| 27 Oct | Two outputs. Output 1: healthy or faulty, decided over the last 10 s (on the board: one 1-s window a second, the ARM averages the last 10 window logits, as in E2). Output 2: a health index from 0 to 100%: 100% = inside the healthy motor's range at that speed, 0% = as far out as a typical faulty recording; a new experiment after E2, defined before its run; E0-E2 unchanged. | The professor (27 Oct) asked for a quality score where 50% = half the capability; the Ottawa data has one healthy motor and each fault at one severity, so that percentage can be neither trained nor tested on it. The health index says how far the motor is from normal, not how much capability is left. | decided (Alex) |
+| 27 Oct | E2 and E3's f per window = the drive's commanded frequency: the speed code's value, or for the 7 ramp recordings whose drive did not follow the nominal ramp, a ramp-and-hold command fitted to the shaft line (only its start and end times). The measured shaft frequency is never an input. | The spec's linear ramp is 5.85 to 14.85 Hz off for those 7; the measured frequency includes the slip and alone separates the healthy motor at 60 Hz (section 12). | [proposed] |
+| 27 Oct | The model is E3, seed 42 (22 -> 32 -> 16 -> 1). | Lowest mean and worst-seed validation loss (F1 and ROC-AUC are 1 on validation for E1-E3); seed 42 alone would pick E2. The criterion (mean and worst seed before seed 42) was set after the E2 and E3 test results were seen, and E3 exists because E2 missed test faults (section 12). | [proposed] |
+| 27 Oct | Output 2 (H1) is computed on the ARM from the window statistics; the chip runs output 1 only (one output, 566 cycles a window). | About 42 to 63 multiply-adds, a square root and a 10-value mean a second; it is not a trained layer, so it does not belong in the MLP. | [proposed] |
+| 27 Oct | INT8 details the spec leaves open: one input scale (the 99.9th percentile of the train inputs / 127, chosen on validation over the maximum), inputs clipped to -127 .. 127, round half away from zero for inputs, weights and biases, hidden scales from the largest train activation; the RTL check runs in a temporary folder. | `mac.py` and the RTL stay unchanged; `mac_attack_accel_MLP/run/` is not ignored by git. | [proposed] |
 
 ## 3. Current status (what is and is not proven)
 
@@ -132,9 +145,18 @@ Tags: [done] = verified by the team, [claim] = from a document or from Claude, n
 - [done] On-chip MLP in simulation (21 Oct, section 5 step 15): 160 random models bit-exact against `golden_mlp()` (P = 4, 8, 16), `tb_axi` 20/20, `mac_test.c` against the RTL 30/30; plain multiplies unchanged (lockstep with step 14 identical in every clock, old test outputs identical).
 - [done] On-chip MLP built in Vivado at 250 MHz (22 Oct): `tb_axi` 20/20 in XSim, resources as predicted, but timing fails by 0.156 ns (section 5, step 15b). Step 15b (two timing fixes, same clock) built 22 Oct: its two paths are gone, but timing still fails by 0.175 ns (converter inside, postproc shift and clamp, cycle-sum adder).
 - [done] Step 15c (postproc in 9 stages, counter sums from local copies, same clock, every output identical) written and simulated: `tb_axi` 20/20, SDK `mac_test.c` against the RTL 30/30. Built 22 Oct: fails by 0.029 ns at 250 MHz (6 endpoints: converter, C block RAM read); **meets timing at 214.286 MHz** (WNS +0.081 ns). Not run on the board yet. Strict-compile fixes 24 Oct (section 6); energy estimates in section 11.
-- NOT done: on-chip MLP meeting timing at 250 MHz and run on the board. NOT done: a trained model to run on it.
-- NOT done: INT8 and INT4 AUC on real data. Nothing trained yet.
+- NOT done: on-chip MLP meeting timing at 250 MHz and run on the board. (27 Oct: a trained model now exists, E3,
+  exported and checked on the RTL in simulation; NOT run on the board.)
+- [claim] INT8 AUC on real data (27 Oct, Claude): E3 seed 42 on the Ottawa motor dataset, test ROC-AUC 1.000 in FP32 and
+  INT8, no decision changed in any split (section 12). NOT done: INT4 AUC on real data.
 - NOT done: audio front end.
+- [claim] Machine Guardian model, phase 1 (27 Oct, Claude): E0 rebuilt on the Ottawa motor dataset, seed-42 test 18/28
+  faults found, 0/4 false alarms, ROC-AUC 0.875, the same as James; every miss at 15 Hz (section 12).
+- [claim] Machine Guardian model, phases 2-4 (27 Oct, Claude): E1, E2, E3 and the health index H1 run (section 12);
+  **E3 seed 42 proposed as the model: test 27/28 faults found, 0/4 false alarms, ROC-AUC 1.000**; INT8 export with no
+  decision changed; on the RTL (Icarus 13, `tb_mlp.sv`) every logit bit-exact, 566 cycles (2.64 us) per window, 818 for
+  10 windows. The model may be recognizing the one healthy motor (section 12). H1 is wrong at low speed. NOT done: Alex's
+  confirmation of the [proposed] choices; the board run; a second healthy motor.
 
 ## 4. Board results
 
@@ -1479,13 +1501,42 @@ Claims that turned out wrong (kept here on purpose):
 - (Answered 18 Oct) Release board run at 200 MHz: 64x64x64 is 2.6x faster than the ARM, 1x64x64 is 5.2x slower.
 - (Answered 18 Oct) Posted writes keep the order of start, status and results when flushed at the 4 points: 24/24 on the board.
 - Next limits are in `mac_axi` (FPGA side): 6 PL cycles per write (bytes written one per clock) and about 12 per read (one read at a time, 3 wait cycles). Options: write the 4 bytes in one clock; let reads overlap; AXI DMA over an HP port for bursts.
-- The dataset and the tasks (fault classes, plus an anomaly or severity output) for the multi-task MLP.
+- (Answered 27 Oct) The dataset and the tasks (fault classes, plus an anomaly or severity output) for the multi-task MLP:
+  the University of Ottawa electric motor dataset; output 1 healthy or faulty, plus a health index as output 2 (see the
+  second-output entry below; section 12).
 - Chip version of the on-chip MLP: 16 KB of weights in flip-flops is about 2-3 mm2 (a Tiny Tapeout tile is about 0.016 mm2): stream the weights in, or a much smaller model?
 - `zed/mac_test.c` is the 13 Oct version; the SDK copy `MAC_attack_V2/src/mac_test.c` is the current one. Replace the old one?
 - Reject a size of 0 (DIMS M, K or N, or a layer's N) in `mac_axi`, so a wrong value cannot hang the core (section 6, 21 Oct)?
 - The ARM's time for the 64-64-64-6 model: still the estimate (73 us per row). The MLP board run measures it (`mac_test.c` times the same model on the ARM); then update section 11.
 - Power with real switching activity instead of the vectorless estimate: a SAIF file from `tb_axi` in `report_power`, or a current measurement on the board's supply.
 - Back towards 250 MHz for the MLP build: 250 MHz missed by 0.029 ns (inside the Xilinx protocol converter and the C block RAM read); the bus on its own 200 MHz clock would take the converter off the core clock.
+- The engine journal-bearing dataset ("Vibration dataset of main journal bearings in internal combustion engines ...", two
+  zip files, not unpacked): Alex (27 Oct) says it can be used for training. It is a combustion engine's journal bearings,
+  healthy and faulty, at 1000, 1500 and 2000 RPM, 0-100% humidity, about -20 to 45 deg C; one zip has 134 CSV files, the
+  other (1.19 GB unpacked) only .docx and .rtf files. A different machine and different sensors from the Ottawa electric
+  motor, so it cannot join the Ottawa split. A separate model, or extra healthy and faulty examples for pretraining?
+- (Answered 27 Oct) The second output the professor asked for (27 Oct): a quality score from 0 to 100%. The Ottawa data
+  has no degradation levels (one healthy motor, each fault at one severity, separate 10-s recordings), so "50% = half its
+  capability" can be neither trained nor tested on it. Alex chose a health index instead (section 2): 100% = inside the
+  healthy motor's range at that speed, 0% = as far out as a typical faulty recording, with the meaning stated plainly; a
+  new experiment after E2. A true capability percentage needs run-to-failure data (machines recorded from new until they
+  fail). Output 1 (has started to deteriorate) is the healthy/faulty output, decided over the last 10 s (the mean of ten
+  1-s window scores, as in E2).
+- The one healthy motor (27 Oct, section 12): it is quieter than every faulty recording on accelerometer 2 and turns
+  slightly faster (less slip) than most faulty recordings at each constant speed, than all of them at 60 Hz, so every result here may partly be "this motor" rather than "healthy". A recording of a second healthy motor,
+  or of the same motor before and after a fault, is the only way to tell. Can the team record one?
+- The health index at low speed (H1, 27 Oct): the healthy 15-Hz test recordings score 0%, and on validation windows it
+  is inverted at 16.5 Hz and uninformative at 19.5 Hz (correct from 22.5 Hz up). A "no reading" cut-off would have to
+  be chosen on the validation windows (16.5-28.5 Hz) as a new experiment; or record the healthy motor at low speeds?
+- The threshold rule (27 Oct): when validation separates the classes completely (E2, E3), "the lowest validation score
+  with the best F1" puts the cut at the lowest faulty validation score, the faulty edge of the gap; a cut in the middle
+  of the gap would call more 15-Hz faults. Changing it now would be choosing it on the test result; a later dataset
+  could settle it.
+- Before this branch (`alex/machine-guardian-model`, from `Alex_edit` 21eb3cb) is committed: `Alex_edit` has moved on
+  to 9793402 (Alex's 24 Oct board run of the on-chip MLP, 30/30 at 214.286 MHz, only `docs/log.md`). Rebase or merge
+  first; the log conflicts in sections 1 and 3 (keep both sides; the trained model is still not run on the board).
+- On the board, the ARM computes the window statistics in float: compare its INT8 rows with
+  `model/export/E3/vectors/test_windows.csv` (float32 rounding can move a value across a rounding boundary).
 
 ## 10. Template for a new timeline row
 
@@ -1536,3 +1587,488 @@ independent recheck `energy/check/recheck.py` that read the reports again and go
 **After the MLP board run.** Put in the measured ARM time for the model (`mac_test.c` prints "ARM software ... us"), the
 accelerator's time for 64 rows including the bus, and recompute the model rows of the table.
 
+## 12. Machine Guardian model (Ottawa motor dataset, from 27 Oct)
+
+**Why.** The on-chip MLP (step 15) needs a trained model to run. Alex's spec (27 Oct): find motor faults (healthy against
+faulty) from vibration, on the University of Ottawa electric motor dataset. First rebuild James's baseline (E0), then
+try speed-aware features (E1), 1-s windows (E2) and, only if faults are still missed, accelerometer 1 (E3); then the
+second output, a health index (Alex, 27 Oct: 100% = inside the healthy motor's range at that speed, 0% = a typical
+faulty recording), as a new experiment after E2; export the model proposed on validation to INT8 (done 27 Oct before Alex's confirmation,
+because he asked to keep going; redo the export if he picks another) for the TPU and check it bit for bit against `golden_mlp()` and `tb/tb_mlp.sv`. Branch
+`alex/machine-guardian-model` (from `Alex_edit`); code, feature tables and weights in `model/` (see `model/README.md`).
+The dataset (2.5 GB of CSV) stays outside git (README rule 4) and is passed with `--data`.
+
+**Data** (read-only; only `2_CSV_Data_Files/{1_Unloaded_Condition,2_Loaded_Condition}/*.csv`, 128 files; the `.mat`
+files are copies of the same recordings and `1_Time` is not a recording). File `{A}_{B}_{speed}_{load}.csv`, 10 s at
+42 kHz (420,000 rows): accelerometers 1, 2, 3, microphone, temperature. Label 0 = healthy (`H_H`, 16 files), 1 = faulty
+(7 classes `B_R`, `F_B`, `K_A`, `R_M`, `R_U`, `S_W`, `V_U`, 112 files). Every class has every speed code at both loads.
+Speed codes: 1-4 = 15, 30, 45, 60 Hz constant; 5 = 15->45, 6 = 30->60, 7 = 45->15, 8 = 60->30 Hz (ramps over the 10 s).
+E0-E2 use accelerometers 2 and 3; E3 adds accelerometer 1 (no microphone, no temperature in any experiment).
+
+| Split (fixed, as in James's report, per Alex's 27 Oct spec) | Speed codes | Healthy | Faulty |
+|---|---|---|---|
+| train | 3 (45 Hz), 4 (60 Hz), 5 (15->45), 8 (60->30) | 8 | 56 |
+| val | 2 (30 Hz), 7 (45->15) | 4 | 28 |
+| test | 1 (15 Hz), 6 (30->60) | 4 | 28 |
+
+Every window of a recording stays in that recording's split. The standardizer and the class weight come from train only;
+experiments are compared on validation only; every experiment's test result is reported and the experiment is not
+changed after its test result has been seen (a new idea is a new experiment).
+
+**Features** (`model/features.py`, 27 Oct). Each CSV is read once (3.8 s for all 128, 8 at a time, in phase 1; about 7 s since the shaft-line tracking was added
+for E2) and gives, for each of
+accelerometers 1, 2, 3, per 10-s recording and per 1-s window (42,000 samples), 8 statistics in float64: mean, std
+(population), RMS, max|x|, peak-to-peak, crest = max|x| / max(RMS, 1e-12), skewness m3/std^3, Pearson kurtosis m4/std^4
+(skewness and kurtosis 0 if std <= 1e-12). Saved exactly (shortest round-trip form) in `model/features/recordings.csv`
+(128 rows) and `windows.csv` (1,280 rows), 0.6 MB together; accelerometer 1 and the windows are saved now so no file is
+read twice (E2 needs windows, E3 needs accelerometer 1). The commanded frequency is not stored; `dataset.commanded_hz()`
+gives it from the speed code (first needed in E1). Checks in the script: std, skewness and kurtosis equal SciPy's within
+6.0e-16 (the same summation order, so this checks the formulas; against exact arithmetic the values are within 7.8e-10
+relative, see the independent checks below); the windows add back up to their recording (mean, variance, RMS, max|x|)
+within 6.6e-12; 128 files, header, 420,000 finite rows each, split counts 8/56, 4/28, 4/28. (The folder is `features/`, not `data/`: `.gitignore` ignores every `data/` folder.)
+
+**The healthy motor is quieter** (RMS, m/s^2, both loads; ratio = quietest faulty recording / loudest healthy one):
+
+| Speed code | Accel 2 healthy | Accel 2 faulty | Ratio | Accel 3 healthy | Accel 3 faulty | Ratio |
+|---|---|---|---|---|---|---|
+| 1 (15 Hz) | 0.561-0.595 | 0.787-2.355 | 1.32x | 0.579-0.627 | 0.733-2.384 | 1.17x |
+| 2 (30 Hz) | 1.697-1.992 | 2.843-4.837 | 1.43x | 1.554-1.756 | 2.911-5.417 | 1.66x |
+| 3 (45 Hz) | 3.477-3.790 | 7.823-12.147 | 2.06x | 3.311-3.457 | 4.588-8.280 | 1.33x |
+| 4 (60 Hz) | 3.167-3.992 | 9.875-13.976 | 2.47x | 4.757-11.561 | 10.511-16.230 | 0.91x |
+| 5 (15->45) | 1.774-1.965 | 5.198-7.414 | 2.65x | 1.772-1.894 | 3.318-5.321 | 1.75x |
+| 6 (30->60) | 2.902-3.040 | 8.910-14.592 | 2.93x | 3.671-5.038 | 7.291-11.865 | 1.45x |
+| 7 (45->15) | 1.540-2.004 | 4.300-6.152 | 2.15x | 1.674-1.682 | 2.941-4.625 | 1.75x |
+| 8 (60->30) | 2.746-3.167 | 6.057-14.663 | 1.91x | 2.706-6.672 | 3.894-12.094 | 0.58x |
+
+On accelerometer 2 the one healthy motor is quieter than every faulty recording at every speed (by 1.3x to 2.9x);
+on accelerometer 3 the ranges overlap at speed codes 4 and 8. There is only one healthy motor, so a model can separate
+the classes by recognizing that motor rather than the fault. Keep this in mind for every result below.
+
+**Training rules** (`model/train.py`, the same for every experiment; Alex's spec, the same as James's). MLP K -> 32 -> 16
+-> 1, ReLU, no dropout. Adam lr 1e-3, betas (0.9, 0.999), eps 1e-8, weight decay 0, batch 64, at most 100 epochs; early
+stop with patience 15 on the weighted validation BCE (improvement more than 1e-5). BCEWithLogitsLoss with pos_weight =
+train healthy / train faulty (8/56 = 0.143). Seeds 42, 43, 44; 42 is the reported run. Deterministic on the CPU
+(`torch.use_deterministic_algorithms`, one thread). Threshold: maximize validation F1 with validation recall >= 0.8,
+the lowest threshold on ties. Positive class = faulty. Reported for every seed: accuracy, precision, recall, F1, ROC-AUC,
+confusion [[TN,FP],[FN,TP]], missed faults by speed code and by fault class.
+Details the spec leaves open (James's script is not in the repo; Alex, 27 Oct: make our own for now) [proposed]:
+- early stopping keeps the weights of the best validation epoch, not the last epoch;
+- PyTorch's default layer initialization, from `torch.manual_seed(seed)` just before the model is built; the batch order
+  from a separate generator with the same seed (for E0, 64 training recordings = one batch per epoch);
+- the validation BCE uses the training pos_weight and is the mean over the validation rows;
+- threshold candidates are the distinct validation scores (logits): faulty if score >= cut; t = sigmoid(cut) is
+  reported for the INT8 export (T_int needs ln(t / (1 - t)), which is the cut);
+- precision is 0 when nothing is called faulty; ROC-AUC from the scores (scikit-learn, ties count half).
+
+### E0: James's baseline rebuilt (defined 27 Oct, before the run)
+
+Inputs (16): the 8 statistics of accelerometer 2 (mean, std, RMS, max|x|, peak-to-peak, crest, skewness, kurtosis),
+then the same 8 of accelerometer 3; one vector per 10-s recording (train 64, val 32, test 32). Compared with James's
+seed-42 test result: 18/28 faults found, 0/4 false alarms, ROC-AUC 0.875. Command: `python train.py E0`.
+
+**E0 results** (27 Oct, run once; tables in `model/results/E0/report.md`; a second run gives byte-identical weights and
+results):
+
+| Seed | Test faults found | Test false alarms | Test ROC-AUC | Test F1 | Test accuracy | Val F1 | t | Best / last epoch |
+|---|---|---|---|---|---|---|---|---|
+| 42 (reported) | 18/28 | 0/4 | 0.875 | 0.783 | 0.688 | 0.982 | 0.085 | 100 / 100 |
+| 43 | 14/28 | 0/4 | 0.768 | 0.667 | 0.562 | 1.000 | 0.320 | 32 / 47 |
+| 44 | 16/28 | 0/4 | 0.893 | 0.727 | 0.625 | 1.000 | 0.099 | 100 / 100 |
+| James (seed 42; Alex's spec, 27 Oct [claim]) | 18/28 | 0/4 | 0.875 | | | | | |
+
+- **Seed 42 gives James's result exactly** (18/28, 0/4, ROC-AUC 0.875; his numbers as given in Alex's spec: James's report
+  and script are not in the repo, so this matches the reported numbers, not his code). Test over the three seeds (mean ± population
+  std): recall 0.571 ± 0.058, F1 0.726 ± 0.047, ROC-AUC 0.845 ± 0.055; precision 1.000 (no test false alarm in any seed).
+- **Every missed fault is at speed code 1 (15 Hz)**: 10/14, 14/14 and 12/14 for seeds 42, 43, 44; speed code 6 (30->60 Hz)
+  0/14 in every seed. The misses cover all 7 fault classes and both loads (seed 42: B_R 1, F_B 2, K_A 2, R_M 2, R_U 1,
+  S_W 1, V_U 1, of 4 each). 15 Hz is slower than every training speed (45, 60, 15->45, 60->30 Hz) and the quietest
+  (faulty RMS 0.7-2.4 m/s^2 against about 0.6 for healthy). Without a speed input, the model takes a quiet faulty motor at
+  15 Hz for a healthy one. E1 (log amplitudes and log f as inputs) is meant to address this.
+- Validation: no missed fault in any seed, one false alarm (seed 42, H_H_2_1). Train: 2 of the 8 healthy recordings
+  called faulty in every seed.
+- Seeds 42 and 44 never stopped early: their best validation loss was at epoch 100, the cap. Seed 43 stopped at epoch 47
+  (best 32). The threshold's tie rule and the recall >= 0.8 limit did not bind in any seed (one best cut, recall 1.0).
+
+**Independent checks of phase 1** (27 Oct; four checkers that did not use the phase-1 code; scripts kept outside the repo).
+81 checks; the only failure was a wording error in this section (it said `train.py` computes the commanded frequency;
+nothing does yet), now fixed.
+- Features: an own CSV parser and exact (`math.fsum`) moments for all 128 recordings and 1,280 windows agree within
+  7.8e-10 relative (a skewness near zero, absolute 1.3e-11; summation order); max|x| and peak-to-peak bit-exact. Column
+  mapping (a1, a2, a3 = CSV columns 0, 2, 3), BOM, 420,000 rows in every file, every metadata field, exact float round-trip.
+- Evaluation: the saved weights and standardizer reproduce all 128 scores exactly; the threshold, every metric, the
+  confusion matrices, ROC-AUC (own Mann-Whitney), the misses by speed code and class and every report table: all equal.
+- Spec audit: every rule of the spec and every default above matches the code (injected-loss tests of the early stopping;
+  20,000 random threshold cases against a brute-force search).
+- Retrain: a training script written from the spec alone gives bit-identical weights, loss histories and metrics for all
+  three seeds.
+
+
+### E1: log amplitudes and log f (defined 27 Oct, before the run)
+
+Inputs (15), one vector per 10-s recording (train 64, val 32, test 32), from `features/recordings.csv`: for accelerometer
+2, then accelerometer 3: ln(std), ln(RMS), ln(max|x|), ln(peak-to-peak), crest, skewness, kurtosis (the means are
+dropped); then ln(f), f = the commanded drive frequency in Hz, for a ramp its mean over the 10 s
+(`dataset.commanded_hz()`). Natural logarithms; the four amplitudes are positive in every recording (smallest: std
+0.381 m/s^2), and `train.py` stops if one is not. Same training rules, seeds and threshold as E0. Command:
+`python train.py E1`.
+
+Why: E0 misses faults only at 15 Hz, where every motor is quiet, and has no speed input. Vibration amplitude grows with
+speed, so the model needs to know the speed to tell "quiet because slow" from "quiet because healthy". In logarithms, an
+amplitude that grows as a power of f becomes a straight line in ln(f), which a ReLU network continues outside the
+training speeds.
+
+Known before the run:
+- f per speed code: 1 = 15, 2 = 30, 3 = 45, 4 = 60, 5 = 30 (15->45), 6 = 45 (30->60), 7 = 30 (45->15), 8 = 45 (60->30).
+  Train has f = 30, 45, 60; val only 30; test 15 and 45. **15 Hz (test) is still below every training speed**, so E1 has
+  to extrapolate there, and validation (30 Hz only) cannot show whether it does. A ramp's mean equals a constant speed's
+  f (codes 5 and 7 look like code 2, codes 6 and 8 like code 3).
+- E1 is compared with E0 on validation only (seed 42 and the three-seed mean: F1, ROC-AUC, the weighted BCE); E0's
+  validation is already near perfect (F1 0.982, 1.000, 1.000), so validation may not separate them. The test result is
+  reported, not used to choose.
+
+**E1 results** (27 Oct, run once; `model/results/E1/report.md`; a second run gives byte-identical weights and results):
+
+| | Val F1 (42 / 43 / 44) | Val ROC-AUC | Val weighted BCE, mean | Test faults found (42 / 43 / 44) | Test false alarms | Test ROC-AUC (42 / 43 / 44) |
+|---|---|---|---|---|---|---|
+| E0 | 0.982 / 1.000 / 1.000 | 0.991 / 1.000 / 1.000 | 0.113 | 18 / 14 / 16 of 28 | 0 / 0 / 0 of 4 | 0.875 / 0.768 / 0.893 |
+| E1 | 1.000 / 1.000 / 1.000 | 1.000 / 1.000 / 1.000 | 0.057 | 15 / 17 / 15 of 28 | 0 / 2 / 0 of 4 | 0.929 / 0.562 / 0.973 |
+
+- On validation (the only basis for choosing) E1 is better than E0: no error in any seed, half the validation loss.
+- On test E1 does not fix 15 Hz: 13, 11 and 13 of the 14 faulty 15-Hz recordings are still missed (none at speed code
+  6). Seed 43 also calls both healthy 15-Hz recordings faulty. As expected before the run, 15 Hz is outside the training
+  speeds and validation cannot see it. The ROC-AUC rises for seeds 42 and 44 (0.929, 0.973): at 15 Hz the faulty
+  recordings mostly score above the healthy ones, but below a threshold set at 30 Hz and above.
+- Every seed ran all 100 epochs (best epoch 100).
+- E1's f has an error found only after the run (ramp check below): for 7 ramp recordings the drive did not follow the
+  nominal ramp, so their 10-s mean frequency is not the nominal one (for example S_W_8_0: 35.4 Hz, not 45). E1 stays as
+  run.
+
+### Ramp check before E2 (27 Oct)
+
+The spec asks to check that the ramps are linear (spectrogram of `H_H_5_0.csv`) before E2 uses each window's mean
+frequency. `model/speed.py` tracks the shaft-rotation line (1x, the lowest strong line; at constant speeds it is within
+about 1 Hz of the commanded frequency) in the spectrogram of accelerometers 2 and 3 (0.5-s segments every 0.05 s, the
+1x line scored with its 2x and 3x lines, best path with at most 0.5 Hz per step), and fits a ramp-and-hold command to
+it: the speed code's start frequency a until t_start, linear to its end frequency b at t_end, then b. Only t_start and
+t_end are fitted. Figure: `model/results/ramps/ramps.png` (`python ramps.py --data ...`).
+
+- **H_H_5_0 is linear**: its 1x line follows 15 -> 45 Hz over the 10 s (fitted ramp -0.05 s -> 9.35 s, at most 1.95 Hz
+  from the nominal ramp, fit error 0.11 Hz).
+- 57 of the 64 ramp recordings have a fitted command within 2.85 Hz of the nominal ramp (fitted ramps start between
+  -0.35 and +0.25 s and end between 9.05 and 10.95 s), and their tracked 1x lines stay within 2.75 Hz of it, except
+  R_M_7_0 (val): its line falls to 18 Hz at 8.5 s and rises again to 19.75 Hz by 9.5 s, about 4 Hz above the nominal
+  ramp, which a ramp-and-hold command cannot follow; it keeps the nominal ramp, so its last window's f (16.5 Hz) is
+  about 3 Hz below the line. Accepted. **7 do not follow the nominal ramp** (fitted command 5.85 to 14.85 Hz from it):
+
+| Recording | Split | Fitted ramp | What the drive did | 10-s mean f (nominal) |
+|---|---|---|---|---|
+| H_H_6_0 | test | 0.10 -> 7.10 s | reached 60 Hz at 7.1 s, then held | 49.2 Hz (45) |
+| V_U_6_0 | test | 0.05 -> 7.10 s | the same | 49.3 Hz (45) |
+| S_W_6_0 | test | -1.80 -> 5.40 s | ramp started before the recording; 60 Hz at 5.4 s | 53.9 Hz (45) |
+| H_H_8_0 | train | 0.90 -> 7.90 s | held 60 Hz to 0.9 s, reached 30 Hz at 7.9 s | 43.2 Hz (45) |
+| V_U_8_0 | train | 1.00 -> 8.05 s | the same | 43.6 Hz (45) |
+| S_W_8_0 | train | -2.10 -> 5.05 s | ramp started before the recording; passed 30 Hz at 5.05 s, fell to about 26 Hz at 6 s, then held at about 28 Hz | 35.4 Hz (45) |
+| S_W_5_0 | train | -2.30 -> 7.15 s | ramp started before the recording; 45 Hz at 7.15 s | 36.9 Hz (30) |
+
+- The tracks were checked by eye against the spectrogram of every one of the 64 ramp recordings (the 1x line, the
+  fitted command and the nominal ramp drawn on each; R_M_7_0's turn-around at the end was missed and found by the
+  independent checks); fit errors 0.08 to 1.18 Hz (S_W_8_0 the largest: f keeps the commanded 30 Hz, about 2 Hz above
+  its line in windows 5-9). The track reads 0 to 0.25 Hz low (how `speed.track` breaks ties; left as is, since E2 and E3
+  were run with it). The tracker is used only for ramps: on
+  some constant 15- and 30-Hz recordings it locks on to another line (the 1x line is weak there).
+- **The measured 1x frequency identifies the healthy motor** (slip): at constant speeds, from the peak of the 10-s
+  spectrum within 10% of the commanded frequency (`features/speed.csv`, `measured_1x_hz`):
+
+| Speed code | Healthy (2) | Faulty (14) | Faulty at or above the slowest healthy |
+|---|---|---|---|
+| 1 (15 Hz) | 15.31-15.42 | 14.63-15.32 | 1 |
+| 2 (30 Hz) | 30.66-30.71 | 29.38-30.74 | 1 |
+| 3 (45 Hz) | 44.69-44.75 | 44.32-45.35 | 3 |
+| 4 (60 Hz) | 59.79 | 59.08-59.23 | 0 |
+
+  At 60 Hz the measured frequency alone separates the healthy motor from every faulty recording. So it is never an
+  input: one more way to recognize the motor rather than the fault.
+- **Decision [proposed]** (Claude, 27 Oct; Alex asked to keep going until the model is finished): f for a window =
+  the drive command's mean over the window (`features/windows.csv`, `f_hz`). Constant speeds: the commanded frequency.
+  Ramps: the nominal ramp, except the 7 recordings above, which use their fitted ramp-and-hold command (more than
+  4.0 Hz from the nominal ramp; the threshold lies in the gap between 2.85 and 5.85 Hz and was set from the fits before
+  E2 was trained, without the labels). The levels are always the commanded ones, so the slip does not enter f. On the
+  board, f is the frequency the drive is commanded to, as the drive reports it; never a shaft-speed sensor such as a
+  tachometer, whose reading includes the slip.
+- `features.py` now also writes `f_hz` (windows), `features/speed.csv` (the command per recording and its fit) and
+  `features/tracks.csv` (the 64 tracked lines, 0.27 MB). `recordings.csv` and every other column of `windows.csv` are
+  byte-identical to before; E0 and E1 give byte-identical weights and results.
+
+### E2: E1 on 1-s windows (defined 27 Oct, before the run)
+
+Inputs (15) per 1-s window (10 per recording: train 640 windows, val 320, test 320), from `features/windows.csv`: the
+E1 inputs computed on the window, with f = the window's drive command (`f_hz`, above). Trained on windows with the E0
+rules (batch 64, so 10 batches per epoch; standardizer and pos_weight = 80 / 560 from the train windows; early stopping
+on the weighted validation BCE over the validation windows). **Recording score = the mean of its 10 window logits**;
+the threshold and every metric are per recording, as before. Command: `python train.py E2`.
+
+Why: E1 learned the recordings' 10-s statistics; windows give 10 times as many examples and a ramp window has one
+speed instead of a 10-s average. On the board the same model is run once a second and the ARM averages the last 10
+logits (output 1). Still known before the run: no window of train or val is at 15 Hz; the lowest train window f is
+16.5 Hz (speed code 5, first window) and the 45->15 ramp in val reaches 16.5 Hz in its last window, so windows bring the
+training range down from 30 to 16.5 Hz.
+
+**E2 results** (27 Oct, run once; `model/results/E2/report.md`; a second run gives byte-identical weights and results):
+
+| | Val F1 (42 / 43 / 44) | Val ROC-AUC | Val weighted BCE (42 / 43 / 44; mean) | Test faults found | Test false alarms | Test ROC-AUC | Best / last epoch |
+|---|---|---|---|---|---|---|---|
+| E1 | 1 / 1 / 1 | 1 / 1 / 1 | 0.054 / 0.050 / 0.068; 0.057 | 15 / 17 / 15 of 28 | 0 / 2 / 0 of 4 | 0.929 / 0.562 / 0.973 | 100 / 100 (all) |
+| E2 | 1 / 1 / 1 | 1 / 1 / 1 | 0.004 / 0.114 / 0.003; 0.040 | **24** / 17 / 23 of 28 | 0 / 2 / 0 of 4 | **1.000** / 0.580 / 1.000 | 99/100, 11/26, 98/100 |
+
+- On validation E2 is better than E1 (lower validation loss for seeds 42 and 44 and on the mean; F1 and ROC-AUC are 1
+  for both). Note: E1's validation loss is per recording (32 rows) and E2's per window (320 rows), so these are not the
+  same quantity; on a common per-recording loss (below, model choice) the ranking is the same except the worst seed. Seed 42 finds 24 of the 28 test faults with no false alarm (James: 18/28); every miss is still at 15 Hz
+  (4/14; seed 44 5/14), all 14 faulty recordings at speed code 6 are found.
+- **Seeds 42 and 44 rank every test recording correctly (ROC-AUC 1.000)**: the test faults at 15 Hz score 1.4 to 11.5
+  (seed 42) and the healthy ones -28.7 and -18.9. The 4 misses come from the threshold: validation separates the
+  classes completely (healthy at most -4.7, faulty at least 4.1), and the rule (the lowest cut among the validation
+  scores with the best F1, faulty if score >= cut) puts the cut at the lowest faulty validation score, +4.1, the top of
+  that gap. The rule stays: changing it now would be choosing it on the test result.
+- Seed 43 stops at epoch 26 (best 11) at a much higher validation loss (0.114) and is no better than E1 on test
+  (17/28, both healthy 15-Hz recordings called faulty, ROC-AUC 0.580). The seeds differ a lot; seed 42 is reported.
+- Test accuracy (0.875) is not near 100%, but the ranking is perfect: as for every result here, the one healthy motor
+  is quieter than every faulty recording on accelerometer 2, so the model may be recognizing that motor, not the fault.
+
+### E3: E2 plus accelerometer 1 (defined 27 Oct, before the run)
+
+The spec runs E3 only if E2 still misses faults; E2 misses 4 (seed 42). Inputs (22) per 1-s window: the 7 E1
+statistics (ln std, ln RMS, ln max|x|, ln peak-to-peak, crest, skewness, kurtosis) of accelerometer 1, then of
+accelerometer 2, then of accelerometer 3, then ln(f) with f as in E2. Everything else as E2 (windows, recording score =
+mean of 10 window logits, same rules). Accelerometer 1's amplitudes are positive in every window (checked by
+`train.py`). Command: `python train.py E3`.
+
+**E3 results** (27 Oct, run once; `model/results/E3/report.md`; a second run gives byte-identical weights and results):
+
+| | Val F1 / ROC-AUC (all seeds) | Val weighted BCE (42 / 43 / 44; mean) | Test faults found | Test false alarms | Test ROC-AUC | Best / last epoch |
+|---|---|---|---|---|---|---|
+| E2 | 1 / 1 | 0.004 / 0.114 / 0.003; 0.040 | 24 / 17 / 23 of 28 | 0 / 2 / 0 of 4 | 1.000 / 0.580 / 1.000 | 99/100, 11/26, 98/100 |
+| E3 | 1 / 1 | 0.007 / 0.008 / 0.006; **0.007** | **27** / 25 / 27 of 28 | 0 / 0 / 0 of 4 | **1.000 / 1.000 / 1.000** | 93/100, 97/100, 98/100 |
+
+- Seed 42: 27 of 28 test faults found, no false alarm (James: 18/28). The one miss is R_U_1_1 (15 Hz) in seeds 42 and
+  44; seed 43 also misses K_A_1_0 and R_M_1_1. Test mean over the seeds: accuracy 0.948 ± 0.029, recall 0.940 ± 0.034,
+  F1 0.969 ± 0.018, precision 1.000, ROC-AUC 1.000 in every seed.
+- Accelerometer 1 also makes the seeds agree: every seed ranks every test recording correctly, where E2's seed 43 did
+  not.
+- **Test accuracy is now close to 100% (0.969 for seed 42). As the spec asks, plainly: the one healthy motor is quieter
+  than every faulty recording (accelerometer 2, every speed), and the test set has that same motor at two more speeds.
+  The model may be recognizing that motor, not the fault. Nothing in this dataset can tell the two apart; a second
+  healthy motor (or the same motor before and after a fault) would.**
+
+**Model choice: E3, seed 42** [proposed] (Claude, 27 Oct; Alex to confirm). Not a validation-only choice, plainly:
+- E3 exists because E2 seed 42 missed 4 test faults (Alex's spec: E3 only if faults are still missed); E2 missed no
+  validation fault in any seed.
+- F1 and ROC-AUC are 1 on validation for E1, E2 and E3 in every seed, so only the validation loss is left. The rule
+  written before E1 (seed 42 and the three-seed mean) does not decide between E2 and E3: seed 42 picks E2 (0.004
+  against 0.007; seed 44 too), the mean picks E3 (0.007 against 0.040, because E2's seed 43 is bad). Putting the mean
+  and the worst seed first was decided after `train.py` had printed both test results (27/28 against 24/28), so the
+  test result may have influenced it.
+- On a common per-recording loss (weighted BCE of the 32 validation recording scores, pos_weight 8/56; E1's own loss
+  is this one): E1 0.054 / 0.050 / 0.068 (mean 0.057), E2 0.0004 / 0.066 / 0.0004 (0.022), E3 0.0015 / 0.0017 / 0.0018
+  (0.0017). E3 has the lowest mean and worst seed; seed 42 alone still picks E2.
+- The reasons to prefer E3 that do not use test: every seed agrees (its worst-seed per-recording loss is 37 times lower
+  than E2's),
+  so the result does not hang on one lucky seed. E2 seed 42 (15 inputs, accelerometers 2 and 3 only; 474 cycles a
+  window, 690 for 10) is the alternative if Alex prefers the pre-declared seed-42 rule.
+- From now on: each experiment's comparison rule, tie-break included, goes into its definition before the run.
+Seed 42 is the reported and exported run (the rule since E0).
+
+Size on the chip (`mlp_equation`, P = 8, the ZedBoard settings PIPE 2, MEM_REG 2, HREAD 1, 9-stage postproc, 8 lanes;
+214.286 MHz): E3 is 22 -> 32 -> 16 -> 1, 22 passes per run.
+
+| Rows M | Model cycles | Time | Array use (MACs / (64 PEs x model cycles)) |
+|---|---|---|---|
+| 1 (one 1-s window, once a second) | 566 | 2.64 us | 3.4% |
+| 10 (the last 10 windows at once) | 818 | 3.82 us | 23.5% |
+
+(E0's 16-32-16-1 shape: 474 and 690 cycles. 22 inputs need 3 blocks of 8 instead of 2, hence the 92 more cycles at
+M = 1.)
+
+### H1: the health index, output 2 (defined 27 Oct, before the run on val and test)
+
+Alex's definition (27 Oct): 100% = inside the healthy motor's range at that speed, 0% = a typical faulty recording.
+`model/health.py`, from `features/windows.csv`; no training, no seeds:
+1. Healthy reference from the 80 healthy train windows only: for each of the 21 window statistics x_j (E3's inputs
+   without ln f), a line alpha_j + beta_j ln f (least squares) and the spread sigma_j of the healthy windows around it.
+2. Window distance d = sqrt(mean_j z_j^2), z_j = (x_j - alpha_j - beta_j ln f) / sigma_j.
+3. Recording distance D = the mean of its 10 window distances (the last 10 s).
+4. Anchors from train only: D_100 = the largest D of the 8 healthy train recordings, each measured with a reference
+   fitted without its own speed code (so it is an unseen speed, as val and test are; 2.508, H_H_8_0); D_0 = the median D
+   of the 56 faulty train recordings (3.804).
+5. HI = 100% x clip((D_0 - D) / (D_0 - D_100), 0, 1).
+
+On the board the ARM computes it from the features it already computes for the MLP (about 42 to 63 multiply-adds, a
+square root and a 10-value mean per second); the chip runs output 1. Reported per split: every healthy recording's HI (it should
+be 100%), the faulty recordings' HI (min / median / max; how many at or below 50% and at 0%), the ROC-AUC of D, and HI
+per speed code and fault class. Known before the run (train only): the least faulty train recording has D = 2.54, just
+above D_100 = 2.51, so some faulty recordings will score near 100%; and test's 15 Hz is below every healthy train
+window (16.5 Hz and up), so the reference is extrapolated there. It measures the distance from one healthy motor, not
+a remaining capability.
+
+**H1 results** (27 Oct, run once; `model/results/H1/report.md`, every recording's index in `health.csv`; deterministic):
+
+| Split | Healthy HI (each recording) | Faulty HI min / median / max | Faulty <= 50% | Faulty at 0% | ROC-AUC of D |
+|---|---|---|---|---|---|
+| train | 100 (all 8) | 0 / 0 / 97 | 45/56 | 28/56 | 1.000 |
+| val | 100, 100, 100, 94 | 0 / 22 / 100 | 20/28 | 12/28 | 0.955 |
+| test | **0 (H_H_1_0), 0 (H_H_1_1)**, 100, 100 | 0 / 35 / 100 | 15/28 | 7/28 | **0.527** |
+
+- Where the healthy reference is dense it works: speed code 6 (test, 30->60 Hz): both healthy recordings 100%, faulty
+  median 0% (max 59%); speed code 2 (val, 30 Hz): healthy 100%, faulty median 22%. On the validation windows of the
+  45->15 ramp it is correct from 22.5 Hz up (window ROC-AUC 0.964 at 22.5 Hz, 1.000 above), uninformative at 19.5 Hz
+  (0.500) and inverted at 16.5 Hz (0.000: both healthy windows have d above D_0); H_H_7_1's 94% comes from its 16.5-Hz
+  window alone, and the validation recording ROC-AUC is 1.000 without the 16.5-Hz windows. Below 30 Hz the reference
+  has only 2 healthy train windows per frequency.
+- **At 15 Hz it fails**: the two healthy 15-Hz recordings score 0% (D = 8.17 and 4.45, far beyond D_0 = 3.80), and the
+  faulty ones a median of 76%. This was the risk named before the run (the reference is a line in ln f fitted from
+  16.5 Hz up; at 15 Hz it is extrapolated), and it is worse than expected: their accelerometer-3 kurtosis is far
+  outside anything seen in training (up to 165 standard deviations; see the INT8 export below).
+- Some faulty recordings score 100%: 3 in val (K_A_2_1, S_W_2_0, V_U_2_1, all at 30 Hz) and 3 in test (F_B_1_0, K_A_1_0,
+  R_U_1_1, all at 15 Hz); none in train, where the highest is S_W_3_0 at 97% (D = 2.54, just above D_100 = 2.51). A
+  100% does not prove a healthy motor. By class (val + test, median): R_M 0%, B_R 19%, R_U 22%, F_B 28%,
+  V_U 28%, K_A 45%, S_W 58%.
+- H1 stays as run. Options for Alex, not done (each would be a new experiment, and validation has no 15-Hz recording to
+  choose with below 16.5 Hz): show "no reading" below a speed chosen on the validation windows (16.5-28.5 Hz), or
+  record the healthy motor at low speeds.
+
+### INT8 export of E3 seed 42 (27 Oct)
+
+`model/export.py` -> `model/export/E3/`. Quantization as the spec; the details it leaves open [proposed] (Claude): one
+input scale s_x for all 22 inputs, chosen on validation between the train maximum of |x_std| / 127 and its 99.9th
+percentile / 127 (the rule written in `export.py` before the run; the percentile won: mean |INT8 - FP32| window logit on
+validation 0.432 against 0.478); inputs clipped to -127 .. 127; round half away from zero for inputs, weights and
+biases; hidden scales s_h = the largest train activation / 127; the threshold from the FP32 cut on validation
+(ln(t / (1 - t)) = cut = 1.1071).
+
+| | Value |
+|---|---|
+| s_x | 0.0475667 (6.04 standard deviations = 127; 9 of 640 train, 15 of 320 val and 26 of 320 test windows have an input beyond 127 s_x, kurtosis or crest and one test skewness; 14 of the 15 val ones change when clipped, one rounds to 127) |
+| s_h (layers 0, 1) | 0.0716283, 0.131701 |
+| Layer 0 (22 x 32) | W_q -127 .. 127, bias -2902 .. 3287, m0 34176 .. 65009, shift 24 .. 25 |
+| Layer 1 (32 x 16) | W_q -127 .. 127, bias -1101 .. 1887, m0 37489 .. 61169, shift 24 .. 26 |
+| Layer 2 (16 x 1) | W_q -99 .. 127; bias_last = -120 (added on the ARM); logit scale s_h x s_w = 0.000626296 |
+| T_int | 1768: the last 10 s are faulty if the sum of the 10 window logits (C + bias_last) >= 17,680 |
+
+| Split | FP32 [[TN,FP],[FN,TP]] | INT8 | ROC-AUC FP32 / INT8 | Decisions changed |
+|---|---|---|---|---|
+| train | [[8,0],[0,56]] | [[8,0],[0,56]] | 1.000 / 1.000 | 0 |
+| val | [[4,0],[0,28]] | [[4,0],[0,28]] | 1.000 / 1.000 | 0 |
+| test | [[4,0],[1,27]] | [[4,0],[1,27]] | 1.000 / 1.000 | 0 |
+
+- **INT8 test: 27 of 28 faults found, 0 of 4 false alarms, accuracy 0.969, precision 1.000, recall 0.964, F1 0.982,
+  ROC-AUC 1.000; no decision changes between FP32 and INT8 in any split.** The only miss is R_U_1_1, as in FP32.
+- Window logits (INT8 x scale against FP32): mean |error| 0.44 over all 1,280 windows (test 1.09); without an input
+  beyond 127 s_x, 0.10 (test 0.11). 23 windows have an error above 5, all where a kurtosis is far beyond INT8's clip at
+  6.04 standard deviations: up to 48 in the healthy 15-Hz test recordings (H_H_1_0, H_H_1_1; accelerometer 3 kurtosis up
+  to 165), and 39 and 15 in the last windows of the healthy 45->15 ramps in val (H_H_7_1, H_H_7_0). Those val windows
+  dominate the validation error that chose s_x. These recordings stay healthy in both FP32 and INT8.
+- Every true sum fits the 22-bit accumulator (checked for all 1,280 windows), so golden_mlp's wrap never happens.
+- Files: `W<l>.hex`, `Bias<l>.hex`, `Scl<l>.hex` (`mac.write_hex`, read by `tb_mlp.sv`; the last layer's bias and
+  scale are written as 0, the chip does not use them), `mg_model.h` (the C header: standardizer, s_x, weights, biases,
+  m0, shift, bias_last, T_int, and the health index, with the steps for the ARM), `vectors/test_windows.csv` (every test
+  window: inputs, INT8 row, C, logit, FP32 logit), `vectors/test_recordings.csv` (sums and decisions), `quant.json`,
+  `report.md`.
+
+### RTL check (27 Oct)
+
+Icarus Verilog 13.0 installed with Homebrew (the Nix store had no iverilog). `model/rtl_check.py` compiles `tb_mlp.sv`
+with the RTL as `mac.py mlp` does (P 8, ACC 22, PIPE 2, MEM_REG 2, HREAD_REG 1, 8 lanes, 9-stage postproc), loads the
+exported hex files and compares every raw sum C, the last layer's INT8 inputs in the A buffer and the four counters with
+`golden_mlp()` and `mlp_equation()`. It works in a temporary folder (`mac.Simulator` would write
+`mac_attack_accel_MLP/run/`, which git does not ignore); `mac.py` and the RTL are unchanged.
+
+| Run | Result |
+|---|---|
+| All 1,280 windows, 64 rows per model run (20 runs) | PASS, 2,330 cycles per run (= equation) |
+| M = 10: each of the 32 test recordings as one model run | PASS, 818 cycles = 3.82 us at 214.286 MHz (= equation) |
+| M = 1: one recording's 10 windows one at a time | PASS, 566 cycles = 2.64 us (= equation) |
+| Logits and decisions | identical in the three runs; every test recording's sum and decision equal the exported vectors (27 of 32 faulty) |
+
+**Every logit matches bit for bit.** 12 s on this Mac.
+
+**Independent checks of phases 2-4** (27 Oct; six checkers that wrote their own code from the definitions above, then a
+second agent tried to refute every defect they reported; scripts kept outside the repo; no repo file changed by them):
+- Ramps: two other trackers (no Viterbi; and a fit straight to the harmonic map) find the same 7 recordings (5.25 to
+  14.88 Hz off; the others at most 2.76 / 3.30 Hz); the fitted times agree within 0.07 s; every f_hz equals the exact
+  integral of its command within 7e-15 Hz; the measured-1x table agrees within 0.01 Hz; recordings.csv byte-identical to
+  phase 1, windows.csv identical apart from f_hz.
+- Retrain: a trainer written from the spec gives bit-identical weights, cuts, epochs, losses, scores and metrics for E1,
+  E2 and E3, all seeds, once four details were known that the spec did not state (now in the `train.py` docstring:
+  standardizer in float64 with the population std, then float32; batch order from one `torch.randperm` a epoch; one
+  forward pass over all rows; the float64 mean of the window logits). No decision of seed 42 depends on them.
+- Health index: own implementation equal within 4e-15 (reference), every D and HI, every table.
+- INT8 and RTL: own quantization equal to every hex file, every header array and constant, every test vector; the
+  header compiles with `-std=c99 -Wall -Wextra -Wconversion -pedantic` without a warning; float32 on the ARM gives the
+  same q in 28,160 of 28,160 values; `rtl_check.py` passes and fails on deliberate errors (it is not vacuous); an own
+  Icarus driver gives the same C and cycles; the stock `mac.py mlp` (P 4, 8, 16: 20/20 each) and `mac.py postproc`
+  pass on Icarus 13.0 in a copy of the folder.
+- Defects found and fixed (no result changed; the exported files are byte-identical, only header comments changed):
+  the model choice was called "validation only" (rewritten above: the criterion was set after the E2 and E3 test
+  results were seen); E1 and E2/E3 validation losses are in different units (noted; per-recording numbers added);
+  H1 was said to work "from 16.5 Hz up" (it is inverted on the 16.5-Hz validation windows); R_M_7_0's end and
+  S_W_8_0's undershoot were not described; a tachometer was named as a source of f (it measures the slip);
+  `round_half_away` rounded 0.49999999999999994 up (fixed; no exported value changes); `export.py`'s overflow check
+  now uses `requantize`; section 3 still said "nothing trained yet"; the healthy motor is faster than most, not every,
+  faulty recording; smaller wording and number errors (op counts, a D value, clipped-window counts, table sizes).
+- Found and left as is, stated above: the tracker reads 0 to 0.25 Hz low; R_M_7_0's last window f is about 3 Hz low.
+
+### Model comparison (27 Oct; from the saved results, no experiment changed)
+
+Test (speed codes 1 and 6: 4 healthy, 28 faulty recordings; positive class = faulty). Balanced accuracy = (recall +
+specificity) / 2; MCC = Matthews correlation. Recomputed independently with no mismatch.
+
+| Seed 42, test | Accuracy | Balanced acc. | Precision | Recall | Specificity | F1 | MCC | ROC-AUC |
+|---|---|---|---|---|---|---|---|---|
+| Always "faulty" (no model) | 0.875 | 0.500 | 0.875 | 1.000 | 0.000 | 0.933 | 0 | - |
+| E0 | 0.688 | 0.821 | 1.000 | 0.643 | 1.000 | 0.783 | 0.429 | 0.875 |
+| E1 | 0.594 | 0.768 | 1.000 | 0.536 | 1.000 | 0.698 | 0.355 | 0.929 |
+| E2 | 0.875 | 0.929 | 1.000 | 0.857 | 1.000 | 0.923 | 0.655 | 1.000 |
+| E3 | 0.969 | 0.982 | 1.000 | 0.964 | 1.000 | 0.982 | 0.878 | 1.000 |
+
+| Test, 3 seeds (mean ± population std) | Balanced acc. | Recall | Specificity | MCC | ROC-AUC | Recall at 15 Hz (42 / 43 / 44) |
+|---|---|---|---|---|---|---|
+| E0 | 0.786 ± 0.029 | 0.571 ± 0.058 | 1.000 | 0.380 ± 0.039 | 0.845 ± 0.055 | 0.29 / 0.00 / 0.14 |
+| E1 | 0.696 ± 0.101 | 0.560 ± 0.034 | 0.833 ± 0.236 | 0.261 ± 0.133 | 0.821 ± 0.184 | 0.07 / 0.21 / 0.07 |
+| E2 | 0.798 ± 0.173 | 0.762 ± 0.110 | 0.833 ± 0.236 | 0.444 ± 0.264 | 0.860 ± 0.198 | 0.71 / 0.21 / 0.64 |
+| E3 | 0.970 ± 0.017 | 0.940 ± 0.034 | 1.000 | 0.824 ± 0.077 | 1.000 | 0.93 / 0.79 / 0.93 |
+
+- Recall at speed code 6 (30->60 Hz) is 14/14 for every model and seed; every error is at 15 Hz, below every training
+  speed. The only false alarms are E1 and E2 seed 43 (H_H_1_0, H_H_1_1).
+- 95% intervals (Clopper-Pearson), seed 42: recall E2 24/28 [0.67, 0.96], E3 27/28 [0.82, 1.00]; the false-alarm rate
+  0/4 is [0, 0.60] for every model: 4 healthy test recordings cannot show a low false-alarm rate.
+- Accuracy, precision and F1 are inflated by the 87.5% faulty test set: calling everything faulty scores 0.875 / 0.875 /
+  0.933. E0 and E1 are below that baseline in accuracy and F1; balanced accuracy and MCC are the fairer numbers.
+- Seed 42 is the best or tied-best test seed in every experiment, so its numbers are at the optimistic end.
+- Decision speed (E2, E3; every block of k consecutive 1-s windows of every test recording, mean logit against the
+  seed's cut; the blocks overlap): E3 seed 42 recall 0.950 / 0.955 / 0.964 / 0.964 with k = 1 / 3 / 5 / 10 s,
+  specificity 1.000 at every k (seeds 43, 44: 0.907 -> 0.893, 0.961 -> 0.964). E2 seed 42: 0.854 -> 0.857. One second
+  already gives almost all of it; averaging 10 s adds little.
+- Validation (all 1.000 for E1-E3) is not independent evidence: the cut is the lowest faulty validation score, so
+  validation recall is 1 by construction, and early stopping used the validation loss.
+
+### Report and two more findings (27 Oct)
+
+`model/report/Machine_Guardian_model_report.pdf` (17 pages, `python report/make_report.py`; the same bytes on every
+build): the whole system from the data to the chip, with every result. Its model numbers, tables and charts are read
+from the saved files when it is built; the RTL, board and check facts are quoted from this log. Two independent agents
+checked it: one recomputed every number (no mismatch), one read it as a newcomer (31 problems in all, every one
+fixed: layout, undefined terms, and the two findings below). README: steps for James to run everything himself.
+
+- **Accelerometer 1 also identifies the healthy motor.** Its spread (std) is lower for the healthy motor than for
+  every faulty recording at every speed code (quietest faulty / loudest healthy 1.49x at 15 Hz, 2.0x to 3.3x at the
+  others; RMS is not comparable on accelerometer 1, which carries a constant offset of about 5 m/s^2). So E3's gain
+  over E2, which comes from adding accelerometer 1 and is all at 15 Hz, may come from a stronger "this is the quiet
+  motor" cue rather than from the faults. Same remedy as before: a second healthy motor.
+- **INT8 brings the healthy low-speed recordings much closer to the threshold.** Their accelerometer-3 kurtosis is far
+  beyond anything in training; FP32 extrapolates it to very negative scores, INT8 clips it at 6 standard deviations.
+  Mean logits (real units, cut 1.11), FP32 -> INT8: H_H_1_0 -27.07 -> -6.28, H_H_1_1 -20.06 -> -9.91 (test), H_H_7_0
+  -10.63 -> -7.41, H_H_7_1 -12.32 -> -7.85 (val). One healthy window crosses the cut in INT8: H_H_7_1 window 9, 4.86
+  (FP32 -34.37); a 1-s decision would alarm there, the 10-s decision does not. No 10-s decision changes in any split.
+  On the board, expect the healthy margin at low speed to be the INT8 one.
+- Wording fixed in the report (and noted here): the test speed codes are not used in training, but for E2 and E3 only
+  15 Hz lies outside the training frequency range (16.5-60 Hz); the test split steered E3's creation and the choice,
+  so the test numbers are development results and the three-seed mean is the fairer figure.
