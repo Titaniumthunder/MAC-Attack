@@ -59,6 +59,31 @@ tables in `features/` without it.
 10 x T_int (output 1). The health index (output 2) is planned to run on the ARM from the same window statistics
 [proposed]. Everything the board needs is in `export/E3/mg_model.h`.
 
+## Single-accelerometer models (`E3_single_accel`, 28 Oct)
+
+E3 with one physical accelerometer and ln f: 8 inputs -> 32 -> 16 -> 1, everything else as E3. E3's files are
+untouched. Results and limits: `SINGLE_ACCEL_MODEL_REPORT.md`, `SINGLE_ACCEL_COMPARISON.md`,
+`SINGLE_ACCEL_HARDWARE_REPORT.md`. Inside `model/` (`python` = the environment above; on the Windows PC it was run
+with Python 3.12):
+
+| Step | Command |
+|---|---|
+| Train the three variants (accelerometer 1, 2, 3; seeds 42-44) and select one on validation | `python single_accel.py` (about 15 s; `--no-train` redoes only the selection and analysis) |
+| Train one variant | `python train.py E3_single_accel_a1` (`_a2`, `_a3`; `--out <folder>` as for E3) |
+| Evaluation tables | written by `single_accel.py` to `results/E3_single_accel/analysis.md` (and `.json`); per variant `results/E3_single_accel_a<k>/report.md` |
+| The configured accelerometer | **Deployed: accelerometer 1**, `weights/E3_single_accel/deployed.json` (team decision by mounting, after the test results). The validation rule's choice (accelerometer 2) is in `selected.json`. To deploy another one, pass its names to the next three commands |
+| Health index of that accelerometer | `python health.py --accels 1 --name H1_single_accel_a1` |
+| Export for the TPU (INT8, hex, C header, vectors) | `python export.py --experiment E3_single_accel_a1 --health H1_single_accel_a1` -> `export/E3_single_accel_a1/` |
+| RTL check | `python rtl_check.py --experiment E3_single_accel_a1` (Icarus) or `--sim vivado` (xsim; works with Vivado 2019.1) |
+| Tests | `python -m pytest test_single_accel.py -q` |
+| PDF report | `python report/make_single_accel_report.py` -> `docs/Machine_Guardian_single_accel_report.pdf` (needs Chrome or Edge, prints HTML headless) |
+
+Inference: `features.window_inputs(accel_window, f_hz)` gives the 8 inputs of one 1-s window (42,000 samples in m/s^2,
+f = the drive's commanded frequency); standardize with `weights/<E>/model.json` `scaler`, run the network
+(`train.mlp(8)` with `seed42.pt`), and average the last 10 window logits against the seed's `cut`. On the board the same
+steps are in `export/<E>/mg_model.h`. Later sensors (temperature, measured RPM) go in `window_inputs(..., extra=...)`
+and `health.statistics()`; no model uses them yet.
+
 ## Files
 
 | Path | In git | What it is |
@@ -70,6 +95,8 @@ tables in `features/` without it.
 | `train.py` | yes | The experiments and the training, threshold and reporting rules (see its docstring) |
 | `health.py` | yes | The health index (output 2) |
 | `export.py`, `rtl_check.py` | yes | INT8 export and the RTL check |
+| `single_accel.py`, `test_single_accel.py` | yes | The single-accelerometer variants and their selection; their checks |
+| `SINGLE_ACCEL_*.md` | yes | The single-accelerometer reports |
 | `features/recordings.csv` | yes | 128 rows, one per 10-s recording |
 | `features/windows.csv` | yes | 1,280 rows, one per 1-s window (with `f_hz`, the window's drive frequency) |
 | `features/speed.csv`, `tracks.csv` | yes | The drive command of each recording and its fit; the tracked 1x lines of the 64 ramp recordings |

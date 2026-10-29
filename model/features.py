@@ -48,6 +48,29 @@ def stats(x):
     return np.stack([mean, std, rms, absmax, p2p, crest, skew, kurt], axis=-1)
 
 
+MODEL_STATS = ("std", "rms", "absmax", "p2p", "crest", "skew", "kurt")   # the model's 7 per accelerometer (no mean)
+LOG_STATS = ("std", "rms", "absmax", "p2p")                              # amplitudes, used as ln
+
+
+def vibration_inputs(x):
+    """One accelerometer's 1-s window (FS samples, m/s^2) -> its 7 model inputs, in the model's order:
+    ln std, ln RMS, ln max|x|, ln peak-to-peak, crest, skewness, kurtosis (train.log_inputs on the tables)."""
+    s = dict(zip(STATS, stats(np.asarray(x, np.float64).reshape(-1, 1))[0]))
+    return np.array([np.log(s[k]) if k in LOG_STATS else s[k] for k in MODEL_STATS])
+
+
+def drive_inputs(f_hz):
+    """The drive's commanded frequency (Hz, from the drive, not a shaft-speed sensor) -> [ln f]."""
+    return np.array([np.log(f_hz)])
+
+
+def window_inputs(accel, f_hz, extra=()):
+    """The board-side input vector of one 1-s window for the single-accelerometer models: the vibration inputs of the
+    one accelerometer, then ln f, then any later sensor groups in `extra` (arrays, e.g. temperature or measured RPM
+    features: not used yet, no model is trained with them). Order = model.json's "inputs"."""
+    return np.concatenate([vibration_inputs(accel), drive_inputs(f_hz), *extra])
+
+
 def read(path):
     """Accelerometers 1, 2, 3 of one recording: ROWS x 3 float64. The header starts with a byte-order mark."""
     with open(path, encoding="utf-8-sig") as f:

@@ -4,6 +4,8 @@
   python train.py E1          the same without the means, ln of the 4 amplitudes, plus ln(commanded frequency)
   python train.py E2          E1 on 1-s windows (f = the window's drive command); recording score = mean of 10 logits
   python train.py E3          E2 plus accelerometer 1 (22 inputs)
+  python train.py E3_single_accel_a1   E3 with one accelerometer (1, 2 or 3: _a1, _a2, _a3) and ln f (8 inputs);
+                                       single_accel.py runs all three and picks one on validation
 
 Writes
   weights/<E>/seed<s>.pt      PyTorch state_dict per seed (torch.load(..., weights_only=True))
@@ -86,12 +88,21 @@ def e3_inputs(rows):
     return log_inputs(rows, np.array([r["f_hz"] for r in rows]), accels=(1, 2, 3))
 
 
+def single_accel_inputs(accel):
+    """E3 with one physical accelerometer: its 7 statistics, then ln f (8 inputs). Same preprocessing as E3."""
+    def inputs(rows):
+        return log_inputs(rows, np.array([r["f_hz"] for r in rows]), accels=(accel,))
+    return inputs
+
+
 # Each experiment is fixed once it has been run and its test result seen; new ideas are new experiments.
 EXPERIMENTS = {
     "E0": {"title": "James's baseline rebuilt", "table": "recordings", "inputs": e0_inputs},
     "E1": {"title": "log amplitudes and log f", "table": "recordings", "inputs": e1_inputs},
     "E2": {"title": "E1 on 1-s windows", "table": "windows", "inputs": e2_inputs},
     "E3": {"title": "E2 plus accelerometer 1", "table": "windows", "inputs": e3_inputs},
+    **{f"E3_single_accel_a{k}": {"title": f"E3 with accelerometer {k} only", "table": "windows",
+                                 "inputs": single_accel_inputs(k)} for k in (1, 2, 3)},
 }
 
 
@@ -232,14 +243,11 @@ def report(name, exp, info, runs, recs):
     return "\n".join(L) + "\n"
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("experiment", choices=sorted(EXPERIMENTS))
-    ap.add_argument("--out", type=Path, default=HERE, help="folder for weights/ and results/ (default model/)")
-    a = ap.parse_args()
+def run(name, out=HERE):
+    """Train one experiment's three seeds and write weights/<E>/ and results/<E>/ under `out`. Returns (info, runs)."""
     torch.use_deterministic_algorithms(True)
     torch.set_num_threads(1)
-    name, exp = a.experiment, EXPERIMENTS[a.experiment]
+    exp = EXPERIMENTS[name]
     t_start = time.time()
 
     rows = load(exp["table"])
@@ -252,7 +260,7 @@ def main():
     yt = torch.tensor(y, dtype=torch.float32)
     pos_weight = float((y[part["train"]] == 0).sum() / (y[part["train"]] == 1).sum())
 
-    wdir, rdir = a.out / "weights" / name, a.out / "results" / name
+    wdir, rdir = out / "weights" / name, out / "results" / name
     wdir.mkdir(parents=True, exist_ok=True)
     rdir.mkdir(parents=True, exist_ok=True)
     runs, scores = {}, {}
@@ -285,7 +293,7 @@ def main():
         w.writerow(META + [f"{k}_s{s}" for s in SEEDS for k in ("score", "faulty")])
         for i, r in enumerate(recs):
             w.writerow([r[k] for k in META] + [v for s in SEEDS for v in (scores[s][i], int(scores[s][i] >= runs[s]["cut"]))])
-    (rdir / "report.md").write_text(report(name, exp, info, runs, recs))
+    (rdir / "report.md").write_text(report(name, exp, info, runs, recs), encoding="utf-8")
 
     print(f"{name}: {exp['title']}, {len(inputs)} inputs, {info['n']} rows, {time.time() - t_start:.1f} s")
     for s, r in runs.items():
@@ -294,6 +302,15 @@ def main():
               f"{m['confusion'][0][1]}/{sum(m['confusion'][0])}, ROC-AUC {m['roc_auc']:.3f}, F1 {m['f1']:.3f} "
               f"(t {r['t']:.4f}, best epoch {r['best_epoch']} of {r['epochs_run']}); missed by speed {m['missed_by_speed']}")
     print(f"  wrote {wdir} and {rdir}")
+    return info, runs
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("experiment", choices=sorted(EXPERIMENTS))
+    ap.add_argument("--out", type=Path, default=HERE, help="folder for weights/ and results/ (default model/)")
+    a = ap.parse_args()
+    run(a.experiment, a.out)
 
 
 if __name__ == "__main__":

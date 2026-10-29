@@ -1,6 +1,7 @@
 """Run the exported model on the RTL (tb/tb_mlp.sv, as mac.py's `mlp` command does) and check every number.
 
   python rtl_check.py                 E3; Icarus Verilog 12 or newer (iverilog, vvp on PATH)
+  python rtl_check.py --experiment E3_single_accel_a1 --sim vivado      another export, on Vivado's xsim
 
 Three runs of the same compiled testbench (the ZedBoard settings: P 8, ACC 22, PIPE 2, MEM_REG 2, HREAD_REG 1,
 8 postproc lanes, 9-stage postproc; weights loaded once per run of the testbench):
@@ -29,19 +30,29 @@ PARAMS = {"P": 8, "ACC": 22, "MAXD": 64, "PIPE": 2, "MEM_REG": 2, "PE_PRIM": 0, 
 
 
 class TempSimulator(mac.Simulator):
-    """mac.Simulator with the work folder somewhere else (its build() is otherwise the same)."""
+    """mac.Simulator with the work folder somewhere else (its build() is otherwise the same).
+    kind: "icarus", "vivado" (xsim) or "auto" (Vivado if found, as mac.py, else Icarus)."""
 
-    def __init__(self, root):
-        super().__init__("icarus")
+    def __init__(self, root, kind="icarus"):
+        super().__init__(kind)
         self.root = Path(root)
 
     def build(self, top, params):
-        work = self.root / f"icarus_{top}"
+        work = self.root / f"{self.kind}_{top}"
         work.mkdir(parents=True, exist_ok=True)
         files = [str(mac.ROOT / f) for f in mac.RTL + [mac.TB[top]]]
-        cmd = ["iverilog", "-g2012", "-s", top, "-o", "sim.vvp"]
-        cmd += [f"-P{top}.{k}={v}" for k, v in params.items()] + files
-        self._call(cmd, work, "Compiling")
+        if self.kind == "icarus":
+            cmd = ["iverilog", "-g2012", "-s", top, "-o", "sim.vvp"]
+            cmd += [f"-P{top}.{k}={v}" for k, v in params.items()] + files
+            self._call(cmd, work, "Compiling")
+        else:
+            self._call([self._tool("xvlog"), "-sv"] + files, work, "Compiling (xvlog)")
+            # -O0: Vivado 2019.1's default -O2 miscompiles tb_mlp.sv (NN[l] = N<l> leaves the default 8, so the
+            # testbench loads 8 x 8 layers; seen 28 Oct 2026). The RTL is the same either way.
+            cmd = [self._tool("xelab"), top, "-O0", "-s", "snap"]
+            for k, v in params.items():
+                cmd += ["-generic_top", f"{k}={v}"]
+            self._call(cmd, work, "Elaborating (xelab)")
         return work
 
 
@@ -83,9 +94,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--experiment", default="E3")
     ap.add_argument("--keep", action="store_true", help="keep the simulation folder")
+    ap.add_argument("--sim", choices=("icarus", "vivado", "auto"), default="icarus",
+                    help="simulator (default icarus; vivado = xsim, found as mac.py finds it)")
     a = ap.parse_args()
-    if not (shutil.which("iverilog") and shutil.which("vvp")):
-        raise SystemExit("Icarus Verilog not found (iverilog, vvp). macOS: brew install icarus-verilog")
+    if a.sim == "icarus" and not (shutil.which("iverilog") and shutil.which("vvp")):
+        raise SystemExit("Icarus Verilog not found (iverilog, vvp). macOS: brew install icarus-verilog; "
+                         "or --sim vivado")
     out = HERE / "export" / a.experiment
     q = json.loads((out / "quant.json").read_text())
     info = json.loads((HERE / "weights" / a.experiment / "model.json").read_text())
@@ -102,7 +116,7 @@ def main():
         layers.append({"W": W, "bias": read_hex(out / f"Bias{l}.hex", 32), "m0": scl & 0xFFFF,
                        "shift": scl >> 16, "relu": q["layers"][l]["relu"]})
     root = Path(tempfile.mkdtemp(prefix="mg_rtl_check_"))
-    sim = TempSimulator(root)
+    sim = TempSimulator(root, a.sim)
     t0 = time.time()
     work = sim.build("tb_mlp", PARAMS)
     print(f"RTL check of {a.experiment} (seed {q['seed']}) with {sim.name}, {PARAMS}; folder {work}")

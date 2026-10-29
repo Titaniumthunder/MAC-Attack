@@ -1,0 +1,12 @@
+{
+ "experiment": "E3_single_accel_a1",
+ "accel": 1,
+ "seed": 42,
+ "health": "H1_single_accel_a1",
+ "export": "export/E3_single_accel_a1/",
+ "decided": "2026-10-28, by the team (James), after the test results of all three variants had been seen",
+ "post_test_decision": true,
+ "reason": "Mounting: accelerometer 1 is the only one on the motor (drive end, magnet-mounted); our system has one accelerometer on the motor. Accelerometers 2 and 3 are on the test rig's shaft bearing housings.",
+ "validation_rule_choice": "E3_single_accel_a2 (selected.json); kept as the documented validation-only result",
+ "note": "Because this overrides the validation rule after the test split was seen, accelerometer 1's test numbers (28/28) are not an unbiased estimate."
+}
