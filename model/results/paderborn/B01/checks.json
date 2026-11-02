@@ -1,0 +1,125 @@
+{
+ "n_mat": 377,
+ "n_csv_rows": 377,
+ "missing_ids": [],
+ "extra_ids": [],
+ "ids_contiguous": true,
+ "all_samples_ok": true,
+ "fs_hz": [
+  128000.0
+ ],
+ "all_finite": true,
+ "timestamps_monotonic": true,
+ "duplicate_timestamps": 0,
+ "first": "2021-10-19 08:46:54",
+ "last": "2021-10-19 10:59:32",
+ "interval_s": {
+  "min": 11.0,
+  "median": 18.0,
+  "max": 1147.0
+ },
+ "log": {
+  "date": "2021-10-19",
+  "log": [
+   [
+    "2021-10-19 08:45",
+    "The new bearing was installed the day before. It operated for a maximum of 15 minutes. Warm-up phase: 10 minutes, n = 750 rpm, F_stat = 2500 N, no dynamic load. After the warm-up phase, the experiment runs with randomly sampled values for the shaft rotational speed, static load and dynamic load's amplitude."
+   ],
+   [
+    "2021-10-19 09:13",
+    "The experiment successfully completes because the temperature threshold value was exceeded!"
+   ]
+  ],
+  "log_end": "2021-10-19 09:13",
+  "stop_reason": "temperature threshold exceeded (value not stated)",
+  "temperature_limit_C": null,
+  "new_bearing": true
+ },
+ "stops_over_60s": [
+  {
+   "before_id": 106,
+   "from": "2021-10-19 09:13:24",
+   "to": "2021-10-19 09:32:31",
+   "gap_s": 1147.0,
+   "T1_before": 113.564329765435,
+   "T1_after": 51.1131832545282
+  },
+  {
+   "before_id": 134,
+   "from": "2021-10-19 09:40:50",
+   "to": "2021-10-19 09:43:08",
+   "gap_s": 138.0,
+   "T1_before": 89.0832302685552,
+   "T1_after": 82.050108602238
+  }
+ ],
+ "segments": {
+  "1": {
+   "ids": [
+    1,
+    105
+   ],
+   "n": 105,
+   "from": "2021-10-19 08:46:54",
+   "to": "2021-10-19 09:13:24",
+   "warmup_rows": 51,
+   "T1_start": 21.4377943343186,
+   "T1_end": 113.564329765435,
+   "T1_max": 113.564329765435
+  },
+  "2": {
+   "ids": [
+    106,
+    133
+   ],
+   "n": 28,
+   "from": "2021-10-19 09:32:31",
+   "to": "2021-10-19 09:40:50",
+   "warmup_rows": 0,
+   "T1_start": 51.1131832545282,
+   "T1_end": 89.0832302685552,
+   "T1_max": 89.0832302685552
+  },
+  "3": {
+   "ids": [
+    134,
+    377
+   ],
+   "n": 244,
+   "from": "2021-10-19 09:43:08",
+   "to": "2021-10-19 10:59:32",
+   "warmup_rows": 0,
+   "T1_start": 82.050108602238,
+   "T1_end": 118.998950610722,
+   "T1_max": 122.558909826503
+  }
+ },
+ "warmup_recorded": true,
+ "records_after_log_end": 272,
+ "last_record_vs_log_end_s": 6392.0,
+ "T1_max": 122.558909826503,
+ "T2_max": 119.380638883527,
+ "setSpeed_out_of_log_range": 33,
+ "setSpeed_max": 3551.6927502193,
+ "measured_speed_max": 3002.94293887047,
+ "speed_not_reached": 32,
+ "static_load_off_150N": 48,
+ "combined_set_at_4300": 172,
+ "combined_set_outside_range": 0,
+ "alignment": {
+  "warmup_rows": 51,
+  "logRMS_jump_at_switch": 2.004291096428498,
+  "largest_step_within_warmup": 0.04504158723435481,
+  "dlogRMS_vs_dlogSpeed_corr_by_lag": {
+   "-3": -0.04254322354475748,
+   "-2": 0.0019717560724200156,
+   "-1": -0.10240690701949383,
+   "0": 0.2431949759622976,
+   "1": -0.11128469307720815,
+   "2": 0.015944277155436212,
+   "3": -0.0858085024510073
+  },
+  "best_lag": 0,
+  "lag0_clear": true
+ }
+}

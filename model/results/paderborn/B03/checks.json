@@ -1,0 +1,80 @@
+{
+ "n_mat": 614,
+ "n_csv_rows": 614,
+ "missing_ids": [],
+ "extra_ids": [],
+ "ids_contiguous": true,
+ "all_samples_ok": true,
+ "fs_hz": [
+  128000.0
+ ],
+ "all_finite": true,
+ "timestamps_monotonic": true,
+ "duplicate_timestamps": 0,
+ "first": "2021-11-05 15:10:43",
+ "last": "2021-11-05 18:23:40",
+ "interval_s": {
+  "min": 14.0,
+  "median": 19.0,
+  "max": 24.0
+ },
+ "log": {
+  "date": "2021-11-05",
+  "log": [
+   [
+    "2021-11-05 15:10",
+    "Begin with a new bearing. Warm-up phase: 10 minutes, n = 750 rpm, F_static = 2500 N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+   ],
+   [
+    "2021-11-05 18:23",
+    "The test was automatically stopped because the bearing housing temperature exceeded the specified limits of 110 degC!"
+   ]
+  ],
+  "log_end": "2021-11-05 18:23",
+  "stop_reason": "bearing housing temperature exceeded 110 degC (automatic stop)",
+  "temperature_limit_C": 110,
+  "new_bearing": true
+ },
+ "stops_over_60s": [],
+ "segments": {
+  "1": {
+   "ids": [
+    1,
+    614
+   ],
+   "n": 614,
+   "from": "2021-11-05 15:10:43",
+   "to": "2021-11-05 18:23:40",
+   "warmup_rows": 0,
+   "T1_start": 25.5787385251795,
+   "T1_end": 118.241236287084,
+   "T1_max": 118.241236287084
+  }
+ },
+ "warmup_recorded": false,
+ "records_after_log_end": 0,
+ "last_record_vs_log_end_s": 40.0,
+ "T1_max": 118.241236287084,
+ "T2_max": 114.143198635888,
+ "setSpeed_out_of_log_range": 0,
+ "setSpeed_max": 2998.11012874497,
+ "measured_speed_max": 2994.84222547112,
+ "speed_not_reached": 0,
+ "static_load_off_150N": 92,
+ "combined_set_at_4300": 313,
+ "combined_set_outside_range": 0,
+ "alignment": {
+  "warmup_rows": 0,
+  "dlogRMS_vs_dlogSpeed_corr_by_lag": {
+   "-3": 0.013207945961644386,
+   "-2": -0.001050683981202612,
+   "-1": -0.46744722082646095,
+   "0": 0.9401491428494176,
+   "1": -0.49171892393481015,
+   "2": 0.009825912290757941,
+   "3": 0.012936073531082436
+  },
+  "best_lag": 0,
+  "lag0_clear": true
+ }
+}

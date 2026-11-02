@@ -1,0 +1,95 @@
+{
+ "lobo_folds": [
+  {
+   "test": "B01",
+   "train": [
+    "B03"
+   ]
+  },
+  {
+   "test": "B03",
+   "train": [
+    "B01"
+   ]
+  }
+ ],
+ "experiments": {
+  "B01": {
+   "experiment": "B01",
+   "n_operating": 326,
+   "ref_ids": [
+    52,
+    151
+   ],
+   "tau": 2.2713328386210083,
+   "first_confirmed_abnormal": {
+    "measurement_id": 210,
+    "timestamp": "2021-10-19 10:07:03"
+   },
+   "abnormal_fraction_after_first": 1.0,
+   "clipped_rows": 170,
+   "thermal": {
+    "T_amb": 21.4377943,
+    "complete": true,
+    "a_degC_per_krpm": 38.68915762926378,
+    "tau_min": 14.586516023027022,
+    "end_index": 214,
+    "end_measurement_id": 215,
+    "end_timestamp": "2021-10-19 10:08:33",
+    "fit_rms_degC": 3.6682574171401705,
+    "sigma_T_degC": 2.568853772588312,
+    "sigma_T_raw_degC": 2.568853772588312
+   },
+   "temperature_states": {
+    "calibrating": 164,
+    "normal": 116,
+    "warming": 46
+   },
+   "temp_resid_after_calibration_C": {
+    "1": -14.62956186003621,
+    "50": -13.31849525965751,
+    "99": -4.194337365716107
+   },
+   "first_temp_above_expected": null
+  },
+  "B03": {
+   "experiment": "B03",
+   "n_operating": 614,
+   "ref_ids": [
+    1,
+    100
+   ],
+   "tau": 2.2329131910327673,
+   "first_confirmed_abnormal": {
+    "measurement_id": 549,
+    "timestamp": "2021-11-05 18:03:16"
+   },
+   "abnormal_fraction_after_first": 1.0,
+   "clipped_rows": 63,
+   "thermal": {
+    "T_amb": 25.5787385,
+    "complete": true,
+    "a_degC_per_krpm": 30.59485732670809,
+    "tau_min": 10.415707739788207,
+    "end_index": 117,
+    "end_measurement_id": 118,
+    "end_timestamp": "2021-11-05 15:47:46",
+    "fit_rms_degC": 0.5325301809780993,
+    "sigma_T_degC": 0.5,
+    "sigma_T_raw_degC": 0.2940699283425736
+   },
+   "temperature_states": {
+    "normal": 384,
+    "calibrating": 118,
+    "warming": 111,
+    "above expected": 1
+   },
+   "temp_resid_after_calibration_C": {
+    "1": -1.6452977749782485,
+    "50": -0.5698205508582106,
+    "99": 1.2823323054648041
+   },
+   "first_temp_above_expected": "2021-11-05 18:23:40"
+  }
+ }
+}
