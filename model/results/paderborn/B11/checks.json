@@ -1,0 +1,111 @@
+{
+ "n_mat": 1953,
+ "n_csv_rows": 1953,
+ "missing_ids": [],
+ "extra_ids": [],
+ "ids_contiguous": true,
+ "all_samples_ok": true,
+ "fs_hz": [
+  64000.0
+ ],
+ "all_finite": true,
+ "timestamps_monotonic": true,
+ "duplicate_timestamps": 0,
+ "first": "2022-08-17 09:26:32",
+ "last": "2022-08-17 18:17:01",
+ "interval_s": {
+  "min": 14.0,
+  "median": 16.0,
+  "max": 38.0
+ },
+ "log": {
+  "log": [
+   [
+    "2022-08-17 09:29",
+    "Begin with a new bearing. No Warm-up phase"
+   ],
+   [
+    "2022-08-17 18:17",
+    "The test is completed because the accelerometer limit was exceeded!"
+   ]
+  ],
+  "log_end": "2022-08-17 18:17",
+  "stop_reason": "accelerometer limit exceeded (value not stated in the log)",
+  "temperature_limit_C": null,
+  "ranges": {
+   "setSpeed_rpm": [
+    1500,
+    2700
+   ],
+   "setStat_N": [
+    3000,
+    3000
+   ],
+   "setDyn_N": [
+    1000,
+    1000
+   ],
+   "combined_N": [
+    4000,
+    4000
+   ]
+  },
+  "dyn_load_type": "Gaussian noise <= 200 Hz",
+  "fs_hz": 64000,
+  "description": {
+   "approx_duration_h": 8,
+   "n_files": 1953,
+   "threshold_criterion": "vibration",
+   "defect_after_dismantling": "IR, OR, B"
+  },
+  "date": "2022-08-17",
+  "vibration_limit": "not stated in the log",
+  "warmup_note": "no warm-up phase (log)",
+  "operator": "Henrik Knapp (supervised by O. K. Aimiyekagbon)",
+  "ended_on": "2022-08-17",
+  "new_bearing": true,
+  "log_source": "newdata/B11/B11_log.pdf, page 2 (transcribed 3 Nov 2026 from the PDF's text layer; ranges on page 1 match the registry)"
+ },
+ "stops_over_60s": [],
+ "segments": {
+  "1": {
+   "ids": [
+    1,
+    1953
+   ],
+   "n": 1953,
+   "from": "2022-08-17 09:26:32",
+   "to": "2022-08-17 18:17:01",
+   "warmup_rows": 0,
+   "T1_start": 27.0287026075604,
+   "T1_end": 43.113975643103,
+   "T1_max": 86.0978696243697
+  }
+ },
+ "warmup_recorded": false,
+ "records_after_log_end": 0,
+ "last_record_vs_log_end_s": 1.0,
+ "T1_max": 86.0978696243697,
+ "T2_max": 87.4403471590476,
+ "setSpeed_out_of_log_range": 0,
+ "setSpeed_max": 2699.41614396871,
+ "measured_speed_max": 2705.79311919643,
+ "speed_not_reached": 0,
+ "static_load_off_150N": 162,
+ "alignment": {
+  "warmup_rows": 0,
+  "dlogRMS_vs_dlogSpeed_corr_by_lag": {
+   "-3": -0.042166610724214425,
+   "-2": 0.10415120400003985,
+   "-1": -0.48406314961144004,
+   "0": 0.8481470386536656,
+   "1": -0.4690181597269901,
+   "2": 0.07828404822540447,
+   "3": -0.03877755198391197
+  },
+  "best_lag": 0,
+  "lag0_clear": true
+ },
+ "combined_set_at_4300": 1953,
+ "combined_set_outside_range": 0
+}

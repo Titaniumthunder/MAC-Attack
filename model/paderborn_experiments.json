@@ -343,11 +343,19 @@
    }
   },
   "B08": {
-   "log": null,
-   "log_end": null,
-   "stop_reason": null,
+   "log": [
+    [
+     "2022-02-04 14:43",
+     "Begin with a new bearing. Warm-up phase: 10 Minutes, n=750rpm, Fstatic = 2500N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+    ],
+    [
+     "2022-02-05 01:20",
+     "The test is completed because the temperature limit was exceeded!"
+    ]
+   ],
+   "log_end": "2022-02-05 01:20",
+   "stop_reason": "temperature limit exceeded (value not stated in the log)",
    "temperature_limit_C": null,
-   "_log_note": "log not transcribed yet (add when the files are downloaded)",
    "ranges": {
     "setSpeed_rpm": [
      1500,
@@ -360,6 +368,10 @@
     "setDyn_N": [
      500,
      1000
+    ],
+    "combined_N": [
+     4000,
+     5000
     ]
    },
    "dyn_load_type": "Gaussian noise <= 200 Hz",
@@ -369,14 +381,28 @@
     "n_files": 1827,
     "threshold_criterion": "temperature",
     "defect_after_dismantling": "IR, B"
-   }
+   },
+   "date": "2022-02-04",
+   "temperature_limit_note": "not stated in the log; the dataset description (p.4) gives 110 degC as the temperature threshold",
+   "operator": "Lennart Viemann (supervised by O. K. Aimiyekagbon)",
+   "ended_on": "2022-02-05",
+   "new_bearing": true,
+   "log_source": "newdata/B08/B08_log.pdf, page 2 (transcribed 3 Nov 2026 from the PDF's text layer; ranges on page 1 match the registry)"
   },
   "B09": {
-   "log": null,
-   "log_end": null,
-   "stop_reason": null,
+   "log": [
+    [
+     "2022-02-18 11:37",
+     "Begin with a new bearing. Warm-up phase: 10 Minutes, n=750rpm, Fstatic = 2500N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+    ],
+    [
+     "2022-02-19 03:59",
+     "The test is completed because the accelerometer limit was exceeded!"
+    ]
+   ],
+   "log_end": "2022-02-19 03:59",
+   "stop_reason": "accelerometer limit exceeded (value not stated in the log)",
    "temperature_limit_C": null,
-   "_log_note": "log not transcribed yet (add when the files are downloaded)",
    "ranges": {
     "setSpeed_rpm": [
      1500,
@@ -389,6 +415,10 @@
     "setDyn_N": [
      750,
      1000
+    ],
+    "combined_N": [
+     4000,
+     5000
     ]
    },
    "dyn_load_type": "Gaussian noise <= 200 Hz",
@@ -398,7 +428,14 @@
     "n_files": 1813,
     "threshold_criterion": "vibration",
     "defect_after_dismantling": "OR, B"
-   }
+   },
+   "date": "2022-02-18",
+   "vibration_limit": "not stated in the log",
+   "operator": "Lennart Viemann (supervised by O. K. Aimiyekagbon)",
+   "ended_on": "2022-02-19",
+   "archive_note": "distributed as B09_part1.zip (log, CSVs, M00001-M00900) and B09_part2.zip (M00901-M01813), merged into newdata/B09/",
+   "new_bearing": true,
+   "log_source": "newdata/B09/B09_log.pdf, page 2 (transcribed 3 Nov 2026 from the PDF's text layer; ranges on page 1 match the registry)"
   },
   "B10": {
    "log": null,
@@ -430,11 +467,19 @@
    }
   },
   "B11": {
-   "log": null,
-   "log_end": null,
-   "stop_reason": null,
+   "log": [
+    [
+     "2022-08-17 09:29",
+     "Begin with a new bearing. No Warm-up phase"
+    ],
+    [
+     "2022-08-17 18:17",
+     "The test is completed because the accelerometer limit was exceeded!"
+    ]
+   ],
+   "log_end": "2022-08-17 18:17",
+   "stop_reason": "accelerometer limit exceeded (value not stated in the log)",
    "temperature_limit_C": null,
-   "_log_note": "log not transcribed yet (add when the files are downloaded)",
    "ranges": {
     "setSpeed_rpm": [
      1500,
@@ -447,6 +492,10 @@
     "setDyn_N": [
      1000,
      1000
+    ],
+    "combined_N": [
+     4000,
+     4000
     ]
    },
    "dyn_load_type": "Gaussian noise <= 200 Hz",
@@ -456,14 +505,29 @@
     "n_files": 1953,
     "threshold_criterion": "vibration",
     "defect_after_dismantling": "IR, OR, B"
-   }
+   },
+   "date": "2022-08-17",
+   "vibration_limit": "not stated in the log",
+   "warmup_note": "no warm-up phase (log)",
+   "operator": "Henrik Knapp (supervised by O. K. Aimiyekagbon)",
+   "ended_on": "2022-08-17",
+   "new_bearing": true,
+   "log_source": "newdata/B11/B11_log.pdf, page 2 (transcribed 3 Nov 2026 from the PDF's text layer; ranges on page 1 match the registry)"
   },
   "B12": {
-   "log": null,
-   "log_end": null,
-   "stop_reason": null,
+   "log": [
+    [
+     "2022-08-24 08:51",
+     "Begin with a new bearing. No Warm-up phase"
+    ],
+    [
+     "2022-08-24 11:22",
+     "The test is completed because the accelerometer limit was exceeded!"
+    ]
+   ],
+   "log_end": "2022-08-24 11:22",
+   "stop_reason": "accelerometer limit exceeded (value not stated in the log)",
    "temperature_limit_C": null,
-   "_log_note": "log not transcribed yet (add when the files are downloaded)",
    "ranges": {
     "setSpeed_rpm": [
      1500,
@@ -476,6 +540,10 @@
     "setDyn_N": [
      1000,
      1000
+    ],
+    "combined_N": [
+     4000,
+     4000
     ]
    },
    "dyn_load_type": "Gaussian noise <= 200 Hz",
@@ -485,7 +553,14 @@
     "n_files": 767,
     "threshold_criterion": "vibration",
     "defect_after_dismantling": "IR, B"
-   }
+   },
+   "date": "2022-08-24",
+   "vibration_limit": "not stated in the log",
+   "warmup_note": "no warm-up phase (log)",
+   "operator": "Henrik Knapp (supervised by O. K. Aimiyekagbon)",
+   "ended_on": "2022-08-24",
+   "new_bearing": true,
+   "log_source": "newdata/B12/B12_log.pdf, page 2 (transcribed 3 Nov 2026 from the PDF's text layer; ranges on page 1 match the registry)"
   },
   "B13": {
    "log": null,
@@ -637,7 +712,7 @@
   }
  },
  "_sources": {
-  "logs": "<EXP>_log.pdf, transcribed by hand (B01, B03 so far)",
+  "logs": "<EXP>_log.pdf, transcribed by hand (B01-B04); B08, B09, B11, B12 transcribed 3 Nov 2026 from the PDF text layer",
   "dataset_description": "O. K. Aimiyekagbon, 'Run-to-failure data set of ball bearings subjected to time-varying load and speed conditions', v2, 25 Mar 2024, Zenodo doi:10.5281/zenodo.10805042 (CC BY 4.0): Table 2 (set ranges), Table 3 (duration, files, threshold criterion, defect found after dismantling), sample rates",
   "paper": "Javanmardi et al., PHM Society European Conference 2024, doi:10.36001/phme.2024.v8i1.4101",
   "note": "defect = type(s) found after dismantling (IR inner race, OR outer race, B rolling element); the description gives no size, no location detail, no inspection date and no intermediate inspection for any experiment"

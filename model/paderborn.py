@@ -239,7 +239,8 @@ def plot_overview(df, exp, path, meta):
 
 def preprocess(exp, data, out, jobs=8):
     meta = META["experiments"].get(exp)
-    name = re.compile(rf"^data_{exp}_M(\d{{4}})\.mat$")
+    # 4 digits (B01-B04 as distributed) or 5 (B08-B12 archives: data_B09_M00001.mat); added 3 Nov 2026, B01-B04 unchanged
+    name = re.compile(rf"^data_{exp}_M(\d{{4,5}})\.mat$")
     files = sorted((data / "vibrationData").glob("*.mat"))
     ids = []
     for p in files:

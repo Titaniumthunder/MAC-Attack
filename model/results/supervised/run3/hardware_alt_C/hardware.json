@@ -1,0 +1,63 @@
+{
+ "cfg": "C_wd_slog",
+ "final": [
+  {
+   "cfg": "C_wd_slog",
+   "seed": 0,
+   "final_train_loss": 0.017250775545835494,
+   "weights_sha256": "a81fde31ea3ec3f2393dbaf575fde2582d4cb2393b3dd2d64873707ebd67af9e"
+  },
+  {
+   "cfg": "C_wd_slog",
+   "seed": 1,
+   "final_train_loss": 0.019324219860136507,
+   "weights_sha256": "6fdb3beebc3f0a0e17216605723ead358c996c0374dc8b4d52f3d1610cb13ab2"
+  },
+  {
+   "cfg": "C_wd_slog",
+   "seed": 2,
+   "final_train_loss": 0.019212144128978252,
+   "weights_sha256": "d4a607da48e66d2ba3fbb66f8972ebb1a72b549bbc596f1e11de6c94f9aa0eb7"
+  },
+  {
+   "cfg": "C_wd_slog",
+   "seed": 3,
+   "final_train_loss": 0.017568464539945126,
+   "weights_sha256": "6fa1a98d572ebc446151ca8e468843f72a33d2d7b005a0c012972fe71f7086c6"
+  },
+  {
+   "cfg": "C_wd_slog",
+   "seed": 4,
+   "final_train_loss": 0.018772401697933674,
+   "weights_sha256": "061cf8b8c275dfecdcae58d8ad9873458768197b2af780cef5c0cce9bcb2b7d9"
+  }
+ ],
+ "rtl_seed0": {
+  "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+  "M64": {
+   "pass": true,
+   "batches": 24,
+   "cycles": [
+    1642
+   ],
+   "equation_cycles": 1642
+  },
+  "M1": {
+   "pass": true,
+   "batches": 10,
+   "cycles": [
+    382
+   ],
+   "equation_cycles": 382
+  },
+  "latency_us_at_214.286MHz": {
+   "M64_per_batch": 7.6626564497914,
+   "M1": 1.782664289780947
+  }
+ },
+ "int8_decisions_changed": 37,
+ "int8_rows": 45015,
+ "int8_labelled_changed": 0,
+ "exported": "/Users/alexsalamati/School/Senior/Capstone/MAC-Attack/model/export/MTL_run3_v2_C",
+ "note": "the pre-declared selection rule chose E_wd_slog_noT (temperature input fed as 0) by a margin inside the noise\n(mean unlatched alarm-state changes 2.80 vs 2.86 over the 7 folds; the nested selection chose C on 4 of 7 outer folds).\nThe project specification keeps temperature as an input, so C is provided as the equivalent alternative with temperature.\nNothing here changes the selection or any Run 3 result; C's held-out (outer) results are already in train/results.json."
+}
