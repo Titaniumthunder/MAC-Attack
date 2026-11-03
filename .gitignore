@@ -61,3 +61,7 @@ model/newdata/
 # OS
 Thumbs.db
 .DS_Store
+
+# Generated build output (kept out of git; large files go to Google Drive, README rule 4)
+mac_attack_accel*/openlane/*/runs/
+mac_attack_accel*/run/
