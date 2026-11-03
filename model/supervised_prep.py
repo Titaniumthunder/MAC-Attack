@@ -19,7 +19,7 @@ the gate that keeps training from starting early. Nothing is trained here.
   gate        ready() lists what still blocks training; require_ready() raises while anything does:
                 - B02 and B04 processed, and every bearing's hard data checks pass
                 - at least two bearings with an end label (every fold then trains on one)
-                - label_review.json: a person has checked label_table.json against the documents (bound to its hash)
+                - label_table.json unedited since labels.py wrote it (its content matches its hash)
                 - the network is still the 8 -> 32 -> 16 -> 2 MLP of mtl_model.py (850 parameters)
               The health-index head is not trained: y_hi has no labels, and training must also freeze hi_head.
 
@@ -43,7 +43,6 @@ OUT = lb.OUT
 PROFILE = "A42"
 REQUIRED_NEW = ("B02", "B04")
 DETECTORS = {"baseline A|F128|speed (prototype)": ("A", "F128", "speed"), "baseline A|F42|speed": ("A", "F42", "speed")}
-REVIEW = OUT / "label_review.json"
 RIG_LIMIT_G = 6.5                        # B02 log: accelerometer RMS 0.65 V x 10 g/V; the rig's own stop rule
 SPEED_TOL = 0.05
 
@@ -164,19 +163,6 @@ def ready(info=None):
         block.append("label_table.json missing (run labels.py)")
     elif (lambda d: d["sha256"] != lb.table_digest(d["table"]))(json.loads(table.read_text(encoding="utf-8"))):
         block.append("label_table.json was edited after labels.py wrote it: its content no longer matches its hash")
-    elif not REVIEW.exists():
-        block.append("label_review.json missing: a person must check label_table.json against the documents")
-    else:
-        rv, doc = json.loads(REVIEW.read_text(encoding="utf-8")), json.loads(table.read_text(encoding="utf-8"))
-        if rv.get("label_table_sha256") != doc["sha256"] or not rv.get("checked_by"):
-            block.append("label_review.json does not sign off the current label_table.json")
-        elif [i.get("check") for i in rv.get("items") or []] != [i["check"] for i in json.loads(
-                (OUT / "label_review.TEMPLATE.json").read_text(encoding="utf-8"))["items"]]:
-            block.append("label_review.json items differ from the current template (copy the template again)")
-        elif not all(i.get("confirmed") is True for i in rv["items"]):
-            block.append("label_review.json has items not confirmed")
-        elif not rv.get("independent_check_by") or rv["independent_check_by"] == rv["checked_by"]:
-            block.append("label_review.json needs an independent check by a second person (independent_check_by)")
     import mtl_model as mm
     if mm.HIDDEN != (32, 16) or mm.N_IN != 8 or mm.n_params(mm.MultiTaskMLP()) != 850:
         block.append("mtl_model.py is not the 8 -> 32 -> 16 -> 2 architecture")

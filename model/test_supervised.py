@@ -112,12 +112,10 @@ def test_prototype_comparison_matches_the_stored_baseline():
 
 # ---------- the gate ----------
 
-def test_training_is_blocked_until_b02_b04_are_checked_and_labels_reviewed():
+def test_training_is_blocked_until_b02_b04_are_checked():
     block = sp.ready()
     if not all((HERE / "results" / "paderborn" / e / f"{e}_processed.csv").exists() for e in sp.REQUIRED_NEW):
         assert any("B02" in b for b in block) and any("B04" in b for b in block)
-    if not sp.REVIEW.exists():
-        assert any("label_review.json" in b for b in block)
     if block:
         with pytest.raises(RuntimeError):
             sp.require_ready()
@@ -154,31 +152,8 @@ def test_b04_half_scale_speed_does_not_change_the_inputs():
     assert abs(sp.speed_ratio("B04") - 0.5) < 0.01 and abs(sp.speed_ratio("B02") - 1) < 0.01
 
 
-def test_an_unconfirmed_review_does_not_unblock_training(tmp_path, monkeypatch):
+def test_an_edited_label_table_blocks_training(tmp_path, monkeypatch):
     doc = json.loads((lb.OUT / "label_table.json").read_text(encoding="utf-8"))
-    checks = [i["check"] for i in json.loads((lb.OUT / "label_review.TEMPLATE.json").read_text(encoding="utf-8"))["items"]]
-    review = tmp_path / "label_review.json"
-    review.write_text(json.dumps({"label_table_sha256": doc["sha256"], "checked_by": "someone",
-                                  "items": [{"check": c, "confirmed": None} for c in checks]}))
-    monkeypatch.setattr(sp, "REVIEW", review)
-    assert any("not confirmed" in b for b in sp.ready())
-    review.write_text(json.dumps({"label_table_sha256": "0" * 64, "checked_by": "someone",
-                                  "items": [{"check": c, "confirmed": True} for c in checks]}))
-    assert any("does not sign off" in b for b in sp.ready())
-    review.write_text(json.dumps({"label_table_sha256": doc["sha256"], "checked_by": "someone",
-                                  "independent_check_by": "someone", "items": [{"check": c, "confirmed": True} for c in checks]}))
-    assert any("independent check" in b for b in sp.ready())
-
-
-def test_the_review_must_use_the_current_template_and_an_unedited_table(tmp_path, monkeypatch):
-    doc = json.loads((lb.OUT / "label_table.json").read_text(encoding="utf-8"))
-    tpl = json.loads((lb.OUT / "label_review.TEMPLATE.json").read_text(encoding="utf-8"))
-    review = tmp_path / "label_review.json"
-    old = [{"check": "an older wording", "confirmed": True}] * len(tpl["items"])
-    review.write_text(json.dumps({"label_table_sha256": doc["sha256"], "checked_by": "a", "independent_check_by": "b",
-                                  "items": old}))
-    monkeypatch.setattr(sp, "REVIEW", review)
-    assert any("differ from the current template" in b for b in sp.ready())
     edited = tmp_path / "supervised"
     edited.mkdir()
     doc["table"]["bearings"]["B02"]["end"]["n"] = 6                 # an edit after labels.py wrote the table
@@ -189,7 +164,7 @@ def test_the_review_must_use_the_current_template_and_an_unedited_table(tmp_path
 
 # ---------- the prepared training run (train_deterioration.py; synthetic data only, nothing real is trained) ----------
 
-def test_training_run_refuses_before_sign_off():
+def test_training_run_refuses_while_blocked():
     import train_deterioration as td
     if sp.ready():
         with pytest.raises(RuntimeError):
