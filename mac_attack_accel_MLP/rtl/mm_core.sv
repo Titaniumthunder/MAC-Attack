@@ -125,6 +125,12 @@
 //     word (wb_row, wb_blk) instead of the host's (rd_row, rd_col), straight from bit fields: no adder
 //     and only one more input on the existing address mux, so the C read address path is no longer
 //     than in step 14. mlp_ctrl's writeback reads C this way (on rd_word, same timing).
+//
+// Step 16 (Nov 2026, for the ASIC): SRAM = 1 builds the A, B and C buffers from SKY130 SRAM macros
+// (sram_buf.sv) instead of inferred memories. OpenLane has no RAM to infer, so with SRAM = 0 every
+// buffer bit became a flip-flop with a write mux and a read mux tree (268k flip-flops at MAXD = 64).
+// The macros read like the block RAMs (data one clock after the address), so no cycle changes.
+// SRAM = 0 (the default) is the design exactly as before, for the FPGA.
 module mm_core #(
     parameter int P       = 16,  // array size
     parameter int BITS    = 8,   // operand width
@@ -137,7 +143,8 @@ module mm_core #(
     parameter int PE_PRIM  = 0,  // 1 = PEs as DSP48E1 primitives (zed/pe_dsp48.sv, FPGA only; PIPE must be 2)
     parameter int HREAD_REG = 0, // 1 = one more register on the host's C read (rd_data 2 cycles later)
     parameter int NL       = 1,  // weight slots in the B buffer (layers of a model); 1 = one matrix, as before
-    parameter int AWR      = 0   // 1 = word write port into A (aw_*), for mlp_ctrl's writeback; needs HCLK_SEP = 0
+    parameter int AWR      = 0,  // 1 = word write port into A (aw_*), for mlp_ctrl's writeback; needs HCLK_SEP = 0
+    parameter int SRAM     = 0   // 1 = A, B and C are SKY130 SRAM macros (sram_buf.sv), for the ASIC (step 16)
 )(
     input  logic             clk,          // core clock
     input  logic             hclk,         // host clock: load port and C read port (connect to clk for one clock)
@@ -207,6 +214,17 @@ module mm_core #(
     assign wr_addr = 32'(wr_row) * TM + 32'(wr_col) / P;
     assign wr_lane = 8'(32'(wr_col) % P);
 
+    // SRAM = 1: the write side of A and B (address, data, lane enables), for the macros
+    /* verilator lint_off UNUSEDSIGNAL */
+    /* verilator lint_off UNDRIVEN */
+    logic [AW-1:0]     sa_waddr;
+    logic [P*BITS-1:0] sa_wdata;
+    logic [P-1:0]      sa_we;
+    logic [BAW-1:0]    sb_waddr;
+    logic [P-1:0]      sb_we;
+    /* verilator lint_on UNDRIVEN */
+    /* verilator lint_on UNUSEDSIGNAL */
+
     // Byte-write-enable style: lane j is a fixed slice, picked by a write enable.
     // (Writing a variable slice made the synthesis tool split each buffer into many
     // block RAMs, which put a long, high-fanout wire on the read address.)
@@ -232,15 +250,29 @@ module mm_core #(
             for (genvar j = 0; j < P; j++) begin : g_awe
                 assign a_we[j] = aw_en || (wr_en && !wr_sel && wr_lane == 8'(j));
             end
-            always_ff @(posedge hclk) begin   // the block RAM byte-write template: one address, one enable per lane
-                for (int j = 0; j < P; j++)
-                    if (a_we[j]) amem[a_waddr][j*BITS +: BITS] <= a_wdata[j*BITS +: BITS];
+            if (SRAM != 0) begin : g_asram
+                assign sa_waddr = a_waddr;
+                assign sa_wdata = a_wdata;
+                assign sa_we    = a_we;
+            end else begin : g_aram
+                always_ff @(posedge hclk) begin   // the block RAM byte-write template: one address, one enable per lane
+                    for (int j = 0; j < P; j++)
+                        if (a_we[j]) amem[a_waddr][j*BITS +: BITS] <= a_wdata[j*BITS +: BITS];
+                end
             end
         end else begin : g_aw0
-            always_ff @(posedge hclk) begin   // load port: host clock
-                if (wr_en && !wr_sel)
-                    for (int j = 0; j < P; j++)
-                        if (wr_lane == 8'(j)) amem[wr_addr][j*BITS +: BITS] <= wr_word[j*BITS +: BITS];
+            if (SRAM != 0) begin : g_asram
+                assign sa_waddr = AW'(wr_addr);
+                assign sa_wdata = wr_word;
+                for (genvar j = 0; j < P; j++) begin : g_awe
+                    assign sa_we[j] = wr_en && !wr_sel && wr_lane == 8'(j);
+                end
+            end else begin : g_aram
+                always_ff @(posedge hclk) begin   // load port: host clock
+                    if (wr_en && !wr_sel)
+                        for (int j = 0; j < P; j++)
+                            if (wr_lane == 8'(j)) amem[wr_addr][j*BITS +: BITS] <= wr_word[j*BITS +: BITS];
+                end
             end
         end
 
@@ -252,17 +284,28 @@ module mm_core #(
             end else begin : g_bwa_math
                 assign wr_baddr = BAW'(int'(wr_layer) * DEPTH + int'(wr_addr));
             end
-            always_ff @(posedge hclk) begin
-                if (wr_en && wr_sel)
-                    for (int j = 0; j < P; j++)
-                        if (wr_lane == 8'(j)) bmem[wr_baddr][j*BITS +: BITS] <= wr_word[j*BITS +: BITS];
+            if (SRAM != 0) begin : g_bsram
+                assign sb_waddr = wr_baddr;
+            end else begin : g_bram
+                always_ff @(posedge hclk) begin
+                    if (wr_en && wr_sel)
+                        for (int j = 0; j < P; j++)
+                            if (wr_lane == 8'(j)) bmem[wr_baddr][j*BITS +: BITS] <= wr_word[j*BITS +: BITS];
+                end
             end
         end else begin : g_bslot1
-            always_ff @(posedge hclk) begin
-                if (wr_en && wr_sel)
-                    for (int j = 0; j < P; j++)
-                        if (wr_lane == 8'(j)) bmem[wr_addr][j*BITS +: BITS] <= wr_word[j*BITS +: BITS];
+            if (SRAM != 0) begin : g_bsram
+                assign sb_waddr = BAW'(wr_addr);
+            end else begin : g_bram
+                always_ff @(posedge hclk) begin
+                    if (wr_en && wr_sel)
+                        for (int j = 0; j < P; j++)
+                            if (wr_lane == 8'(j)) bmem[wr_addr][j*BITS +: BITS] <= wr_word[j*BITS +: BITS];
+                end
             end
+        end
+        for (genvar j = 0; j < P; j++) begin : g_sbwe     // B's lane enables (used with SRAM = 1)
+            assign sb_we[j] = (SRAM != 0) && wr_en && wr_sel && wr_lane == 8'(j);
         end
     endgenerate
 
@@ -371,9 +414,23 @@ module mm_core #(
     logic [P*BITS-1:0] aq1, bq1;
     logic [P-1:0]      a_lanes_q1, b_lanes_q1;
     logic [P*BITS-1:0] w_row, a_row;          // inputs of the array
+    generate
+        if (SRAM != 0) begin : g_absram
+            // the macros' read is the same register: aq1 / bq1 = the word at a_addr / b_addr one clock later
+            sram_buf #(.W(P*BITS), .D(DEPTH), .NWE(P)) u_amem (
+                .wclk(hclk), .we(sa_we), .waddr(sa_waddr), .wdata(sa_wdata),
+                .rclk(clk), .raddr(a_addr), .rdata(aq1));
+            sram_buf #(.W(P*BITS), .D(BDEPTH), .NWE(P)) u_bmem (
+                .wclk(hclk), .we(sb_we), .waddr(sb_waddr), .wdata(wr_word),
+                .rclk(clk), .raddr(b_addr), .rdata(bq1));
+        end else begin : g_abram
+            always_ff @(posedge clk) begin
+                aq1 <= amem[a_addr];
+                bq1 <= bmem[b_addr];
+            end
+        end
+    endgenerate
     always_ff @(posedge clk) begin
-        aq1 <= amem[a_addr];
-        bq1 <= bmem[b_addr];
         a_lanes_q1 <= a_lanes;
         b_lanes_q1 <= b_lanes;
     end
@@ -524,8 +581,12 @@ module mm_core #(
 
     assign host_raddr = int'(rd_row) * TM + int'(rd_col) / P;
 
+    generate
+        if (SRAM == 0) begin : g_cread        // (with SRAM = 1, cq1 is the macros' read, below)
+            always_ff @(posedge clk) cq1 <= cmem[c_raddr];   // block-RAM read (with HCLK_SEP = 0 the host reads this one too)
+        end
+    endgenerate
     always_ff @(posedge clk) begin
-        cq1 <= cmem[c_raddr];                 // block-RAM read (with HCLK_SEP = 0 the host reads this one too)
         // Registered copy for the accumulator. In the first pass of an output block the old word
         // must not be added, so it is cleared here (a synchronous reset on these flip-flops)
         // instead of through a mux in front of the adder.
@@ -559,9 +620,17 @@ module mm_core #(
         if (rst) wq_en <= 1'b0;
         else     wq_en <= out_valid;
     end
-    always_ff @(posedge clk) begin
-        if (wq_en) cmem[wq_addr] <= wq;
-    end
+    generate
+        if (SRAM != 0) begin : g_csram
+            sram_buf #(.W(P*ACC), .D(DEPTH), .NWE(1)) u_cmem (
+                .wclk(clk), .we(wq_en), .waddr(wq_addr), .wdata(wq),
+                .rclk(clk), .raddr(c_raddr), .rdata(cq1));
+        end else begin : g_cram
+            always_ff @(posedge clk) begin
+                if (wq_en) cmem[wq_addr] <= wq;
+            end
+        end
+    endgenerate
 
     // Host read of C (1 cycle on hclk), and which read port it uses
     generate

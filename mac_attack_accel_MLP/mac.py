@@ -13,6 +13,7 @@ check every answer against NumPy.
   python mac.py board 16 16 16 --port COM5     same, with the real Arty board (later)
 
 Common options:  --P 16 (array size)   --sim vivado|icarus   --seed 1   --vivado-bin <folder>
+                 --sram (multiply, compare, test, mlp): the ASIC buffers, SKY130 SRAM macro models
 
 Vivado: run from a terminal where Vivado's bin folder is on PATH (or pass --vivado-bin).
 Icarus: install Icarus Verilog 12 or newer and make sure iverilog and vvp are on PATH.
@@ -29,6 +30,41 @@ RTL = ["rtl/delay_line.sv", "rtl/pe.sv", "rtl/systolic_array.sv", "rtl/mm_core.s
 TB = {"tb_mm": "tb/tb_mm.sv", "tb_postproc": "tb/tb_postproc.sv", "tb_chip": "tb/tb_chip.sv",
       "tb_mlp": "tb/tb_mlp.sv"}
 MAXD = 64
+SRAM_RTL = "rtl/sram_buf.sv"                                  # --sram: the ASIC buffers (mm_core step 16)
+SRAM_MODEL = "sky130_sram_2kbyte_1rw1r_32x512_8.v"            # the macro's simulation model, from the PDK
+SRAM_TOPS = ("tb_mm", "tb_mlp")                               # testbenches with the SRAM parameter
+
+
+def find_sram_model(work):
+    """The SKY130 SRAM macro's Verilog model (under $PDK_ROOT, or in volare's default folder ~/.volare),
+    copied into the work folder with two changes:
+      * its memory is declared before the code that uses it (OpenRAM's model declares `mem` after the
+        always blocks, which Icarus 13 does not accept);
+      * a read of the word that port 0 writes in the same clock returns X: the real macro's read data
+        is undefined then, while the model would return the old or new word. So a test fails if the
+        design ever uses such a read."""
+    rel = "sky130A/libs.ref/sky130_sram_macros/verilog/" + SRAM_MODEL
+    roots = [os.environ["PDK_ROOT"]] if os.environ.get("PDK_ROOT") else []
+    roots.append(str(Path.home() / ".volare"))
+    for root in roots:
+        for pat in (f"{root}/{rel}", f"{root}/volare/sky130/versions/*/{rel}"):
+            hits = sorted(glob.glob(pat))
+            if hits:
+                text = Path(hits[-1]).read_text()
+                decl = next(l for l in text.splitlines(keepends=True) if l.lstrip().startswith("reg") and " mem " in l)
+                text = text.replace(decl, "").replace("  // All inputs are registers", decl + "  reg collide1;\n"
+                                                      + "  // All inputs are registers", 1)
+                for old, new in (("    if (!csb0 && !web0 && !csb1 && (addr0 == addr1))\n",
+                                  "    collide1 = !csb0 && !web0 && !csb1 && (addr0 == addr1);\n"
+                                  "    if (!csb0 && !web0 && !csb1 && (addr0 == addr1))\n"),
+                                 ("       dout1 <= #(DELAY) mem[addr1_reg];",
+                                  "       dout1 <= #(DELAY) collide1 ? {DATA_WIDTH{1'bx}} : mem[addr1_reg];")):
+                    assert text.count(old) == 1, "unexpected SRAM model: " + old
+                    text = text.replace(old, new)
+                out = Path(work) / SRAM_MODEL
+                out.write_text(text)
+                return str(out)
+    sys.exit("--sram needs the SKY130 PDK (sky130_sram_macros). Set PDK_ROOT to the folder that holds sky130A.")
 
 
 # ------------------------------------------------------------------ simulators
@@ -69,6 +105,7 @@ class Simulator:
                 sys.exit("No simulator found. Install Vivado or Icarus Verilog (iverilog, vvp).")
         self.kind = kind
         self.built = {}
+        self.sram = False             # --sram: build tb_mm and tb_mlp with SRAM = 1 and the macro model
 
     @property
     def name(self):
@@ -97,13 +134,19 @@ class Simulator:
         return r.stdout
 
     def build(self, top, params):
+        sram = self.sram and top in SRAM_TOPS
+        if sram:
+            params = {**params, "SRAM": 1}
         key = (top, tuple(sorted(params.items())))
         if key in self.built:
             return self.built[key]
         tag = "_".join(f"{k}{v}" for k, v in sorted(params.items()))
         work = ROOT / "run" / f"{self.kind}_{top}_{tag}"
         work.mkdir(parents=True, exist_ok=True)
-        files = [str(ROOT / f) for f in RTL + [TB[top]]]
+        files = [str(ROOT / f) for f in RTL]
+        if sram:                      # the model has no `timescale: it comes right after sram_buf.sv's
+            files += [str(ROOT / SRAM_RTL), find_sram_model(work)]
+        files.append(str(ROOT / TB[top]))
         if self.kind == "icarus":
             cmd = ["iverilog", "-g2012", "-s", top, "-o", "sim.vvp"]
             cmd += [f"-P{top}.{k}={v}" for k, v in params.items()] + files
@@ -683,6 +726,8 @@ def main():
         p.add_argument("--sim", choices=("auto", "vivado", "icarus"), default="auto")
         p.add_argument("--vivado-bin", help="folder that contains xvlog, xelab and xsim")
         p.add_argument("--seed", type=int, default=1)
+        p.add_argument("--sram", action="store_true",
+                       help="ASIC buffers: SKY130 SRAM macro models (needs the PDK; PDK_ROOT or ~/.volare)")
 
     p = sub.add_parser("multiply", help="multiply two matrices on the hardware model")
     p.add_argument("M", type=int, nargs="?", default=16)
@@ -744,6 +789,7 @@ def main():
     if getattr(a, "P", 2) < 2 or any(s < 2 for s in getattr(a, "sizes", [])):
         sys.exit("The array size P must be 2 or more.")
     sim = Simulator(a.sim, a.vivado_bin)
+    sim.sram = getattr(a, "sram", False)
     good = {"multiply": cmd_multiply, "compare": cmd_compare, "test": cmd_test,
             "saturate": cmd_saturate, "postproc": cmd_postproc, "uart": cmd_uart, "mlp": cmd_mlp}[a.cmd](a, sim)
     sys.exit(0 if good else 1)

@@ -27,7 +27,8 @@ module tb_mlp #(
     parameter int HREAD_REG = 1,
     parameter int NL        = 4,
     parameter int PPL       = 0,
-    parameter int PPIPE     = 2
+    parameter int PPIPE     = 2,
+    parameter int SRAM      = 0      // 1 = the ASIC buffers (SRAM macro models)
 );
     localparam int LW = (NL > 1) ? $clog2(NL) : 1;
     localparam int TM = (MAXD + P - 1) / P;
@@ -50,7 +51,7 @@ module tb_mlp #(
     logic [31:0]     perf_passes, perf_cycles, perf_total, model_cycles;
 
     mlp_ctrl #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(0), .MAXD(MAXD), .PIPE(PIPE), .MEM_REG(MEM_REG),
-               .PE_PRIM(PE_PRIM), .HREAD_REG(HREAD_REG), .NL(NL), .PPL(PPL), .PPIPE(PPIPE)) dut (
+               .PE_PRIM(PE_PRIM), .HREAD_REG(HREAD_REG), .NL(NL), .PPL(PPL), .PPIPE(PPIPE), .SRAM(SRAM)) dut (
         .clk(clk), .rst(rst),
         .wr_en(wr_en), .wr_sel(wr_sel), .wr_layer(wr_layer), .wr_row(wr_row), .wr_col(wr_col), .wr_data(wr_data),
         .pw_en(pw_en), .pw_field(pw_field), .pw_layer(pw_layer), .pw_ch(pw_ch), .pw_data(pw_data),
@@ -69,9 +70,31 @@ module tb_mlp #(
     string fn;
 
     // A[i][k] straight out of mm_core's A buffer (word (i, k/P), lane k mod P)
+    generate
+        if (SRAM != 0) begin : g_abuf
+            // the A buffer is in the SRAM macros (sram_buf.sv): a view of their arrays, word by word
+            localparam int COLS = (P * BITS + 31) / 32;
+            localparam int ROWS = (MAXD * TM + 511) / 512;
+            wire [COLS*32-1:0] view [ROWS*512];
+            for (genvar r = 0; r < ROWS; r++) begin : g_r
+                for (genvar c = 0; c < COLS; c++) begin : g_c
+                    for (genvar w = 0; w < 512; w++) begin : g_w
+                        assign view[r*512 + w][c*32 +: 32] = dut.u_core.g_absram.u_amem.g_row[r].g_col[c].u_mem.mem[w];
+                    end
+                end
+            end
+            function automatic logic [P*BITS-1:0] word(input int a);
+                return view[a][P*BITS-1:0];
+            endfunction
+        end else begin : g_abuf
+            function automatic logic [P*BITS-1:0] word(input int a);
+                return dut.u_core.amem[a];
+            endfunction
+        end
+    endgenerate
     function automatic logic [BITS-1:0] a_buf(input int i, input int k);
         logic [P*BITS-1:0] w;
-        w = dut.u_core.amem[i * TM + k / P];
+        w = g_abuf.word(i * TM + k / P);
         return w[(k % P) * BITS +: BITS];
     endfunction
 
@@ -170,7 +193,9 @@ module tb_mlp #(
                 for (int j = 0; j < NN[L-1]; j++) begin
                     @(negedge clk);
                     rd_row = 8'(i); rd_col = 8'(j);
-                    repeat (1 + HREAD_REG) @(negedge clk);
+                    // taken at the clock edge, as the hardware would (with SRAM = 1 and HREAD_REG = 0
+                    // rd_data comes straight from the macro, ready only after the falling edge)
+                    repeat (2 + HREAD_REG) @(posedge clk);
                     $fdisplay(fd, "%h", rd_data);
                 end
             $fclose(fd);

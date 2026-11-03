@@ -60,7 +60,8 @@ module mlp_ctrl #(
     parameter int HREAD_REG = 1,
     parameter int NL        = 4,    // layers (weight slots in B, layer table entries)
     parameter int PPL       = 0,    // postproc lanes; 0 = P (one C word per clock). Must divide P.
-    parameter int PPIPE     = 2     // postproc pipeline: 0 = 3 stages, 1 = 7, 2 = 9 stages (for 250 MHz)
+    parameter int PPIPE     = 2,    // postproc pipeline: 0 = 3 stages, 1 = 7, 2 = 9 stages (for 250 MHz)
+    parameter int SRAM      = 0     // 1 = mm_core's buffers are SKY130 SRAM macros (ASIC, see mm_core.sv step 16)
 )(
     input  logic             clk,
     input  logic             rst,
@@ -138,7 +139,7 @@ module mlp_ctrl #(
     logic [SW-1:0]    tk_s;
 
     mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD), .PIPE(PIPE), .MEM_REG(MEM_REG),
-              .HCLK_SEP(0), .PE_PRIM(PE_PRIM), .HREAD_REG(HREAD_REG), .NL(NL), .AWR(1)) u_core (
+              .HCLK_SEP(0), .PE_PRIM(PE_PRIM), .HREAD_REG(HREAD_REG), .NL(NL), .AWR(1), .SRAM(SRAM)) u_core (
         .clk(clk), .hclk(clk), .rst(rst),
         .wr_en(wr_en), .wr_sel(wr_sel), .wr_row(wr_row), .wr_col(wr_col), .wr_data(wr_data),
         .wr_layer(wr_layer),

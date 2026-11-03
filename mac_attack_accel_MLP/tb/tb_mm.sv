@@ -6,13 +6,14 @@
 // Plusargs:                        +M=<m> +K=<k> +N=<n>
 // Writes:                          C.hex      M*N results, row-major, one per line
 //                                  stats.txt  "passes cycles total"
-// Parameters (set at elaboration): P, BITS, ACC, SAT, MAXD
+// Parameters (set at elaboration): P, BITS, ACC, SAT, MAXD, SRAM
 module tb_mm #(
     parameter int P    = 16,
     parameter int BITS = 8,
     parameter int ACC  = 32,
     parameter int SAT  = 0,
-    parameter int MAXD = 64
+    parameter int MAXD = 64,
+    parameter int SRAM = 0      // 1 = the ASIC buffers (SRAM macro models)
 );
 
     logic clk = 1'b0;
@@ -27,7 +28,7 @@ module tb_mm #(
     logic [ACC-1:0]  rd_data;
     logic [31:0]     perf_passes, perf_cycles, perf_total;
 
-    mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD)) dut (
+    mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD), .SRAM(SRAM)) dut (
         .clk(clk), .hclk(clk), .rst(rst),
         .wr_en(wr_en), .wr_sel(wr_sel), .wr_row(wr_row), .wr_col(wr_col), .wr_data(wr_data),
         .start(start), .dim_m(dim_m), .dim_k(dim_k), .dim_n(dim_n), .busy(busy), .done(done),
@@ -88,7 +89,9 @@ module tb_mm #(
             for (int j = 0; j < N; j++) begin
                 @(negedge clk);
                 rd_row = 8'(i); rd_col = 8'(j);
-                @(negedge clk);
+                // rd_data is taken at the clock edge, as the hardware would: with SRAM = 1 it comes
+                // straight from the macro, whose read data is only ready after the falling edge
+                repeat (2) @(posedge clk);
                 $fdisplay(fd, "%h", rd_data);
             end
         $fclose(fd);
