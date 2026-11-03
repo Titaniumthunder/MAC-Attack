@@ -1,0 +1,151 @@
+{
+ "n_mat": 1114,
+ "n_csv_rows": 1114,
+ "missing_ids": [],
+ "extra_ids": [],
+ "ids_contiguous": true,
+ "all_samples_ok": true,
+ "fs_hz": [
+  128000.0
+ ],
+ "all_finite": true,
+ "timestamps_monotonic": true,
+ "duplicate_timestamps": 0,
+ "first": "2021-11-17 12:45:09",
+ "last": "2021-11-17 18:26:58",
+ "interval_s": {
+  "min": 12.0,
+  "median": 18.0,
+  "max": 24.0
+ },
+ "log": {
+  "log": [
+   [
+    "2021-11-17 12:45",
+    "Begin with a new bearing. Warm-up phase: 10 minutes, n = 750 rpm, F_static = 2500 N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+   ],
+   [
+    "2021-11-17 13:45",
+    "Since the bearing temperature was above 60 degC, the parameters for the higher operating temperature were selected!"
+   ],
+   [
+    "2021-11-17 18:26",
+    "The test was successfully completed because the RMS values of an accelerometer exceeded the specified limit!"
+   ]
+  ],
+  "log_end": "2021-11-17 18:26",
+  "stop_reason": "accelerometer RMS exceeded the specified limit (value not stated in the log)",
+  "temperature_limit_C": null,
+  "ranges": {
+   "setSpeed_rpm": [
+    1500,
+    3000
+   ],
+   "setStat_N": [
+    2500,
+    3800
+   ],
+   "setDyn_N": [
+    500,
+    1500
+   ],
+   "combined_N": [
+    4000,
+    5000
+   ]
+  },
+  "dyn_load_type": "sinusoidal 2 Hz",
+  "fs_hz": 128000,
+  "description": {
+   "approx_duration_h": 6,
+   "n_files": 1114,
+   "threshold_criterion": "vibration",
+   "defect_after_dismantling": "IR, B"
+  },
+  "date": "2021-11-17",
+  "vibration_limit": "not stated in the log",
+  "new_bearing": true,
+  "log_source": "newdata/B04/B04_log.pdf, page 2 (Lennart Viemann, supervised by O. K. Aimiyekagbon)",
+  "parameter_sets": {
+   "selection": "bearing temperature queried after 60 min of operation: above 60 degC keeps the T_high intervals, below switches to T_low (heavier load)",
+   "T_high": {
+    "setSpeed_rpm": [
+     1500,
+     3000
+    ],
+    "setStat_N": [
+     2500,
+     3800
+    ],
+    "setDyn_N": [
+     500,
+     1500
+    ]
+   },
+   "T_low": {
+    "setSpeed_rpm": [
+     2400,
+     3600
+    ],
+    "setStat_N": [
+     3300,
+     3800
+    ],
+    "setDyn_N": [
+     750,
+     1700
+    ]
+   },
+   "selected": "T_high (log 13:45)",
+   "combined_N": [
+    4000,
+    5000
+   ]
+  },
+  "recording_note": "recorded measured speed and peak dynamic load are 0.50 x the set values in every row (static load is not); the vibration spectrum's shaft line is at the SET speed, so the shaft ran at the set speed and these two columns were logged at half scale. Kept as recorded in the processed data; per-bearing inputs are invariant to a constant speed scale."
+ },
+ "stops_over_60s": [],
+ "segments": {
+  "1": {
+   "ids": [
+    1,
+    1114
+   ],
+   "n": 1114,
+   "from": "2021-11-17 12:45:09",
+   "to": "2021-11-17 18:26:58",
+   "warmup_rows": 50,
+   "T1_start": 22.1547517347734,
+   "T1_end": 65.7170373403981,
+   "T1_max": 66.0079553869847
+  }
+ },
+ "warmup_recorded": true,
+ "records_after_log_end": 0,
+ "last_record_vs_log_end_s": 58.0,
+ "T1_max": 66.0079553869847,
+ "T2_max": 65.1297744334284,
+ "setSpeed_out_of_log_range": 0,
+ "setSpeed_max": 2995.70534302303,
+ "measured_speed_max": 1494.45512781587,
+ "speed_not_reached": 1114,
+ "static_load_off_150N": 433,
+ "alignment": {
+  "warmup_rows": 50,
+  "logRMS_jump_at_switch": 1.654877418715091,
+  "largest_step_within_warmup": 0.05129318109751435,
+  "dlogRMS_vs_dlogSpeed_corr_by_lag": {
+   "-3": 0.011824221679668956,
+   "-2": 0.005569733433494258,
+   "-1": -0.4886310605220432,
+   "0": 0.9580762654513849,
+   "1": -0.48160988592613385,
+   "2": 0.002488509430896416,
+   "3": 0.0061395288071599335
+  },
+  "best_lag": 0,
+  "lag0_clear": true
+ },
+ "combined_set_at_4300": 409,
+ "combined_set_outside_range": 0
+}

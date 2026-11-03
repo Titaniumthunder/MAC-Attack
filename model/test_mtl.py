@@ -217,7 +217,7 @@ def test_prototype_reports_no_health_percentage(e):
 
 def test_existing_models_and_results_untouched():
     r = subprocess.run(["git", "status", "--porcelain", "--", "weights", "export", "results", "train.py", "health.py",
-                        "export.py", "features.py", "anomaly_baseline.py", "paderborn.py", "b01_preprocess.py",
+                        "export.py", "features.py", "anomaly_baseline.py", "mtl_model.py", "b01_preprocess.py",
                         "b01_analysis.py"], cwd=HERE, capture_output=True, text=True, check=True)
     changed = [ln for ln in r.stdout.splitlines() if not ln.startswith("??")]
     assert changed == [], changed                    # tracked files: no modification

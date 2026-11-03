@@ -1,4 +1,4 @@
-"""results/multitask/MULTITASK_ARCHITECTURE_REPORT.md as a PDF: docs/Multitask_architecture_report.pdf.
+"""results/multitask/MULTITASK_ARCHITECTURE_REPORT.md as a PDF: docs/Multitask_MLP_reports/Multitask_architecture_report.pdf.
 
   python report/make_multitask_report.py     (inside model/; --keep-html prints the intermediate page)
 
@@ -12,7 +12,7 @@ from make_paderborn_baseline_report import CSS, browser, convert   # noqa: E402
 
 HERE = Path(__file__).resolve().parent.parent
 SRC = HERE / "results" / "multitask" / "MULTITASK_ARCHITECTURE_REPORT.md"
-OUT = HERE.parent / "docs" / "Multitask_architecture_report.pdf"
+OUT = HERE.parent / "docs" / "Multitask_MLP_reports" / "Multitask_architecture_report.pdf"
 BREAKS = (4, 5, 8)
 
 
@@ -23,7 +23,7 @@ def main():
     tmp = Path(tempfile.mkdtemp(prefix="mg_mtl_report_"))
     page = tmp / "report.html"
     page.write_text(page_html, encoding="utf-8")
-    OUT.parent.mkdir(exist_ok=True)
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run([browser(), "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
                     f"--user-data-dir={tmp / 'profile'}", f"--print-to-pdf={OUT}", page.as_uri()],
                    check=True, capture_output=True, timeout=120)

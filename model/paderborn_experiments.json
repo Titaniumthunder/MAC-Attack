@@ -1,33 +1,651 @@
 {
  "_note": "Transcribed by hand from each experiment's <EXP>_log.pdf (read in a PDF viewer). Only what the log states; null = not stated. Add an entry when a new experiment's files are added; paderborn.py also runs without one (and says so).",
  "protocol": {
-  "fs_hz": 128000, "duration_s": 1.6, "pause_s": 12, "g_per_v": 10,
-  "warmup": {"setSpeed_rpm": 750, "setStat_N": 2500, "setDyn_N": 0, "minutes": 10},
-  "ranges": {"setSpeed_rpm": [2400, 3000], "setStat_N": [3300, 3800], "setDyn_N": [500, 1400], "combined_N": [4300, 4900]},
+  "fs_hz": 128000,
+  "duration_s": 1.6,
+  "pause_s": 12,
+  "g_per_v": 10,
+  "warmup": {
+   "setSpeed_rpm": 750,
+   "setStat_N": 2500,
+   "setDyn_N": 0,
+   "minutes": 10
+  },
+  "ranges": {
+   "setSpeed_rpm": [
+    2400,
+    3000
+   ],
+   "setStat_N": [
+    3300,
+    3800
+   ],
+   "setDyn_N": [
+    500,
+    1400
+   ],
+   "combined_N": [
+    4300,
+    4900
+   ]
+  },
   "dyn_load_hz": 2
  },
  "experiments": {
   "B01": {
    "date": "2021-10-19",
    "log": [
-    ["2021-10-19 08:45", "The new bearing was installed the day before. It operated for a maximum of 15 minutes. Warm-up phase: 10 minutes, n = 750 rpm, F_stat = 2500 N, no dynamic load. After the warm-up phase, the experiment runs with randomly sampled values for the shaft rotational speed, static load and dynamic load's amplitude."],
-    ["2021-10-19 09:13", "The experiment successfully completes because the temperature threshold value was exceeded!"]
+    [
+     "2021-10-19 08:45",
+     "The new bearing was installed the day before. It operated for a maximum of 15 minutes. Warm-up phase: 10 minutes, n = 750 rpm, F_stat = 2500 N, no dynamic load. After the warm-up phase, the experiment runs with randomly sampled values for the shaft rotational speed, static load and dynamic load's amplitude."
+    ],
+    [
+     "2021-10-19 09:13",
+     "The experiment successfully completes because the temperature threshold value was exceeded!"
+    ]
    ],
    "log_end": "2021-10-19 09:13",
    "stop_reason": "temperature threshold exceeded (value not stated)",
    "temperature_limit_C": null,
-   "new_bearing": true
+   "new_bearing": true,
+   "ranges": {
+    "setSpeed_rpm": [
+     2400,
+     3000
+    ],
+    "setStat_N": [
+     3300,
+     3800
+    ],
+    "setDyn_N": [
+     500,
+     1400
+    ],
+    "combined_N": [
+     4300,
+     4900
+    ]
+   },
+   "dyn_load_type": "sinusoidal 2 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 2,
+    "n_files": 377,
+    "threshold_criterion": null,
+    "defect_after_dismantling": "IR, OR, B"
+   },
+   "note": "no stop criterion pre-set (description); its log says the run 'successfully completes' at 09:13 because the temperature threshold was exceeded, yet the data continue in two more segments to 10:59 (undocumented)"
+  },
+  "B02": {
+   "log": [
+    [
+     "2021-10-25 08:59",
+     "Begin with a new bearing. Warm-up phase: 10 minutes, n = 750 rpm, F_static = 2500 N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+    ],
+    [
+     "2021-10-25 13:32",
+     "The test was stopped because the RMS value of an accelerometer exceeded a value of 0.65 V twice. To account for possible outliers, the test was continued, where the threshold is allowed to be crossed 4 times."
+    ],
+    [
+     "2021-10-25 14:36",
+     "The test was successfully completed because the RMS value of the accelerometer exceeded a value of 0.65 V four times."
+    ]
+   ],
+   "log_end": "2021-10-25 14:36",
+   "stop_reason": "accelerometer RMS exceeded 0.65 V (6.5 g) four times",
+   "temperature_limit_C": null,
+   "ranges": {
+    "setSpeed_rpm": [
+     2400,
+     3000
+    ],
+    "setStat_N": [
+     3300,
+     3800
+    ],
+    "setDyn_N": [
+     500,
+     1400
+    ],
+    "combined_N": [
+     4300,
+     4900
+    ]
+   },
+   "dyn_load_type": "sinusoidal 2 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 6,
+    "n_files": 1116,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "IR"
+   },
+   "date": "2021-10-25",
+   "vibration_limit": "accelerometer RMS 0.65 V = 6.5 g; first stop at 13:32 after 2 crossings, continued with 4 allowed",
+   "new_bearing": true,
+   "log_source": "newdata/B02/B02_log.pdf, page 2 (Lennart Viemann, supervised by O. K. Aimiyekagbon)"
   },
   "B03": {
    "date": "2021-11-05",
    "log": [
-    ["2021-11-05 15:10", "Begin with a new bearing. Warm-up phase: 10 minutes, n = 750 rpm, F_static = 2500 N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."],
-    ["2021-11-05 18:23", "The test was automatically stopped because the bearing housing temperature exceeded the specified limits of 110 degC!"]
+    [
+     "2021-11-05 15:10",
+     "Begin with a new bearing. Warm-up phase: 10 minutes, n = 750 rpm, F_static = 2500 N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+    ],
+    [
+     "2021-11-05 18:23",
+     "The test was automatically stopped because the bearing housing temperature exceeded the specified limits of 110 degC!"
+    ]
    ],
    "log_end": "2021-11-05 18:23",
    "stop_reason": "bearing housing temperature exceeded 110 degC (automatic stop)",
    "temperature_limit_C": 110,
-   "new_bearing": true
+   "new_bearing": true,
+   "ranges": {
+    "setSpeed_rpm": [
+     2400,
+     3000
+    ],
+    "setStat_N": [
+     3300,
+     3800
+    ],
+    "setDyn_N": [
+     500,
+     1400
+    ],
+    "combined_N": [
+     4300,
+     4900
+    ]
+   },
+   "dyn_load_type": "sinusoidal 2 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 3,
+    "n_files": 614,
+    "threshold_criterion": "temperature",
+    "defect_after_dismantling": "IR"
+   }
+  },
+  "B04": {
+   "log": [
+    [
+     "2021-11-17 12:45",
+     "Begin with a new bearing. Warm-up phase: 10 minutes, n = 750 rpm, F_static = 2500 N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+    ],
+    [
+     "2021-11-17 13:45",
+     "Since the bearing temperature was above 60 degC, the parameters for the higher operating temperature were selected!"
+    ],
+    [
+     "2021-11-17 18:26",
+     "The test was successfully completed because the RMS values of an accelerometer exceeded the specified limit!"
+    ]
+   ],
+   "log_end": "2021-11-17 18:26",
+   "stop_reason": "accelerometer RMS exceeded the specified limit (value not stated in the log)",
+   "temperature_limit_C": null,
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     3000
+    ],
+    "setStat_N": [
+     2500,
+     3800
+    ],
+    "setDyn_N": [
+     500,
+     1500
+    ],
+    "combined_N": [
+     4000,
+     5000
+    ]
+   },
+   "dyn_load_type": "sinusoidal 2 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 6,
+    "n_files": 1114,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "IR, B"
+   },
+   "date": "2021-11-17",
+   "vibration_limit": "not stated in the log",
+   "new_bearing": true,
+   "log_source": "newdata/B04/B04_log.pdf, page 2 (Lennart Viemann, supervised by O. K. Aimiyekagbon)",
+   "parameter_sets": {
+    "selection": "bearing temperature queried after 60 min of operation: above 60 degC keeps the T_high intervals, below switches to T_low (heavier load)",
+    "T_high": {
+     "setSpeed_rpm": [
+      1500,
+      3000
+     ],
+     "setStat_N": [
+      2500,
+      3800
+     ],
+     "setDyn_N": [
+      500,
+      1500
+     ]
+    },
+    "T_low": {
+     "setSpeed_rpm": [
+      2400,
+      3600
+     ],
+     "setStat_N": [
+      3300,
+      3800
+     ],
+     "setDyn_N": [
+      750,
+      1700
+     ]
+    },
+    "selected": "T_high (log 13:45)",
+    "combined_N": [
+     4000,
+     5000
+    ]
+   },
+   "recording_note": "SUSPECTED logging/scaling discrepancy, not confirmed by the dataset authors: recorded measured speed and peak dynamic load are about 0.50 x the set values in every row (static load is not). The vibration spectrum's shaft line sits at the SET speed, which supports (does not prove) that the shaft ran at the set speed and these two columns were logged at half scale. Kept as recorded in the processed data; per-bearing inputs are invariant to a constant speed scale."
+  },
+  "B05": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     3000
+    ],
+    "setStat_N": [
+     2500,
+     3800
+    ],
+    "setDyn_N": [
+     500,
+     1500
+    ]
+   },
+   "dyn_load_type": "sinusoidal 2 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 3,
+    "n_files": 572,
+    "threshold_criterion": null,
+    "defect_after_dismantling": "B"
+   },
+   "note": "deliberately interrupted (description)"
+  },
+  "B06": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     3600
+    ],
+    "setStat_N": [
+     3300,
+     3800
+    ],
+    "setDyn_N": [
+     750,
+     1700
+    ]
+   },
+   "dyn_load_type": "sinusoidal 2 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 67,
+    "n_files": 12965,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "IR, B"
+   }
+  },
+  "B07": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     3000
+    ],
+    "setStat_N": [
+     3250,
+     4000
+    ],
+    "setDyn_N": [
+     250,
+     750
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 37,
+    "n_files": 6393,
+    "threshold_criterion": "temperature",
+    "defect_after_dismantling": "IR"
+   }
+  },
+  "B08": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     3000
+    ],
+    "setStat_N": [
+     3250,
+     4000
+    ],
+    "setDyn_N": [
+     500,
+     1000
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 11,
+    "n_files": 1827,
+    "threshold_criterion": "temperature",
+    "defect_after_dismantling": "IR, B"
+   }
+  },
+  "B09": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     3000
+    ],
+    "setStat_N": [
+     2500,
+     3800
+    ],
+    "setDyn_N": [
+     750,
+     1000
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 128000,
+   "description": {
+    "approx_duration_h": 13,
+    "n_files": 1813,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "OR, B"
+   }
+  },
+  "B10": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     2700
+    ],
+    "setStat_N": [
+     2000,
+     3250
+    ],
+    "setDyn_N": [
+     750,
+     1500
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 64000,
+   "description": {
+    "approx_duration_h": 19,
+    "n_files": 3224,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "OR, B"
+   }
+  },
+  "B11": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     2700
+    ],
+    "setStat_N": [
+     3000,
+     3000
+    ],
+    "setDyn_N": [
+     1000,
+     1000
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 64000,
+   "description": {
+    "approx_duration_h": 8,
+    "n_files": 1953,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "IR, OR, B"
+   }
+  },
+  "B12": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     2700
+    ],
+    "setStat_N": [
+     3000,
+     3000
+    ],
+    "setDyn_N": [
+     1000,
+     1000
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 64000,
+   "description": {
+    "approx_duration_h": 3,
+    "n_files": 767,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "IR, B"
+   }
+  },
+  "B13": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     1500,
+     2700
+    ],
+    "setStat_N": [
+     3000,
+     3000
+    ],
+    "setDyn_N": [
+     1000,
+     1000
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 64000,
+   "description": {
+    "approx_duration_h": 66,
+    "n_files": 19417,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "IR, B"
+   }
+  },
+  "B14": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     2700,
+     2700
+    ],
+    "setStat_N": [
+     2500,
+     2500
+    ],
+    "setDyn_N": [
+     700,
+     1500
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 64000,
+   "description": {
+    "approx_duration_h": 41,
+    "n_files": 12317,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "B"
+   },
+   "note": "dynamic range [700, 1500] N in the description, [750, 1500] N in the paper (B14-B15)"
+  },
+  "B15": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     2700,
+     2700
+    ],
+    "setStat_N": [
+     2500,
+     2500
+    ],
+    "setDyn_N": [
+     700,
+     1500
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 64000,
+   "description": {
+    "approx_duration_h": 76,
+    "n_files": 22567,
+    "threshold_criterion": "temperature",
+    "defect_after_dismantling": "IR, B"
+   },
+   "note": "dynamic range [700, 1500] N in the description, [750, 1500] N in the paper (B14-B15)"
+  },
+  "B16": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     2700,
+     2700
+    ],
+    "setStat_N": [
+     2500,
+     2500
+    ],
+    "setDyn_N": [
+     1000,
+     1500
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 64000,
+   "description": {
+    "approx_duration_h": 20,
+    "n_files": 5891,
+    "threshold_criterion": null,
+    "defect_after_dismantling": "IR, OR, B"
+   },
+   "note": "no threshold criterion listed (description)"
+  },
+  "B17": {
+   "log": null,
+   "log_end": null,
+   "stop_reason": null,
+   "temperature_limit_C": null,
+   "_log_note": "log not transcribed yet (add when the files are downloaded)",
+   "ranges": {
+    "setSpeed_rpm": [
+     2700,
+     2700
+    ],
+    "setStat_N": [
+     1500,
+     2500
+    ],
+    "setDyn_N": [
+     1500,
+     1500
+    ]
+   },
+   "dyn_load_type": "Gaussian noise <= 200 Hz",
+   "fs_hz": 64000,
+   "description": {
+    "approx_duration_h": 17,
+    "n_files": 2733,
+    "threshold_criterion": "vibration",
+    "defect_after_dismantling": "B"
+   }
   }
+ },
+ "_sources": {
+  "logs": "<EXP>_log.pdf, transcribed by hand (B01, B03 so far)",
+  "dataset_description": "O. K. Aimiyekagbon, 'Run-to-failure data set of ball bearings subjected to time-varying load and speed conditions', v2, 25 Mar 2024, Zenodo doi:10.5281/zenodo.10805042 (CC BY 4.0): Table 2 (set ranges), Table 3 (duration, files, threshold criterion, defect found after dismantling), sample rates",
+  "paper": "Javanmardi et al., PHM Society European Conference 2024, doi:10.36001/phme.2024.v8i1.4101",
+  "note": "defect = type(s) found after dismantling (IR inner race, OR outer race, B rolling element); the description gives no size, no location detail, no inspection date and no intermediate inspection for any experiment"
+ },
+ "dataset": {
+  "bearing": "61806-2RS (d 30 mm, D 42 mm, 19 balls of 3.18 mm, pitch 35.5 mm, C0 3.15 kN, C 4.00 kN)",
+  "accelerometers": "PCB 603C01, 100 mV/g, +-50 g, flat 0.5-10 kHz (3 dB), resonance 25 kHz; A = accHorizRear_A, C = accHorizFrontal_C (horizontal, housing); B (vertical, lever) not provided",
+  "temperature": "Pt100 (MC 745691-02), accuracy +-(0.3 + 0.005|t|) degC, 10 Hz; T1, T2 on the bearing housing, ambient near the rig",
+  "stop_criteria": "vibration threshold in [6, 10] g or housing temperature 110 degC; no criterion pre-set for B01; B05 deliberately interrupted"
  }
 }

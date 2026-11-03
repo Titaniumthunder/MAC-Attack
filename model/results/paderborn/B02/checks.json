@@ -1,0 +1,136 @@
+{
+ "n_mat": 1116,
+ "n_csv_rows": 1116,
+ "missing_ids": [],
+ "extra_ids": [],
+ "ids_contiguous": true,
+ "all_samples_ok": true,
+ "fs_hz": [
+  128000.0
+ ],
+ "all_finite": true,
+ "timestamps_monotonic": true,
+ "duplicate_timestamps": 0,
+ "first": "2021-10-25 08:59:35",
+ "last": "2021-10-25 14:36:36",
+ "interval_s": {
+  "min": 11.0,
+  "median": 18.0,
+  "max": 282.0
+ },
+ "log": {
+  "log": [
+   [
+    "2021-10-25 08:59",
+    "Begin with a new bearing. Warm-up phase: 10 minutes, n = 750 rpm, F_static = 2500 N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+   ],
+   [
+    "2021-10-25 13:32",
+    "The test was stopped because the RMS value of an accelerometer exceeded a value of 0.65 V twice. To account for possible outliers, the test was continued, where the threshold is allowed to be crossed 4 times."
+   ],
+   [
+    "2021-10-25 14:36",
+    "The test was successfully completed because the RMS value of the accelerometer exceeded a value of 0.65 V four times."
+   ]
+  ],
+  "log_end": "2021-10-25 14:36",
+  "stop_reason": "accelerometer RMS exceeded 0.65 V (6.5 g) four times",
+  "temperature_limit_C": null,
+  "ranges": {
+   "setSpeed_rpm": [
+    2400,
+    3000
+   ],
+   "setStat_N": [
+    3300,
+    3800
+   ],
+   "setDyn_N": [
+    500,
+    1400
+   ],
+   "combined_N": [
+    4300,
+    4900
+   ]
+  },
+  "dyn_load_type": "sinusoidal 2 Hz",
+  "fs_hz": 128000,
+  "description": {
+   "approx_duration_h": 6,
+   "n_files": 1116,
+   "threshold_criterion": "vibration",
+   "defect_after_dismantling": "IR"
+  },
+  "date": "2021-10-25",
+  "vibration_limit": "accelerometer RMS 0.65 V = 6.5 g; first stop at 13:32 after 2 crossings, continued with 4 allowed",
+  "new_bearing": true,
+  "log_source": "newdata/B02/B02_log.pdf, page 2 (Lennart Viemann, supervised by O. K. Aimiyekagbon)"
+ },
+ "stops_over_60s": [
+  {
+   "before_id": 922,
+   "from": "2021-10-25 13:32:36",
+   "to": "2021-10-25 13:37:18",
+   "gap_s": 282.0,
+   "T1_before": 73.5943468233011,
+   "T1_after": 62.195883367039
+  }
+ ],
+ "segments": {
+  "1": {
+   "ids": [
+    1,
+    921
+   ],
+   "n": 921,
+   "from": "2021-10-25 08:59:35",
+   "to": "2021-10-25 13:32:36",
+   "warmup_rows": 51,
+   "T1_start": 25.3116584778644,
+   "T1_end": 73.5943468233011,
+   "T1_max": 73.5943468233011
+  },
+  "2": {
+   "ids": [
+    922,
+    1116
+   ],
+   "n": 195,
+   "from": "2021-10-25 13:37:18",
+   "to": "2021-10-25 14:36:36",
+   "warmup_rows": 0,
+   "T1_start": 62.195883367039,
+   "T1_end": 73.1541377376698,
+   "T1_max": 73.4819143026208
+  }
+ },
+ "warmup_recorded": true,
+ "records_after_log_end": 0,
+ "last_record_vs_log_end_s": 36.0,
+ "T1_max": 73.5943468233011,
+ "T2_max": 73.2625964438649,
+ "setSpeed_out_of_log_range": 0,
+ "setSpeed_max": 2998.28213720921,
+ "measured_speed_max": 3001.28942799483,
+ "speed_not_reached": 0,
+ "static_load_off_150N": 182,
+ "alignment": {
+  "warmup_rows": 51,
+  "logRMS_jump_at_switch": 1.689314278309382,
+  "largest_step_within_warmup": 0.07209637112547052,
+  "dlogRMS_vs_dlogSpeed_corr_by_lag": {
+   "-3": 0.005657066257390194,
+   "-2": 0.013144959182325078,
+   "-1": -0.4558815431827673,
+   "0": 0.8826585623414033,
+   "1": -0.4322817651267995,
+   "2": -0.0052543158990201394,
+   "3": 0.00014999837412275132
+  },
+  "best_lag": 0,
+  "lag0_clear": true
+ },
+ "combined_set_at_4300": 539,
+ "combined_set_outside_range": 0
+}

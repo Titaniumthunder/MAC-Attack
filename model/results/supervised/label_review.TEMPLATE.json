@@ -1,0 +1,114 @@
+{
+ "label_table_sha256": "4eff40d85f35e35dcc1f8129c1f90267c44f3a748c576639ac2ced4deb20a475",
+ "checked_by": null,
+ "date": null,
+ "independent_check_by": null,
+ "independent_check_date": null,
+ "items": [
+  {
+   "bearing": "all",
+   "check": "Defect types after dismantling (B01 IR, OR, B; B02 IR; B03 IR; B04 IR, B) match Table 3 of the official dataset description (Zenodo 10.5281/zenodo.10805042); they were transcribed, not read from a local file",
+   "source": "Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.8 Table 3, Defect column",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "all",
+   "check": "Assumptions A1-A4 in label_table.json are acceptable. The final five measurements of B02, B03 and B04 are PROVISIONAL END-STAGE PROXY LABELS: they stand for the end-of-test state of a bearing found damaged after dismantling (description Table 3), not a verified deteriorated state at those measurements. The exact damage onset is unknown (A3). The rig stopping at its vibration or temperature threshold does not by itself prove that the bearing defect caused the stop (A2 is an assumption). The healthy labels rest on 'no defect was initiated' and 'Begin with a new bearing' (A4)",
+   "source": "Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.2 'No defect was initiated'; p.8 Table 3; logs p.2; A1-A3 have no document (dismantling time not given anywhere)",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "all",
+   "check": "START_N = 100 and END_N = 5 (fixed 2 Nov 2026 before B02/B04 were seen) are kept; B01's start labels withheld",
+   "source": "labels.py (rule fixed 2 Nov 2026); label review decision 2 Nov 2026 (B01 withheld)",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "all",
+   "check": "The end labels of B02 and B04 sit where the rig's vibration stop rule fired on the same rear accelerometer the model uses: accepted, provided every trained head is compared with that rule (it is in baseline_comparison.json)",
+   "source": "Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.4 T_vibration in [6, 10] g; p.8 Table 3 B02, B04 = T_vibration; B02_log.pdf p.2 (0.65 V); B04_log.pdf p.2",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B01",
+   "check": "End label withheld (no stop criterion pre-set; recording continues 272 measurements past the logged stop)",
+   "source": "Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.4 'for experiment B01 no criteria was pre-set'; p.8 Table 3 B01 '-'; B01_log.pdf p.2 (09:13 entry); checks.json",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B01",
+   "check": "No healthy labels (decided 2 Nov 2026, walkthrough item 6): T1 reached the 110 degC stop temperature 16 min after warm-up (09:12:49; log 09:13), the test restarted twice afterwards, and the bearing had run up to 15 min the day before. With the end label also withheld, B01 has no label and is left out of the folds",
+   "source": "B01_log.pdf p.2 (08:45 and 09:13 entries); description p.4 (110 degC); processed T1 (first at or above 110 degC 09:12:49)",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B02",
+   "check": "Start M0052-M0151 healthy: log 08:59 'Begin with a new bearing'",
+   "source": "B02_log.pdf p.2 (08:59 'Begin with a new bearing'); Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.2",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B02",
+   "check": "End M1112-M1116 (14:35:29-14:36:36) deteriorated: log 14:36 stop, RMS above 0.65 V four times; recording ends 36 s after the logged stop",
+   "source": "B02_log.pdf p.2 (14:36 entry); Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.4, p.8; checks.json last record 36 s after 14:36",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B02",
+   "check": "The 13:32 stop (vibration limit crossed twice, M0920-M0921 above 6.5 g in our data) was NOT a dismantling: the test continued, so M0921 and its neighbours stay masked",
+   "source": "B02_log.pdf p.2 (13:32 entry); checks.json stop 13:32:36-13:37:18",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B02",
+   "check": "Our 1.6-s RMS is above 6.5 g in 13 measurements after the restart while the log counts four crossings: the rig's RMS window differs from ours; no label depends on this count",
+   "source": "B02_log.pdf p.2 (14:36 'four times'); processed rear RMS",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B03",
+   "check": "Start M0001-M0100 healthy (B03's warm-up is not in the recording, so the first 100 are at test conditions)",
+   "source": "B03_log.pdf p.2 (15:10 'Begin with a new bearing', warm-up described); Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.2; first record 15:10:43, no warm-up rows",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B03",
+   "check": "End M0610-M0614 (18:22:25-18:23:40) deteriorated: log 18:23 automatic stop, housing temperature above 110 degC",
+   "source": "B03_log.pdf p.2 (18:23 entry, 110 degC); Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.4, p.8; T1 first above 110 degC at M0612 18:23:02",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B04",
+   "check": "Start M0051-M0150 healthy: log 12:45 'Begin with a new bearing'",
+   "source": "B04_log.pdf p.2 (12:45 'Begin with a new bearing'); Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.2",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B04",
+   "check": "End M1110-M1114 (18:25:44-18:26:58) deteriorated: log 18:26 stop, RMS above the specified limit (value not stated)",
+   "source": "B04_log.pdf p.2 (18:26 entry, limit value not stated); Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.4 ([6, 10] g), p.8",
+   "confirmed": null,
+   "comment": ""
+  },
+  {
+   "bearing": "B04",
+   "check": "SUSPECTED logging/scaling discrepancy, NOT confirmed by the dataset authors: B04's recorded measured speed is 0.498-0.500 x and its peak dynamic load about 0.52 x the set values in every row (static load normal). Our vibration analysis supports, but does not prove, that the shaft ran at the set speed and these two columns were logged at half scale: in 14 files from M0001 to M1114 the shaft-frequency line sits at the set speed, with only background at the recorded speed. Neither the description nor the B04 log mentions it. Data kept as recorded; labels never use speed; the 8 inputs are identical with the speed doubled",
+   "source": "Dataset description v2 (Aimiyekagbon, 25 Mar 2024, Zenodo 10.5281/zenodo.10805042) p.7 (meanAbs_speed = measured speed, no scale note); B04_log.pdf p.1 (T_high ranges); vibration spectrum (14 files, M0001-M1114)",
+   "confirmed": null,
+   "comment": ""
+  }
+ ]
+}

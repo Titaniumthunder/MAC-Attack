@@ -158,15 +158,21 @@ def calibrate(full, profile=PRIMARY_PROFILE):
     d = ab.prepare(full)
     ref = d[d.ref]
     F = vib_features(ref, profile)
-    X = np.column_stack([np.ones(len(ref)), ref.ln_speed])
+    if not np.isfinite(F).all():         # e.g. the 20-64 kHz band of a 64-kHz experiment (B10-B17): use profile A42
+        raise ValueError(f"profile {profile} needs features this experiment does not have (sampled below 128 kHz?)")
+    # constant set speed (B14-B17 run at 2700 rpm): the measured RPM only jitters, so no RPM term is fitted
+    rpm_varies = ref.setSpeed_rpm.nunique() > 1
+    X = np.column_stack([np.ones(len(ref)), ref.ln_speed] if rpm_varies else [np.ones(len(ref))])
     B, *_ = np.linalg.lstsq(X, F, rcond=None)
     sig = (F - X @ B).std(axis=0)
+    b1 = B[1] if rpm_varies else np.zeros(F.shape[1])
     thermal, _ = thermal_calibration(full, ref_end)
     base = ab.fit(ref, *ab.PRIMARY)
     return {"profile": profile, "channel": CHANNEL, "inputs": input_names(profile), "ref_n": REF_N,
             "ref_measurement_ids": [int(ref.measurement_id.iloc[0]), int(ref.measurement_id.iloc[-1])],
-            "vib_b0": B[0].tolist(), "vib_b1_ln_rpm": B[1].tolist(), "vib_sigma": np.where(sig > 1e-12, sig, 1.0).tolist(),
-            "ln_rpm_mean": float(ref.ln_speed.mean()), "ln_rpm_std": float(ref.ln_speed.std()),
+            "rpm_correction": bool(rpm_varies),
+            "vib_b0": B[0].tolist(), "vib_b1_ln_rpm": b1.tolist(), "vib_sigma": np.where(sig > 1e-12, sig, 1.0).tolist(),
+            "ln_rpm_mean": float(ref.ln_speed.mean()), "ln_rpm_std": float(ref.ln_speed.std()) if rpm_varies else 1.0,
             "z_clip": Z_CLIP, "thermal": thermal,
             "anomaly": {"config": list(ab.PRIMARY), "features": base["names"], "B": base["B"].tolist(),
                         "sigma": base["sigma"].tolist(), "tau": base["tau"], "run": RUN}}

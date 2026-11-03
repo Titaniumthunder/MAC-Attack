@@ -13,6 +13,11 @@ The same steps as b01_preprocess.py (kept unchanged: it made results/B01/ and it
   - merged with <EXP>_meanTemperatures.csv and <EXP>_operatingConditions.csv in time order;
   - checks: files contiguous and complete, sample count and rate, timestamps, the file <-> row alignment,
     stops (segments), warm-up rows, every condition against the protocol ranges and the log (paderborn_experiments.json).
+  - sample rate per file (from measTime): the data set is 128 kHz up to B09 and 64 kHz from B10 (dataset description,
+    Zenodo 10.5281/zenodo.10805042). At 64 kHz the 20-64 kHz band does not exist (Nyquist 32 kHz) and is left empty
+    (NaN), and the "lr_" signal is resampled by 2/3 to the same 42.67 kHz. The 128-kHz path is unchanged.
+  - set-point ranges and warm-up per experiment from paderborn_experiments.json (B04-B17 use other ranges than B01-B03),
+    falling back to the protocol's.
 Writes results/paderborn/<EXP>/<EXP>_processed.csv, checks.json, figures/<EXP>_overview.png.
 Nothing is filled in, and no label, failure time or health value is written.
 """
@@ -37,6 +42,8 @@ N_SAMPLES = int(FS * P["duration_s"])
 CHANNELS = {"A": "accHorizRear_A", "C": "accHorizFrontal_C"}      # A rear, C front (horizontal)
 BANDS = [(10, 1000), (1000, 5000), (5000, 20000), (20000, 64000)]
 DECIM = 3                                                          # 128 kHz / 3 = 42.67 kHz
+LR_FS = 128000 / DECIM                                             # the "lr_" rate for every experiment
+NOMINAL_FS = (128000, 64000)                                       # the data set's two sample rates
 GAP_S = 60                                                         # a pause longer than this is a stop
 
 
@@ -54,17 +61,22 @@ def time_stats(x):
             "skew": (d ** 3).mean() / std ** 3, "kurt": (d ** 4).mean() / std ** 4}
 
 
-def features(x):
-    """One channel (g): the b01_preprocess.py features, then the 42.67-kHz ones."""
+def features(x, fs=FS):
+    """One channel (g): the b01_preprocess.py features, then the 42.67-kHz ones. fs: 128000 or 64000 Hz."""
+    if fs not in NOMINAL_FS:
+        raise ValueError(f"sample rate {fs} Hz is not one of {NOMINAL_FS}")
     out = time_stats(x)
     d = x - out["mean"]
     spec = np.abs(np.fft.rfft(d)) ** 2
-    f = np.fft.rfftfreq(len(d), 1 / FS)
+    f = np.fft.rfftfreq(len(d), 1 / fs)
     scale = 2.0 / len(d) ** 2
     for lo, hi in BANDS:
         k = (f >= lo) & (f < hi)
-        out[band_name(lo, hi)] = np.sqrt(spec[k].sum() * scale)
-    lr = signal.decimate(x, DECIM, ftype="fir", zero_phase=True)     # anti-alias FIR, then every 3rd sample
+        out[band_name(lo, hi)] = np.sqrt(spec[k].sum() * scale) if hi <= fs / 2 else np.nan   # band above Nyquist
+    if fs == 128000:
+        lr = signal.decimate(x, DECIM, ftype="fir", zero_phase=True)     # anti-alias FIR, then every 3rd sample
+    else:
+        lr = signal.resample_poly(x, 2, 3)                                # 64 kHz * 2/3 = 42.67 kHz (polyphase FIR)
     out.update({f"lr_{k}": v for k, v in time_stats(lr).items() if k in ("std", "rms", "peak", "crest", "kurt", "skew")})
     return out
 
@@ -72,11 +84,15 @@ def features(x):
 def read_one(path):
     m = sio.loadmat(path)
     t = m["measTime"].ravel()
-    res = {"n_samples": len(t), "fs_hz": float(1 / np.diff(t).mean()), "finite": True}
+    fs_meas = float(1 / np.diff(t).mean())
+    fs = min(NOMINAL_FS, key=lambda n: abs(n - fs_meas))
+    if abs(fs - fs_meas) > 0.01 * fs:
+        raise ValueError(f"{path}: measured sample rate {fs_meas:.1f} Hz is not 128 or 64 kHz")
+    res = {"n_samples": len(t), "fs_hz": fs_meas, "finite": True}
     for c, key in CHANNELS.items():
         x = m[key].ravel().astype(np.float64) * P["g_per_v"]
         res["finite"] &= bool(np.isfinite(x).all())
-        res.update({f"acc{c}_{k}": float(v) for k, v in features(x).items()})
+        res.update({f"acc{c}_{k}": float(v) for k, v in features(x, fs).items()})
     return res
 
 
@@ -98,14 +114,14 @@ def annotate(df, meta):
     df["segment"] = 1 + (gap > GAP_S).cumsum()
     first = df.groupby("segment")["timestamp"].transform("first")
     df["t_in_segment_s"] = (df["timestamp"] - first).dt.total_seconds()
-    w = P["warmup"]
+    w = (meta or {}).get("warmup", P["warmup"])
     df["warmup"] = ((df["setSpeed_rpm"] - w["setSpeed_rpm"]).abs() < 1) & (df["setDyn_N"] == w["setDyn_N"]) \
         & ((df["setStat_N"] - w["setStat_N"]).abs() < 1)
     end = pd.Timestamp(meta["log_end"]) + pd.Timedelta(seconds=59) if meta and meta.get("log_end") else None
     df["after_log_end"] = df["timestamp"] > end if end is not None else False
     df["combined_set_N"] = df["setStat_N"] + df["setDyn_N"]
     op = ~df["warmup"]
-    lo, hi = P["ranges"]["setSpeed_rpm"]
+    lo, hi = (meta or {}).get("ranges", P["ranges"])["setSpeed_rpm"]
     df["flag_setSpeed_out_of_log_range"] = op & ((df["setSpeed_rpm"] < lo) | (df["setSpeed_rpm"] > hi))
     df["speed_error_rpm"] = df["speed_rpm"] - df["setSpeed_rpm"]
     df["flag_speed_not_reached"] = df["speed_error_rpm"].abs() > 20
@@ -151,7 +167,7 @@ def checks(df, ids, vdf_raw, meta):
     expected = list(range(1, len(df) + 1))
     c = {"n_mat": len(ids), "n_csv_rows": len(df), "missing_ids": sorted(set(expected) - set(ids)),
          "extra_ids": sorted(set(ids) - set(expected)), "ids_contiguous": ids == expected,
-         "all_samples_ok": bool((vdf_raw["n_samples"] == N_SAMPLES).all()),
+         "all_samples_ok": bool((vdf_raw["n_samples"] == (vdf_raw["fs_hz"] * P["duration_s"]).round()).all()),
          "fs_hz": sorted(set(vdf_raw["fs_hz"].round(3))), "all_finite": bool(vdf_raw["finite"].all()),
          "timestamps_monotonic": bool(ts.is_monotonic_increasing), "duplicate_timestamps": int(ts.duplicated().sum()),
          "first": str(ts.iloc[0]), "last": str(ts.iloc[-1]),
@@ -175,10 +191,12 @@ def checks(df, ids, vdf_raw, meta):
          "setSpeed_max": float(df["setSpeed_rpm"].max()), "measured_speed_max": float(df["speed_rpm"].max()),
          "speed_not_reached": int(df["flag_speed_not_reached"].sum()),
          "static_load_off_150N": int(df["flag_static_load_off_150N"].sum()),
-         "combined_set_at_4300": int((~df["warmup"] & (df["combined_set_N"].round(3) == 4300)).sum()),
-         "combined_set_outside_range": int((~df["warmup"] & ((df["combined_set_N"] < 4300 - 1e-6)
-                                                             | (df["combined_set_N"] > 4900 + 1e-6))).sum()),
          "alignment": alignment(df)}
+    cr = (meta or {}).get("ranges", P["ranges"]).get("combined_N")      # only B01-B03 state a combined-load range
+    if cr:
+        c["combined_set_at_4300"] = int((~df["warmup"] & (df["combined_set_N"].round(3) == cr[0])).sum())
+        c["combined_set_outside_range"] = int((~df["warmup"] & ((df["combined_set_N"] < cr[0] - 1e-6)
+                                                                | (df["combined_set_N"] > cr[1] + 1e-6))).sum())
     return c
 
 

@@ -1,0 +1,249 @@
+{
+ "note": "per held-out bearing; start rows are the baseline's own reference (in-sample); end rows mark documented damage, not onset",
+ "thermal_validity": {
+  "B01": {
+   "V1_uninterrupted_cold_start": false,
+   "V2_steady_before_first_alarm": false,
+   "V3_steady_residual_le_1C": false,
+   "valid": false,
+   "segments_in_calibration": [
+    1,
+    2,
+    3
+   ],
+   "T1_start_minus_ambient_C": -0.037428800000000706,
+   "calibration_end_id": 215,
+   "first_alarm_id": 208,
+   "sigma_T_raw_C": 2.568853772588312,
+   "a_degC_per_krpm": 38.68915762926378,
+   "tau_min": 14.586516023027022
+  },
+  "B02": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 4.561576800000001,
+   "calibration_end_id": 159,
+   "first_alarm_id": 862,
+   "sigma_T_raw_C": 0.5029348885415804,
+   "a_degC_per_krpm": 15.113436925255787,
+   "tau_min": 10.136167959013052
+  },
+  "B03": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 3.1255263000000006,
+   "calibration_end_id": 118,
+   "first_alarm_id": 547,
+   "sigma_T_raw_C": 0.2940699283425736,
+   "a_degC_per_krpm": 30.59485732670809,
+   "tau_min": 10.415707739788207
+  },
+  "B04": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 1.4714343999999997,
+   "calibration_end_id": 150,
+   "first_alarm_id": 440,
+   "sigma_T_raw_C": 0.16712155059704242,
+   "a_degC_per_krpm": 34.99177171455719,
+   "tau_min": 10.286369310038982
+  }
+ },
+ "detectors": {
+  "B01": {
+   "baseline A|F128|speed (prototype)": {
+    "start_rows": 0,
+    "start_in_sample": true,
+    "start_above_fraction": null,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": NaN,
+    "end_rows": 0,
+    "end_above_fraction": null,
+    "end_alarmed_fraction": null,
+    "masked_alarmed_fraction (descriptive only)": 0.5153374233128835,
+    "first_confirmed_alarm_measurement_id": 210,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 52.483333333333334,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "baseline A|F42|speed": {
+    "start_rows": 0,
+    "start_in_sample": true,
+    "start_above_fraction": null,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": NaN,
+    "end_rows": 0,
+    "end_above_fraction": null,
+    "end_alarmed_fraction": null,
+    "masked_alarmed_fraction (descriptive only)": 0.5153374233128835,
+    "first_confirmed_alarm_measurement_id": 210,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 52.483333333333334,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "reference: rig stop rule, rear RMS > 6.5 g": {
+    "start_rows": 0,
+    "start_in_sample": false,
+    "start_above_fraction": null,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": NaN,
+    "end_rows": 0,
+    "end_above_fraction": null,
+    "end_alarmed_fraction": null,
+    "masked_alarmed_fraction (descriptive only)": 0.03987730061349693,
+    "first_confirmed_alarm_measurement_id": 362,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 5.033333333333333,
+    "alarm_state_changes_after_first_alarm": 2
+   },
+   "multi-task MLP (A42)": "not trained: blocked by supervised_prep.ready()"
+  },
+  "B02": {
+   "baseline A|F128|speed (prototype)": {
+    "start_rows": 100,
+    "start_in_sample": true,
+    "start_above_fraction": 0.01,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 1.0,
+    "end_alarmed_fraction": 1.0,
+    "masked_alarmed_fraction (descriptive only)": 0.25833333333333336,
+    "first_confirmed_alarm_measurement_id": 864,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 81.33333333333333,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "baseline A|F42|speed": {
+    "start_rows": 100,
+    "start_in_sample": true,
+    "start_above_fraction": 0.01,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 1.0,
+    "end_alarmed_fraction": 1.0,
+    "masked_alarmed_fraction (descriptive only)": 0.25729166666666664,
+    "first_confirmed_alarm_measurement_id": 865,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 81.01666666666667,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "reference: rig stop rule, rear RMS > 6.5 g": {
+    "start_rows": 100,
+    "start_in_sample": false,
+    "start_above_fraction": 0.0,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 0.8,
+    "end_alarmed_fraction": 0.4,
+    "masked_alarmed_fraction (descriptive only)": 0.0010416666666666667,
+    "first_confirmed_alarm_measurement_id": 1109,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 2.1333333333333333,
+    "alarm_state_changes_after_first_alarm": 2
+   },
+   "multi-task MLP (A42)": "not trained: blocked by supervised_prep.ready()"
+  },
+  "B03": {
+   "baseline A|F128|speed (prototype)": {
+    "start_rows": 100,
+    "start_in_sample": true,
+    "start_above_fraction": 0.01,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 1.0,
+    "end_alarmed_fraction": 1.0,
+    "masked_alarmed_fraction (descriptive only)": 0.11984282907662082,
+    "first_confirmed_alarm_measurement_id": 549,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 20.4,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "baseline A|F42|speed": {
+    "start_rows": 100,
+    "start_in_sample": true,
+    "start_above_fraction": 0.01,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 1.0,
+    "end_alarmed_fraction": 1.0,
+    "masked_alarmed_fraction (descriptive only)": 0.11984282907662082,
+    "first_confirmed_alarm_measurement_id": 549,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 20.4,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "reference: rig stop rule, rear RMS > 6.5 g": {
+    "start_rows": 100,
+    "start_in_sample": false,
+    "start_above_fraction": 0.0,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 0.0,
+    "end_alarmed_fraction": 0.0,
+    "masked_alarmed_fraction (descriptive only)": 0.0,
+    "first_confirmed_alarm_measurement_id": null,
+    "first_alarm_minutes_before_last_record (not a detection delay)": null,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "multi-task MLP (A42)": "not trained: blocked by supervised_prep.ready()"
+  },
+  "B04": {
+   "baseline A|F128|speed (prototype)": {
+    "start_rows": 100,
+    "start_in_sample": true,
+    "start_above_fraction": 0.01,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 1.0,
+    "end_alarmed_fraction": 1.0,
+    "masked_alarmed_fraction (descriptive only)": 0.6965589155370178,
+    "first_confirmed_alarm_measurement_id": 442,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 209.55,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "baseline A|F42|speed": {
+    "start_rows": 100,
+    "start_in_sample": true,
+    "start_above_fraction": 0.01,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 1.0,
+    "end_alarmed_fraction": 1.0,
+    "masked_alarmed_fraction (descriptive only)": 0.6965589155370178,
+    "first_confirmed_alarm_measurement_id": 442,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 209.55,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "reference: rig stop rule, rear RMS > 6.5 g": {
+    "start_rows": 100,
+    "start_in_sample": false,
+    "start_above_fraction": 0.0,
+    "start_alarm_episodes": 0,
+    "start_alarm_episodes_per_hour": 0.0,
+    "end_rows": 5,
+    "end_above_fraction": 0.8,
+    "end_alarmed_fraction": 0.4,
+    "masked_alarmed_fraction (descriptive only)": 0.0,
+    "first_confirmed_alarm_measurement_id": 1113,
+    "first_alarm_minutes_before_last_record (not a detection delay)": 0.3,
+    "alarm_state_changes_after_first_alarm": 0
+   },
+   "multi-task MLP (A42)": "not trained: blocked by supervised_prep.ready()"
+  }
+ }
+}

@@ -1,0 +1,68 @@
+{
+ "ready": false,
+ "blockers": [
+  "label_review.json missing: a person must check label_table.json against the documents"
+ ],
+ "data_checks": {
+  "B01": {
+   "processed": true,
+   "hard_failures": [],
+   "soft": {
+    "speed_not_reached": 32,
+    "static_load_off_150N": 48,
+    "setSpeed_out_of_log_range": 33,
+    "combined_set_outside_range": 0,
+    "records_after_log_end": 272,
+    "last_record_vs_log_end_s": 6392.0,
+    "segments": 3,
+    "median_measured_over_set_speed": 1.0028,
+    "recording_note": null
+   }
+  },
+  "B02": {
+   "processed": true,
+   "hard_failures": [],
+   "soft": {
+    "speed_not_reached": 0,
+    "static_load_off_150N": 182,
+    "setSpeed_out_of_log_range": 0,
+    "combined_set_outside_range": 0,
+    "records_after_log_end": 0,
+    "last_record_vs_log_end_s": 36.0,
+    "segments": 2,
+    "median_measured_over_set_speed": 1.0027,
+    "recording_note": null
+   }
+  },
+  "B03": {
+   "processed": true,
+   "hard_failures": [],
+   "soft": {
+    "speed_not_reached": 0,
+    "static_load_off_150N": 92,
+    "setSpeed_out_of_log_range": 0,
+    "combined_set_outside_range": 0,
+    "records_after_log_end": 0,
+    "last_record_vs_log_end_s": 40.0,
+    "segments": 1,
+    "median_measured_over_set_speed": 0.9992,
+    "recording_note": null
+   }
+  },
+  "B04": {
+   "processed": true,
+   "hard_failures": [],
+   "soft": {
+    "speed_not_reached": 1114,
+    "static_load_off_150N": 433,
+    "setSpeed_out_of_log_range": 0,
+    "combined_set_outside_range": 0,
+    "records_after_log_end": 0,
+    "last_record_vs_log_end_s": 58.0,
+    "segments": 1,
+    "median_measured_over_set_speed": 0.4992,
+    "recording_note": "SUSPECTED logging/scaling discrepancy, not confirmed by the dataset authors: recorded measured speed and peak dynamic load are about 0.50 x the set values in every row (static load is not). The vibration spectrum's shaft line sits at the SET speed, which supports (does not prove) that the shaft ran at the set speed and these two columns were logged at half scale. Kept as recorded in the processed data; per-bearing inputs are invariant to a constant speed scale."
+   }
+  }
+ }
+}
