@@ -12,7 +12,10 @@ module tb_chip #(
     parameter int ACC          = 32,
     parameter int SAT          = 0,
     parameter int MAXD         = 64,
-    parameter int CLKS_PER_BIT = 4   // fast serial line for simulation
+    parameter int CLKS_PER_BIT = 4,  // fast serial line for simulation
+    parameter int PIPE         = 1,
+    parameter int MEM_REG      = 1,
+    parameter int HREAD_REG    = 0
 );
     localparam int MAXS = 40000;
 
@@ -23,7 +26,8 @@ module tb_chip #(
     logic tx_line;                           // chip -> laptop
     logic busy_led;
 
-    chip_top #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD), .CLKS_PER_BIT(CLKS_PER_BIT)) dut (
+    chip_top #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD), .CLKS_PER_BIT(CLKS_PER_BIT),
+              .PIPE(PIPE), .MEM_REG(MEM_REG), .HREAD_REG(HREAD_REG)) dut (
         .clk(clk), .rst(rst), .uart_rx_i(rx_line), .uart_tx_o(tx_line), .busy_led(busy_led));
 
     logic [31:0] script [MAXS];

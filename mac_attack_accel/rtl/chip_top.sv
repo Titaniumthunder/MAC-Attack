@@ -12,7 +12,10 @@ module chip_top #(
     parameter int ACC          = 32,
     parameter int SAT          = 0,
     parameter int MAXD         = 64,
-    parameter int CLKS_PER_BIT = 868     // 100 MHz / 115200 baud
+    parameter int CLKS_PER_BIT = 868,    // 100 MHz / 115200 baud
+    parameter int PIPE         = 1,      // mm_core settings (see mm_core.sv); the defaults are mm_core's own
+    parameter int MEM_REG      = 1,
+    parameter int HREAD_REG    = 0
 )(
     input  logic clk,
     input  logic rst,
@@ -34,7 +37,7 @@ module chip_top #(
     uart_tx #(.CLKS_PER_BIT(CLKS_PER_BIT)) u_tx (
         .clk(clk), .rst(rst), .tx_start(tx_start), .tx_data(tx_data), .tx_ready(tx_ready), .tx(uart_tx_o));
 
-    host_if #(.P(P), .BITS(BITS), .ACC(ACC), .MAXD(MAXD)) u_host (
+    host_if #(.P(P), .BITS(BITS), .ACC(ACC), .MAXD(MAXD), .HREAD_REG(HREAD_REG)) u_host (
         .clk(clk), .rst(rst),
         .rx_valid(rx_valid), .rx_data(rx_data), .tx_start(tx_start), .tx_data(tx_data), .tx_ready(tx_ready),
         .wr_en(wr_en), .wr_sel(wr_sel), .wr_row(wr_row), .wr_col(wr_col), .wr_data(wr_data),
@@ -42,7 +45,8 @@ module chip_top #(
         .rd_row(rd_row), .rd_col(rd_col), .rd_data(rd_data),
         .perf_passes(perf_passes), .perf_cycles(perf_cycles), .perf_total(perf_total));
 
-    mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD)) u_core (
+    mm_core #(.P(P), .BITS(BITS), .ACC(ACC), .SAT(SAT), .MAXD(MAXD), .PIPE(PIPE), .MEM_REG(MEM_REG),
+              .HREAD_REG(HREAD_REG)) u_core (
         .clk(clk), .hclk(clk), .rst(rst),
         .wr_en(wr_en), .wr_sel(wr_sel), .wr_row(wr_row), .wr_col(wr_col), .wr_data(wr_data),
         .start(start), .dim_m(dim_m), .dim_k(dim_k), .dim_n(dim_n), .busy(busy), .done(done),

@@ -13,7 +13,8 @@ module host_if #(
     parameter int P    = 16,
     parameter int BITS = 8,
     parameter int ACC  = 32,      // at most 32
-    parameter int MAXD = 64
+    parameter int MAXD = 64,
+    parameter int HREAD_REG = 0   // 1 = mm_core's HREAD_REG: rd_data 2 cycles after rd_row/rd_col (wait 1 more)
 )(
     input  logic            clk,
     input  logic            rst,
@@ -42,7 +43,7 @@ module host_if #(
     input  logic [31:0]     perf_total
 );
     typedef enum logic [3:0] {
-        S_CMD, S_DIMS, S_LOAD, S_RUN, S_CREAD, S_CW1, S_CW2, S_CNEXT,
+        S_CMD, S_DIMS, S_LOAD, S_RUN, S_CREAD, S_CW1, S_CW1B, S_CW2, S_CNEXT,
         S_SEND_GO, S_SEND_HOLD, S_SEND_WAIT
     } state_t;
     state_t state, ret;
@@ -120,7 +121,8 @@ module host_if #(
                     rlen <= 13; ridx <= 0; ret <= S_CMD; state <= S_SEND_GO;
                 end
                 S_CREAD: begin rd_row <= 8'(row); rd_col <= 8'(col); state <= S_CW1; end
-                S_CW1:   state <= S_CW2;                           // C word is being read
+                S_CW1:   state <= (HREAD_REG != 0) ? S_CW1B : S_CW2;  // C word is being read
+                S_CW1B:  state <= S_CW2;                           // HREAD_REG: one more read register
                 S_CW2: begin                                       // rd_data is valid now
                     for (int b = 0; b < 4; b++) rbuf[b] <= cval[8*b +: 8];
                     rlen <= 4; ridx <= 0; ret <= S_CNEXT; state <= S_SEND_GO;
