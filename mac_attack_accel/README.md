@@ -20,7 +20,7 @@ SystemVerilog, and every result is checked automatically.
 | Host interface | `rtl/uart_rx.sv`, `rtl/uart_tx.sv`, `rtl/host_if.sv`, `rtl/chip_top.sv` | Laptop talks to the chip over a serial line | Started: works in simulation, not yet on a board |
 | Board top | `fpga/arty_top.sv`, `fpga/arty_a7.xdc` | Clock, reset button, USB-UART pins, LEDs for the Arty A7 | Started: not yet built in Vivado |
 | Vivado project script | `vivado/create_project.tcl` | Creates the Vivado project with all files added | Done: works in Vivado (folder must be on `C:\`) |
-| ZedBoard: ARM drives the core | `zed/` (`mac_axi.v`, `tb_axi.sv`, `mac_test.c`, `create_zed_project.tcl`) | AXI4-Lite registers so the Zynq's ARM loads, runs and reads the array | Started: 12/12 in simulation, C program 8/8 against the RTL; not yet built in Vivado. See `zed/README.md` |
+| ZedBoard: ARM drives the core | `zed/` (`mac_axi.v`, `tb_axi.sv`, `create_zed_project.tcl`); board program `zed/mac_zed_project/mac_zed.sdk/MAC_attack_V2/src/mac_test.c` | AXI4-Lite registers so the Zynq's ARM loads, runs and reads the array | Started: 12/12 in simulation, C program 8/8 against the RTL; not yet built in Vivado. See `zed/README.md` |
 | Chip layout trial | `openlane/mac_attack_chip/` | Same core (P = 4) as plain Verilog for OpenLane 2 / SKY130 | Started: netlist checked in simulation; see its README |
 
 There are two ways to run it. **Way 1 needs only Vivado** and works like a class lab.

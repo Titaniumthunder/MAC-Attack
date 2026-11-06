@@ -1506,7 +1506,7 @@ Claims that turned out wrong (kept here on purpose):
   the University of Ottawa electric motor dataset; output 1 healthy or faulty, plus a health index as output 2 (see the
   second-output entry below; section 12).
 - Chip version of the on-chip MLP: 16 KB of weights in flip-flops is about 2-3 mm2 (a Tiny Tapeout tile is about 0.016 mm2): stream the weights in, or a much smaller model?
-- `zed/mac_test.c` is the 13 Oct version; the SDK copy `MAC_attack_V2/src/mac_test.c` is the current one. Replace the old one?
+- (Answered 5 Nov) `zed/mac_test.c` is the 13 Oct version; the SDK copy `MAC_attack_V2/src/mac_test.c` is the current one. Replace the old one? The old copies moved to `archive/mac_attack_accel/zed/` and `archive/mac_attack_accel_MLP/zed/`.
 - Reject a size of 0 (DIMS M, K or N, or a layer's N) in `mac_axi`, so a wrong value cannot hang the core (section 6, 21 Oct)?
 - The ARM's time for the 64-64-64-6 model: still the estimate (73 us per row). The MLP board run measures it (`mac_test.c` times the same model on the ARM); then update section 11.
 - Power with real switching activity instead of the vectorless estimate: a SAIF file from `tb_axi` in `report_power`, or a current measurement on the board's supply.

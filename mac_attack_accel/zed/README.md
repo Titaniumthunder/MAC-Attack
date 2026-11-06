@@ -22,7 +22,7 @@ Guardian design needs (sensor -> ARM/PL -> array -> anomaly score).
 | `mac_axi.v` | AXI4-Lite wrapper: 12 registers the ARM reads and writes (map below). Plain Verilog on purpose (see Notes). |
 | `tb_axi.sv` | Self-checking testbench that plays the ARM: same registers, same order as the C program. |
 | `create_zed_project.tcl` | Makes the Vivado project, the simulation set-up and the block design. |
-| `mac_test.c` | Bare-metal program for the ARM (Vitis): loads matrices, runs, checks every value, times each step. |
+| `mac_zed_project/mac_zed.sdk/MAC_attack_V2/src/mac_test.c` | Bare-metal program for the ARM (the SDK app): loads matrices, runs, checks every value, times each step. The 13 Oct copy that was in `zed/` is archived as `archive/mac_attack_accel/zed/mac_test.c`. |
 
 **What has been checked (13 Oct):** `tb_axi` passes 12/12 at P = 4, 8 and 16 (Icarus).
 `mac_test.c` was compiled on a PC and run against the RTL through Verilator (the `Xil_Out32` /
@@ -139,7 +139,7 @@ Menu names change between versions. The steps are the same:
    - Vitis 2023.2 and later (Unified IDE): File > New Component > Platform.
    - Vitis 2020.1 to 2023.1 (Classic): File > New > Application Project > *Create a new platform from hardware (XSA)*.
 2. Make an **application** on that platform from the *Hello World* template.
-3. Delete `helloworld.c` from the app's `src` and add `zed/mac_test.c` instead.
+3. Delete `helloworld.c` from the app's `src` and add `mac_zed_project/mac_zed.sdk/MAC_attack_V2/src/mac_test.c` instead.
 4. Turn on optimisation (Release configuration, or `-O2` in the app's compiler settings), so
    the ARM's software multiply is a fair comparison.
 5. Build.

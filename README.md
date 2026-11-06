@@ -22,7 +22,7 @@ Both design folders have the same layout:
 │   ├── tb/                  Testbenches
 │   ├── mac.py               Python golden model
 │   ├── fpga/                Arty A7 top, constraints, synth/bitstream Tcl
-│   ├── zed/                 ZedBoard AXI wrapper, test C code, create_zed_project.tcl
+│   ├── zed/                 ZedBoard AXI wrapper, create_zed_project.tcl, the Vivado/SDK project (board C code in its SDK app)
 │   ├── vivado/              create_project.tcl for the standalone Vivado project
 │   └── openlane/            OpenLane / SKY130 chip config and sources
 ├── docs/                    Project brief and shared documents
@@ -79,4 +79,5 @@ then rerun the script to check it. Tell the other person when you are editing th
 - **First time on each computer:** BSPs are generated, not in git. **File > New > Board Support
   Package**, named exactly `MAC_attack_V2_bsp` (hardware platform `system_wrapper_hw_platform_0`,
   CPU `ps7_cortexa9_0`, OS `standalone`). Without it you get "xil_io.h not found".
-- The SDK app's `mac_test.c` is the current one; the copies in `zed/` and `James/` are older.
+- The SDK app's `mac_test.c` is the current one. The 13 Oct copies that were in each design's `zed/` are in
+  `archive/` (see `archive/README.md`); `James/` keeps its own copy for his golden model.
