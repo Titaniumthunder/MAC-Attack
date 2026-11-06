@@ -11,7 +11,7 @@ Guardian design needs (sensor -> ARM/PL -> array -> anomaly score).
  │                    Ethernet, timers                           │
  │        │ M_AXI_GP0 (32-bit AXI, ARM is the master)            │
  │ ───────┼────────────────────────────────────────────────────  │
- │ PL     ▼        (FPGA fabric, FCLK_CLK0 = 50 MHz)             │
+ │ PL     ▼        (FPGA fabric, FCLK_CLK0 = 250 MHz)            │
  │   AXI interconnect ──► mac_axi (registers) ──► mm_core        │
  │                                     A, B, C buffers + P x P PEs│
  └───────────────────────────────────────────────────────────────┘
@@ -19,16 +19,19 @@ Guardian design needs (sensor -> ARM/PL -> array -> anomaly score).
 
 | File | What it is |
 |---|---|
-| `mac_axi.v` | AXI4-Lite wrapper: 12 registers the ARM reads and writes (map below). Plain Verilog on purpose (see Notes). |
+| `mac_axi.v` | AXI4-Lite wrapper: 13 registers (0x00 to 0x30) the ARM reads and writes (map below). Plain Verilog on purpose (see Notes). |
 | `tb_axi.sv` | Self-checking testbench that plays the ARM: same registers, same order as the C program. |
 | `create_zed_project.tcl` | Makes the Vivado project, the simulation set-up and the block design. |
 | `mac_zed_project/mac_zed.sdk/MAC_attack_V2/src/mac_test.c` | Bare-metal program for the ARM (the SDK app): loads matrices, runs, checks every value, times each step. The 13 Oct copy that was in `zed/` is archived as `archive/mac_attack_accel/zed/mac_test.c`. |
 
-**What has been checked (13 Oct):** `tb_axi` passes 12/12 at P = 4, 8 and 16 (Icarus).
-`mac_test.c` was compiled on a PC and run against the RTL through Verilator (the `Xil_Out32` /
+**What has been checked (13 Oct; history, before steps 6-14):** `tb_axi` passes 12/12 at P = 4, 8 and 16
+(Icarus). `mac_test.c` was compiled on a PC and run against the RTL through Verilator (the `Xil_Out32` /
 `Xil_In32` calls were turned into AXI transactions): 8/8 at P = 8 and 16. Two planted bugs were
 caught (byte order reversed: 8 tests fail; no result auto-increment: 6 fail).
-**Not checked yet:** the block design, the bitstream and the board. Those need real Vivado.
+**Now (step 14):** `tb_axi` has 14 tests (`ALL AXI TESTS PASSED (14/14)`) and the SDK `mac_test.c` 12 tests in
+each of 2 bus modes (24/24). The block design and the bitstream are built and in git: FCLK_CLK0 250 MHz,
+WNS +0.008 ns (`mac_zed.runs/impl_1`). Board, 19 Oct: `ALL BOARD TESTS PASSED (24/24)` at 250 MHz, measured
+clock 247.55 MHz (`docs/log.md` section 4).
 
 ---
 
@@ -61,11 +64,14 @@ Rules for the team:
   undo those before you pull: `git status`, then `git restore <file>` for each one.
 - If the project breaks: delete `mac_zed_project/` except `mac_zed.sdk/`, run `create_zed_project.tcl`
   (section 2), and get the SDK files back with `git checkout -- mac_zed_project/mac_zed.sdk` if the
-  script removed them.
+  script removed them. Note: the script still has `set FCLK_MHZ 200` (its line 24), so a rebuild with it gives a
+  200 MHz PL clock, not the committed 250 MHz (`FCLK_HZ` 250000000 in `mac_test.c`). Set FCLK_CLK0 by hand
+  (step 5) after the script; changing the script is Alex's decision.
 
 ## 1. Copy the folder to a local drive
 
-Same rule as before: `C:\mac_attack_accel`, not `\\Mac\Home\...` (the simulator fails on
+Same rule as before: the repository on a local drive (for example `C:\...\MAC-Attack\mac_attack_accel`,
+with `rtl\` next to `zed\`), not `\\Mac\Home\...` (the simulator fails on
 network paths and the script stops if it sees one).
 
 ## 2. Make the project and simulate
@@ -77,7 +83,7 @@ network paths and the script stops if it sees one).
 
 ```
   ID   = 0x4d414331  (MAC1)
-  INFO = P 8, 8-bit inputs, 32-bit sums, matrices up to 64
+  INFO = P 8, 8-bit inputs, 22-bit sums, matrices up to 64
   DIMS write then read back: 0x050607    (ok)
 
   PASS  small numbers                   4x 4x 4    16/16   correct  passes   1 (eq   1)  cycles    26 (eq    26)  bus: load     58, run    42, read    100 clocks
@@ -88,11 +94,16 @@ network paths and the script stops if it sees one).
 
   Clocks over all 8 multiplies: loading 26234, computing 8976, reading 36338
   Moving data takes 7.0x as long as the computing, even with an ideal bus.
+  ...
 
- ALL AXI TESTS PASSED (12/12)
+ ALL AXI TESTS PASSED (14/14)
 ```
 
-The simulation ends at about 1.54 ms of simulated time.
+The bus clock counts (load, run, read), the totals 26234 / 8976 / 36338 and the 7.0x above are from the
+13 Oct output, before steps 6-14 (TODO: confirm); since then, for example, step 11 adds a clock to every run
+and step 14 one to every register read (`mac_axi.v` header). The `...` after the totals are the two
+largest-sum tests.
+The simulation ends at about 1.54 ms of simulated time (13 Oct output, before steps 6-14; TODO: confirm).
 
 If the script ends with `Block design 'system' built`, skip to step 10.
 If it ends with `NOTE: the block design step stopped`, build it by hand (steps 3 to 9).
@@ -103,7 +114,8 @@ If it ends with `NOTE: the block design step stopped`, build it by hand (steps 3
 4. **+** (Add IP) > *ZYNQ7 Processing System*. Click **Run Block Automation**, keep
    *Apply Board Preset* ticked, OK. This sets the DDR, the UART and the MIO pins for the ZedBoard.
 5. Double-click the Zynq block:
-   - *Clock Configuration > PL Fabric Clocks*: **FCLK_CLK0 = 50 MHz**.
+   - *Clock Configuration > PL Fabric Clocks*: **FCLK_CLK0 = 250 MHz** (Vivado makes 250.000 MHz: the
+     committed build; history: 50 MHz in the 13 Oct plan, see Notes).
    - *PS-PL Configuration > AXI Non Secure Enablement > GP Master AXI Interface*:
      **M AXI GP0 interface** ticked (the board preset usually has it on already).
 6. In the Sources window, right-click `mac_axi.v` > **Add Module to Block Design**.
@@ -120,7 +132,8 @@ If it ends with `NOTE: the block design step stopped`, build it by hand (steps 3
 ## 10. Bitstream and timing
 
 1. **Generate Bitstream** (it runs synthesis and implementation first).
-2. Open Implemented Design > **Report Timing Summary**: **WNS must be 0 or more** at 50 MHz.
+2. Open Implemented Design > **Report Timing Summary**: **WNS must be 0 or more** at the PL clock (committed
+   build: 4.000 ns = 250 MHz, impl_1 WNS +0.008 ns).
    If it is negative, write down the WNS and the worst path (Source, Destination) before changing anything.
 3. **Report Utilization**: write down LUT, FF, BRAM and DSP. (For scale: P = 16 on the Arty
    A7-100T used 28,390 LUTs and 128 BRAMs; the XC7Z020 has 53,200 LUTs and 140 BRAMs.)
@@ -128,6 +141,9 @@ If it ends with `NOTE: the block design step stopped`, build it by hand (steps 3
    reset, bus) comes from the Zynq inside the chip, and the board preset handles the DDR and MIO pins.
 
 ## 11. Export the hardware
+
+Note: this project uses Vivado/SDK **2019.1**: Export Hardware writes `system_wrapper.hdf` and File > Launch SDK
+opens the SDK (section 0). The `.xsa` and Vitis steps in sections 11 to 13 apply to Vivado/Vitis 2020.1 and later.
 
 File > Export > **Export Hardware** > *Include bitstream* > save `system_wrapper.xsa`.
 
@@ -155,11 +171,13 @@ Menu names change between versions. The steps are the same:
 4. In Vitis, **Run** the application on hardware (Classic: Run As > Launch Hardware).
    This programs the PL with the bitstream, then loads and starts the program on the ARM.
 
-What the terminal should show (this is the Verilator run; the times on the board will differ):
+What the terminal should show (the first and last lines are what the current program prints; the two test lines
+and their times are from the 13 Oct Verilator run at 50 MHz, before steps 6-14, and the times on the board will
+differ. At 250 MHz the 64x64x64 array time is 5,504 cycles = 22.0 us, printed as `array 22 us (calc)`):
 
 ```
  MAC Attack accelerator on the ZedBoard
- Found it: 8x8 array, 8-bit inputs, 32-bit sums, matrices up to 64, clock 50 MHz
+ Found it: 8x8 array, 8-bit inputs, 22-bit sums, matrices up to 64, clock 250.00 MHz (FCLK_HZ)
 
 PASS  small numbers                 4x 4x 4    16/16   correct  passes 1 (eq 1)  cycles 26 (eq 26)
       array 0 us | over the bus: load 1 us, run 0 us, read 1 us | ARM software 0 us
@@ -167,23 +185,25 @@ PASS  small numbers                 4x 4x 4    16/16   correct  passes 1 (eq 1) 
 PASS  random INT8, 64x64 folded    64x64x64  4096/4096 correct  passes 64 (eq 64)  cycles 5504 (eq 5504)
       array 110 us | over the bus: load 245 us, run 110 us, read 409 us | ARM software 0 us
 ...
- ALL BOARD TESTS PASSED (8/8)
+ ALL BOARD TESTS PASSED (24/24)
 ```
 
 How to read the second line of each test:
 
 | Number | Where it comes from | What it means |
 |---|---|---|
-| array | `PERF_CYCLES` / 50 MHz | Time the systolic array spends computing. Same as the equation T = Np(M + 3P − 2). |
+| array | `PERF_CYCLES` / `CORE_HZ` (= `FCLK_HZ`, 250 MHz) | Time the systolic array spends computing. Same as the equation T = Np(M + 3P − 2). |
 | load | ARM timer around the `LOAD_DATA` writes | Moving A and B into the PL, 4 bytes per write. |
 | run | ARM timer from start to `done` | Array time plus the ARM polling `STATUS`. |
 | read | ARM timer around the `RESULT_DATA` reads | Moving C back, one 32-bit value per read. |
 | ARM software | ARM timer around a plain C triple loop | The same multiply on the Cortex-A9 alone. 0 in the Verilator run because no real ARM ran. |
 
-**What to expect on the real board (not measured yet):** every `Xil_Out32` / `Xil_In32` is a
+**What to expect on the real board (history: written before the board runs; measured on 19 Oct at 250 MHz,
+24/24, in `docs/log.md` section 4):** every `Xil_Out32` / `Xil_In32` is a
 separate bus transaction that takes several times longer than the 5 to 6 clocks the testbench
 needs, so `load` and `read` will be larger than in simulation. For 64x64 the ARM software may
-well beat the accelerator end to end. That is a result, not a bug: it is the I/O bottleneck,
+well beat the accelerator end to end (on the board it did not: the accelerator was 7.6x faster for
+64x64x64 with posted writes, `docs/log.md` section 4). That is a result, not a bug: it is the I/O bottleneck,
 measured. It is the reason for the next steps below.
 
 ---
@@ -193,17 +213,18 @@ measured. It is the reason for the next steps below.
 | Offset | Name | R/W | Bits |
 |---|---|---|---|
 | 0x00 | CTRL | W | [0] start (ignored while busy). Also clears DONE and LOAD_ERR. |
-| 0x04 | STATUS | R | [0] busy, [1] done (stays set until the next start), [2] load attempted while busy (dropped) |
+| 0x04 | STATUS | R | [0] busy, [1] done (stays set until the next start), [2] load attempted while busy (dropped), [3] waiting for the core clock, CTRL ignored (two-clock builds only, CORE_CLK = 1: written and simulated in `tb_axi` (15/15), not built in Vivado, not run on the board) |
 | 0x08 | DIMS | RW | [7:0] M, [15:8] K, [23:16] N. Ignored while busy. (A is M x K, B is K x N) |
 | 0x0C | LOAD_PTR | RW | [0] matrix (0 = A, 1 = B), [15:8] row, [23:16] column to start at |
 | 0x10 | LOAD_DATA | W | 4 INT8 values, byte 0 first. The position moves one column right after each byte and wraps to the next row, so a matrix is one stream of bytes in row order. Bytes past the end are dropped. |
 | 0x14 | RESULT_PTR | RW | [7:0] row, [15:8] column of the next C value |
-| 0x18 | RESULT_DATA | R | C[row][col], signed 32-bit; the position then moves on (column first, then row) |
+| 0x18 | RESULT_DATA | R | C[row][col], signed 32-bit (the 22-bit sum sign-extended); the position then moves on (column first, then row) |
 | 0x1C | PERF_PASSES | R | Tile passes in the last run: ⌈K/P⌉ · ⌈N/P⌉ |
 | 0x20 | PERF_CYCLES | R | Cycles in passes: passes · (M + 3P − 2) |
-| 0x24 | PERF_TOTAL | R | All busy cycles (PERF_CYCLES + 3) |
+| 0x24 | PERF_TOTAL | R | All busy cycles (PERF_CYCLES + 3 + PIPE + MEM_REG = PERF_CYCLES + 7 on the ZedBoard build) |
 | 0x28 | INFO | R | [7:0] P, [15:8] input bits, [23:16] accumulator bits, [31:24] MAXD |
 | 0x2C | ID | R | 0x4D414331 ("MAC1") |
+| 0x30 | CONFIG | R | [7:0] PIPE, [15:8] MEM_REG, [16] core on its own clock (CORE_CLK = 1: written and simulated in `tb_axi` (15/15), never built in Vivado, not run on the board), [17] DSP48E1 PEs |
 
 One multiply, in order: write DIMS; LOAD_PTR = A at (0,0); stream A with LOAD_DATA; the same
 for B; CTRL = 1; poll STATUS until done; RESULT_PTR = (0,0); read RESULT_DATA M x N times.
@@ -216,12 +237,12 @@ for B; CTRL = 1; poll STATUS until done; RESULT_PTR = (0,0); read RESULT_DATA M 
 |---|---|---|
 | Script stops: network path | Folder is on `\\Mac\Home\...` | Copy to `C:\` (step 1) |
 | `no ZedBoard board files found` | Board files not installed | Vivado Store > Boards > ZedBoard |
-| `tb_axi` prints `ERROR: timeout` | Core never reported done | Check the RTL files are the ones from this zip |
+| `tb_axi` prints `ERROR: timeout` | Core never reported done | Check the RTL files are the ones in this folder's `rtl/` (same commit as `zed/`) |
 | Terminal shows nothing | Wrong COM port, wrong baud, or cable on J17 only | Cable on J14, 115200 8N1 |
 | Program hangs at the first register access | PL not programmed (an AXI access to an empty PL never gets a reply) | Run on hardware again so Vitis programs the bitstream first |
 | `Accelerator not found at 0x43c00000` | Address differs | Copy the address from the Address Editor into `MAC_BASE` |
 | A test FAILs | A real bug, or a version mismatch | Run `tb_axi` in Vivado first; it uses the same data |
-| Timing fails at 50 MHz | Long path in the core | Send WNS and the worst path; try P = 4 to confirm the flow first |
+| Timing fails at the PL clock (250 MHz) | Long path in the core | Send WNS and the worst path; try P = 4 to confirm the flow first |
 
 ---
 
@@ -229,13 +250,14 @@ for B; CTRL = 1; poll STATUS until done; RESULT_PTR = (0,0); read RESULT_DATA M 
 
 - **Why `mac_axi.v` is plain Verilog:** Vivado's block design can only add a Verilog or VHDL
   file as a module (*Add Module to Block Design*). The core under it stays SystemVerilog.
-- **Why 50 MHz and P = 8 first:** the Arty build failed timing at 100 MHz with P = 16. Getting
+- **Why 50 MHz and P = 8 first:** (history: the 13 Oct plan; this build now runs at 250 MHz, P = 8)
+  the Arty build failed timing at 100 MHz with P = 16. Getting
   one clean build on the board comes before speed. Then raise the clock or P, one at a time.
 - **Why the same random seed everywhere:** `tb_axi.sv`, `mac_test.c` and the earlier testbenches
   use the same xorshift generator (seed 0x2468ACE1), so a board failure can be reproduced in simulation.
 - **Data movement:** even with an ideal bus, loading and reading take 2.3x (P = 4), 7.0x (P = 8)
-  and 17.4x (P = 16) as long as the computing. A bigger array makes this worse, not better,
-  because the compute gets faster and the bus does not.
+  and 17.4x (P = 16) as long as the computing (13 Oct `tb_axi` output, before steps 6-14; TODO: confirm).
+  A bigger array makes this worse, not better, because the compute gets faster and the bus does not.
 
 ## Next steps toward Machine Guardian
 
