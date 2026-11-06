@@ -2,7 +2,8 @@
 
 A 16x16 systolic array (256 multiply-accumulate units, INT8, 32-bit accumulators) that
 multiplies matrices of any size up to 64x64 by cutting them into 16x16 tiles (folding).
-It is the same structure as Google's TPU matrix unit, much smaller. Everything is
+(That is `rtl/chip_top.sv` and the testbenches; the ZedBoard build in `zed/` is 8x8, P = 8,
+with exact 22-bit accumulators.) It is the same structure as Google's TPU matrix unit, much smaller. Everything is
 SystemVerilog, and every result is checked automatically.
 
 ## What is in here
@@ -16,12 +17,12 @@ SystemVerilog, and every result is checked automatically.
 | Accumulators | `rtl/mm_core.sv` | Add each tile's partial sums into C | Done |
 | Performance counters | `rtl/mm_core.sv` | Passes, cycles in passes, total cycles | Done |
 | Saturating accumulators | `SAT` option in `pe.sv`, `mm_core.sv` | Clamp instead of wrapping on overflow | Started: tested, not used by default |
-| Post-processing unit | `rtl/postproc.sv` | Bias + requantize + ReLU (the TPU's activation unit), one scale per output channel | Done in simulation: used by the on-chip MLP (21 Oct) |
-| On-chip MLP | `rtl/mlp_ctrl.sv` | Runs a whole MLP (up to 4 layers) with no help from the ARM between layers: weight slots, scale memory, postproc units, layer sequencer | Started: bit-exact in simulation (21 Oct), not yet built; `docs/log.md` section 5, step 15 |
+| Post-processing unit | `rtl/postproc.sv` | Bias + requantize + ReLU (the TPU's activation unit), one scale per output channel | Done: used by the on-chip MLP (21 Oct); built with it in Vivado, timing met at 214.286 MHz (step 15c, 22 Oct) |
+| On-chip MLP | `rtl/mlp_ctrl.sv` | Runs a whole MLP (up to 4 layers) with no help from the ARM between layers: weight slots, scale memory, postproc units, layer sequencer | Done in simulation and in Vivado: bit-exact (21 Oct); built, timing met at 214.286 MHz (step 15c, 22 Oct, WNS +0.081 ns); board run: TODO: confirm (recorded on branch Alex_edit, not yet on main); `docs/log.md` section 5, step 15 |
 | Host interface | `rtl/uart_rx.sv`, `rtl/uart_tx.sv`, `rtl/host_if.sv`, `rtl/chip_top.sv` | Laptop talks to the chip over a serial line | Started: works in simulation, not yet on a board |
-| Board top | `fpga/arty_top.sv`, `fpga/arty_a7.xdc` | Clock, reset button, USB-UART pins, LEDs for the Arty A7 | Started: not yet built in Vivado |
+| Board top | `fpga/arty_top.sv`, `fpga/arty_a7.xdc` | Clock, reset button, USB-UART pins, LEDs for the Arty A7 | Started: not yet built in Vivado (TODO: confirm; zed/README.md says the Arty build failed timing at 100 MHz) |
 | Vivado project script | `vivado/create_project.tcl` | Creates the Vivado project with all files added | Done: works in Vivado (folder must be on `C:\`) |
-| ZedBoard: ARM drives the core | `zed/` (`mac_axi.v`, `tb_axi.sv`, `create_zed_project.tcl`); board program `zed/mac_zed_project/mac_zed.sdk/MAC_attack_V2/src/mac_test.c` | AXI4-Lite registers so the Zynq's ARM loads, runs and reads the array | Started: 12/12 in simulation, C program 8/8 against the RTL; not yet built in Vivado. See `zed/README.md` |
+| ZedBoard: ARM drives the core | `zed/` (`mac_axi.v`, `tb_axi.sv`, `create_zed_project.tcl`); board program `zed/mac_zed_project/mac_zed.sdk/MAC_attack_V2/src/mac_test.c` | AXI4-Lite registers so the Zynq's ARM loads, runs and reads the array | Done in simulation and in Vivado: `tb_axi` 20/20, board program 30/30 against the RTL in Verilator (15 tests x 2 bus modes); built at 214.286 MHz (step 15c, WNS +0.081 ns); board run: TODO: confirm (recorded on branch Alex_edit, not yet on main). See `zed/README.md` |
 | Chip layout trial | `openlane/mac_attack_chip/` | Same core (P = 4) as plain Verilog for OpenLane 2 / SKY130 | Started: netlist checked in simulation; see its README |
 
 There are two ways to run it. **Way 1 needs only Vivado** and works like a class lab.
@@ -30,7 +31,7 @@ Way 2 uses a Python script and is for checking many sizes at once.
 ## Way 1: in Vivado (no Python needed)
 
 1. Unzip, then put the folder on a local Windows drive with a short path, for example
-   `C:\mac_attack_accel` (it should contain `rtl`, `tb`, `vivado`). **Not** in a Mac shared
+   `C:\mac_attack_accel_MLP` (it should contain `rtl`, `tb`, `vivado`). **Not** in a Mac shared
    folder (`\\Mac\Home\...` in a Parallels VM) or any other network path: Vivado's
    simulator cannot run from there and fails with `[USF-XSim-62] 'compile' step failed`.
 2. Open Vivado. Do not create a project yourself. Go to **Tools > Run Tcl Script...** and pick
@@ -74,7 +75,7 @@ Vivado shows every signal at the top level of the testbench, so there are 40 row
 | | `dim_m`, `dim_k`, `dim_n`, `start` | Matrix sizes for this test, then a one-clock "go" pulse |
 | | `busy`, `done` | High while the core computes; one-clock pulse when C is complete |
 | | `rd_row`, `rd_col`, `rd_data` | Read port: ask for C[row][col], the 32-bit result appears on the next clock |
-| | `perf_passes`, `perf_cycles`, `perf_total` | Hardware counters: tile passes, cycles in passes, total busy cycles (3 more: start-up, last row, done) |
+| | `perf_passes`, `perf_cycles`, `perf_total` | Hardware counters: tile passes, cycles in passes, total busy cycles (5 more: start-up, last row, done, plus 1 each for the defaults PIPE = 1 and MEM_REG = 1) |
 | Probes (8) | `array_loading_weights`, `array_streaming_inputs`, `array_output_ready` | The array's three phases in each pass |
 | | `pass_number`, `cycle_in_pass`, `reduction_block`, `output_block` | Controller counters (`pass_number` is a copy of `perf_passes`) |
 | | `c_lane0` | Partial sum leaving column 0 of the array; meaningful only while `array_output_ready` is high |
@@ -142,7 +143,7 @@ It also runs the full 60-case test suite. Use it when you want many sizes or ran
 matrices of your own choosing.
 
 1. Install Python 3 (tick "Add python.exe to PATH") and run `pip install numpy`.
-2. Open a **Command Prompt** (not the Vivado Tcl Shell), `cd C:\mac_attack_accel`
+2. Open a **Command Prompt** (not the Vivado Tcl Shell), `cd C:\mac_attack_accel_MLP`
 3. `python mac.py multiply 4 4 4 --data small --P 4`
 
 `mac.py` finds Vivado on the PATH or in the usual install folders. If not, add
@@ -212,8 +213,8 @@ To get Vivado's real numbers without a board:
 `vivado -mode batch -source fpga/synth_check.tcl -tclargs 16 xc7a100tcsg324-1`
 
 **Not checked yet:**
-- In Vivado, only `tb_selfcheck` has been run so far (9 Oct: `create_project.tcl` worked, 8/8 PASS, 330.43 us simulated, same results as Icarus). `tb_compare`, `tb_extras` and Vivado synthesis have not been run in Vivado yet.
-- Nothing has run on a board yet, and timing at 100 MHz has not been checked.
+- In the Way 1 Vivado project (Arty), only `tb_selfcheck` has been run so far (9 Oct: `create_project.tcl` worked, 8/8 PASS, 330.43 us simulated, same results as Icarus). `tb_compare`, `tb_extras` and Vivado synthesis have not been run in Vivado yet (synthesis: TODO: confirm, see the next line).
+- Nothing has run on the Arty board yet, and timing at 100 MHz has not been checked (TODO: confirm; zed/README.md says the Arty build failed timing at 100 MHz). The ZedBoard has run the matrix core since 15 Oct (8/8 at 50 MHz; design 1 24/24 at 250 MHz on 19 Oct); this design's board run: TODO: confirm (recorded on branch Alex_edit, not yet on main); see `zed/README.md`.
 - These are FPGA estimates only. Chip area, power and speed come from the SKY130 / OpenLane flow, which is a later stage.
 
 ## Later: on the Arty board
