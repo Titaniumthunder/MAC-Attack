@@ -92,7 +92,8 @@
 //       C: a copy written on core_clk and read on s_axi_aclk (see mm_core.sv, HCLK_SEP).
 //     * DIMS and the performance counters: they do not change while the other side reads them
 //       (DIMS only while idle; the counters only during a run, read after done).
-//   zed/mac_zed_cdc.xdc tells Vivado the two clocks are asynchronous.
+//   Never built in Vivado. The build script and its clock constraints (zed/mac_zed_cdc.xdc) were
+//   removed on 8 Nov 2026; create_zed_project.tcl always builds CORE_CLK = 0.
 //   CORE_CLK = 0: one clock, exactly as before (core_clk and core_locked are not used).
 // Step 14 (18 Oct 2026), for one clock at 250 MHz. Same results:
 //   * HREAD_REG = 1 (the default): the core registers the C word once more before the lane select
