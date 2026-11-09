@@ -15,11 +15,11 @@ preplace netloc ps7_FCLK_RESET0_N 1 1 1 470 170n
 preplace netloc rst_fclk0_interconnect_aresetn 1 0 3 60 290 NJ 290 820
 preplace netloc rst_fclk0_peripheral_aresetn 1 0 3 70 310 NJ 310 840
 preplace netloc xlconstant_0_dout 1 0 3 40 300 NJ 300 820
-preplace netloc ps7_DDR 1 1 3 NJ 60 NJ 60 1090
 preplace netloc ps7_M_AXI_GP0 1 0 2 50 0 480
 preplace netloc ps7_FIXED_IO 1 1 3 NJ 80 NJ 80 N
-preplace netloc mac_rs_M_AXI 1 0 4 20 -10 NJ -10 NJ -10 1080
+preplace netloc ps7_DDR 1 1 3 NJ 60 NJ 60 1090
 preplace netloc axi_ic_M00_AXI 1 1 2 480 380 N
+preplace netloc mac_rs_M_AXI 1 0 4 20 -10 NJ -10 NJ -10 1080
 levelinfo -pg 1 0 270 650 960 1110
 pagesize -pg 1 -db -bbox -sgen 0 -70 1220 730
 "

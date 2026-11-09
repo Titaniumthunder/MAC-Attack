@@ -17,18 +17,20 @@ is healthy / faulty from motor vibration (University of Ottawa electric motor da
 | `Alex/` `James/` `Marco/` | Personal working areas | |
 | `archive/` | Files no longer used, kept for history (see `archive/README.md`) | |
 
-Both design folders have the same layout:
+Both design folders have `rtl/`, `tb/`, `mac.py` and `zed/`; only design 1 keeps the Arty A7 files
+(`fpga/`, `vivado/`) and the OpenLane chip trial (`openlane/`):
 
 ```
 .
-├── mac_attack_accel/        Design 1 (see mac_attack_accel/README.md); mac_attack_accel_MLP/ is laid out the same
+├── mac_attack_accel/        Design 1 (see mac_attack_accel/README.md)
 │   ├── rtl/                 SystemVerilog RTL (PE, systolic array, mm_core, host_if, UART, chip_top)
 │   ├── tb/                  Testbenches
 │   ├── mac.py               Python golden model
-│   ├── fpga/                Arty A7 top, constraints, synth/bitstream Tcl
+│   ├── fpga/                Arty A7 top, constraints, synth/bitstream Tcl (design 1 only)
 │   ├── zed/                 ZedBoard AXI wrapper, create_zed_project.tcl, the Vivado/SDK project (board C code in its SDK app)
-│   ├── vivado/              create_project.tcl for the standalone Vivado project
-│   └── openlane/            OpenLane / SKY130 chip config and sources
+│   ├── vivado/              create_project.tcl for the Arty Vivado project (design 1 only)
+│   └── openlane/            OpenLane / SKY130 chip config and sources (design 1 only)
+├── mac_attack_accel_MLP/    Design 2 (see mac_attack_accel_MLP/README.md): rtl/, tb/, mac.py, zed/
 ├── model/                   Machine Guardian model (see model/README.md)
 ├── docs/                    Project log, brief and shared documents
 ├── archive/                 Files no longer used (see archive/README.md)

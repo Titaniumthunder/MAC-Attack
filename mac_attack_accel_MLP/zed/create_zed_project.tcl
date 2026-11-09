@@ -23,8 +23,6 @@ if {[string match "//*" $here] || [string match {\\\\*} $here]} {
 set P 8          ;# array size for the board; 8x8 first, 16x16 once timing is clean
 set FCLK_MHZ 200 ;# PL clock from the Zynq (1000 MHz IO PLL / 5); set FCLK_HZ in mac_test.c to the same value
 set PIPE 2       ;# PE pipeline: 2 = input, multiply, add in the DSP (step 11); 1 = multiply, then add in LUTs
-set CORE_MHZ 0   ;# 0 = one clock for everything. > 0 (e.g. 250): the core gets its own clock of this
-                 ;# frequency from a Clocking Wizard fed by FCLK_CLK0 (step 12); set CORE_HZ in mac_test.c
 
 create_project mac_zed [file join $here mac_zed_project] -part xc7z020clg484-1 -force
 
@@ -43,10 +41,6 @@ add_files -norecurse [glob [file join $root rtl *.sv]]
 add_files -norecurse [file join $here mac_axi.v]
 add_files -norecurse [file join $here pe_dsp48.sv]   ;# each PE as one DSP48E1 (mac_axi PE_PRIM = 1)
 set_property top mac_axi [get_filesets sources_1]
-# Two clocks: tell timing analysis the core clock and the AXI clock are unrelated (see the file)
-if {$CORE_MHZ > 0} {
-    add_files -fileset constrs_1 -norecurse [file join $here mac_zed_cdc.xdc]
-}
 
 # Simulation: tb_axi plays the ARM over AXI
 add_files -fileset sim_1 -norecurse [file join $here tb_axi.sv]
@@ -60,7 +54,7 @@ update_compile_order -fileset sim_1
 # Newest installed version of a Xilinx IP, so the script does not depend on one Vivado release
 proc ipv {name} { return [lindex [lsort [get_ipdefs -all "xilinx.com:ip:${name}:*"]] end] }
 
-proc build_block_design {P FCLK_MHZ PIPE CORE_MHZ} {
+proc build_block_design {P FCLK_MHZ PIPE} {
     create_bd_design system
 
     # Zynq processing system: ARM cores, DDR, USB-UART; board preset from the ZedBoard files
@@ -94,26 +88,11 @@ proc build_block_design {P FCLK_MHZ PIPE CORE_MHZ} {
     }
     connect_bd_net [get_bd_pins ps7/FCLK_RESET0_N] [get_bd_pins rst_fclk0/ext_reset_in]
 
-    # The core's clock (step 12)
-    if {$CORE_MHZ > 0} {
-        # Clocking Wizard (MMCM) fed by FCLK_CLK0. FCLK already has a global buffer, so no input
-        # buffer here. Held in reset while the Zynq holds the PL in reset (FCLK_RESET0_N), because
-        # ps7_init can change FCLK after the bitstream is loaded and the MMCM must lock again.
-        set cw [create_bd_cell -type ip -vlnv [ipv clk_wiz] clk_core]
-        set_property -dict [list CONFIG.PRIM_SOURCE {No_buffer} CONFIG.PRIM_IN_FREQ $FCLK_MHZ \
-            CONFIG.CLKOUT1_REQUESTED_OUT_FREQ $CORE_MHZ CONFIG.RESET_TYPE {ACTIVE_LOW} CONFIG.USE_LOCKED {true}] $cw
-        connect_bd_net $clk [get_bd_pins clk_core/clk_in1]
-        connect_bd_net [get_bd_pins ps7/FCLK_RESET0_N] [get_bd_pins clk_core/resetn]
-        connect_bd_net [get_bd_pins clk_core/clk_out1] [get_bd_pins mac/core_clk]
-        connect_bd_net [get_bd_pins clk_core/locked] [get_bd_pins mac/core_locked]
-        set_property CONFIG.CORE_CLK 1 $mac
-    } else {
-        # One clock: core_clk is not used; tie it to FCLK_CLK0 and core_locked to 1
-        connect_bd_net $clk [get_bd_pins mac/core_clk]
-        set one [create_bd_cell -type ip -vlnv [ipv xlconstant] one]
-        connect_bd_net [get_bd_pins one/dout] [get_bd_pins mac/core_locked]
-        set_property CONFIG.CORE_CLK 0 $mac
-    }
+    # One clock for everything: mac_axi's core_clk is not used; tie it to FCLK_CLK0 and core_locked to 1
+    connect_bd_net $clk [get_bd_pins mac/core_clk]
+    set one [create_bd_cell -type ip -vlnv [ipv xlconstant] one]
+    connect_bd_net [get_bd_pins one/dout] [get_bd_pins mac/core_locked]
+    set_property CONFIG.CORE_CLK 0 $mac
     connect_bd_net [get_bd_pins rst_fclk0/interconnect_aresetn] [get_bd_pins axi_ic/ARESETN]
     foreach p {axi_ic/S00_ARESETN axi_ic/M00_ARESETN mac_rs/aresetn mac/s_axi_aresetn} {
         connect_bd_net [get_bd_pins rst_fclk0/peripheral_aresetn] [get_bd_pins $p]
@@ -129,16 +108,13 @@ proc build_block_design {P FCLK_MHZ PIPE CORE_MHZ} {
     update_compile_order -fileset sources_1
 }
 
-if {[catch {build_block_design $P $FCLK_MHZ $PIPE $CORE_MHZ} err]} {
+if {[catch {build_block_design $P $FCLK_MHZ $PIPE} err]} {
     puts ""
     puts "NOTE: the block design step stopped: $err"
     puts "The project and simulation are ready. Build the block design in the GUI (zed\\README.md, steps 3 to 9)."
 } else {
     puts ""
     puts "Block design 'system' built: Zynq -> AXI interconnect -> register slice -> mac_axi (P = $P, PIPE = $PIPE), PL clock $FCLK_MHZ MHz."
-    if {$CORE_MHZ > 0} {
-        puts "Core clock: Clocking Wizard clk_core, $CORE_MHZ MHz requested (check its actual frequency in the block)."
-    }
     foreach seg [get_bd_addr_segs -quiet -of_objects [get_bd_addr_spaces ps7/Data]] {
         puts "  [get_property NAME $seg]: offset [get_property OFFSET $seg], range [get_property RANGE $seg]"
     }
