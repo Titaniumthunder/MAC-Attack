@@ -1,0 +1,81 @@
+{
+ "configs": {
+  "A_run12": {
+   "wd": 0.0,
+   "transform": "clip16",
+   "x8": true
+  },
+  "B_wd": {
+   "wd": 0.01,
+   "transform": "clip16",
+   "x8": true
+  },
+  "C_wd_slog": {
+   "wd": 0.01,
+   "transform": "slog",
+   "x8": true
+  },
+  "D_wd_noT": {
+   "wd": 0.01,
+   "transform": "clip16",
+   "x8": false
+  },
+  "E_wd_slog_noT": {
+   "wd": 0.01,
+   "transform": "slog",
+   "x8": false
+  }
+ },
+ "primary": "B_wd",
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "steps": 2000,
+ "batch": 64,
+ "lr": 0.001,
+ "x8_dropout": 0.5,
+ "threshold": 0.5,
+ "persistence": 3,
+ "alarm": "latched",
+ "zcap_slog": 10000.0,
+ "s_x": {
+  "clip16": 0.12598425196850394,
+  "slog": 0.07252315249587808
+ },
+ "bearings": [
+  "B02",
+  "B03",
+  "B04",
+  "B08",
+  "B09",
+  "B11",
+  "B12"
+ ],
+ "new_bearings": [
+  "B08",
+  "B09",
+  "B11",
+  "B12"
+ ],
+ "locked_test_never_loaded": [
+  "B06",
+  "B07",
+  "B13",
+  "B17"
+ ],
+ "label_table_sha256": "eb1e8e8e3b8a553382633d495837cac36cac89c1a1b55cdf892334da21635d1b",
+ "selection": "lexicographic means: healthy rows alarmed (min), end-stage recall (max), unlatched alarm-state changes (min), labelled log-loss (min)",
+ "architecture": [
+  8,
+  32,
+  16,
+  2
+ ],
+ "params": 850,
+ "script_sha256": "f4e699160f5048693b6df493ffa176186197f12124b6a278658758b402fed720",
+ "docstring": "Training Run 3 of the deterioration head: seven development bearings, nested leave-one-bearing-out (3 Nov 2026).\n\n  python run3_prep.py                       first (results/supervised/run3/prep/)\n  python train_deterioration_run3.py        -> results/supervised/run3/train/, export/MTL_run3/   (refuses to overwrite)\n\nDESIGN (fixed here, written to train/DESIGN.json before any network is trained):\n  bearings     B02, B03, B04 (Runs 1-2) and B08, B09, B11, B12 (new), 100 healthy-reference + 5 provisional end-stage\n               labels each (labels.py rule, unchanged). B01 excluded (no labels). B06, B07, B13, B17 (locked test) never\n               loaded: splits.assert_development on every bearing list.\n  network      mtl_model.MultiTaskMLP, unchanged 8 -> 32 -> 16 -> 2 (850 parameters); the health-index head frozen\n               (no gradient, not in the optimizer, checked bit-identical after every training); y_hi has no labels.\n  training     Run 1-2's loop (train_deterioration.train_fold): Adam lr 1e-3, 2,000 steps of 64 rows (half per class),\n               temperature-input dropout 50 %, seeds 0-4. Labelled rows of the training bearings only.\n  candidates   A_run12        Run 1-2 settings (weight decay 0, inputs clipped at +-16, temperature input used)\n               B_wd           A + weight decay 0.01 (Adam L2)          PRE-DECLARED PRIMARY (suggested by Run 2, which\n                                                                        saw B02-B04: exploratory for those 3 bearings)\n               C_wd_slog      B with log-compressed inputs instead of the +-16 clip: x = sign(z) ln(1 + min(|z|, 1e4))\n                              (clipping study; the ARM computes the transform, so the hardware is unchanged)\n               D_wd_noT       B with the temperature input x8 = 0 on every row (temperature-shortcut study)\n               E_wd_slog_noT  C + D\n  decision     score p = sigmoid(logit) > 0.5 (fixed, not tuned), alarm after 3 consecutive, LATCHED (Run 2); the raw score\n               is kept next to the alarm in every predictions file.\n  protocols    P1 primary: B_wd, 7-fold leave-one-bearing-out (train on 6, score every measurement of the 7th), 5 seeds.\n               P2 nested selection: for each outer bearing o, inner leave-one-out over the other 6 (train on 5, validate\n               on 1) for every candidate and seed; the candidate is chosen by SELECTION (below) on the inner folds only,\n               then scored on o (the outer model is the P3 model of that candidate: same data, same seeds). This is the\n               unbiased estimate of \"choose among A-E, then deploy\".\n               P3 every candidate, 7-fold (for transparency; used only by the final full-development selection).\n               FINAL the candidate chosen by SELECTION over the 7-fold results, trained on all 7 bearings (5 seeds):\n               the deployment candidate (no held-out data left; not frozen; the test set stays locked).\n  SELECTION    lexicographic on the mean over validation folds x seeds: (1) fewest healthy-reference rows alarmed\n               (latched), (2) highest end-stage recall (latched), (3) fewest alarm-state changes of the UNLATCHED alarm\n               (stability, label-free), (4) lowest log-loss on the labelled rows. Alarm timing is never used to select\n               (the onset is unknown).\n  leakage      no measurement of a validation or held-out bearing is used to fit the network, the INT8 calibration, a\n               threshold or a hyperparameter of its fold. Inputs are normalised per bearing on that bearing's own first\n               100 operating measurements (as a deployed unit commissions itself); nothing is fitted across bearings.\n  hardware     every outer and final model: INT8 (export.build, s_x = clip/127, hidden scales from the training bearings'\n               rows) through the bit-exact golden model on every row; the final models exported as hex files\n               (export/MTL_run3/); RTL simulation (tb_mlp.sv, Icarus) of the final seed-0 model and of one outer model\n               per bearing. Simulation only: nothing here ran on the ZedBoard.\n"
+}

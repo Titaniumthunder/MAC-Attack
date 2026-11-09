@@ -1,0 +1,134 @@
+{
+ "n_mat": 1827,
+ "n_csv_rows": 1827,
+ "missing_ids": [],
+ "extra_ids": [],
+ "ids_contiguous": true,
+ "all_samples_ok": true,
+ "fs_hz": [
+  128000.0
+ ],
+ "all_finite": true,
+ "timestamps_monotonic": true,
+ "duplicate_timestamps": 0,
+ "first": "2022-02-04 14:43:30",
+ "last": "2022-02-05 01:20:58",
+ "interval_s": {
+  "min": 12.0,
+  "median": 20.0,
+  "max": 430.0
+ },
+ "log": {
+  "log": [
+   [
+    "2022-02-04 14:43",
+    "Begin with a new bearing. Warm-up phase: 10 Minutes, n=750rpm, Fstatic = 2500N, no dynamic load. After the warm-up phase, the test runs with set values for rotation speed, static load and dynamic load."
+   ],
+   [
+    "2022-02-05 01:20",
+    "The test is completed because the temperature limit was exceeded!"
+   ]
+  ],
+  "log_end": "2022-02-05 01:20",
+  "stop_reason": "temperature limit exceeded (value not stated in the log)",
+  "temperature_limit_C": null,
+  "ranges": {
+   "setSpeed_rpm": [
+    1500,
+    3000
+   ],
+   "setStat_N": [
+    3250,
+    4000
+   ],
+   "setDyn_N": [
+    500,
+    1000
+   ],
+   "combined_N": [
+    4000,
+    5000
+   ]
+  },
+  "dyn_load_type": "Gaussian noise <= 200 Hz",
+  "fs_hz": 128000,
+  "description": {
+   "approx_duration_h": 11,
+   "n_files": 1827,
+   "threshold_criterion": "temperature",
+   "defect_after_dismantling": "IR, B"
+  },
+  "date": "2022-02-04",
+  "temperature_limit_note": "not stated in the log; the dataset description (p.4) gives 110 degC as the temperature threshold",
+  "operator": "Lennart Viemann (supervised by O. K. Aimiyekagbon)",
+  "ended_on": "2022-02-05",
+  "new_bearing": true,
+  "log_source": "newdata/B08/B08_log.pdf, page 2 (transcribed 3 Nov 2026 from the PDF's text layer; ranges on page 1 match the registry)"
+ },
+ "stops_over_60s": [
+  {
+   "before_id": 51,
+   "from": "2022-02-04 14:53:24",
+   "to": "2022-02-04 15:00:34",
+   "gap_s": 430.0,
+   "T1_before": 34.4002899870026,
+   "T1_after": 30.4957908720217
+  }
+ ],
+ "segments": {
+  "1": {
+   "ids": [
+    1,
+    50
+   ],
+   "n": 50,
+   "from": "2022-02-04 14:43:30",
+   "to": "2022-02-04 14:53:24",
+   "warmup_rows": 50,
+   "T1_start": 21.9768781765211,
+   "T1_end": 34.4002899870026,
+   "T1_max": 34.4002899870026
+  },
+  "2": {
+   "ids": [
+    51,
+    1827
+   ],
+   "n": 1777,
+   "from": "2022-02-04 15:00:34",
+   "to": "2022-02-05 01:20:58",
+   "warmup_rows": 0,
+   "T1_start": 30.4957908720217,
+   "T1_end": 113.607679203327,
+   "T1_max": 113.607679203327
+  }
+ },
+ "warmup_recorded": true,
+ "records_after_log_end": 0,
+ "last_record_vs_log_end_s": 58.0,
+ "T1_max": 113.607679203327,
+ "T2_max": 108.397598403989,
+ "setSpeed_out_of_log_range": 0,
+ "setSpeed_max": 2999.77115051109,
+ "measured_speed_max": 3000.06309462611,
+ "speed_not_reached": 0,
+ "static_load_off_150N": 729,
+ "alignment": {
+  "warmup_rows": 50,
+  "logRMS_jump_at_switch": 1.6918632742964002,
+  "largest_step_within_warmup": 0.09670503147589748,
+  "dlogRMS_vs_dlogSpeed_corr_by_lag": {
+   "-3": -0.05085250734140893,
+   "-2": 0.02284949914272544,
+   "-1": -0.4691616072847586,
+   "0": 0.9156794267891918,
+   "1": -0.46171595986109215,
+   "2": 0.0233264418569095,
+   "3": -0.042066700658171606
+  },
+  "best_lag": 0,
+  "lag0_clear": true
+ },
+ "combined_set_at_4300": 127,
+ "combined_set_outside_range": 0
+}

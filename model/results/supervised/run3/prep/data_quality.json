@@ -1,0 +1,818 @@
+{
+ "B02": {
+  "hard_failures": [],
+  "soft": {
+   "speed_not_reached": 0,
+   "static_load_off_150N": 182,
+   "setSpeed_out_of_log_range": 0,
+   "combined_set_outside_range": 0,
+   "records_after_log_end": 0,
+   "last_record_vs_log_end_s": 36.0,
+   "segments": 2,
+   "median_measured_over_set_speed": 1.0027,
+   "recording_note": null
+  },
+  "fs_hz": [
+   128000.0
+  ],
+  "first_record": "2021-10-25 08:59:35",
+  "last_record": "2021-10-25 14:36:36",
+  "segments": {
+   "1": {
+    "ids": [
+     1,
+     921
+    ],
+    "n": 921,
+    "from": "2021-10-25 08:59:35",
+    "to": "2021-10-25 13:32:36",
+    "warmup_rows": 51,
+    "T1_start": 25.3116584778644,
+    "T1_end": 73.5943468233011,
+    "T1_max": 73.5943468233011
+   },
+   "2": {
+    "ids": [
+     922,
+     1116
+    ],
+    "n": 195,
+    "from": "2021-10-25 13:37:18",
+    "to": "2021-10-25 14:36:36",
+    "warmup_rows": 0,
+    "T1_start": 62.195883367039,
+    "T1_end": 73.1541377376698,
+    "T1_max": 73.4819143026208
+   }
+  },
+  "stops_over_60s": [
+   {
+    "before_id": 922,
+    "from": "2021-10-25 13:32:36",
+    "to": "2021-10-25 13:37:18",
+    "gap_s": 282.0,
+    "T1_before": 73.5943468233011,
+    "T1_after": 62.195883367039
+   }
+  ],
+  "interval_s": {
+   "min": 11.0,
+   "median": 18.0,
+   "max": 282.0
+  },
+  "warmup_rows": 51,
+  "alignment_lag0_r": 0.8826585623414033,
+  "lag0_clear": true,
+  "T1_max_C": 73.5943468233011,
+  "operating_measurements": 1065,
+  "thermal_validity_as_used": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 4.561576800000001,
+   "calibration_end_id": 159,
+   "first_alarm_id": 862,
+   "sigma_T_raw_C": 0.5029349592408847,
+   "a_degC_per_krpm": 15.113436745560312,
+   "tau_min": 10.136167558029952
+  },
+  "thermal_validity_with_A_F42_alarm": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 4.561576800000001,
+   "calibration_end_id": 159,
+   "first_alarm_id": 863,
+   "sigma_T_raw_C": 0.5029349592408847,
+   "a_degC_per_krpm": 15.113436745560312,
+   "tau_min": 10.136167558029952
+  },
+  "temp_input_masked": false,
+  "rows_with_an_input_clipped": 252,
+  "clipped_rows_per_input": {
+   "z_ln_lr_rms": 249,
+   "z_ln_lr_peak": 238,
+   "z_lr_kurt": 55,
+   "z_ln_band_1k_5k": 246,
+   "z_ln_band_5k_20k": 252,
+   "z_lr_crest": 0,
+   "rpm_z": 0,
+   "temp_resid_z": 0
+  },
+  "raw_max_per_input": {
+   "z_ln_lr_rms": 44.26847063753081,
+   "z_ln_lr_peak": 25.85682655007361,
+   "z_lr_kurt": 54.52427426682253,
+   "z_ln_band_1k_5k": 36.09521383821387,
+   "z_ln_band_5k_20k": 46.83752801894114,
+   "z_lr_crest": 6.420748568192198,
+   "rpm_z": 1.8023851142286293,
+   "temp_resid_z": 13.950794829070876
+  },
+  "detectors": {
+   "baseline A|F128|speed (prototype)": {
+    "tau": 1.8261588467772294,
+    "persistent_alarm_id": 862,
+    "available": true
+   },
+   "baseline A|F42|speed": {
+    "tau": 2.0281815328211783,
+    "persistent_alarm_id": 863,
+    "available": true
+   }
+  },
+  "rig_rule_rows_above_6.5g": 15
+ },
+ "B03": {
+  "hard_failures": [],
+  "soft": {
+   "speed_not_reached": 0,
+   "static_load_off_150N": 92,
+   "setSpeed_out_of_log_range": 0,
+   "combined_set_outside_range": 0,
+   "records_after_log_end": 0,
+   "last_record_vs_log_end_s": 40.0,
+   "segments": 1,
+   "median_measured_over_set_speed": 0.9992,
+   "recording_note": null
+  },
+  "fs_hz": [
+   128000.0
+  ],
+  "first_record": "2021-11-05 15:10:43",
+  "last_record": "2021-11-05 18:23:40",
+  "segments": {
+   "1": {
+    "ids": [
+     1,
+     614
+    ],
+    "n": 614,
+    "from": "2021-11-05 15:10:43",
+    "to": "2021-11-05 18:23:40",
+    "warmup_rows": 0,
+    "T1_start": 25.5787385251795,
+    "T1_end": 118.241236287084,
+    "T1_max": 118.241236287084
+   }
+  },
+  "stops_over_60s": [],
+  "interval_s": {
+   "min": 14.0,
+   "median": 19.0,
+   "max": 24.0
+  },
+  "warmup_rows": 0,
+  "alignment_lag0_r": 0.9401491428494176,
+  "lag0_clear": true,
+  "T1_max_C": 118.241236287084,
+  "operating_measurements": 614,
+  "thermal_validity_as_used": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 3.1255263000000006,
+   "calibration_end_id": 118,
+   "first_alarm_id": 547,
+   "sigma_T_raw_C": 0.29406993110342283,
+   "a_degC_per_krpm": 30.594857337290506,
+   "tau_min": 10.41570775220926
+  },
+  "thermal_validity_with_A_F42_alarm": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 3.1255263000000006,
+   "calibration_end_id": 118,
+   "first_alarm_id": 547,
+   "sigma_T_raw_C": 0.29406993110342283,
+   "a_degC_per_krpm": 30.594857337290506,
+   "tau_min": 10.41570775220926
+  },
+  "temp_input_masked": false,
+  "rows_with_an_input_clipped": 62,
+  "clipped_rows_per_input": {
+   "z_ln_lr_rms": 59,
+   "z_ln_lr_peak": 57,
+   "z_lr_kurt": 23,
+   "z_ln_band_1k_5k": 59,
+   "z_ln_band_5k_20k": 51,
+   "z_lr_crest": 0,
+   "rpm_z": 0,
+   "temp_resid_z": 1
+  },
+  "raw_max_per_input": {
+   "z_ln_lr_rms": 45.54592372412888,
+   "z_ln_lr_peak": 23.759973998370466,
+   "z_lr_kurt": 81.19805638538912,
+   "z_ln_band_1k_5k": 39.52425364325913,
+   "z_ln_band_5k_20k": 22.664259647435816,
+   "z_lr_crest": 7.048223228283746,
+   "rpm_z": 1.8082468370007614,
+   "temp_resid_z": 21.068550545227453
+  },
+  "detectors": {
+   "baseline A|F128|speed (prototype)": {
+    "tau": 2.2329131910327558,
+    "persistent_alarm_id": 547,
+    "available": true
+   },
+   "baseline A|F42|speed": {
+    "tau": 2.235988475309612,
+    "persistent_alarm_id": 547,
+    "available": true
+   }
+  },
+  "rig_rule_rows_above_6.5g": 11
+ },
+ "B04": {
+  "hard_failures": [],
+  "soft": {
+   "speed_not_reached": 1114,
+   "static_load_off_150N": 433,
+   "setSpeed_out_of_log_range": 0,
+   "combined_set_outside_range": 0,
+   "records_after_log_end": 0,
+   "last_record_vs_log_end_s": 58.0,
+   "segments": 1,
+   "median_measured_over_set_speed": 0.4992,
+   "recording_note": "SUSPECTED logging/scaling discrepancy, not confirmed by the dataset authors: recorded measured speed and peak dynamic load are about 0.50 x the set values in every row (static load is not). The vibration spectrum's shaft line sits at the SET speed, which supports (does not prove) that the shaft ran at the set speed and these two columns were logged at half scale. Kept as recorded in the processed data; per-bearing inputs are invariant to a constant speed scale."
+  },
+  "fs_hz": [
+   128000.0
+  ],
+  "first_record": "2021-11-17 12:45:09",
+  "last_record": "2021-11-17 18:26:58",
+  "segments": {
+   "1": {
+    "ids": [
+     1,
+     1114
+    ],
+    "n": 1114,
+    "from": "2021-11-17 12:45:09",
+    "to": "2021-11-17 18:26:58",
+    "warmup_rows": 50,
+    "T1_start": 22.1547517347734,
+    "T1_end": 65.7170373403981,
+    "T1_max": 66.0079553869847
+   }
+  },
+  "stops_over_60s": [],
+  "interval_s": {
+   "min": 12.0,
+   "median": 18.0,
+   "max": 24.0
+  },
+  "warmup_rows": 50,
+  "alignment_lag0_r": 0.9580762654513849,
+  "lag0_clear": true,
+  "T1_max_C": 66.0079553869847,
+  "operating_measurements": 1064,
+  "thermal_validity_as_used": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 1.4714343999999997,
+   "calibration_end_id": 150,
+   "first_alarm_id": 440,
+   "sigma_T_raw_C": 0.16712155092056538,
+   "a_degC_per_krpm": 34.99177176053664,
+   "tau_min": 10.286369338724159
+  },
+  "thermal_validity_with_A_F42_alarm": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 1.4714343999999997,
+   "calibration_end_id": 150,
+   "first_alarm_id": 440,
+   "sigma_T_raw_C": 0.16712155092056538,
+   "a_degC_per_krpm": 34.99177176053664,
+   "tau_min": 10.286369338724159
+  },
+  "temp_input_masked": false,
+  "rows_with_an_input_clipped": 672,
+  "clipped_rows_per_input": {
+   "z_ln_lr_rms": 661,
+   "z_ln_lr_peak": 555,
+   "z_lr_kurt": 174,
+   "z_ln_band_1k_5k": 415,
+   "z_ln_band_5k_20k": 672,
+   "z_lr_crest": 4,
+   "rpm_z": 0,
+   "temp_resid_z": 0
+  },
+  "raw_max_per_input": {
+   "z_ln_lr_rms": 38.99975486144313,
+   "z_ln_lr_peak": 29.489180153663384,
+   "z_lr_kurt": 54.72364000624952,
+   "z_ln_band_1k_5k": 31.56966060927418,
+   "z_ln_band_5k_20k": 48.02475376365855,
+   "z_lr_crest": 17.970041195876753,
+   "rpm_z": 1.987839047799353,
+   "temp_resid_z": 7.988217487865427
+  },
+  "detectors": {
+   "baseline A|F128|speed (prototype)": {
+    "tau": 2.21711068871153,
+    "persistent_alarm_id": 440,
+    "available": true
+   },
+   "baseline A|F42|speed": {
+    "tau": 1.9887097701317118,
+    "persistent_alarm_id": 440,
+    "available": true
+   }
+  },
+  "rig_rule_rows_above_6.5g": 36
+ },
+ "B08": {
+  "hard_failures": [],
+  "soft": {
+   "speed_not_reached": 0,
+   "static_load_off_150N": 729,
+   "setSpeed_out_of_log_range": 0,
+   "combined_set_outside_range": 0,
+   "records_after_log_end": 0,
+   "last_record_vs_log_end_s": 58.0,
+   "segments": 2,
+   "median_measured_over_set_speed": 1.0013,
+   "recording_note": null
+  },
+  "fs_hz": [
+   128000.0
+  ],
+  "first_record": "2022-02-04 14:43:30",
+  "last_record": "2022-02-05 01:20:58",
+  "segments": {
+   "1": {
+    "ids": [
+     1,
+     50
+    ],
+    "n": 50,
+    "from": "2022-02-04 14:43:30",
+    "to": "2022-02-04 14:53:24",
+    "warmup_rows": 50,
+    "T1_start": 21.9768781765211,
+    "T1_end": 34.4002899870026,
+    "T1_max": 34.4002899870026
+   },
+   "2": {
+    "ids": [
+     51,
+     1827
+    ],
+    "n": 1777,
+    "from": "2022-02-04 15:00:34",
+    "to": "2022-02-05 01:20:58",
+    "warmup_rows": 0,
+    "T1_start": 30.4957908720217,
+    "T1_end": 113.607679203327,
+    "T1_max": 113.607679203327
+   }
+  },
+  "stops_over_60s": [
+   {
+    "before_id": 51,
+    "from": "2022-02-04 14:53:24",
+    "to": "2022-02-04 15:00:34",
+    "gap_s": 430.0,
+    "T1_before": 34.4002899870026,
+    "T1_after": 30.4957908720217
+   }
+  ],
+  "interval_s": {
+   "min": 12.0,
+   "median": 20.0,
+   "max": 430.0
+  },
+  "warmup_rows": 50,
+  "alignment_lag0_r": 0.9156794267891918,
+  "lag0_clear": true,
+  "T1_max_C": 113.607679203327,
+  "operating_measurements": 1777,
+  "thermal_validity_as_used": {
+   "V1_uninterrupted_cold_start": false,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": false,
+   "valid": false,
+   "segments_in_calibration": [
+    1,
+    2
+   ],
+   "T1_start_minus_ambient_C": 0.16153070000000014,
+   "calibration_end_id": 247,
+   "first_alarm_id": 612,
+   "sigma_T_raw_C": 1.3143120841350129,
+   "a_degC_per_krpm": 34.0011378921861,
+   "tau_min": 16.131003944369382
+  },
+  "thermal_validity_with_A_F42_alarm": {
+   "V1_uninterrupted_cold_start": false,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": false,
+   "valid": false,
+   "segments_in_calibration": [
+    1,
+    2
+   ],
+   "T1_start_minus_ambient_C": 0.16153070000000014,
+   "calibration_end_id": 247,
+   "first_alarm_id": 612,
+   "sigma_T_raw_C": 1.3143120841350129,
+   "a_degC_per_krpm": 34.0011378921861,
+   "tau_min": 16.131003944369382
+  },
+  "temp_input_masked": true,
+  "rows_with_an_input_clipped": 607,
+  "clipped_rows_per_input": {
+   "z_ln_lr_rms": 270,
+   "z_ln_lr_peak": 3,
+   "z_lr_kurt": 0,
+   "z_ln_band_1k_5k": 70,
+   "z_ln_band_5k_20k": 607,
+   "z_lr_crest": 0,
+   "rpm_z": 0,
+   "temp_resid_z": 0
+  },
+  "raw_max_per_input": {
+   "z_ln_lr_rms": 25.324507339121183,
+   "z_ln_lr_peak": 17.742052278510247,
+   "z_lr_kurt": 15.312530710277983,
+   "z_ln_band_1k_5k": 19.56342037854727,
+   "z_ln_band_5k_20k": 33.37416510798115,
+   "z_lr_crest": 11.033792835795683,
+   "rpm_z": 1.9668932711753075,
+   "temp_resid_z": 0.0
+  },
+  "detectors": {
+   "baseline A|F128|speed (prototype)": {
+    "tau": 1.7577296957334503,
+    "persistent_alarm_id": 612,
+    "available": true
+   },
+   "baseline A|F42|speed": {
+    "tau": 1.8672381890853649,
+    "persistent_alarm_id": 612,
+    "available": true
+   }
+  },
+  "rig_rule_rows_above_6.5g": 22
+ },
+ "B09": {
+  "hard_failures": [],
+  "soft": {
+   "speed_not_reached": 0,
+   "static_load_off_150N": 962,
+   "setSpeed_out_of_log_range": 0,
+   "combined_set_outside_range": 0,
+   "records_after_log_end": 0,
+   "last_record_vs_log_end_s": 44.0,
+   "segments": 1,
+   "median_measured_over_set_speed": 1.0011,
+   "recording_note": null
+  },
+  "fs_hz": [
+   128000.0
+  ],
+  "first_record": "2022-02-18 15:51:44",
+  "last_record": "2022-02-19 03:59:44",
+  "segments": {
+   "1": {
+    "ids": [
+     1,
+     1813
+    ],
+    "n": 1813,
+    "from": "2022-02-18 15:51:44",
+    "to": "2022-02-19 03:59:44",
+    "warmup_rows": 50,
+    "T1_start": 23.9314748997364,
+    "T1_end": 57.4669816636614,
+    "T1_max": 59.1031838674474
+   }
+  },
+  "stops_over_60s": [],
+  "interval_s": {
+   "min": 12.0,
+   "median": 23.0,
+   "max": 52.0
+  },
+  "warmup_rows": 50,
+  "alignment_lag0_r": 0.9262250397805133,
+  "lag0_clear": true,
+  "T1_max_C": 59.1031838674474,
+  "operating_measurements": 1763,
+  "thermal_validity_as_used": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 1.2950405000000025,
+   "calibration_end_id": 150,
+   "first_alarm_id": 205,
+   "sigma_T_raw_C": 0.2474357948717486,
+   "a_degC_per_krpm": 12.026543133785003,
+   "tau_min": 9.723423014695081
+  },
+  "thermal_validity_with_A_F42_alarm": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 1.2950405000000025,
+   "calibration_end_id": 150,
+   "first_alarm_id": 209,
+   "sigma_T_raw_C": 0.2474357948717486,
+   "a_degC_per_krpm": 12.026543133785003,
+   "tau_min": 9.723423014695081
+  },
+  "temp_input_masked": false,
+  "rows_with_an_input_clipped": 517,
+  "clipped_rows_per_input": {
+   "z_ln_lr_rms": 0,
+   "z_ln_lr_peak": 0,
+   "z_lr_kurt": 0,
+   "z_ln_band_1k_5k": 517,
+   "z_ln_band_5k_20k": 17,
+   "z_lr_crest": 0,
+   "rpm_z": 0,
+   "temp_resid_z": 0
+  },
+  "raw_max_per_input": {
+   "z_ln_lr_rms": 14.152526552538168,
+   "z_ln_lr_peak": 6.568960403089603,
+   "z_lr_kurt": 3.795289122892145,
+   "z_ln_band_1k_5k": 21.45351594989013,
+   "z_ln_band_5k_20k": 17.616035997931476,
+   "z_lr_crest": 3.593169295466687,
+   "rpm_z": 1.7955337102945723,
+   "temp_resid_z": 15.76367084543422
+  },
+  "detectors": {
+   "baseline A|F128|speed (prototype)": {
+    "tau": 2.024834292230016,
+    "persistent_alarm_id": 205,
+    "available": true
+   },
+   "baseline A|F42|speed": {
+    "tau": 2.075460487874592,
+    "persistent_alarm_id": 209,
+    "available": true
+   }
+  },
+  "rig_rule_rows_above_6.5g": 1
+ },
+ "B11": {
+  "hard_failures": [],
+  "soft": {
+   "speed_not_reached": 0,
+   "static_load_off_150N": 162,
+   "setSpeed_out_of_log_range": 0,
+   "combined_set_outside_range": 0,
+   "records_after_log_end": 0,
+   "last_record_vs_log_end_s": 1.0,
+   "segments": 1,
+   "median_measured_over_set_speed": 1.0027,
+   "recording_note": null
+  },
+  "fs_hz": [
+   64000.0
+  ],
+  "first_record": "2022-08-17 09:26:32",
+  "last_record": "2022-08-17 18:17:01",
+  "segments": {
+   "1": {
+    "ids": [
+     1,
+     1953
+    ],
+    "n": 1953,
+    "from": "2022-08-17 09:26:32",
+    "to": "2022-08-17 18:17:01",
+    "warmup_rows": 0,
+    "T1_start": 27.0287026075604,
+    "T1_end": 43.113975643103,
+    "T1_max": 86.0978696243697
+   }
+  },
+  "stops_over_60s": [],
+  "interval_s": {
+   "min": 14.0,
+   "median": 16.0,
+   "max": 38.0
+  },
+  "warmup_rows": 0,
+  "alignment_lag0_r": 0.8481470386536656,
+  "lag0_clear": true,
+  "T1_max_C": 86.0978696243697,
+  "operating_measurements": 1953,
+  "thermal_validity_as_used": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": -0.25882110000000225,
+   "calibration_end_id": 137,
+   "first_alarm_id": 1000000000,
+   "sigma_T_raw_C": 0.09723922110780892,
+   "a_degC_per_krpm": 21.408319374011604,
+   "tau_min": 11.319058300652106
+  },
+  "thermal_validity_with_A_F42_alarm": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": -0.25882110000000225,
+   "calibration_end_id": 137,
+   "first_alarm_id": 704,
+   "sigma_T_raw_C": 0.09723922110780892,
+   "a_degC_per_krpm": 21.408319374011604,
+   "tau_min": 11.319058300652106
+  },
+  "temp_input_masked": false,
+  "rows_with_an_input_clipped": 1247,
+  "clipped_rows_per_input": {
+   "z_ln_lr_rms": 166,
+   "z_ln_lr_peak": 285,
+   "z_lr_kurt": 25,
+   "z_ln_band_1k_5k": 108,
+   "z_ln_band_5k_20k": 1247,
+   "z_lr_crest": 62,
+   "rpm_z": 0,
+   "temp_resid_z": 626
+  },
+  "raw_max_per_input": {
+   "z_ln_lr_rms": 36.192029357180424,
+   "z_ln_lr_peak": 30.20856657646297,
+   "z_lr_kurt": 36.629337104379566,
+   "z_ln_band_1k_5k": 25.970885719278083,
+   "z_ln_band_5k_20k": 50.642882052852634,
+   "z_lr_crest": 36.68179930795426,
+   "rpm_z": 1.8938155191513124,
+   "temp_resid_z": 61.28421658881199
+  },
+  "detectors": {
+   "baseline A|F128|speed (prototype)": {
+    "tau": null,
+    "persistent_alarm_id": null,
+    "available": false
+   },
+   "baseline A|F42|speed": {
+    "tau": 1.9162114557514052,
+    "persistent_alarm_id": 704,
+    "available": true
+   }
+  },
+  "rig_rule_rows_above_6.5g": 0
+ },
+ "B12": {
+  "hard_failures": [],
+  "soft": {
+   "speed_not_reached": 0,
+   "static_load_off_150N": 0,
+   "setSpeed_out_of_log_range": 0,
+   "combined_set_outside_range": 0,
+   "records_after_log_end": 0,
+   "last_record_vs_log_end_s": 23.0,
+   "segments": 1,
+   "median_measured_over_set_speed": 1.0012,
+   "recording_note": null
+  },
+  "fs_hz": [
+   64000.0
+  ],
+  "first_record": "2022-08-24 08:49:23",
+  "last_record": "2022-08-24 11:22:23",
+  "segments": {
+   "1": {
+    "ids": [
+     1,
+     767
+    ],
+    "n": 767,
+    "from": "2022-08-24 08:49:23",
+    "to": "2022-08-24 11:22:23",
+    "warmup_rows": 0,
+    "T1_start": 27.0091229527549,
+    "T1_end": 88.3281700916161,
+    "T1_max": 88.943672177533
+   }
+  },
+  "stops_over_60s": [],
+  "interval_s": {
+   "min": 11.0,
+   "median": 12.0,
+   "max": 14.0
+  },
+  "warmup_rows": 0,
+  "alignment_lag0_r": 0.7792212746646962,
+  "lag0_clear": true,
+  "T1_max_C": 88.943672177533,
+  "operating_measurements": 767,
+  "thermal_validity_as_used": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 1.4004674000000001,
+   "calibration_end_id": 205,
+   "first_alarm_id": 1000000000,
+   "sigma_T_raw_C": 0.37449630036907733,
+   "a_degC_per_krpm": 21.472254866699423,
+   "tau_min": 12.32723585179394
+  },
+  "thermal_validity_with_A_F42_alarm": {
+   "V1_uninterrupted_cold_start": true,
+   "V2_steady_before_first_alarm": true,
+   "V3_steady_residual_le_1C": true,
+   "valid": true,
+   "segments_in_calibration": [
+    1
+   ],
+   "T1_start_minus_ambient_C": 1.4004674000000001,
+   "calibration_end_id": 205,
+   "first_alarm_id": 561,
+   "sigma_T_raw_C": 0.37449630036907733,
+   "a_degC_per_krpm": 21.472254866699423,
+   "tau_min": 12.32723585179394
+  },
+  "temp_input_masked": false,
+  "rows_with_an_input_clipped": 438,
+  "clipped_rows_per_input": {
+   "z_ln_lr_rms": 0,
+   "z_ln_lr_peak": 0,
+   "z_lr_kurt": 0,
+   "z_ln_band_1k_5k": 0,
+   "z_ln_band_5k_20k": 0,
+   "z_lr_crest": 0,
+   "rpm_z": 0,
+   "temp_resid_z": 438
+  },
+  "raw_max_per_input": {
+   "z_ln_lr_rms": 3.5669765584799764,
+   "z_ln_lr_peak": 2.4269016820176086,
+   "z_lr_kurt": 6.090086201806896,
+   "z_ln_band_1k_5k": 3.562235454523421,
+   "z_ln_band_5k_20k": 2.3739504130574267,
+   "z_lr_crest": 4.29551776990486,
+   "rpm_z": 1.8385953199710403,
+   "temp_resid_z": 31.68695545263705
+  },
+  "detectors": {
+   "baseline A|F128|speed (prototype)": {
+    "tau": null,
+    "persistent_alarm_id": null,
+    "available": false
+   },
+   "baseline A|F42|speed": {
+    "tau": 2.0067878213087256,
+    "persistent_alarm_id": 561,
+    "available": true
+   }
+  },
+  "rig_rule_rows_above_6.5g": 0
+ }
+}

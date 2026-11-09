@@ -1,0 +1,285 @@
+{
+ "split": {
+  "seed": 20261102,
+  "rule": "(declared before drawing; nothing here depends on any measurement):\n  1. The bearing (experiment) is the unit: all measurements of one experiment are in the same set.\n  2. Not eligible for the test set:\n       B01, B03  already analysed in detail (anomaly baseline, multi-task inputs) - not blind any more;\n       B05       deliberately interrupted;  B01, B16  no stop criterion pre-set  (dataset description, Table 3).\n  3. One test bearing per operating regime, drawn with random.Random(SEED).choice from the eligible ones:\n       S128  sinusoidal load, 128 kHz, variable speed      B01-B06\n       N128  noise load,      128 kHz, variable speed      B07-B09\n       N64v  noise load,       64 kHz, variable speed      B10-B13\n       N64c  noise load,       64 kHz, constant 2700 rpm   B14-B17\n  4. Everything else is the development set. Model choices use leave-one-bearing-out over the development set only.",
+  "regimes": {
+   "S128": [
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "B05",
+    "B06"
+   ],
+   "N128": [
+    "B07",
+    "B08",
+    "B09"
+   ],
+   "N64v": [
+    "B10",
+    "B11",
+    "B12",
+    "B13"
+   ],
+   "N64c": [
+    "B14",
+    "B15",
+    "B16",
+    "B17"
+   ]
+  },
+  "not_eligible_for_test": {
+   "B01": "analysed; no stop criterion pre-set",
+   "B03": "analysed",
+   "B05": "deliberately interrupted",
+   "B16": "no stop criterion pre-set"
+  },
+  "test": {
+   "S128": "B06",
+   "N128": "B07",
+   "N64v": "B13",
+   "N64c": "B17"
+  },
+  "development": [
+   "B01",
+   "B02",
+   "B03",
+   "B04",
+   "B05",
+   "B08",
+   "B09",
+   "B10",
+   "B11",
+   "B12",
+   "B14",
+   "B15",
+   "B16"
+  ],
+  "development_folds": [
+   {
+    "held_out": "B01",
+    "train": [
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B02",
+    "train": [
+     "B01",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B03",
+    "train": [
+     "B01",
+     "B02",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B04",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B05",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B08",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B09",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B10",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B11",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B11",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B12",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B12",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B14",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B14",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B15",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B15",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B16"
+    ]
+   },
+   {
+    "held_out": "B16",
+    "train": [
+     "B01",
+     "B02",
+     "B03",
+     "B04",
+     "B05",
+     "B08",
+     "B09",
+     "B10",
+     "B11",
+     "B12",
+     "B14",
+     "B15"
+    ]
+   }
+  ]
+ },
+ "sha256": "03c374fc6bd299e07b0fcef7118d56627ee84f3605c17e34a86a72721ac588a5",
+ "fixed_on": "2026-11-02"
+}

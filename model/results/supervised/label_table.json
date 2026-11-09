@@ -1,0 +1,181 @@
+{
+ "table": {
+  "rule": {
+   "start_n": 100,
+   "start_withheld": {
+    "B01": "housing temperature reached the 110 degC stop temperature 16 min after warm-up (log 09:13); restarted twice afterwards; ran up to 15 min the day before (log 08:45): not a documented healthy start (label review, 2 Nov 2026)"
+   },
+   "end_n": 5,
+   "end_tolerance_s": 120,
+   "sensitivity_end_n": [
+    3,
+    10,
+    20
+   ],
+   "health_index": "no labels (no measured severity)"
+  },
+  "evidence": {
+   "E1": "new bearing at the start; no defect initiated (dataset description)",
+   "E2": "defect type after dismantling (dataset description, Table 3)",
+   "A1": "PROVISIONAL END-STAGE PROXY: the last END_N measurements stand for the end-of-test state; that the damage found at dismantling was already present then is assumed, not verified",
+   "A2": "ASSUMPTION: the bearing defect caused the stop; the rig stopping at its threshold does not by itself prove this",
+   "A3": "NOT an onset time: the exact damage onset is unknown (masked middle); the end label marks the documented end stage, not when damage began",
+   "A4": "ASSUMPTION: healthy throughout the first START_N measurements (supported by E1, not measured)"
+  },
+  "bearings": {
+   "B01": {
+    "experiment": "B01",
+    "operating_measurements": 326,
+    "start": {
+     "label": null,
+     "withheld_because": [
+      "housing temperature reached the 110 degC stop temperature 16 min after warm-up (log 09:13); restarted twice afterwards; ran up to 15 min the day before (log 08:45): not a documented healthy start (label review, 2 Nov 2026)"
+     ]
+    },
+    "end": {
+     "label": null,
+     "withheld_because": [
+      "no stop criterion pre-set (description: None)",
+      "recording does not end at the logged stop (272 records after it, last record 6392.0 s from it)"
+     ]
+    },
+    "masked": 326,
+    "health_index_labels": 0,
+    "sources": [
+     "Paderborn LDM run-to-failure data set description, Zenodo 10.5281/zenodo.10805042, Table 3",
+     "B01 log (paderborn_experiments.json)"
+    ]
+   },
+   "B02": {
+    "experiment": "B02",
+    "operating_measurements": 1065,
+    "start": {
+     "label": 0,
+     "n": 100,
+     "measurement_ids": [
+      52,
+      151
+     ],
+     "until": "2021-10-25 09:39:51",
+     "evidence": [
+      "E1",
+      "A4"
+     ]
+    },
+    "end": {
+     "label": 1,
+     "n": 5,
+     "measurement_ids": [
+      1112,
+      1116
+     ],
+     "from": "2021-10-25 14:35:29",
+     "to": "2021-10-25 14:36:36",
+     "minutes_covered": 1.1166666666666667,
+     "evidence": [
+      "E2",
+      "A1",
+      "A2",
+      "A3"
+     ],
+     "defect_after_dismantling": "IR",
+     "stop": "accelerometer RMS exceeded 0.65 V (6.5 g) four times",
+     "log_end": "2021-10-25 14:36"
+    },
+    "masked": 960,
+    "health_index_labels": 0,
+    "sources": [
+     "Paderborn LDM run-to-failure data set description, Zenodo 10.5281/zenodo.10805042, Table 3",
+     "B02 log (paderborn_experiments.json)"
+    ]
+   },
+   "B03": {
+    "experiment": "B03",
+    "operating_measurements": 614,
+    "start": {
+     "label": 0,
+     "n": 100,
+     "measurement_ids": [
+      1,
+      100
+     ],
+     "until": "2021-11-05 15:42:10",
+     "evidence": [
+      "E1",
+      "A4"
+     ]
+    },
+    "end": {
+     "label": 1,
+     "n": 5,
+     "measurement_ids": [
+      610,
+      614
+     ],
+     "from": "2021-11-05 18:22:25",
+     "to": "2021-11-05 18:23:40",
+     "minutes_covered": 1.25,
+     "evidence": [
+      "E2",
+      "A1",
+      "A2",
+      "A3"
+     ],
+     "defect_after_dismantling": "IR",
+     "stop": "bearing housing temperature exceeded 110 degC (automatic stop)",
+     "log_end": "2021-11-05 18:23"
+    },
+    "masked": 509,
+    "health_index_labels": 0,
+    "sources": [
+     "Paderborn LDM run-to-failure data set description, Zenodo 10.5281/zenodo.10805042, Table 3",
+     "B03 log (paderborn_experiments.json)"
+    ]
+   },
+   "B04": {
+    "experiment": "B04",
+    "operating_measurements": 1064,
+    "start": {
+     "label": 0,
+     "n": 100,
+     "measurement_ids": [
+      51,
+      150
+     ],
+     "until": "2021-11-17 13:26:01",
+     "evidence": [
+      "E1",
+      "A4"
+     ]
+    },
+    "end": {
+     "label": 1,
+     "n": 5,
+     "measurement_ids": [
+      1110,
+      1114
+     ],
+     "from": "2021-11-17 18:25:44",
+     "to": "2021-11-17 18:26:58",
+     "minutes_covered": 1.2333333333333334,
+     "evidence": [
+      "E2",
+      "A1",
+      "A2",
+      "A3"
+     ],
+     "defect_after_dismantling": "IR, B",
+     "stop": "accelerometer RMS exceeded the specified limit (value not stated in the log)",
+     "log_end": "2021-11-17 18:26"
+    },
+    "masked": 959,
+    "health_index_labels": 0,
+    "sources": [
+     "Paderborn LDM run-to-failure data set description, Zenodo 10.5281/zenodo.10805042, Table 3",
+     "B04 log (paderborn_experiments.json)"
+    ]
+   }
+  }
+ },
+ "sha256": "4eff40d85f35e35dcc1f8129c1f90267c44f3a748c576639ac2ced4deb20a475"
+}

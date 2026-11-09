@@ -1,0 +1,386 @@
+{
+ "fix": "weight decay drives the weights of some dead hidden neurons to ~1e-35. export.build then gives that output\nchannel a weight scale of ~1e-37 and its bias quantizes to ~1e24, which overflows INT64 in the cast and cannot be stored\nin the hardware's 32-bit bias (31 of 175 outer models and 1 of 5 final models in train/results.json). v1's INT8 numbers\nfor those models are therefore invalid. The fix, applied only on the export path (export.py and the trained weights are\nunchanged): before quantizing, every weight with |w| < 1e-6 x the largest |w| of its layer is set to 0; export.build\nalready gives an all-zero column the scale 1. The FP32 effect of this is measured on every row (max |logit change|) and\nevery INT32 bias is asserted to fit 32 bits.",
+ "outer_models": 175,
+ "outer_decisions_changed_total": 245,
+ "outer_rows_total": 225075,
+ "outer_labelled_decisions_changed": 5,
+ "outer_latched_first_alarm_same": 169,
+ "outer_max_fp32_change_from_zeroing": 0.0,
+ "outer_models_with_zeroed_weights": 136,
+ "per_cfg": {
+  "decisions_changed": {
+   "A_run12": 74,
+   "B_wd": 74,
+   "C_wd_slog": 44,
+   "D_wd_noT": 40,
+   "E_wd_slog_noT": 13
+  },
+  "decisions_changed_labelled": {
+   "A_run12": 0,
+   "B_wd": 0,
+   "C_wd_slog": 2,
+   "D_wd_noT": 0,
+   "E_wd_slog_noT": 3
+  },
+  "latched_states_differ": {
+   "A_run12": 24,
+   "B_wd": 37,
+   "C_wd_slog": 2,
+   "D_wd_noT": 4,
+   "E_wd_slog_noT": 0
+  }
+ },
+ "rtl": {
+  "final_seed0": {
+   "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+   "M64": {
+    "pass": true,
+    "batches": 24,
+    "cycles": [
+     1642
+    ],
+    "equation_cycles": 1642
+   },
+   "M1": {
+    "pass": true,
+    "batches": 10,
+    "cycles": [
+     382
+    ],
+    "equation_cycles": 382
+   },
+   "latency_us_at_214.286MHz": {
+    "M64_per_batch": 7.6626564497914,
+    "M1": 1.782664289780947
+   }
+  },
+  "outer_seed0": {
+   "B_wd/B02": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "B_wd/B03": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "B_wd/B04": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "B_wd/B08": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "B_wd/B09": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "B_wd/B11": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "B_wd/B12": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "C_wd_slog/B03": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "C_wd_slog/B04": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "C_wd_slog/B11": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "C_wd_slog/B12": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "E_wd_slog_noT/B02": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "E_wd_slog_noT/B08": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   },
+   "E_wd_slog_noT/B09": {
+    "simulator": "Icarus Verilog, tb_mlp.sv, rtl_check.PARAMS (P = 8, ACC = 22)",
+    "M64": {
+     "pass": true,
+     "batches": 9,
+     "cycles": [
+      1642
+     ],
+     "equation_cycles": 1642
+    },
+    "M1": {
+     "pass": true,
+     "batches": 10,
+     "cycles": [
+      382
+     ],
+     "equation_cycles": 382
+    },
+    "latency_us_at_214.286MHz": {
+     "M64_per_batch": 7.6626564497914,
+     "M1": 1.782664289780947
+    }
+   }
+  }
+ },
+ "all_rtl_pass": true,
+ "exported": "/Users/alexsalamati/School/Senior/Capstone/MAC-Attack/model/export/MTL_run3_v2",
+ "final_cfg": "E_wd_slog_noT",
+ "v1_note": "results/supervised/run3/train/results.json 'int8' entries and export/MTL_run3/ are v1 (before the fix); use this folder's numbers"
+}

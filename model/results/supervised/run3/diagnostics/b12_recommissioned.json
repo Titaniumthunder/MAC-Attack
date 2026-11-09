@@ -1,0 +1,339 @@
+{
+ "note": "Post-hoc diagnostic (NOT part of Run 3's evaluation, changes no label or result): why every Run 3 MLP misses B12.\n\n  python run3_b12_diagnostic.py   -> results/supervised/run3/diagnostics/b12_recommissioned.json\n\nThe data review found an undocumented, lasting vibration step at M0061 (rear RMS ~0.56 -> ~1.37 g, 12 min after the\nstart), inside B12's first 100 operating measurements, which are both its healthy labels and its commissioning reference.\nA reference that straddles a level change inflates the reference spread (sigma) and shrinks every later z-input.\nTest: commission B12 on M0061-M0160 instead (the 100 measurements after the step), recompute the same 8 inputs and the\nanomaly detector, and score them with the Run 3 OUTER models for B12 (trained on the other 6 bearings only, never on\nB12). This is a what-if on one bearing chosen after seeing its result: it explains, it does not re-evaluate.",
+ "variants": {
+  "as used in Run 3 (reference M0001-M0100)": {
+   "x8": "as Run 3",
+   "reference_ids": [
+    1,
+    100
+   ],
+   "vib_sigma_ln_lr_rms": 0.5013298543592366,
+   "end_stage_raw_z_ln_lr_rms": [
+    2.51,
+    2.46,
+    2.72,
+    2.48,
+    2.96
+   ],
+   "models": {
+    "E_wd_slog_noT": [
+     {
+      "seed": 0,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.275,
+       0.321,
+       0.361,
+       0.326,
+       0.408
+      ]
+     },
+     {
+      "seed": 1,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.247,
+       0.289,
+       0.322,
+       0.291,
+       0.366
+      ]
+     },
+     {
+      "seed": 2,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.271,
+       0.314,
+       0.346,
+       0.314,
+       0.391
+      ]
+     },
+     {
+      "seed": 3,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.278,
+       0.322,
+       0.352,
+       0.319,
+       0.397
+      ]
+     },
+     {
+      "seed": 4,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.286,
+       0.33,
+       0.357,
+       0.322,
+       0.404
+      ]
+     }
+    ],
+    "C_wd_slog": [
+     {
+      "seed": 0,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.376,
+       0.428,
+       0.474,
+       0.435,
+       0.523
+      ]
+     },
+     {
+      "seed": 1,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.344,
+       0.393,
+       0.43,
+       0.394,
+       0.477
+      ]
+     },
+     {
+      "seed": 2,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.377,
+       0.425,
+       0.459,
+       0.423,
+       0.507
+      ]
+     },
+     {
+      "seed": 3,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.391,
+       0.44,
+       0.473,
+       0.436,
+       0.521
+      ]
+     },
+     {
+      "seed": 4,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.391,
+       0.439,
+       0.467,
+       0.427,
+       0.515
+      ]
+     }
+    ]
+   },
+   "anomaly A|F42|speed": {
+    "tau": 2.0067878213087256,
+    "first_alarm_id": 563,
+    "min_before_last_record": 40.82,
+    "end_recall": 1.0
+   }
+  },
+  "re-commissioned on M0061-M0160": {
+   "x8": "not calibrated (x8 = 0)",
+   "reference_ids": [
+    61,
+    160
+   ],
+   "vib_sigma_ln_lr_rms": 0.23383780882319605,
+   "end_stage_raw_z_ln_lr_rms": [
+    4.11,
+    3.41,
+    2.74,
+    2.31,
+    3.18
+   ],
+   "models": {
+    "E_wd_slog_noT": [
+     {
+      "seed": 0,
+      "first_alarm_id": 677,
+      "min_before_last_record": 18.0,
+      "end_recall": 1.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.549,
+       0.567,
+       0.508,
+       0.438,
+       0.579
+      ]
+     },
+     {
+      "seed": 1,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.513,
+       0.53,
+       0.463,
+       0.397,
+       0.534
+      ]
+     },
+     {
+      "seed": 2,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.549,
+       0.563,
+       0.492,
+       0.424,
+       0.562
+      ]
+     },
+     {
+      "seed": 3,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.557,
+       0.571,
+       0.495,
+       0.426,
+       0.566
+      ]
+     },
+     {
+      "seed": 4,
+      "first_alarm_id": 677,
+      "min_before_last_record": 18.0,
+      "end_recall": 1.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.567,
+       0.582,
+       0.505,
+       0.434,
+       0.577
+      ]
+     }
+    ],
+    "C_wd_slog": [
+     {
+      "seed": 0,
+      "first_alarm_id": 677,
+      "min_before_last_record": 18.0,
+      "end_recall": 1.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.541,
+       0.557,
+       0.502,
+       0.432,
+       0.573
+      ]
+     },
+     {
+      "seed": 1,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.505,
+       0.519,
+       0.455,
+       0.389,
+       0.525
+      ]
+     },
+     {
+      "seed": 2,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.541,
+       0.552,
+       0.483,
+       0.415,
+       0.552
+      ]
+     },
+     {
+      "seed": 3,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.553,
+       0.564,
+       0.491,
+       0.421,
+       0.561
+      ]
+     },
+     {
+      "seed": 4,
+      "first_alarm_id": null,
+      "min_before_last_record": null,
+      "end_recall": 0.0,
+      "healthy_rows_alarmed": 0,
+      "end_stage_p": [
+       0.559,
+       0.57,
+       0.495,
+       0.424,
+       0.565
+      ]
+     }
+    ]
+   },
+   "anomaly A|F42|speed": {
+    "tau": 1.9851708807365782,
+    "first_alarm_id": 563,
+    "min_before_last_record": 40.82,
+    "end_recall": 1.0
+   }
+  }
+ }
+}

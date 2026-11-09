@@ -1,0 +1,100 @@
+{
+ "inputs": [
+  "z_ln_rms",
+  "z_ln_peak",
+  "z_kurt",
+  "z_ln_band_1k_5k",
+  "z_ln_band_5k_20k",
+  "z_ln_band_20k_64k",
+  "rpm_z",
+  "temp_resid_z"
+ ],
+ "sizes": [
+  8,
+  32,
+  16,
+  2
+ ],
+ "heads": [
+  "deterioration_logit",
+  "health_raw"
+ ],
+ "layers": [
+  {
+   "layer": 0,
+   "in": 8,
+   "out": 32,
+   "weights": 256,
+   "biases": 32,
+   "activation": "ReLU",
+   "array_passes": 4
+  },
+  {
+   "layer": 1,
+   "in": 32,
+   "out": 16,
+   "weights": 512,
+   "biases": 16,
+   "activation": "ReLU",
+   "array_passes": 8
+  },
+  {
+   "layer": 2,
+   "in": 16,
+   "out": 2,
+   "weights": 32,
+   "biases": 2,
+   "activation": "none (ARM: sigmoid per head)",
+   "array_passes": 2
+  }
+ ],
+ "params": 850,
+ "params_int8_bytes": 800,
+ "bias_int32_bytes": 200,
+ "cycles": {
+  "1": 382,
+  "10": 562,
+  "64": 1642
+ },
+ "int8_check": {
+  "rows": 940,
+  "s_x": 0.12598425196850394,
+  "mean_abs_err": [
+   0.007206044476328211,
+   0.0057344961008494845
+  ],
+  "max_abs_err": [
+   0.03275847006883256,
+   0.0295204889881759
+  ],
+  "fp32_range": [
+   [
+    0.024373656138777733,
+    -0.10723689198493958
+   ],
+   [
+    1.4812051057815552,
+    0.6070648431777954
+   ]
+  ],
+  "note": "random initialization: checks the arithmetic, not any prediction"
+ },
+ "rtl": {
+  "M64": {
+   "pass": true,
+   "runs": 14,
+   "cycles": [
+    1642
+   ],
+   "equation": 1642
+  },
+  "M1": {
+   "pass": true,
+   "runs": 10,
+   "cycles": [
+    382
+   ],
+   "equation": 382
+  }
+ }
+}

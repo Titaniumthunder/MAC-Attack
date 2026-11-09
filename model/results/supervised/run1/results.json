@@ -1,0 +1,363 @@
+{
+ "design": {
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "steps": 2000,
+  "batch": 64,
+  "lr": 0.001,
+  "x8_dropout": 0.5,
+  "threshold": 0.5,
+  "run": 3,
+  "profile": "A42",
+  "inputs": [
+   "z_ln_lr_rms",
+   "z_ln_lr_peak",
+   "z_lr_kurt",
+   "z_ln_band_1k_5k",
+   "z_ln_band_5k_20k",
+   "z_lr_crest",
+   "rpm_z",
+   "temp_resid_z"
+  ],
+  "label_table_sha256": "4eff40d85f35e35dcc1f8129c1f90267c44f3a748c576639ac2ced4deb20a475",
+  "health_index_head": "frozen, untrained"
+ },
+ "folds": {
+  "B02": {
+   "train": [
+    "B03",
+    "B04"
+   ],
+   "train_rows": {
+    "healthy": 200,
+    "deteriorated": 10
+   },
+   "seeds": {
+    "0": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.21458333333333332,
+      "first_confirmed_alarm_measurement_id": 870,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 79.48333333333333,
+      "alarm_state_changes_after_first_alarm": 8
+     },
+     "final_train_loss": 6.608069088542834e-05,
+     "weights_sha256": "835358ca240c490593e23acbfaad9a207f2dcd9c98120c9e1bfeefad15a3461b"
+    },
+    "1": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.190625,
+      "first_confirmed_alarm_measurement_id": 870,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 79.48333333333333,
+      "alarm_state_changes_after_first_alarm": 14
+     },
+     "final_train_loss": 6.64539256831631e-05,
+     "weights_sha256": "03e6bbc0134f3eccdd08233eb6417ea9c97ce3c32da913843477c76d2ed061df"
+    },
+    "2": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.15208333333333332,
+      "first_confirmed_alarm_measurement_id": 879,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 76.61666666666666,
+      "alarm_state_changes_after_first_alarm": 16
+     },
+     "final_train_loss": 4.1678602428874e-05,
+     "weights_sha256": "89c6f4f4b437e487d88d02827fbfa810fbc96326002505193d1387f5b2296ba1"
+    }
+   },
+   "reference": {
+    "baseline A|F128|speed (prototype)": {
+     "start_rows": 100,
+     "start_in_sample": true,
+     "start_above_fraction": 0.01,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 1.0,
+     "end_alarmed_fraction": 1.0,
+     "masked_alarmed_fraction (descriptive only)": 0.25833333333333336,
+     "first_confirmed_alarm_measurement_id": 864,
+     "first_alarm_minutes_before_last_record (not a detection delay)": 81.33333333333333,
+     "alarm_state_changes_after_first_alarm": 0
+    },
+    "baseline A|F42|speed": {
+     "start_rows": 100,
+     "start_in_sample": true,
+     "start_above_fraction": 0.01,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 1.0,
+     "end_alarmed_fraction": 1.0,
+     "masked_alarmed_fraction (descriptive only)": 0.25729166666666664,
+     "first_confirmed_alarm_measurement_id": 865,
+     "first_alarm_minutes_before_last_record (not a detection delay)": 81.01666666666667,
+     "alarm_state_changes_after_first_alarm": 0
+    },
+    "rig stop rule, rear RMS > 6.5 g": {
+     "start_rows": 100,
+     "start_in_sample": false,
+     "start_above_fraction": 0.0,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 0.8,
+     "end_alarmed_fraction": 0.4,
+     "masked_alarmed_fraction (descriptive only)": 0.0010416666666666667,
+     "first_confirmed_alarm_measurement_id": 1109,
+     "first_alarm_minutes_before_last_record (not a detection delay)": 2.1333333333333333,
+     "alarm_state_changes_after_first_alarm": 2
+    }
+   },
+   "end_label_placed_by": "vibration"
+  },
+  "B03": {
+   "train": [
+    "B02",
+    "B04"
+   ],
+   "train_rows": {
+    "healthy": 200,
+    "deteriorated": 10
+   },
+   "seeds": {
+    "0": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.03929273084479371,
+      "first_confirmed_alarm_measurement_id": 590,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 7.416666666666667,
+      "alarm_state_changes_after_first_alarm": 0
+     },
+     "final_train_loss": 3.496965655358508e-05,
+     "weights_sha256": "c94746cc4d9f8e1c4b0977117038af2f75881310f25ccca85b8ed1d78015d947"
+    },
+    "1": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.03339882121807466,
+      "first_confirmed_alarm_measurement_id": 590,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 7.416666666666667,
+      "alarm_state_changes_after_first_alarm": 2
+     },
+     "final_train_loss": 6.0975908127147704e-05,
+     "weights_sha256": "3f8f2415131044cceff0fd1f93918766dfa0e66517fb94c367f6906fc2ac9d8d"
+    },
+    "2": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.03339882121807466,
+      "first_confirmed_alarm_measurement_id": 590,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 7.416666666666667,
+      "alarm_state_changes_after_first_alarm": 2
+     },
+     "final_train_loss": 4.433959111338481e-05,
+     "weights_sha256": "711a136c67fed4adeb28a28638c5416be3ae39430f8ec5e5a03c5146993b0fb6"
+    }
+   },
+   "reference": {
+    "baseline A|F128|speed (prototype)": {
+     "start_rows": 100,
+     "start_in_sample": true,
+     "start_above_fraction": 0.01,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 1.0,
+     "end_alarmed_fraction": 1.0,
+     "masked_alarmed_fraction (descriptive only)": 0.11984282907662082,
+     "first_confirmed_alarm_measurement_id": 549,
+     "first_alarm_minutes_before_last_record (not a detection delay)": 20.4,
+     "alarm_state_changes_after_first_alarm": 0
+    },
+    "baseline A|F42|speed": {
+     "start_rows": 100,
+     "start_in_sample": true,
+     "start_above_fraction": 0.01,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 1.0,
+     "end_alarmed_fraction": 1.0,
+     "masked_alarmed_fraction (descriptive only)": 0.11984282907662082,
+     "first_confirmed_alarm_measurement_id": 549,
+     "first_alarm_minutes_before_last_record (not a detection delay)": 20.4,
+     "alarm_state_changes_after_first_alarm": 0
+    },
+    "rig stop rule, rear RMS > 6.5 g": {
+     "start_rows": 100,
+     "start_in_sample": false,
+     "start_above_fraction": 0.0,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 0.0,
+     "end_alarmed_fraction": 0.0,
+     "masked_alarmed_fraction (descriptive only)": 0.0,
+     "first_confirmed_alarm_measurement_id": null,
+     "first_alarm_minutes_before_last_record (not a detection delay)": null,
+     "alarm_state_changes_after_first_alarm": 0
+    }
+   },
+   "end_label_placed_by": "temperature"
+  },
+  "B04": {
+   "train": [
+    "B02",
+    "B03"
+   ],
+   "train_rows": {
+    "healthy": 200,
+    "deteriorated": 10
+   },
+   "seeds": {
+    "0": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.3222106360792492,
+      "first_confirmed_alarm_measurement_id": 478,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 198.01666666666668,
+      "alarm_state_changes_after_first_alarm": 46
+     },
+     "final_train_loss": 3.637333429651335e-05,
+     "weights_sha256": "aaad7c36809a78a059ddb52f9802c777d66456153c133d54ca9899efa1f2b50b"
+    },
+    "1": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.32116788321167883,
+      "first_confirmed_alarm_measurement_id": 458,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 204.38333333333333,
+      "alarm_state_changes_after_first_alarm": 42
+     },
+     "final_train_loss": 7.308074418688193e-05,
+     "weights_sha256": "f42f5593d5f49e373a1ea17b183192740f2202b9d5cae53f94869ca726f1ef1c"
+    },
+    "2": {
+     "metrics": {
+      "start_rows": 100,
+      "start_in_sample": false,
+      "start_above_fraction": 0.0,
+      "start_alarm_episodes": 0,
+      "start_alarm_episodes_per_hour": 0.0,
+      "end_rows": 5,
+      "end_above_fraction": 1.0,
+      "end_alarmed_fraction": 1.0,
+      "masked_alarmed_fraction (descriptive only)": 0.2721584984358707,
+      "first_confirmed_alarm_measurement_id": 489,
+      "first_alarm_minutes_before_last_record (not a detection delay)": 194.55,
+      "alarm_state_changes_after_first_alarm": 44
+     },
+     "final_train_loss": 8.081721898633987e-05,
+     "weights_sha256": "90588b34f60414be54eb3b42901749c734719227a09afd4bc16eb15ca26f7967"
+    }
+   },
+   "reference": {
+    "baseline A|F128|speed (prototype)": {
+     "start_rows": 100,
+     "start_in_sample": true,
+     "start_above_fraction": 0.01,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 1.0,
+     "end_alarmed_fraction": 1.0,
+     "masked_alarmed_fraction (descriptive only)": 0.6965589155370178,
+     "first_confirmed_alarm_measurement_id": 442,
+     "first_alarm_minutes_before_last_record (not a detection delay)": 209.55,
+     "alarm_state_changes_after_first_alarm": 0
+    },
+    "baseline A|F42|speed": {
+     "start_rows": 100,
+     "start_in_sample": true,
+     "start_above_fraction": 0.01,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 1.0,
+     "end_alarmed_fraction": 1.0,
+     "masked_alarmed_fraction (descriptive only)": 0.6965589155370178,
+     "first_confirmed_alarm_measurement_id": 442,
+     "first_alarm_minutes_before_last_record (not a detection delay)": 209.55,
+     "alarm_state_changes_after_first_alarm": 0
+    },
+    "rig stop rule, rear RMS > 6.5 g": {
+     "start_rows": 100,
+     "start_in_sample": false,
+     "start_above_fraction": 0.0,
+     "start_alarm_episodes": 0,
+     "start_alarm_episodes_per_hour": 0.0,
+     "end_rows": 5,
+     "end_above_fraction": 0.8,
+     "end_alarmed_fraction": 0.4,
+     "masked_alarmed_fraction (descriptive only)": 0.0,
+     "first_confirmed_alarm_measurement_id": 1113,
+     "first_alarm_minutes_before_last_record (not a detection delay)": 0.3,
+     "alarm_state_changes_after_first_alarm": 0
+    }
+   },
+   "end_label_placed_by": "vibration"
+  }
+ }
+}

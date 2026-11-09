@@ -1,0 +1,2078 @@
+{
+ "design": {
+  "ref_n": 100,
+  "threshold_percentile": 99,
+  "persistence": 3,
+  "primary": [
+   "A",
+   "F128",
+   "speed"
+  ],
+  "feature_sets": {
+   "F128": [
+    "rms",
+    "peak",
+    "kurt",
+    "crest",
+    "band_1k_5k",
+    "band_5k_20k",
+    "band_20k_64k"
+   ],
+   "F42": [
+    "lr_rms",
+    "lr_peak",
+    "lr_kurt",
+    "lr_crest",
+    "band_1k_5k",
+    "band_5k_20k"
+   ]
+  },
+  "conditions": {
+   "none": [],
+   "speed": [
+    "ln_speed"
+   ],
+   "speed+T": [
+    "ln_speed",
+    "T1_C"
+   ],
+   "speed+load": [
+    "ln_speed",
+    "stat_kN",
+    "dyn_kN"
+   ],
+   "speed+load+T": [
+    "ln_speed",
+    "stat_kN",
+    "dyn_kN",
+    "T1_C"
+   ]
+  }
+ },
+ "experiments": {
+  "B01": {
+   "n_operating": 326,
+   "ref_period": [
+    "2021-10-19 08:57:10",
+    "2021-10-19 09:48:28"
+   ],
+   "ref_T1": [
+    32.8423748,
+    101.720989
+   ],
+   "variants": {
+    "A|F128|none": {
+     "tau": 2.3255753267980235,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 4.696844576245448,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.0,
+      "ln peak": 0.0,
+      "kurt": 0.0,
+      "crest": 0.0,
+      "ln band_1k_5k": 0.0,
+      "ln band_5k_20k": -0.0,
+      "ln band_20k_64k": 0.0
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 208,
+      "crest": 218,
+      "ln band_1k_5k": 208,
+      "ln band_5k_20k": 209,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 13.0,
+      "ln peak": 17.7,
+      "kurt": 8.6,
+      "crest": 3.1,
+      "ln band_1k_5k": 27.1,
+      "ln band_5k_20k": 9.7,
+      "ln band_20k_64k": 14.7
+     }
+    },
+    "A|F128|speed": {
+     "tau": 2.2713328386210083,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 7.674722072106295,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.158,
+      "ln peak": 0.217,
+      "kurt": 0.216,
+      "crest": 0.006,
+      "ln band_1k_5k": 0.46,
+      "ln band_5k_20k": 0.329,
+      "ln band_20k_64k": 0.794
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 208,
+      "crest": 218,
+      "ln band_1k_5k": 208,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 14.1,
+      "ln peak": 20.3,
+      "kurt": 9.3,
+      "crest": 3.2,
+      "ln band_1k_5k": 36.6,
+      "ln band_5k_20k": 11.8,
+      "ln band_20k_64k": 32.9
+     }
+    },
+    "A|F128|speed+T": {
+     "tau": 2.19338360474525,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 8.560335570073821,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.293,
+      "ln peak": 0.338,
+      "kurt": 0.223,
+      "crest": 0.038,
+      "ln band_1k_5k": 0.567,
+      "ln band_5k_20k": 0.486,
+      "ln band_20k_64k": 0.795
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 208,
+      "crest": 218,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 16.5,
+      "ln peak": 23.0,
+      "kurt": 9.2,
+      "crest": 2.8,
+      "ln band_1k_5k": 42.0,
+      "ln band_5k_20k": 14.6,
+      "ln band_20k_64k": 32.8
+     }
+    },
+    "A|F128|speed+load": {
+     "tau": 2.2439822649105374,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 7.895005995071431,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.169,
+      "ln peak": 0.25,
+      "kurt": 0.227,
+      "crest": 0.017,
+      "ln band_1k_5k": 0.511,
+      "ln band_5k_20k": 0.333,
+      "ln band_20k_64k": 0.795
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 208,
+      "crest": 218,
+      "ln band_1k_5k": 208,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 14.3,
+      "ln peak": 20.8,
+      "kurt": 9.5,
+      "crest": 3.2,
+      "ln band_1k_5k": 38.6,
+      "ln band_5k_20k": 11.9,
+      "ln band_20k_64k": 32.9
+     }
+    },
+    "A|F128|speed+load+T": {
+     "tau": 2.1536419475462325,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 2,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 9.004419768639718,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.313,
+      "ln peak": 0.385,
+      "kurt": 0.234,
+      "crest": 0.046,
+      "ln band_1k_5k": 0.633,
+      "ln band_5k_20k": 0.494,
+      "ln band_20k_64k": 0.795
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 208,
+      "crest": 218,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 16.9,
+      "ln peak": 24.0,
+      "kurt": 9.3,
+      "crest": 2.8,
+      "ln band_1k_5k": 45.8,
+      "ln band_5k_20k": 14.8,
+      "ln band_20k_64k": 32.8
+     }
+    },
+    "A|F42|none": {
+     "tau": 2.469784298588183,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 4.109426694164747,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.0,
+      "ln lr_peak": 0.0,
+      "lr_kurt": 0.0,
+      "lr_crest": -0.0,
+      "ln band_1k_5k": 0.0,
+      "ln band_5k_20k": -0.0
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 208,
+      "lr_crest": 218,
+      "ln band_1k_5k": 208,
+      "ln band_5k_20k": 209
+     },
+     "feature_end_z": {
+      "ln lr_rms": 13.0,
+      "ln lr_peak": 17.5,
+      "lr_kurt": 8.8,
+      "lr_crest": 3.1,
+      "ln band_1k_5k": 27.1,
+      "ln band_5k_20k": 9.7
+     }
+    },
+    "A|F42|speed": {
+     "tau": 2.3784417183970827,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 5.43568057587402,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.157,
+      "ln lr_peak": 0.208,
+      "lr_kurt": 0.216,
+      "lr_crest": 0.007,
+      "ln band_1k_5k": 0.46,
+      "ln band_5k_20k": 0.329
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 208,
+      "lr_crest": 218,
+      "ln band_1k_5k": 208,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 14.1,
+      "ln lr_peak": 19.9,
+      "lr_kurt": 9.5,
+      "lr_crest": 3.1,
+      "ln band_1k_5k": 36.6,
+      "ln band_5k_20k": 11.8
+     }
+    },
+    "A|F42|speed+T": {
+     "tau": 2.2377783518925973,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 6.734454139238886,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.293,
+      "ln lr_peak": 0.342,
+      "lr_kurt": 0.223,
+      "lr_crest": 0.027,
+      "ln band_1k_5k": 0.567,
+      "ln band_5k_20k": 0.486
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 208,
+      "lr_crest": 218,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 16.5,
+      "ln lr_peak": 22.8,
+      "lr_kurt": 9.3,
+      "lr_crest": 2.8,
+      "ln band_1k_5k": 42.0,
+      "ln band_5k_20k": 14.6
+     }
+    },
+    "A|F42|speed+load": {
+     "tau": 2.4137461576948365,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 5.554484904633988,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.168,
+      "ln lr_peak": 0.241,
+      "lr_kurt": 0.227,
+      "lr_crest": 0.019,
+      "ln band_1k_5k": 0.511,
+      "ln band_5k_20k": 0.333
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 208,
+      "lr_crest": 218,
+      "ln band_1k_5k": 208,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 14.3,
+      "ln lr_peak": 20.4,
+      "lr_kurt": 9.6,
+      "lr_crest": 3.1,
+      "ln band_1k_5k": 38.6,
+      "ln band_5k_20k": 11.9
+     }
+    },
+    "A|F42|speed+load+T": {
+     "tau": 2.276362894240484,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 2,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 7.035478333356955,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.313,
+      "ln lr_peak": 0.389,
+      "lr_kurt": 0.234,
+      "lr_crest": 0.036,
+      "ln band_1k_5k": 0.633,
+      "ln band_5k_20k": 0.494
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 208,
+      "lr_crest": 218,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 16.8,
+      "ln lr_peak": 23.8,
+      "lr_kurt": 9.5,
+      "lr_crest": 2.8,
+      "ln band_1k_5k": 45.8,
+      "ln band_5k_20k": 14.8
+     }
+    },
+    "C|F128|none": {
+     "tau": 2.1305675662600656,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 4.519949611367983,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.0,
+      "ln peak": -0.0,
+      "kurt": 0.0,
+      "crest": 0.0,
+      "ln band_1k_5k": 0.0,
+      "ln band_5k_20k": -0.0,
+      "ln band_20k_64k": -0.0
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 212,
+      "crest": 212,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 209
+     },
+     "feature_end_z": {
+      "ln rms": 10.2,
+      "ln peak": 13.0,
+      "kurt": 5.0,
+      "crest": 2.7,
+      "ln band_1k_5k": 19.8,
+      "ln band_5k_20k": 15.5,
+      "ln band_20k_64k": 13.3
+     }
+    },
+    "C|F128|speed": {
+     "tau": 2.178729559402664,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 7.5217018171527315,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.361,
+      "ln peak": 0.411,
+      "kurt": 0.295,
+      "crest": 0.074,
+      "ln band_1k_5k": 0.232,
+      "ln band_5k_20k": 0.678,
+      "ln band_20k_64k": 0.784
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 216,
+      "crest": 212,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 12.6,
+      "ln peak": 17.4,
+      "kurt": 5.6,
+      "crest": 2.6,
+      "ln band_1k_5k": 22.4,
+      "ln band_5k_20k": 27.2,
+      "ln band_20k_64k": 29.0
+     }
+    },
+    "C|F128|speed+T": {
+     "tau": 2.0629585291823678,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 8.959499376488008,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.437,
+      "ln peak": 0.488,
+      "kurt": 0.362,
+      "crest": 0.09,
+      "ln band_1k_5k": 0.234,
+      "ln band_5k_20k": 0.802,
+      "ln band_20k_64k": 0.785
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 216,
+      "crest": 212,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 14.3,
+      "ln peak": 19.4,
+      "kurt": 5.2,
+      "crest": 2.3,
+      "ln band_1k_5k": 22.5,
+      "ln band_5k_20k": 36.4,
+      "ln band_20k_64k": 29.3
+     }
+    },
+    "C|F128|speed+load": {
+     "tau": 2.1872093431652737,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 7.518728687822013,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.363,
+      "ln peak": 0.423,
+      "kurt": 0.299,
+      "crest": 0.09,
+      "ln band_1k_5k": 0.267,
+      "ln band_5k_20k": 0.682,
+      "ln band_20k_64k": 0.785
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 216,
+      "crest": 212,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 12.6,
+      "ln peak": 17.8,
+      "kurt": 5.7,
+      "crest": 2.6,
+      "ln band_1k_5k": 23.0,
+      "ln band_5k_20k": 27.3,
+      "ln band_20k_64k": 29.0
+     }
+    },
+    "C|F128|speed+load+T": {
+     "tau": 2.04880388567315,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 2,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 9.114551016521611,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln rms": 0.442,
+      "ln peak": 0.506,
+      "kurt": 0.365,
+      "crest": 0.105,
+      "ln band_1k_5k": 0.271,
+      "ln band_5k_20k": 0.808,
+      "ln band_20k_64k": 0.786
+     },
+     "feature_first_alarm": {
+      "ln rms": 208,
+      "ln peak": 208,
+      "kurt": 216,
+      "crest": 212,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208,
+      "ln band_20k_64k": 208
+     },
+     "feature_end_z": {
+      "ln rms": 14.4,
+      "ln peak": 20.0,
+      "kurt": 5.2,
+      "crest": 2.4,
+      "ln band_1k_5k": 23.2,
+      "ln band_5k_20k": 37.0,
+      "ln band_20k_64k": 29.3
+     }
+    },
+    "C|F42|none": {
+     "tau": 2.190921454560944,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 3.821548035360639,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.0,
+      "ln lr_peak": 0.0,
+      "lr_kurt": 0.0,
+      "lr_crest": 0.0,
+      "ln band_1k_5k": 0.0,
+      "ln band_5k_20k": -0.0
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 212,
+      "lr_crest": 225,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 10.1,
+      "ln lr_peak": 13.2,
+      "lr_kurt": 5.1,
+      "lr_crest": 2.4,
+      "ln band_1k_5k": 19.8,
+      "ln band_5k_20k": 15.5
+     }
+    },
+    "C|F42|speed": {
+     "tau": 2.146596741481051,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 5.742385696378017,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.359,
+      "ln lr_peak": 0.401,
+      "lr_kurt": 0.298,
+      "lr_crest": 0.094,
+      "ln band_1k_5k": 0.232,
+      "ln band_5k_20k": 0.678
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 216,
+      "lr_crest": 217,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 12.5,
+      "ln lr_peak": 17.5,
+      "lr_kurt": 5.7,
+      "lr_crest": 2.7,
+      "ln band_1k_5k": 22.4,
+      "ln band_5k_20k": 27.2
+     }
+    },
+    "C|F42|speed+T": {
+     "tau": 2.0063044870236,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 7.624866134552598,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.435,
+      "ln lr_peak": 0.469,
+      "lr_kurt": 0.364,
+      "lr_crest": 0.124,
+      "ln band_1k_5k": 0.234,
+      "ln band_5k_20k": 0.802
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 216,
+      "lr_crest": 217,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 14.2,
+      "ln lr_peak": 19.3,
+      "lr_kurt": 5.2,
+      "lr_crest": 2.3,
+      "ln band_1k_5k": 22.5,
+      "ln band_5k_20k": 36.4
+     }
+    },
+    "C|F42|speed+load": {
+     "tau": 2.1610209410447534,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 5.7588891194310925,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.361,
+      "ln lr_peak": 0.417,
+      "lr_kurt": 0.302,
+      "lr_crest": 0.116,
+      "ln band_1k_5k": 0.267,
+      "ln band_5k_20k": 0.682
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 216,
+      "lr_crest": 217,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 12.6,
+      "ln lr_peak": 18.0,
+      "lr_kurt": 5.8,
+      "lr_crest": 2.7,
+      "ln band_1k_5k": 23.0,
+      "ln band_5k_20k": 27.3
+     }
+    },
+    "C|F42|speed+load+T": {
+     "tau": 1.994478887747193,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 56,
+     "post_ref_pre_alarm_exceed": 3,
+     "first_alarm": {
+      "measurement_id": 208,
+      "timestamp": "2021-10-19 10:06:24",
+      "operating_min": 58.7633333,
+      "T1_C": 113.497731,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 7.795805674889107,
+      "minutes_before_last_record": 53.13333333333333,
+      "minutes_before_log_end": -53.4
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.44,
+      "ln lr_peak": 0.491,
+      "lr_kurt": 0.367,
+      "lr_crest": 0.142,
+      "ln band_1k_5k": 0.271,
+      "ln band_5k_20k": 0.808
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 208,
+      "ln lr_peak": 208,
+      "lr_kurt": 216,
+      "lr_crest": 220,
+      "ln band_1k_5k": 192,
+      "ln band_5k_20k": 208
+     },
+     "feature_end_z": {
+      "ln lr_rms": 14.4,
+      "ln lr_peak": 20.0,
+      "lr_kurt": 5.3,
+      "lr_crest": 2.4,
+      "ln band_1k_5k": 23.2,
+      "ln band_5k_20k": 37.0
+     }
+    }
+   },
+   "primary": {
+    "tau": 2.2713328386210083,
+    "ref_exceed": 1,
+    "ref_n": 100,
+    "post_ref_pre_alarm_n": 56,
+    "post_ref_pre_alarm_exceed": 0,
+    "first_alarm": {
+     "measurement_id": 208,
+     "timestamp": "2021-10-19 10:06:24",
+     "operating_min": 58.7633333,
+     "T1_C": 113.497731,
+     "fraction_alarmed_after": 1.0,
+     "median_score_after_over_tau": 7.674722072106295,
+     "minutes_before_last_record": 53.13333333333333,
+     "minutes_before_log_end": -53.4
+    },
+    "ref_r2": {
+     "ln rms": 0.158,
+     "ln peak": 0.217,
+     "kurt": 0.216,
+     "crest": 0.006,
+     "ln band_1k_5k": 0.46,
+     "ln band_5k_20k": 0.329,
+     "ln band_20k_64k": 0.794
+    },
+    "feature_first_alarm": {
+     "ln rms": 208,
+     "ln peak": 208,
+     "kurt": 208,
+     "crest": 218,
+     "ln band_1k_5k": 208,
+     "ln band_5k_20k": 208,
+     "ln band_20k_64k": 208
+    },
+    "feature_end_z": {
+     "ln rms": 14.1,
+     "ln peak": 20.3,
+     "kurt": 9.3,
+     "crest": 3.2,
+     "ln band_1k_5k": 36.6,
+     "ln band_5k_20k": 11.8,
+     "ln band_20k_64k": 32.9
+    }
+   },
+   "load_effect_ref": {
+    "ln rms": {
+     "corr_with_total_load": -0.031293328745467905,
+     "sigma_shift_over_load_range": -0.1390619712004279
+    },
+    "ln peak": {
+     "corr_with_total_load": -0.09327524327496187,
+     "sigma_shift_over_load_range": -0.4144985437477383
+    },
+    "kurt": {
+     "corr_with_total_load": -0.1116791500902115,
+     "sigma_shift_over_load_range": -0.4962822229572669
+    },
+    "crest": {
+     "corr_with_total_load": -0.08611381647498986,
+     "sigma_shift_over_load_range": -0.3826744404216932
+    },
+    "ln band_1k_5k": {
+     "corr_with_total_load": -0.08913335391030465,
+     "sigma_shift_over_load_range": -0.3960927261938377
+    },
+    "ln band_5k_20k": {
+     "corr_with_total_load": 0.02253228926871726,
+     "sigma_shift_over_load_range": 0.10012947445930989
+    },
+    "ln band_20k_64k": {
+     "corr_with_total_load": 0.0444305734517071,
+     "sigma_shift_over_load_range": 0.197441543404187
+    }
+   },
+   "speed_coef_A_F128": {
+    "ln rms": 0.901,
+    "ln peak": 0.843,
+    "kurt": -0.445,
+    "crest": -0.342,
+    "ln band_1k_5k": 0.71,
+    "ln band_5k_20k": 1.694,
+    "ln band_20k_64k": 2.363
+   }
+  },
+  "B03": {
+   "n_operating": 614,
+   "ref_period": [
+    "2021-11-05 15:10:43",
+    "2021-11-05 15:42:10"
+   ],
+   "ref_T1": [
+    25.5787385,
+    103.006863
+   ],
+   "variants": {
+    "A|F128|none": {
+     "tau": 1.6983443101486115,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 4,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 6.4221507708613155,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln rms": 0.0,
+      "ln peak": 0.0,
+      "kurt": 0.0,
+      "crest": 0.0,
+      "ln band_1k_5k": 0.0,
+      "ln band_5k_20k": 0.0,
+      "ln band_20k_64k": 0.0
+     },
+     "feature_first_alarm": {
+      "ln rms": 555,
+      "ln peak": 555,
+      "kurt": 547,
+      "crest": null,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 549,
+      "ln band_20k_64k": 556
+     },
+     "feature_end_z": {
+      "ln rms": 12.1,
+      "ln peak": 11.9,
+      "kurt": 7.4,
+      "crest": -0.4,
+      "ln band_1k_5k": 11.6,
+      "ln band_5k_20k": 12.7,
+      "ln band_20k_64k": 7.9
+     }
+    },
+    "A|F128|speed": {
+     "tau": 2.2329131910327673,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 9.667929990369675,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln rms": 0.896,
+      "ln peak": 0.676,
+      "kurt": 0.002,
+      "crest": 0.022,
+      "ln band_1k_5k": 0.856,
+      "ln band_5k_20k": 0.556,
+      "ln band_20k_64k": 0.029
+     },
+     "feature_first_alarm": {
+      "ln rms": 547,
+      "ln peak": 549,
+      "kurt": 547,
+      "crest": null,
+      "ln band_1k_5k": 551,
+      "ln band_5k_20k": 547,
+      "ln band_20k_64k": 556
+     },
+     "feature_end_z": {
+      "ln rms": 38.4,
+      "ln peak": 21.1,
+      "kurt": 7.4,
+      "crest": -0.3,
+      "ln band_1k_5k": 31.3,
+      "ln band_5k_20k": 18.5,
+      "ln band_20k_64k": 8.1
+     }
+    },
+    "A|F128|speed+T": {
+     "tau": 1.759070703050171,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 22,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 13.736621413566608,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln rms": 0.91,
+      "ln peak": 0.701,
+      "kurt": 0.003,
+      "crest": 0.031,
+      "ln band_1k_5k": 0.873,
+      "ln band_5k_20k": 0.805,
+      "ln band_20k_64k": 0.821
+     },
+     "feature_first_alarm": {
+      "ln rms": 547,
+      "ln peak": 550,
+      "kurt": 547,
+      "crest": null,
+      "ln band_1k_5k": 551,
+      "ln band_5k_20k": 547,
+      "ln band_20k_64k": 556
+     },
+     "feature_end_z": {
+      "ln rms": 40.8,
+      "ln peak": 21.6,
+      "kurt": 7.4,
+      "crest": -0.4,
+      "ln band_1k_5k": 32.8,
+      "ln band_5k_20k": 26.6,
+      "ln band_20k_64k": 16.4
+     }
+    },
+    "A|F128|speed+load": {
+     "tau": 2.363853467897348,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 0,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 9.372830104741645,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln rms": 0.902,
+      "ln peak": 0.688,
+      "kurt": 0.007,
+      "crest": 0.033,
+      "ln band_1k_5k": 0.866,
+      "ln band_5k_20k": 0.56,
+      "ln band_20k_64k": 0.035
+     },
+     "feature_first_alarm": {
+      "ln rms": 547,
+      "ln peak": 549,
+      "kurt": 547,
+      "crest": null,
+      "ln band_1k_5k": 551,
+      "ln band_5k_20k": 547,
+      "ln band_20k_64k": 556
+     },
+     "feature_end_z": {
+      "ln rms": 39.6,
+      "ln peak": 21.8,
+      "kurt": 7.4,
+      "crest": -0.4,
+      "ln band_1k_5k": 32.7,
+      "ln band_5k_20k": 18.6,
+      "ln band_20k_64k": 8.2
+     }
+    },
+    "A|F128|speed+load+T": {
+     "tau": 1.8966303583950626,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 10,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 13.089154389067394,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln rms": 0.916,
+      "ln peak": 0.712,
+      "kurt": 0.009,
+      "crest": 0.041,
+      "ln band_1k_5k": 0.882,
+      "ln band_5k_20k": 0.812,
+      "ln band_20k_64k": 0.824
+     },
+     "feature_first_alarm": {
+      "ln rms": 547,
+      "ln peak": 550,
+      "kurt": 547,
+      "crest": null,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 547,
+      "ln band_20k_64k": 556
+     },
+     "feature_end_z": {
+      "ln rms": 42.4,
+      "ln peak": 22.3,
+      "kurt": 7.4,
+      "crest": -0.5,
+      "ln band_1k_5k": 34.4,
+      "ln band_5k_20k": 27.1,
+      "ln band_20k_64k": 16.6
+     }
+    },
+    "A|F42|none": {
+     "tau": 1.708653256550568,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 4,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 6.612497239942285,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln lr_rms": -0.0,
+      "ln lr_peak": 0.0,
+      "lr_kurt": 0.0,
+      "lr_crest": -0.0,
+      "ln band_1k_5k": 0.0,
+      "ln band_5k_20k": 0.0
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 555,
+      "ln lr_peak": 555,
+      "lr_kurt": 547,
+      "lr_crest": null,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 549
+     },
+     "feature_end_z": {
+      "ln lr_rms": 12.1,
+      "ln lr_peak": 11.8,
+      "lr_kurt": 7.4,
+      "lr_crest": -0.4,
+      "ln band_1k_5k": 11.6,
+      "ln band_5k_20k": 12.7
+     }
+    },
+    "A|F42|speed": {
+     "tau": 2.2359884753096027,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 10.299098398067047,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.896,
+      "ln lr_peak": 0.668,
+      "lr_kurt": 0.002,
+      "lr_crest": 0.025,
+      "ln band_1k_5k": 0.856,
+      "ln band_5k_20k": 0.556
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 547,
+      "ln lr_peak": 549,
+      "lr_kurt": 547,
+      "lr_crest": null,
+      "ln band_1k_5k": 551,
+      "ln band_5k_20k": 547
+     },
+     "feature_end_z": {
+      "ln lr_rms": 38.3,
+      "ln lr_peak": 20.7,
+      "lr_kurt": 7.4,
+      "lr_crest": -0.3,
+      "ln band_1k_5k": 31.3,
+      "ln band_5k_20k": 18.5
+     }
+    },
+    "A|F42|speed+T": {
+     "tau": 1.9205414209524172,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 9,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 13.193728185801605,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.91,
+      "ln lr_peak": 0.693,
+      "lr_kurt": 0.003,
+      "lr_crest": 0.034,
+      "ln band_1k_5k": 0.873,
+      "ln band_5k_20k": 0.805
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 547,
+      "ln lr_peak": 549,
+      "lr_kurt": 547,
+      "lr_crest": null,
+      "ln band_1k_5k": 551,
+      "ln band_5k_20k": 547
+     },
+     "feature_end_z": {
+      "ln lr_rms": 40.7,
+      "ln lr_peak": 21.2,
+      "lr_kurt": 7.4,
+      "lr_crest": -0.4,
+      "ln band_1k_5k": 32.8,
+      "ln band_5k_20k": 26.6
+     }
+    },
+    "A|F42|speed+load": {
+     "tau": 2.3819852443010987,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 1,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 9.94761031275327,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.902,
+      "ln lr_peak": 0.678,
+      "lr_kurt": 0.007,
+      "lr_crest": 0.032,
+      "ln band_1k_5k": 0.866,
+      "ln band_5k_20k": 0.56
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 547,
+      "ln lr_peak": 549,
+      "lr_kurt": 547,
+      "lr_crest": null,
+      "ln band_1k_5k": 551,
+      "ln band_5k_20k": 547
+     },
+     "feature_end_z": {
+      "ln lr_rms": 39.6,
+      "ln lr_peak": 21.3,
+      "lr_kurt": 7.4,
+      "lr_crest": -0.4,
+      "ln band_1k_5k": 32.7,
+      "ln band_5k_20k": 18.6
+     }
+    },
+    "A|F42|speed+load+T": {
+     "tau": 2.0051195296400066,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 446,
+     "post_ref_pre_alarm_exceed": 7,
+     "first_alarm": {
+      "measurement_id": 547,
+      "timestamp": "2021-11-05 18:02:39",
+      "operating_min": 172.16,
+      "T1_C": 106.64831,
+      "fraction_alarmed_after": 1.0,
+      "median_score_after_over_tau": 12.952951787154692,
+      "minutes_before_last_record": 21.016666666666666,
+      "minutes_before_log_end": 20.35
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.916,
+      "ln lr_peak": 0.702,
+      "lr_kurt": 0.009,
+      "lr_crest": 0.04,
+      "ln band_1k_5k": 0.882,
+      "ln band_5k_20k": 0.812
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 547,
+      "ln lr_peak": 552,
+      "lr_kurt": 547,
+      "lr_crest": null,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 547
+     },
+     "feature_end_z": {
+      "ln lr_rms": 42.2,
+      "ln lr_peak": 21.8,
+      "lr_kurt": 7.5,
+      "lr_crest": -0.5,
+      "ln band_1k_5k": 34.4,
+      "ln band_5k_20k": 27.1
+     }
+    },
+    "C|F128|none": {
+     "tau": 1.5745363642816275,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 214,
+     "post_ref_pre_alarm_exceed": 7,
+     "first_alarm": {
+      "measurement_id": 315,
+      "timestamp": "2021-11-05 16:49:24",
+      "operating_min": 98.91,
+      "T1_C": 109.075831,
+      "fraction_alarmed_after": 0.9,
+      "median_score_after_over_tau": 1.3195056727064531,
+      "minutes_before_last_record": 94.26666666666667,
+      "minutes_before_log_end": 93.6
+     },
+     "ref_r2": {
+      "ln rms": -0.0,
+      "ln peak": 0.0,
+      "kurt": 0.0,
+      "crest": 0.0,
+      "ln band_1k_5k": 0.0,
+      "ln band_5k_20k": 0.0,
+      "ln band_20k_64k": -0.0
+     },
+     "feature_first_alarm": {
+      "ln rms": 557,
+      "ln peak": 554,
+      "kurt": 315,
+      "crest": 547,
+      "ln band_1k_5k": 557,
+      "ln band_5k_20k": 549,
+      "ln band_20k_64k": 556
+     },
+     "feature_end_z": {
+      "ln rms": 7.3,
+      "ln peak": 8.4,
+      "kurt": 7.6,
+      "crest": 0.9,
+      "ln band_1k_5k": 8.2,
+      "ln band_5k_20k": 14.6,
+      "ln band_20k_64k": 8.9
+     }
+    },
+    "C|F128|speed": {
+     "tau": 1.9433130539706747,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 214,
+     "post_ref_pre_alarm_exceed": 3,
+     "first_alarm": {
+      "measurement_id": 315,
+      "timestamp": "2021-11-05 16:49:24",
+      "operating_min": 98.91,
+      "T1_C": 109.075831,
+      "fraction_alarmed_after": 0.79,
+      "median_score_after_over_tau": 1.2061868547987085,
+      "minutes_before_last_record": 94.26666666666667,
+      "minutes_before_log_end": 93.6
+     },
+     "ref_r2": {
+      "ln rms": 0.913,
+      "ln peak": 0.828,
+      "kurt": 0.065,
+      "crest": 0.063,
+      "ln band_1k_5k": 0.71,
+      "ln band_5k_20k": 0.526,
+      "ln band_20k_64k": 0.033
+     },
+     "feature_first_alarm": {
+      "ln rms": 555,
+      "ln peak": 549,
+      "kurt": 315,
+      "crest": 547,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 547,
+      "ln band_20k_64k": 556
+     },
+     "feature_end_z": {
+      "ln rms": 25.6,
+      "ln peak": 20.3,
+      "kurt": 7.7,
+      "crest": 0.8,
+      "ln band_1k_5k": 15.7,
+      "ln band_5k_20k": 21.3,
+      "ln band_20k_64k": 9.1
+     }
+    },
+    "C|F128|speed+T": {
+     "tau": 1.920628728565156,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 206,
+     "post_ref_pre_alarm_exceed": 4,
+     "first_alarm": {
+      "measurement_id": 307,
+      "timestamp": "2021-11-05 16:46:52",
+      "operating_min": 96.3766667,
+      "T1_C": 108.158159,
+      "fraction_alarmed_after": 0.9805194805194806,
+      "median_score_after_over_tau": 1.7203212587974286,
+      "minutes_before_last_record": 96.8,
+      "minutes_before_log_end": 96.13333333333334
+     },
+     "ref_r2": {
+      "ln rms": 0.914,
+      "ln peak": 0.829,
+      "kurt": 0.073,
+      "crest": 0.064,
+      "ln band_1k_5k": 0.715,
+      "ln band_5k_20k": 0.901,
+      "ln band_20k_64k": 0.822
+     },
+     "feature_first_alarm": {
+      "ln rms": 555,
+      "ln peak": 549,
+      "kurt": 315,
+      "crest": 547,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 230,
+      "ln band_20k_64k": 320
+     },
+     "feature_end_z": {
+      "ln rms": 25.9,
+      "ln peak": 20.4,
+      "kurt": 7.6,
+      "crest": 0.8,
+      "ln band_1k_5k": 15.6,
+      "ln band_5k_20k": 44.4,
+      "ln band_20k_64k": 18.7
+     }
+    },
+    "C|F128|speed+load": {
+     "tau": 1.944638107696239,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 214,
+     "post_ref_pre_alarm_exceed": 2,
+     "first_alarm": {
+      "measurement_id": 315,
+      "timestamp": "2021-11-05 16:49:24",
+      "operating_min": 98.91,
+      "T1_C": 109.075831,
+      "fraction_alarmed_after": 0.8066666666666666,
+      "median_score_after_over_tau": 1.2134261006115477,
+      "minutes_before_last_record": 94.26666666666667,
+      "minutes_before_log_end": 93.6
+     },
+     "ref_r2": {
+      "ln rms": 0.914,
+      "ln peak": 0.839,
+      "kurt": 0.069,
+      "crest": 0.112,
+      "ln band_1k_5k": 0.73,
+      "ln band_5k_20k": 0.528,
+      "ln band_20k_64k": 0.038
+     },
+     "feature_first_alarm": {
+      "ln rms": 555,
+      "ln peak": 547,
+      "kurt": 315,
+      "crest": 547,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 547,
+      "ln band_20k_64k": 556
+     },
+     "feature_end_z": {
+      "ln rms": 25.8,
+      "ln peak": 21.0,
+      "kurt": 7.7,
+      "crest": 0.9,
+      "ln band_1k_5k": 16.6,
+      "ln band_5k_20k": 21.4,
+      "ln band_20k_64k": 9.2
+     }
+    },
+    "C|F128|speed+load+T": {
+     "tau": 1.8004959976721628,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 206,
+     "post_ref_pre_alarm_exceed": 17,
+     "first_alarm": {
+      "measurement_id": 307,
+      "timestamp": "2021-11-05 16:46:52",
+      "operating_min": 96.3766667,
+      "T1_C": 108.158159,
+      "fraction_alarmed_after": 0.987012987012987,
+      "median_score_after_over_tau": 1.85648694926177,
+      "minutes_before_last_record": 96.8,
+      "minutes_before_log_end": 96.13333333333334
+     },
+     "ref_r2": {
+      "ln rms": 0.915,
+      "ln peak": 0.839,
+      "kurt": 0.077,
+      "crest": 0.113,
+      "ln band_1k_5k": 0.734,
+      "ln band_5k_20k": 0.905,
+      "ln band_20k_64k": 0.823
+     },
+     "feature_first_alarm": {
+      "ln rms": 555,
+      "ln peak": 547,
+      "kurt": 315,
+      "crest": 547,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 230,
+      "ln band_20k_64k": 320
+     },
+     "feature_end_z": {
+      "ln rms": 26.1,
+      "ln peak": 21.1,
+      "kurt": 7.6,
+      "crest": 0.9,
+      "ln band_1k_5k": 16.6,
+      "ln band_5k_20k": 45.3,
+      "ln band_20k_64k": 18.8
+     }
+    },
+    "C|F42|none": {
+     "tau": 1.5817089292727018,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 214,
+     "post_ref_pre_alarm_exceed": 8,
+     "first_alarm": {
+      "measurement_id": 315,
+      "timestamp": "2021-11-05 16:49:24",
+      "operating_min": 98.91,
+      "T1_C": 109.075831,
+      "fraction_alarmed_after": 0.9366666666666666,
+      "median_score_after_over_tau": 1.4121052263643792,
+      "minutes_before_last_record": 94.26666666666667,
+      "minutes_before_log_end": 93.6
+     },
+     "ref_r2": {
+      "ln lr_rms": -0.0,
+      "ln lr_peak": 0.0,
+      "lr_kurt": 0.0,
+      "lr_crest": 0.0,
+      "ln band_1k_5k": 0.0,
+      "ln band_5k_20k": 0.0
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 557,
+      "ln lr_peak": 555,
+      "lr_kurt": 315,
+      "lr_crest": 547,
+      "ln band_1k_5k": 557,
+      "ln band_5k_20k": 549
+     },
+     "feature_end_z": {
+      "ln lr_rms": 7.3,
+      "ln lr_peak": 8.3,
+      "lr_kurt": 7.6,
+      "lr_crest": 0.7,
+      "ln band_1k_5k": 8.2,
+      "ln band_5k_20k": 14.6
+     }
+    },
+    "C|F42|speed": {
+     "tau": 1.9891982194374165,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 214,
+     "post_ref_pre_alarm_exceed": 2,
+     "first_alarm": {
+      "measurement_id": 315,
+      "timestamp": "2021-11-05 16:49:24",
+      "operating_min": 98.91,
+      "T1_C": 109.075831,
+      "fraction_alarmed_after": 0.8333333333333334,
+      "median_score_after_over_tau": 1.2612798477535687,
+      "minutes_before_last_record": 94.26666666666667,
+      "minutes_before_log_end": 93.6
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.913,
+      "ln lr_peak": 0.826,
+      "lr_kurt": 0.065,
+      "lr_crest": 0.065,
+      "ln band_1k_5k": 0.71,
+      "ln band_5k_20k": 0.526
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 555,
+      "ln lr_peak": 549,
+      "lr_kurt": 315,
+      "lr_crest": 547,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 547
+     },
+     "feature_end_z": {
+      "ln lr_rms": 25.4,
+      "ln lr_peak": 19.7,
+      "lr_kurt": 7.7,
+      "lr_crest": 0.5,
+      "ln band_1k_5k": 15.7,
+      "ln band_5k_20k": 21.3
+     }
+    },
+    "C|F42|speed+T": {
+     "tau": 2.056063683087308,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 214,
+     "post_ref_pre_alarm_exceed": 7,
+     "first_alarm": {
+      "measurement_id": 315,
+      "timestamp": "2021-11-05 16:49:24",
+      "operating_min": 98.91,
+      "T1_C": 109.075831,
+      "fraction_alarmed_after": 0.9933333333333333,
+      "median_score_after_over_tau": 1.5838418301266857,
+      "minutes_before_last_record": 94.26666666666667,
+      "minutes_before_log_end": 93.6
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.914,
+      "ln lr_peak": 0.827,
+      "lr_kurt": 0.072,
+      "lr_crest": 0.065,
+      "ln band_1k_5k": 0.715,
+      "ln band_5k_20k": 0.901
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 555,
+      "ln lr_peak": 549,
+      "lr_kurt": 315,
+      "lr_crest": 547,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 230
+     },
+     "feature_end_z": {
+      "ln lr_rms": 25.7,
+      "ln lr_peak": 19.9,
+      "lr_kurt": 7.6,
+      "lr_crest": 0.5,
+      "ln band_1k_5k": 15.6,
+      "ln band_5k_20k": 44.4
+     }
+    },
+    "C|F42|speed+load": {
+     "tau": 1.9367376910958047,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 214,
+     "post_ref_pre_alarm_exceed": 4,
+     "first_alarm": {
+      "measurement_id": 315,
+      "timestamp": "2021-11-05 16:49:24",
+      "operating_min": 98.91,
+      "T1_C": 109.075831,
+      "fraction_alarmed_after": 0.8766666666666667,
+      "median_score_after_over_tau": 1.305251347441516,
+      "minutes_before_last_record": 94.26666666666667,
+      "minutes_before_log_end": 93.6
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.914,
+      "ln lr_peak": 0.835,
+      "lr_kurt": 0.068,
+      "lr_crest": 0.104,
+      "ln band_1k_5k": 0.73,
+      "ln band_5k_20k": 0.528
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 555,
+      "ln lr_peak": 549,
+      "lr_kurt": 315,
+      "lr_crest": 547,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 547
+     },
+     "feature_end_z": {
+      "ln lr_rms": 25.7,
+      "ln lr_peak": 20.6,
+      "lr_kurt": 7.7,
+      "lr_crest": 0.7,
+      "ln band_1k_5k": 16.6,
+      "ln band_5k_20k": 21.4
+     }
+    },
+    "C|F42|speed+load+T": {
+     "tau": 1.9289817782524397,
+     "ref_exceed": 1,
+     "ref_n": 100,
+     "post_ref_pre_alarm_n": 206,
+     "post_ref_pre_alarm_exceed": 10,
+     "first_alarm": {
+      "measurement_id": 307,
+      "timestamp": "2021-11-05 16:46:52",
+      "operating_min": 96.3766667,
+      "T1_C": 108.158159,
+      "fraction_alarmed_after": 0.987012987012987,
+      "median_score_after_over_tau": 1.6901443620444638,
+      "minutes_before_last_record": 96.8,
+      "minutes_before_log_end": 96.13333333333334
+     },
+     "ref_r2": {
+      "ln lr_rms": 0.915,
+      "ln lr_peak": 0.836,
+      "lr_kurt": 0.076,
+      "lr_crest": 0.104,
+      "ln band_1k_5k": 0.734,
+      "ln band_5k_20k": 0.905
+     },
+     "feature_first_alarm": {
+      "ln lr_rms": 555,
+      "ln lr_peak": 549,
+      "lr_kurt": 315,
+      "lr_crest": 547,
+      "ln band_1k_5k": 555,
+      "ln band_5k_20k": 230
+     },
+     "feature_end_z": {
+      "ln lr_rms": 26.0,
+      "ln lr_peak": 20.8,
+      "lr_kurt": 7.6,
+      "lr_crest": 0.7,
+      "ln band_1k_5k": 16.6,
+      "ln band_5k_20k": 45.3
+     }
+    }
+   },
+   "primary": {
+    "tau": 2.2329131910327673,
+    "ref_exceed": 1,
+    "ref_n": 100,
+    "post_ref_pre_alarm_n": 446,
+    "post_ref_pre_alarm_exceed": 1,
+    "first_alarm": {
+     "measurement_id": 547,
+     "timestamp": "2021-11-05 18:02:39",
+     "operating_min": 172.16,
+     "T1_C": 106.64831,
+     "fraction_alarmed_after": 1.0,
+     "median_score_after_over_tau": 9.667929990369675,
+     "minutes_before_last_record": 21.016666666666666,
+     "minutes_before_log_end": 20.35
+    },
+    "ref_r2": {
+     "ln rms": 0.896,
+     "ln peak": 0.676,
+     "kurt": 0.002,
+     "crest": 0.022,
+     "ln band_1k_5k": 0.856,
+     "ln band_5k_20k": 0.556,
+     "ln band_20k_64k": 0.029
+    },
+    "feature_first_alarm": {
+     "ln rms": 547,
+     "ln peak": 549,
+     "kurt": 547,
+     "crest": null,
+     "ln band_1k_5k": 551,
+     "ln band_5k_20k": 547,
+     "ln band_20k_64k": 556
+    },
+    "feature_end_z": {
+     "ln rms": 38.4,
+     "ln peak": 21.1,
+     "kurt": 7.4,
+     "crest": -0.3,
+     "ln band_1k_5k": 31.3,
+     "ln band_5k_20k": 18.5,
+     "ln band_20k_64k": 8.1
+    }
+   },
+   "load_effect_ref": {
+    "ln rms": {
+     "corr_with_total_load": 0.058527786301293766,
+     "sigma_shift_over_load_range": 0.2464094671618729
+    },
+    "ln peak": {
+     "corr_with_total_load": 0.11155123474481783,
+     "sigma_shift_over_load_range": 0.46964496783148857
+    },
+    "kurt": {
+     "corr_with_total_load": 0.07042669941218908,
+     "sigma_shift_over_load_range": 0.29650541345936793
+    },
+    "crest": {
+     "corr_with_total_load": 0.09724684710632328,
+     "sigma_shift_over_load_range": 0.40942166606617947
+    },
+    "ln band_1k_5k": {
+     "corr_with_total_load": 0.06646195756705461,
+     "sigma_shift_over_load_range": 0.27981334312435574
+    },
+    "ln band_5k_20k": {
+     "corr_with_total_load": -0.08020598529179224,
+     "sigma_shift_over_load_range": -0.33767745797189075
+    },
+    "ln band_20k_64k": {
+     "corr_with_total_load": 0.035638771593249706,
+     "sigma_shift_over_load_range": 0.15004378729428008
+    }
+   },
+   "speed_coef_A_F128": {
+    "ln rms": 2.017,
+    "ln peak": 1.851,
+    "kurt": -0.027,
+    "crest": -0.749,
+    "ln band_1k_5k": 1.99,
+    "ln band_5k_20k": 1.77,
+    "ln band_20k_64k": 0.688
+   }
+  }
+ },
+ "leave_one_bearing_out": {
+  "B01": {
+   "global (fitted on B03)": {
+    "tau": 2.2329131910327673,
+    "ref_exceed": 24,
+    "ref_n": 100,
+    "post_ref_pre_alarm_n": 56,
+    "post_ref_pre_alarm_exceed": 12,
+    "first_alarm": {
+     "measurement_id": 208,
+     "timestamp": "2021-10-19 10:06:24",
+     "operating_min": 58.7633333,
+     "T1_C": 113.497731,
+     "fraction_alarmed_after": 1.0,
+     "median_score_after_over_tau": 9.395633113865616,
+     "minutes_before_last_record": 53.13333333333333,
+     "minutes_before_log_end": -53.4
+    },
+    "held_out_ref_exceed_fraction": 0.24,
+    "held_out_ref_median_score_over_tau": 0.620635771932482
+   },
+   "commissioned (own reference)": {
+    "tau": 2.2713328386210083,
+    "ref_exceed": 1,
+    "ref_n": 100,
+    "post_ref_pre_alarm_n": 56,
+    "post_ref_pre_alarm_exceed": 0,
+    "first_alarm": {
+     "measurement_id": 208,
+     "timestamp": "2021-10-19 10:06:24",
+     "operating_min": 58.7633333,
+     "T1_C": 113.497731,
+     "fraction_alarmed_after": 1.0,
+     "median_score_after_over_tau": 7.674722072106295,
+     "minutes_before_last_record": 53.13333333333333,
+     "minutes_before_log_end": -53.4
+    },
+    "ref_r2": {
+     "ln rms": 0.158,
+     "ln peak": 0.217,
+     "kurt": 0.216,
+     "crest": 0.006,
+     "ln band_1k_5k": 0.46,
+     "ln band_5k_20k": 0.329,
+     "ln band_20k_64k": 0.794
+    },
+    "feature_first_alarm": {
+     "ln rms": 208,
+     "ln peak": 208,
+     "kurt": 208,
+     "crest": 218,
+     "ln band_1k_5k": 208,
+     "ln band_5k_20k": 208,
+     "ln band_20k_64k": 208
+    },
+    "feature_end_z": {
+     "ln rms": 14.1,
+     "ln peak": 20.3,
+     "kurt": 9.3,
+     "crest": 3.2,
+     "ln band_1k_5k": 36.6,
+     "ln band_5k_20k": 11.8,
+     "ln band_20k_64k": 32.9
+    }
+   }
+  },
+  "B03": {
+   "global (fitted on B01)": {
+    "tau": 2.2713328386210083,
+    "ref_exceed": 51,
+    "ref_n": 100,
+    "post_ref_pre_alarm_n": 149,
+    "post_ref_pre_alarm_exceed": 18,
+    "first_alarm": {
+     "measurement_id": 250,
+     "timestamp": "2021-11-05 16:28:57",
+     "operating_min": 78.46,
+     "T1_C": 107.813695,
+     "fraction_alarmed_after": 0.3643835616438356,
+     "median_score_after_over_tau": 0.9426047957037543,
+     "minutes_before_last_record": 114.71666666666667,
+     "minutes_before_log_end": 114.05
+    },
+    "held_out_ref_exceed_fraction": 0.51,
+    "held_out_ref_median_score_over_tau": 1.0030803134649047
+   },
+   "commissioned (own reference)": {
+    "tau": 2.2329131910327673,
+    "ref_exceed": 1,
+    "ref_n": 100,
+    "post_ref_pre_alarm_n": 446,
+    "post_ref_pre_alarm_exceed": 1,
+    "first_alarm": {
+     "measurement_id": 547,
+     "timestamp": "2021-11-05 18:02:39",
+     "operating_min": 172.16,
+     "T1_C": 106.64831,
+     "fraction_alarmed_after": 1.0,
+     "median_score_after_over_tau": 9.667929990369675,
+     "minutes_before_last_record": 21.016666666666666,
+     "minutes_before_log_end": 20.35
+    },
+    "ref_r2": {
+     "ln rms": 0.896,
+     "ln peak": 0.676,
+     "kurt": 0.002,
+     "crest": 0.022,
+     "ln band_1k_5k": 0.856,
+     "ln band_5k_20k": 0.556,
+     "ln band_20k_64k": 0.029
+    },
+    "feature_first_alarm": {
+     "ln rms": 547,
+     "ln peak": 549,
+     "kurt": 547,
+     "crest": null,
+     "ln band_1k_5k": 551,
+     "ln band_5k_20k": 547,
+     "ln band_20k_64k": 556
+    },
+    "feature_end_z": {
+     "ln rms": 38.4,
+     "ln peak": 21.1,
+     "kurt": 7.4,
+     "crest": -0.3,
+     "ln band_1k_5k": 31.3,
+     "ln band_5k_20k": 18.5,
+     "ln band_20k_64k": 8.1
+    }
+   }
+  }
+ }
+}

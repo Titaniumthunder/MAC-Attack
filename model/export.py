@@ -1,6 +1,7 @@
 """Export the proposed model to INT8 for the on-chip MLP and check it in Python (bit-exact model: mac.py's golden_mlp).
 
   python export.py                    E3, seed 42 (the proposed model; Alex to confirm, docs/log.md section 12)
+  python export.py --experiment E3_single_accel_a1 --health H1_single_accel_a1     a single-accelerometer model
 
 Quantization (Alex's spec of 27 Oct; the open details marked):
   inputs   x_std = (x - mean) / std (the training standardizer); q_x = clip(round_half_away(x_std / s_x), -127, 127).
@@ -22,6 +23,7 @@ and scale are zero: the chip does not use them), mg_model.h (C header: everythin
 index of output 2), vectors/ (test vectors), quant.json and report.md.
 """
 import argparse, csv, json, math, sys
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -108,6 +110,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--experiment", default="E3")
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--health", default="H1", help="the health index (weights/<name>/health.json) for mg_model.h")
+    ap.add_argument("--out", type=Path, default=HERE / "export", help="folder for <E>/ (default model/export/)")
     a = ap.parse_args()
     name, seed = a.experiment, a.seed
     exp = EXPERIMENTS[name]
@@ -128,10 +132,11 @@ def main():
     cut = info["seeds"][str(seed)]["cut"]
     recs, fscore = recording_scores(rows, fp32)
 
-    # the FP32 path must give train.py's saved scores exactly
+    # the FP32 path must give train.py's saved scores: exactly on the machine that trained it; another OS or CPU can
+    # round float32 differently in the last bits (README), so allow 1e-5 (Windows vs the Mac's E3: 7.6e-7)
     with open(HERE / "results" / name / "scores.csv", newline="") as f:
         saved = {r["file"]: float(r[f"score_s{seed}"]) for r in csv.DictReader(f)}
-    assert all(saved[r["file"]] == s for r, s in zip(recs, fscore)), "FP32 scores differ from train.py's"
+    assert all(abs(saved[r["file"]] - s) <= 1e-5 for r, s in zip(recs, fscore)), "FP32 scores differ from train.py's"
 
     # input scale: two candidates, chosen on validation
     absx = np.abs(Xs[part["train"]])
@@ -169,14 +174,16 @@ def main():
                                if f_ != i_]}
     werr = np.abs(logit_int * lscale - fp32)
 
-    out = HERE / "export" / name
+    out = a.out / name
     (out / "vectors").mkdir(parents=True, exist_ok=True)
     for l, L in enumerate(layers):
         write_hex(out / f"W{l}.hex", L["W"], 8)
         write_hex(out / f"Bias{l}.hex", L["bias"], 32)
         write_hex(out / f"Scl{l}.hex", (np.asarray(L["shift"]) << 16) | np.asarray(L["m0"]), 24)
 
-    health = json.loads((HERE / "weights" / "H1" / "health.json").read_text())
+    health = json.loads((HERE / "weights" / a.health / "health.json").read_text())
+    accels = sorted({int(n[1]) for n in inputs if n.startswith("a")})
+    assert health["statistics"] == inputs[:-1], "the health index must use the model's accelerometers"
     quant = {"experiment": name, "seed": seed, "inputs": inputs, "sizes": info["sizes"],
              "s_x": s_x, "s_x_candidates": cands, "s_x_val_mae": trial, "s_x_choice": pick,
              "layers": [{"s_in": sc["s_in"], "s_w": sc["s_w"].tolist(), **({"s_out": sc["s_out"]} if "s_out" in sc else {}),
@@ -185,11 +192,11 @@ def main():
                         for L, sc in zip(layers, scales)],
              "bias_last": bias_last, "logit_scale": lscale, "cut": cut, "t": info["seeds"][str(seed)]["t"],
              "T_int": T_int, "rule": "faulty if sum of the last 10 window logit_int >= 10 * T_int"}
-    (out / "quant.json").write_text(json.dumps(quant, indent=1) + "\n")
+    (out / "quant.json").write_text(json.dumps(quant, indent=1) + "\n", encoding="utf-8")
     (out / "mg_model.h").write_text(header(name, seed, inputs, mean, std, s_x, layers, bias_last, lscale, cut,
-                                           T_int, health))
+                                           T_int, health, accels), encoding="utf-8")
     write_vectors(out / "vectors", rows, recs, X, Xq, C, logit_int, fp32, isum, T_int, cut, fscore, part)
-    (out / "report.md").write_text(report(name, seed, quant, res, werr, part, layers))
+    (out / "report.md").write_text(report(name, seed, quant, res, werr, part, layers), encoding="utf-8")
 
     print(f"{name} seed {seed} exported to {out}")
     print(f"  s_x {pick} = {s_x:.6g} (validation mean |logit error|: " +
@@ -202,13 +209,19 @@ def main():
     print(f"  window logits: INT8 x scale vs FP32, mean |error| {werr.mean():.4f}, max {werr.max():.4f}")
 
 
-def header(name, seed, inputs, mean, std, s_x, layers, bias_last, lscale, cut, T_int, health):
+def header(name, seed, inputs, mean, std, s_x, layers, bias_last, lscale, cut, T_int, health, accels=(1, 2, 3)):
     K = [L["W"].shape[0] for L in layers]
     N = [L["W"].shape[1] for L in layers]
+    acc = f"accelerometer{'s' if len(accels) > 1 else ''} {', '.join(map(str, accels))}"
+    caveat = health.get("caveat") or ([
+        "motor at that speed, not a remaining capability. Not reliable below about 22 Hz: on validation windows it",
+        "is inverted at 16.5 Hz and uninformative at 19.5 Hz, and at 15 Hz (test) healthy recordings score 0%."]
+        if health["name"] == "H1" else [
+        f"motor at that speed, not a remaining capability (results/{health['name']}/report.md: where it holds)."])
     H = [f"/* Machine Guardian model {name} (seed {seed}), INT8 for the on-chip MLP. Generated by model/export.py: do not edit.",
          " *",
-         " * Once a second, for the last 1-s window (42,000 samples of accelerometers 1, 2, 3 and the drive frequency f):",
-         " *   1. x[k], k = 0 .. 21, in this order: per accelerometer 1, 2, 3: ln(std), ln(RMS), ln(max|x|), ln(peak-to-peak),",
+         f" * Once a second, for the last 1-s window (42,000 samples of {acc} and the drive frequency f):",
+         f" *   1. x[k], k = 0 .. {K[0] - 1}, in this order: per accelerometer {', '.join(map(str, accels))}: ln(std), ln(RMS), ln(max|x|), ln(peak-to-peak),",
          " *      crest = max|x| / RMS, skewness m3 / std^3, kurtosis m4 / std^4 (population moments); then ln(f), f in Hz",
          " *      (the frequency the drive is commanded to during the window, as the drive reports it; never a shaft-speed",
          " *      sensor such as a tachometer: that reading includes the slip, which differs between motors).",
@@ -217,11 +230,10 @@ def header(name, seed, inputs, mean, std, s_x, layers, bias_last, lscale, cut, T
          " *   3. the chip runs the 3 layers (weights, biases, {shift, m0} below; ReLU after layers 0 and 1) and returns",
          " *      C, the last layer's raw sum; logit = C + MG_BIAS_LAST (real logit ~ MG_LOGIT_SCALE * logit).",
          " *   4. output 1: keep the last 10 logits; the motor is faulty if their sum >= 10 * MG_T_INT.",
-         " *   5. output 2 (health index, on the ARM): per window d = sqrt(mean_j z_j^2) over the first 21 x (no ln f),",
+         f" *   5. output 2 (health index, on the ARM): per window d = sqrt(mean_j z_j^2) over the first {K[0] - 1} x (no ln f),",
          " *      z_j = (x[j] - MG_HI_ALPHA[j] - MG_HI_BETA[j] * ln f) / MG_HI_SIGMA[j]; D = mean of the last 10 d;",
          " *      HI = 100% * clamp((MG_HI_D0 - D) / (MG_HI_D0 - MG_HI_D100), 0, 1). It is a distance from the one healthy",
-         " *      motor at that speed, not a remaining capability. Not reliable below about 22 Hz: on validation windows it",
-         " *      is inverted at 16.5 Hz and uninformative at 19.5 Hz, and at 15 Hz (test) healthy recordings score 0%.",
+         *[" *      " + c for c in caveat],
          " * Weights: K x N, row-major (W[k * N + n]), the order of the W<l>.hex files for tb_mlp.sv.",
          " * Inputs: " + ", ".join(inputs),
          " */",

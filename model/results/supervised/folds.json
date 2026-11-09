@@ -1,0 +1,42 @@
+{
+ "profile": "A42",
+ "test_set": "locked (splits.py)",
+ "without_labels": [
+  "B01"
+ ],
+ "folds": [
+  {
+   "held_out": "B02",
+   "train": [
+    "B03",
+    "B04"
+   ],
+   "train_bearings_with_end_label": [
+    "B03",
+    "B04"
+   ]
+  },
+  {
+   "held_out": "B03",
+   "train": [
+    "B02",
+    "B04"
+   ],
+   "train_bearings_with_end_label": [
+    "B02",
+    "B04"
+   ]
+  },
+  {
+   "held_out": "B04",
+   "train": [
+    "B02",
+    "B03"
+   ],
+   "train_bearings_with_end_label": [
+    "B02",
+    "B03"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deterioration Training</title>
+<script>
+  const theme = new URLSearchParams(location.search).get('theme');   // ?theme=light for the report screenshot
+  if (theme) document.documentElement.dataset.theme = theme;
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#f7f7f5; --card:#fff; --ink:#1d1d1b; --muted:#6b6b66; --line:#e2e2dc;
+          --healthy:#2f7fbf; --det:#e07b28; --ok:#2e8b57; --bad:#c0392b; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+          --bg:#151514; --card:#1f1f1d; --ink:#ecece8; --muted:#9a9a94; --line:#33332f; } }
+  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 system-ui, -apple-system, sans-serif; }
+  main { max-width:1200px; margin:0 auto; padding:20px 16px 40px; }
+  h1 { font-size:20px; margin:0 0 4px; } h2 { font-size:15px; margin:0 0 8px; }
+  .sub { color:var(--muted); margin-bottom:16px; }
+  .bar { height:8px; background:var(--line); border-radius:4px; overflow:hidden; margin:8px 0 4px; }
+  .bar > div { height:100%; background:var(--healthy); width:0; transition:width .3s; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; min-width:0; }
+  .chart { position:relative; height:200px; } .chart.tall { height:230px; }
+  .status { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; background:var(--line); }
+  .status.done { background:var(--ok); color:#fff; }
+  table { border-collapse:collapse; width:100%; font-size:13px; }
+  th, td { text-align:left; padding:5px 6px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:600; } td.n { font-variant-numeric:tabular-nums; }
+  .note { color:var(--muted); font-size:12px; margin-top:8px; }
+  .scroll { overflow-x:auto; }
+  .err { color:var(--bad); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Deterioration head: training</h1>
+  <div class="sub">Leave-one-bearing-out, 3 seeds per fold. <span id="status" class="status">waiting for training…</span>
+    <span id="elapsed"></span></div>
+  <div class="bar"><div id="bar"></div></div>
+  <div class="sub" id="current"></div>
+
+  <div class="grid" id="folds"></div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>Results on each held-out bearing</h2>
+    <div class="scroll" id="table"><span class="note">Appears when each fold finishes.</span></div>
+    <div class="note">“Healthy rows above threshold” is the share of the bearing's documented-healthy start rows the model
+      calls deteriorated (lower is better). “End rows alarmed” is the share of the final, documented-damaged rows with a
+      confirmed alarm (higher is better). End rows mark where damage was documented, not when it began, so this is not a
+      detection rate.</div>
+  </div>
+</main>
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = { h: css('--healthy'), d: css('--det'), m: css('--muted'), l: css('--line') };
+const seedAlpha = ['ff', 'b0', '70'];
+Chart.defaults.color = C.m; Chart.defaults.borderColor = C.l; Chart.defaults.font.size = 11;
+Chart.defaults.animation = false;
+const charts = {}; let built = false;
+
+function lineChart(id, opts) {
+  return new Chart(document.getElementById(id), { type: 'line', data: { datasets: [] },
+    options: Object.assign({ maintainAspectRatio: false, parsing: false, normalized: true,
+      elements: { point: { radius: 0 }, line: { borderWidth: 1.6 } },
+      plugins: { legend: { labels: { boxWidth: 10 } } },
+      scales: { x: { type: 'linear', title: { display: true, text: 'step' } } } }, opts) });
+}
+
+function build(p) {
+  const root = document.getElementById('folds');
+  root.innerHTML = p.folds.map(e => `
+    <div class="card"><h2>Held out: ${e}</h2>
+      <div class="chart"><canvas id="loss-${e}"></canvas></div>
+      <div class="chart"><canvas id="sep-${e}"></canvas></div>
+      <div class="chart tall"><canvas id="trace-${e}"></canvas></div>
+    </div>`).join('');
+  for (const e of p.folds) {
+    charts['loss-' + e] = lineChart('loss-' + e, { scales: { x: { type: 'linear', max: p.steps, title: { display: true, text: 'step' } },
+      y: { type: 'logarithmic', title: { display: true, text: 'training loss' } } } });
+    charts['sep-' + e] = lineChart('sep-' + e, { scales: { x: { type: 'linear', max: p.steps, title: { display: true, text: 'step' } },
+      y: { min: 0, max: 1, title: { display: true, text: `${e}: mean P(deteriorated)` } } } });
+    charts['trace-' + e] = new Chart(document.getElementById('trace-' + e), { type: 'scatter', data: { datasets: [] },
+      options: { maintainAspectRatio: false, parsing: false,
+        plugins: { legend: { labels: { boxWidth: 10 } }, title: { display: true, text: 'P(deteriorated) over the run (seed mean)' } },
+        scales: { x: { title: { display: true, text: 'measurement id' } }, y: { min: -0.02, max: 1.02 } } } });
+  }
+  built = true;
+}
+
+function update(p) {
+  if (!built) build(p);
+  const total = p.folds.length * p.seeds.length;
+  const finished = Object.values(p.runs).filter(r => r.step.length && r.step.at(-1) >= p.steps).length;
+  document.getElementById('bar').style.width = (p.status === 'done' ? 100 : 100 * finished / total) + '%';
+  const st = document.getElementById('status');
+  st.textContent = p.status === 'done' ? 'done' : `training: ${finished} of ${total} runs finished`;
+  st.className = 'status' + (p.status === 'done' ? ' done' : '');
+  document.getElementById('elapsed').textContent = ` · ${p.elapsed_s.toFixed(1)} s`;
+  const cur = p.current && p.runs[p.current];
+  document.getElementById('current').textContent = cur ? `Now: fold ${cur.fold}, seed ${cur.seed}, step ${cur.step.at(-1) || 0} of ${p.steps}` : '';
+
+  for (const e of p.folds) {
+    const loss = [], sep = [];
+    p.seeds.forEach((s, i) => {
+      const r = p.runs[`${e}/seed${s}`]; if (!r) return;
+      const pts = k => r.step.map((x, j) => ({ x, y: r[k][j] }));
+      loss.push({ label: `seed ${s}`, data: pts('loss'), borderColor: C.h + seedAlpha[i] });
+      sep.push({ label: i ? '' : 'healthy rows', data: pts('p_healthy'), borderColor: C.h + seedAlpha[i] });
+      sep.push({ label: i ? '' : 'deteriorated rows', data: pts('p_det'), borderColor: C.d + seedAlpha[i] });
+    });
+    sep.push({ label: 'threshold', data: [{ x: 0, y: p.threshold }, { x: p.steps, y: p.threshold }],
+               borderColor: C.m, borderDash: [4, 4], borderWidth: 1 });
+    charts['loss-' + e].data.datasets = loss; charts['loss-' + e].update();
+    const sc = charts['sep-' + e]; sc.data.datasets = sep;
+    sc.options.plugins.legend.labels.filter = it => it.text !== ''; sc.update();
+    const h = p.heldout[e];
+    if (h) {
+      const groups = [[null, 'unlabelled', C.l, 1.5], [0, 'healthy (0)', C.h, 2.5], [1, 'deteriorated (1)', C.d, 4]];
+      charts['trace-' + e].data.datasets = groups.map(([v, label, color, r]) => ({ label, backgroundColor: color, pointRadius: r,
+        data: h.measurement_id.map((x, j) => ({ x, y: h.p_mean[j], v: h.y_det[j] })).filter(d => d.v === v) }));
+      charts['trace-' + e].update();
+    }
+  }
+  table(p);
+}
+
+const pct = v => v == null ? '–' : (100 * v).toFixed(0) + '%';
+function table(p) {
+  const rows = [];
+  for (const e of p.folds) {
+    const h = p.heldout[e]; if (!h) continue;
+    for (const [s, m] of Object.entries(h.metrics.seeds))
+      rows.push(`<tr><td>${e}</td><td>MLP seed ${s}</td><td class="n">${pct(m.start_above_fraction)}</td><td class="n">${pct(m.end_alarmed_fraction)}</td><td class="n">${m.first_confirmed_alarm_measurement_id ?? '–'}</td></tr>`);
+    for (const [name, m] of Object.entries(h.metrics.reference))
+      rows.push(`<tr style="color:var(--muted)"><td>${e}</td><td>${name}</td><td class="n">${pct(m.start_above_fraction)}${m.start_in_sample ? '*' : ''}</td><td class="n">${pct(m.end_alarmed_fraction)}</td><td class="n">${m.first_confirmed_alarm_measurement_id ?? '–'}</td></tr>`);
+  }
+  if (rows.length) document.getElementById('table').innerHTML = `<table><tr><th>Held out</th><th>Detector</th>
+    <th>Healthy rows above threshold</th><th>End rows alarmed</th><th>First confirmed alarm (id)</th></tr>${rows.join('')}</table>
+    <div class="note">* baseline fitted on these same start rows (in-sample). Grey rows are the reference detectors the MLP must beat.</div>`;
+}
+
+let last = '';
+async function poll() {
+  try {
+    const r = await fetch('results/supervised/run1/progress.json', { cache: 'no-store' });
+    if (r.ok) { const t = await r.text(); if (t !== last) { last = t; const p = JSON.parse(t); update(p); if (p.status === 'done') return; } }
+  } catch (e) { /* not started yet, or mid-write */ }
+  setTimeout(poll, 400);
+}
+poll();
+</script>
+</body>
+</html>

@@ -2,6 +2,7 @@
 that speed, 0% = a typical faulty recording).
 
   python health.py            (from the cached features; the dataset is not needed)
+  python health.py --accels 1 --name H1_single_accel_a1     the same method on one accelerometer (7 statistics)
 
 How far the motor's vibration is from the healthy motor's at the same speed:
   1. Healthy reference, from the 80 healthy train windows only: for each of the 21 window statistics x_j (E3's inputs
@@ -29,9 +30,11 @@ from train import SPLITS, load, log_inputs
 ACCELS = (1, 2, 3)
 
 
-def statistics(rows):
-    """The 21 window statistics and ln f (E3's inputs)."""
-    X, names = log_inputs(rows, np.array([r["f_hz"] for r in rows]), accels=ACCELS)
+def statistics(rows, accels=ACCELS):
+    """The 7 window statistics of each given accelerometer (E3's inputs without ln f) and ln f. Statistics of later
+    sensors (temperature, measured RPM) would be appended to X here: reference(), window_d() and anchors() work on
+    any number of columns."""
+    X, names = log_inputs(rows, np.array([r["f_hz"] for r in rows]), accels=accels)
     return X[:, :-1], X[:, -1], names[:-1]
 
 
@@ -80,9 +83,11 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", type=Path, default=HERE, help="folder for weights/ and results/ (default model/)")
     ap.add_argument("--train-only", action="store_true", help="print the train anchors only (nothing written)")
+    ap.add_argument("--accels", type=int, nargs="+", default=list(ACCELS), help="accelerometers (default 1 2 3)")
+    ap.add_argument("--name", default="H1", help="folder name under weights/ and results/ (default H1)")
     a = ap.parse_args()
     rows = load("windows")
-    X, lf, names = statistics(rows)
+    X, lf, names = statistics(rows, tuple(a.accels))
     ref, D, loso, d100, d0 = anchors(rows, X, lf)
     recs = [r for r in rows if r["window"] == 0]
     if a.train_only:
@@ -98,23 +103,23 @@ def main():
         raise SystemExit(f"D_0 = {d0:.4f} is not above D_100 = {d100:.4f}: the index cannot separate them")
 
     score = {f: hi(v, d0, d100) for f, v in D.items()}
-    wdir, rdir = a.out / "weights" / "H1", a.out / "results" / "H1"
+    wdir, rdir = a.out / "weights" / a.name, a.out / "results" / a.name
     wdir.mkdir(parents=True, exist_ok=True)
     rdir.mkdir(parents=True, exist_ok=True)
-    info = {"name": "H1", "statistics": names, "f": "f_hz, the window's drive command (as E2, E3)",
+    info = {"name": a.name, "statistics": names, "f": "f_hz, the window's drive command (as E2, E3)",
             "alpha": ref["alpha"].tolist(), "beta": ref["beta"].tolist(), "sigma": ref["sigma"].tolist(),
             "d_100": d100, "d_0": d0, "loso_healthy_D": loso,
             "formula": "d = sqrt(mean_j ((x_j - alpha_j - beta_j ln f) / sigma_j)^2); D = mean of 10 window d; "
                        "HI = 100 * clip((d_0 - D) / (d_0 - d_100), 0, 1)"}
-    (wdir / "health.json").write_text(json.dumps(info, indent=1) + "\n")
+    (wdir / "health.json").write_text(json.dumps(info, indent=1) + "\n", encoding="utf-8")
     with open(rdir / "health.csv", "w", newline="") as f:
         w = csv.writer(f, lineterminator="\n")
         w.writerow(["file", "cls", "label", "speed", "load", "split", "D", "HI"])
         for r in recs:
             w.writerow([r[k] for k in ("file", "cls", "label", "speed", "load", "split")]
                        + [D[r["file"]], float(score[r["file"]])])
-    (rdir / "report.md").write_text(report(recs, D, score, d100, d0, loso))
-    print(f"H1: D_100 = {d100:.4f}, D_0 = {d0:.4f}")
+    (rdir / "report.md").write_text(report(recs, D, score, d100, d0, loso, a.name), encoding="utf-8")
+    print(f"{a.name}: D_100 = {d100:.4f}, D_0 = {d0:.4f}")
     for sp in SPLITS:
         part = [r for r in recs if r["split"] == sp]
         h = [score[r["file"]] for r in part if r["label"] == 0]
@@ -124,8 +129,8 @@ def main():
     print(f"  wrote {wdir} and {rdir}")
 
 
-def report(recs, D, score, d100, d0, loso):
-    L = ["# H1: health index (output 2)", "",
+def report(recs, D, score, d100, d0, loso, name="H1"):
+    L = [f"# {name}: health index (output 2)", "",
          f"D_100 = {d100:.4f} (largest leave-one-speed-out D of the healthy train recordings), "
          f"D_0 = {d0:.4f} (median D of the faulty train recordings). HI = 100% * clip((D_0 - D) / (D_0 - D_100), 0, 1).",
          "", "Leave-one-speed-out D of the healthy train recordings: "
