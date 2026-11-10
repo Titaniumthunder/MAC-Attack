@@ -1,4 +1,4 @@
-"""The Paderborn B01 report as a PDF: docs/Paderborn_B01_report.pdf.
+"""The Paderborn B01 report as a PDF: docs/Model/03_Paderborn_B01_first_bearing.pdf.
 
   python report/make_b01_report.py        (inside model/, after b01_preprocess.py and b01_analysis.py)
 
@@ -15,7 +15,7 @@ import subprocess   # noqa: E402
 
 HERE = Path(__file__).resolve().parent.parent
 RES = HERE / "results" / "B01"
-OUT = HERE.parent / "docs" / "Paderborn_B01_report.pdf"
+OUT = HERE.parent / "docs" / "Model" / "03_Paderborn_B01_first_bearing.pdf"
 C = json.loads((RES / "checks.json").read_text(encoding="utf-8"))
 A = json.loads((RES / "analysis.json").read_text(encoding="utf-8"))
 

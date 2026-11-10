@@ -1,4 +1,4 @@
-"""results/paderborn/PADERBORN_BASELINE_REPORT.md as a PDF: docs/Paderborn_baseline_report.pdf.
+"""results/paderborn/PADERBORN_BASELINE_REPORT.md as a PDF: docs/Model/04_Paderborn_anomaly_detector_baseline.pdf.
 
   python report/make_paderborn_baseline_report.py     (inside model/)
 
@@ -14,7 +14,7 @@ from make_single_accel_report import browser   # noqa: E402
 
 HERE = Path(__file__).resolve().parent.parent
 SRC = HERE / "results" / "paderborn" / "PADERBORN_BASELINE_REPORT.md"
-OUT = HERE.parent / "docs" / "Paderborn_baseline_report.pdf"
+OUT = HERE.parent / "docs" / "Model" / "04_Paderborn_anomaly_detector_baseline.pdf"
 
 CSS = """
 @page { size: A4; margin: 15mm 14mm; }

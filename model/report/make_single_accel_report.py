@@ -1,4 +1,4 @@
-"""The single-accelerometer report as a PDF: docs/Machine_Guardian_single_accel_report.pdf.
+"""The single-accelerometer report as a PDF: docs/Model/02_Ottawa_single_accelerometer_model.pdf.
 
   python report/make_single_accel_report.py          (inside model/; needs Microsoft Edge or Chrome for the PDF)
 
@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 HERE = Path(__file__).resolve().parent.parent
-OUT = HERE.parent / "docs" / "Machine_Guardian_single_accel_report.pdf"
+OUT = HERE.parent / "docs" / "Model" / "02_Ottawa_single_accelerometer_model.pdf"
 
 # reference palette (dataviz skill), light mode: slot 1 blue = healthy, slot 2 orange = faulty
 HEALTHY, FAULTY = "#2a78d6", "#eb6834"

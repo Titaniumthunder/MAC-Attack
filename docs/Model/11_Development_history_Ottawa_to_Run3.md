@@ -775,4 +775,4 @@ data.
 | Validation, split, labels | `model/results/phase2/DATASET_VALIDATION_REPORT.md`, `model/splits.py`, `model/labels.py`, `model/results/supervised/LABEL_REVIEW_REPORT.md` |
 | Run 1 | `model/train_deterioration.py`, `model/results/supervised/run1/` (`TRAINING_RUN1_REPORT.md`, `results.json`) |
 | Run 2 | `model/train_deterioration_run2.py`, `model/results/supervised/run2/` (`TRAINING_RUN2_REPORT.md`, `results.json`, `checkpoints.csv`, `variants.csv`) |
-| New bearings and Run 3 | `model/extract_paderborn_zips.py`, `model/run3_prep.py`, `model/train_deterioration_run3.py`, `model/run3_hardware.py`, `model/run3_final_c.py`, `model/run3_supplement.py`, `model/run3_b12_diagnostic.py`, `model/results/supervised/run3/`, `docs/Multitask_MLP_reports/Machine_Guardian_Training_Run3_Report.pdf` |
+| New bearings and Run 3 | `model/extract_paderborn_zips.py`, `model/run3_prep.py`, `model/train_deterioration_run3.py`, `model/run3_hardware.py`, `model/run3_final_c.py`, `model/run3_supplement.py`, `model/run3_b12_diagnostic.py`, `model/results/supervised/run3/`, `docs/Model/10_Training_run3.pdf` |

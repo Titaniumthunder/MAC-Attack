@@ -2,8 +2,8 @@
 run3_tables.py and run3_diagrams.py first):
 
   python report/make_run3_reports.py
-    -> docs/Multitask_MLP_reports/Machine_Guardian_Training_Run3_Report.md / .pdf
-       docs/Multitask_MLP_reports/Machine_Guardian_ML_Development_and_Training_Results_v2.md / .pdf  (the original v1
+    -> docs/Model/10_Training_run3.md / .pdf
+       docs/Model/11_Development_history_Ottawa_to_Run3.md / .pdf  (the original v1
        report is not touched)
 The Run 3 Markdown is composed from results/supervised/run3/TRAINING_RUN3_REPORT.template.md and the generated
 analysis/tables.md ({{T_NAME}} placeholders), so every table number comes from the saved results.
@@ -16,7 +16,7 @@ from pro_report import build_pdf   # noqa: E402
 
 HERE = Path(__file__).resolve().parent.parent
 RUN3 = HERE / "results" / "supervised" / "run3"
-DOCS = HERE.parent / "docs" / "Multitask_MLP_reports"
+DOCS = HERE.parent / "docs" / "Model"
 
 
 def compose():
@@ -33,10 +33,10 @@ def compose():
 
 def main():
     md = compose()
-    out_md = DOCS / "Machine_Guardian_Training_Run3_Report.md"
+    out_md = DOCS / "10_Training_run3.md"
     out_md.write_text(md, encoding="utf-8")
     shutil.copyfile(out_md, RUN3 / "TRAINING_RUN3_REPORT.md")
-    build_pdf(out_md, DOCS / "Machine_Guardian_Training_Run3_Report.pdf",
+    build_pdf(out_md, DOCS / "10_Training_run3.pdf",
               "Machine Guardian — Training Run 3 and Expanded Dataset Evaluation",
               "Seven Paderborn development bearings (four new), nested leave-one-bearing-out validation, five training "
               "configurations, INT8 and RTL verification of the trained 8 → 32 → 16 → 2 multi-task MLP",
@@ -48,9 +48,9 @@ def main():
                      ("6 of 7", "bearings alarmed before the stop (B12 missed)"),
                      ("1.78 µs", "per inference, trained network on the RTL")],
               breaks=(2, 4, 5, 7, 9, 10, 11, 12, 14, 15, 16, 17))
-    v2 = DOCS / "Machine_Guardian_ML_Development_and_Training_Results_v2.md"
+    v2 = DOCS / "11_Development_history_Ottawa_to_Run3.md"
     if v2.exists():
-        build_pdf(v2, DOCS / "Machine_Guardian_ML_Development_and_Training_Results_v2.pdf",
+        build_pdf(v2, DOCS / "11_Development_history_Ottawa_to_Run3.pdf",
                   "Machine Guardian — ML Model Development and Training Results",
                   "Version 2: from the original Ottawa motor model, through the Paderborn redesign, to Training Run 3 on "
                   "seven development bearings",

@@ -1,4 +1,4 @@
-"""results/phase2/DATASET_VALIDATION_REPORT.md as a PDF: docs/Multitask_MLP_reports/Dataset_validation_report.pdf.
+"""results/phase2/DATASET_VALIDATION_REPORT.md as a PDF: docs/Model/06_Dataset_validation_and_training_plan.pdf.
 
   python report/make_phase2_report.py     (inside model/; --keep-html prints the intermediate page)
 
@@ -12,7 +12,7 @@ from make_paderborn_baseline_report import CSS, browser, convert   # noqa: E402
 
 HERE = Path(__file__).resolve().parent.parent
 SRC = HERE / "results" / "phase2" / "DATASET_VALIDATION_REPORT.md"
-OUT = HERE.parent / "docs" / "Multitask_MLP_reports" / "Dataset_validation_report.pdf"
+OUT = HERE.parent / "docs" / "Model" / "06_Dataset_validation_and_training_plan.pdf"
 BREAKS = (3, 6, 8)
 
 

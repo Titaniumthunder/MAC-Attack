@@ -1,4 +1,4 @@
-"""results/supervised/run1/TRAINING_RUN1_REPORT.md as a PDF: docs/Multitask_MLP_reports/Training_run1_report.pdf.
+"""results/supervised/run1/TRAINING_RUN1_REPORT.md as a PDF: docs/Model/08_Training_run1.pdf.
 
   python report/make_training_run1_report.py     (inside model/; run train_deterioration.py first; --keep-html prints the page)
 
@@ -25,7 +25,7 @@ from paderborn import load                                 # noqa: E402
 
 RUN = HERE / "results" / "supervised" / "run1"
 SRC = RUN / "TRAINING_RUN1_REPORT.md"
-OUT = HERE.parent / "docs" / "Multitask_MLP_reports" / "Training_run1_report.pdf"
+OUT = HERE.parent / "docs" / "Model" / "08_Training_run1.pdf"
 FIG = RUN / "figures"
 BREAKS = (6,)
 MAC_CHROME = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
