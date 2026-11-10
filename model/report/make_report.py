@@ -3,7 +3,7 @@
   python report/make_report.py          (from model/; reads the saved results, writes docs/ and report/figures/)
 
 Every number in the tables and charts is read from the saved files (features/, weights/, results/, export/) when the
-report is built, so the PDF cannot drift from them. Writes docs/Machine_Guardian_model_report.pdf (repo top folder) and the charts in
+report is built, so the PDF cannot drift from them. Writes docs/Model/01_Ottawa_three_accelerometer_model_E0-E3.pdf (repo top folder) and the charts in
 report/figures/.
 """
 import csv, json, math, sys
@@ -41,7 +41,7 @@ from mac import golden_mlp, mlp_equation, read_hex   # noqa: E402
 
 rl_config.invariant = 1          # the same PDF bytes on every build
 FIG = HERE / "figures"
-OUT = MODEL.parent / "docs" / "Machine_Guardian_model_report.pdf"   # docs/, next to the project brief
+OUT = MODEL.parent / "docs" / "Model" / "01_Ottawa_three_accelerometer_model_E0-E3.pdf"   # docs/Model/, step 01
 SEEDS = ("42", "43", "44")
 EXPS = ("E0", "E1", "E2", "E3")
 FCLK = 214.286e6
