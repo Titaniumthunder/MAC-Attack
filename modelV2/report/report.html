@@ -1,0 +1,487 @@
+<html><body style='font-family:sans-serif;max-width:1000px;margin:auto'><h1>Machine Guardian modelV2: bearing status and health on the MAC accelerator</h1>
+<p>A vibration sensor on a motor bearing is measured for 1.6 s at a time. A host processor turns each measurement into 13 numbers that say how far the bearing has moved from its own healthy start. A small neural network on the chip (the INT8 systolic-array MLP accelerator) turns those numbers into a status (healthy, developing or faulty) and a health value. The host combines them into one of four levels (Normal, Anomaly, Warning, Failing) and a health percentage.</p>
+<img src='figs/system.png' style='max-width:100%'>
+<h2>1. Data</h2>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>role</th>
+      <th>bearings</th>
+      <th>recordings</th>
+      <th>rows / windows</th>
+      <th>sample rate</th>
+      <th>resampled</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Paderborn run-to-failure</td>
+      <td>trains both heads; validation</td>
+      <td>7</td>
+      <td>8943</td>
+      <td>8943</td>
+      <td>128 or 64 kHz</td>
+      <td>to 42 kHz</td>
+    </tr>
+    <tr>
+      <td>Ottawa UORED-VAFCLS</td>
+      <td>trains the status head in version B only; validation</td>
+      <td>16</td>
+      <td>48</td>
+      <td>416</td>
+      <td>42 kHz</td>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
+<p>Both datasets go through the same signal chain: the offset is removed, the signal is resampled to 42 kHz with an anti-aliasing filter where needed, and low-passed at 15 kHz. A Paderborn row is one 1.6-s measurement taken every 12 to 23 s until the bearing fails. An Ottawa recording is 10 s long and is cut into 1.6-s windows with 50 % overlap; each bearing has one healthy, one developing and one faulty recording. The Ottawa files also have a temperature-difference column (median by stage {&#x27;0&#x27;: 1.7, &#x27;1&#x27;: 13.4, &#x27;2&#x27;: 29.8}); it is not used, and it is corrupt in 2 recordings (bearing 16 stage 1, bearing 17 stage 2).</p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Paderborn bearing</th>
+      <th>rows</th>
+      <th>healthy (label)</th>
+      <th>faulty (label)</th>
+      <th>unlabelled</th>
+      <th>baseline starts at row</th>
+      <th>onset, min before end</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>B02</td>
+      <td>1065</td>
+      <td>150</td>
+      <td>20</td>
+      <td>895</td>
+      <td>0</td>
+      <td>79</td>
+    </tr>
+    <tr>
+      <td>B03</td>
+      <td>614</td>
+      <td>150</td>
+      <td>20</td>
+      <td>444</td>
+      <td>0</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <td>B04</td>
+      <td>1064</td>
+      <td>150</td>
+      <td>20</td>
+      <td>894</td>
+      <td>0</td>
+      <td>210</td>
+    </tr>
+    <tr>
+      <td>B08</td>
+      <td>1777</td>
+      <td>150</td>
+      <td>20</td>
+      <td>1607</td>
+      <td>0</td>
+      <td>215</td>
+    </tr>
+    <tr>
+      <td>B09</td>
+      <td>1763</td>
+      <td>150</td>
+      <td>20</td>
+      <td>1593</td>
+      <td>0</td>
+      <td>647</td>
+    </tr>
+    <tr>
+      <td>B11</td>
+      <td>1953</td>
+      <td>150</td>
+      <td>20</td>
+      <td>1783</td>
+      <td>0</td>
+      <td>340</td>
+    </tr>
+    <tr>
+      <td>B12</td>
+      <td>707</td>
+      <td>150</td>
+      <td>20</td>
+      <td>537</td>
+      <td>60</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+<p>Healthy = the 100 baseline measurements and the 50 after them. Faulty = the last 20 measurements before the documented stop; these are the labels every result is scored on. For training only, every measurement after the detector&#x27;s sustained onset is also labelled faulty, so the network learns moderate, sustained damage as well as the end stage. Ottawa windows: 64 healthy, 176 developing, 176 faulty.</p>
+<h2>2. Training, validation and test split</h2>
+<img src='figs/split.png' style='max-width:100%'>
+<p>The bearing is the unit: all rows of a bearing are in the same set. Validation is leave-one-bearing-out: each Paderborn development bearing is held out once and scored by networks that never saw it. The locked bearings are not loaded by any script until a model is frozen, and are then tested once. Version A trains on Paderborn only. Version B also trains the status head on the Ottawa development bearings, held out in the same folds.</p>
+<h2>3. Features and network inputs</h2>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>feature (per 1.6-s window)</th>
+      <th>formula</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>rms</td>
+      <td>ln of the root-mean-square</td>
+    </tr>
+    <tr>
+      <td>peak</td>
+      <td>ln of the largest |x|</td>
+    </tr>
+    <tr>
+      <td>kurt</td>
+      <td>mean((x - mean)^4) / rms^4</td>
+    </tr>
+    <tr>
+      <td>crest</td>
+      <td>peak / rms</td>
+    </tr>
+    <tr>
+      <td>band_10_1k</td>
+      <td>ln RMS of the 10 Hz - 1 kHz band (FFT)</td>
+    </tr>
+    <tr>
+      <td>band_1k_5k</td>
+      <td>ln RMS of the 1 - 5 kHz band</td>
+    </tr>
+    <tr>
+      <td>band_5k_15k</td>
+      <td>ln RMS of the 5 - 15 kHz band</td>
+    </tr>
+  </tbody>
+</table>
+<p>Baseline: on a bearing&#x27;s first 100 measurements each feature is fitted as b0 + b1 ln(rpm) (the rpm term only if the speed varied), with spread sigma. A step inside those 100 measurements restarts the baseline after the step. z = (feature - fit) / sigma. The detector score is s = sqrt(mean(z^2)); its threshold tau is the 99th percentile of s on the baseline. The 13 network inputs are: the 7 z-features; 3 ln(s); the mean of z over the last 4 measurements for rms, band_1k_5k, band_5k_15k and kurt; and 4 ln(rpm / 2000). Each goes through slog(v) = sign(v) ln(1 + |v|). There is no time, row-number or temperature input. An Ottawa bearing has no 100-measurement start: its baseline is the 5 windows in the first 5 s of its healthy recording, with no rpm term, and the 4 windows in the last 5 s are its healthy examples. So short a baseline under-estimates the spread, so sigma is never allowed below a fixed floor per feature {&#x27;rms&#x27;: 0.04, &#x27;peak&#x27;: 0.08, &#x27;kurt&#x27;: 0.04, &#x27;crest&#x27;: 0.29, &#x27;band_10_1k&#x27;: 0.07, &#x27;band_1k_5k&#x27;: 0.05, &#x27;band_5k_15k&#x27;: 0.056} (the smallest baseline sigma seen on the Paderborn development bearings, which it therefore leaves unchanged).</p>
+<img src='figs/features.png' style='max-width:100%'>
+<h2>4. Model</h2>
+<img src='figs/architecture.png' style='max-width:100%'>
+<p>992 weights and 52 biases. On the chip: INT8 weights with one scale per output channel, INT32 biases, one input scale (0.07252 per step), ReLU, and a per-channel multiply-and-shift between layers. The last layer returns raw sums; the host adds its bias and scale. &#x27;Developing&#x27; is labelled only in Ottawa, so only version B can learn it; Ottawa never trains the health head.</p>
+<p>Host logic, per measurement. Normal: detector score at or below its threshold. Anomaly: score above the threshold on this measurement; clears itself. Warning: score above the threshold 3 measurements in a row; clears after 20 quiet ones. Failing: the network says &#x27;faulty&#x27; 3 measurements in a row; stays on. Health %: 100 x sigmoid(health logit), median of the last 4 measurements, shown as a running minimum so it never rises. Temperature (separate, not a network input): on when the housing temperature is more than 6 C above its own median over the previous 50 measurements, 3 in a row; the first 60 minutes after a start or stop are ignored.</p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>bearing</th>
+      <th>temperature rule on before onset (rows / rows)</th>
+      <th>first on, min before the end</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>B02</td>
+      <td>0/804</td>
+      <td>never</td>
+    </tr>
+    <tr>
+      <td>B03</td>
+      <td>0/546</td>
+      <td>never</td>
+    </tr>
+    <tr>
+      <td>B04</td>
+      <td>0/389</td>
+      <td>never</td>
+    </tr>
+    <tr>
+      <td>B08</td>
+      <td>0/1162</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <td>B09</td>
+      <td>0/171</td>
+      <td>never</td>
+    </tr>
+    <tr>
+      <td>B11</td>
+      <td>0/703</td>
+      <td>never</td>
+    </tr>
+    <tr>
+      <td>B12</td>
+      <td>0/659</td>
+      <td>never</td>
+    </tr>
+  </tbody>
+</table>
+<h2>5. Training loop</h2>
+<p>1. A batch of 64 rows is drawn: half with a status label (every dataset-and-class group equally likely), half with a health target (before and after onset equally likely). 2. Each row&#x27;s history length is drawn from 1 to 4. 3. Loss = cross-entropy over the 3 status logits on the status half + mean squared error between sigmoid(health logit) and the health target on the health half; each half trains only its own head, so the health head is trained identically in versions A and B. Validation losses are class-balanced the same way. 4. Adam, learning rate 0.001 falling to 0 on a cosine, weight decay 0.01, 4000 steps, no early stopping. 5. Repeated for every held-out bearing and seeds [0, 1, 2], plus one network per seed on all development bearings (the exported one). Health target = severity of the detector score (median of the last 4 measurements): 100 % at a score of 2.5 or less, which healthy operation stays below, falling with the logarithm of the score to 0 % at 25, a typical end-stage score.</p>
+<h2>6. Training curves and results</h2>
+<p>Run 3 (the old model/ network, 8-32-16-2, its own validation folds and inputs) on the same bearings:</p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>held-out bearing</th>
+      <th>end caught (seeds)</th>
+      <th>healthy rows alarmed / possible</th>
+      <th>alarm, min before onset</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>B02</td>
+      <td>5/5</td>
+      <td>0/500</td>
+      <td>-3</td>
+    </tr>
+    <tr>
+      <td>B03</td>
+      <td>5/5</td>
+      <td>0/500</td>
+      <td>-4</td>
+    </tr>
+    <tr>
+      <td>B04</td>
+      <td>5/5</td>
+      <td>0/500</td>
+      <td>-2</td>
+    </tr>
+    <tr>
+      <td>B08</td>
+      <td>5/5</td>
+      <td>0/500</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <td>B09</td>
+      <td>5/5</td>
+      <td>0/500</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <td>B11</td>
+      <td>5/5</td>
+      <td>0/500</td>
+      <td>-2</td>
+    </tr>
+    <tr>
+      <td>B12</td>
+      <td>0/5</td>
+      <td>0/500</td>
+      <td>nan</td>
+    </tr>
+  </tbody>
+</table>
+<p>Run 3 has no health error: its health head was never trained.</p>
+<p>All runs overlaid (mean over folds and seeds):</p>
+<img src='figs/curves_all.png' style='max-width:100%'>
+<h2>Run 20261110-215217_A_severity (trained on paderborn, history 4)</h2>
+<img src='figs/curves_20261110-215217_A_severity.png' style='max-width:100%'>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>held-out bearing</th>
+      <th>end caught (seeds)</th>
+      <th>healthy rows alarmed / possible</th>
+      <th>Failing, min before onset</th>
+      <th>health error before onset, %</th>
+      <th>after onset, %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>B02</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-3</td>
+      <td>3.3</td>
+      <td>12.3</td>
+    </tr>
+    <tr>
+      <td>B03</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>2.4</td>
+      <td>15.3</td>
+    </tr>
+    <tr>
+      <td>B04</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>4.1</td>
+      <td>8.8</td>
+    </tr>
+    <tr>
+      <td>B08</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>4.4</td>
+      <td>7.5</td>
+    </tr>
+    <tr>
+      <td>B09</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>8</td>
+      <td>6.5</td>
+      <td>8.1</td>
+    </tr>
+    <tr>
+      <td>B11</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>3.4</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <td>B12</td>
+      <td>0/3</td>
+      <td>0/450</td>
+      <td>nan</td>
+      <td>9.2</td>
+      <td>21.9</td>
+    </tr>
+  </tbody>
+</table>
+<p>Negative minutes mean Failing came after the detector&#x27;s sustained onset; &#x27;nan&#x27; means it never came.</p>
+<img src='../runs/20261110-215217_A_severity/timelines.png' style='max-width:100%'>
+<p>P(developing) on held-out Paderborn bearings: 0.004 on healthy rows, 0.015 between onset and Failing, 0.001 after Failing; before onset 0.007 at 1700-1900 rpm (Ottawa&#x27;s speed) against 0.005 at other speeds. It should be near 0 on healthy rows, rise after onset, and not depend on the speed. Hidden-layer dataset probe AUC: 0.66 (0.5 = the network cannot tell the datasets apart).</p>
+<p>Ottawa held-out bearings, seed 0: healthy windows called healthy 1.00, damaged windows called faulty 1.00 (this version has no &#x27;developing&#x27; examples, so a stage accuracy would be capped by construction); health % by stage [97.0, 23.0, 18.0]; it falls healthy &gt; developing &gt; faulty on 12 of 16 bearings.</p>
+<img src='figs/confusion_20261110-215217_A_severity.png' style='max-width:100%'>
+<p>INT8 vs FP32: 0.045 % of status decisions change, health differs by at most 2.30 % points, Failing row identical: False. RTL bit-exact: True.</p>
+<h2>Run 20261110-220018_A_severity_onset (trained on paderborn, history 4)</h2>
+<img src='figs/curves_20261110-220018_A_severity_onset.png' style='max-width:100%'>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>held-out bearing</th>
+      <th>end caught (seeds)</th>
+      <th>healthy rows alarmed / possible</th>
+      <th>Failing, min before onset</th>
+      <th>health error before onset, %</th>
+      <th>after onset, %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>B02</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-3</td>
+      <td>3.6</td>
+      <td>12.2</td>
+    </tr>
+    <tr>
+      <td>B03</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>2.6</td>
+      <td>16.4</td>
+    </tr>
+    <tr>
+      <td>B04</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>3.9</td>
+      <td>8.4</td>
+    </tr>
+    <tr>
+      <td>B08</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>4.4</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <td>B09</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>6.6</td>
+      <td>6.6</td>
+    </tr>
+    <tr>
+      <td>B11</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>-1</td>
+      <td>3.2</td>
+      <td>7.9</td>
+    </tr>
+    <tr>
+      <td>B12</td>
+      <td>3/3</td>
+      <td>0/450</td>
+      <td>31</td>
+      <td>9.2</td>
+      <td>20.2</td>
+    </tr>
+  </tbody>
+</table>
+<p>Negative minutes mean Failing came after the detector&#x27;s sustained onset; &#x27;nan&#x27; means it never came.</p>
+<img src='../runs/20261110-220018_A_severity_onset/timelines.png' style='max-width:100%'>
+<p>P(developing) on held-out Paderborn bearings: 0.004 on healthy rows, 0.014 between onset and Failing, 0.003 after Failing; before onset 0.007 at 1700-1900 rpm (Ottawa&#x27;s speed) against 0.006 at other speeds. It should be near 0 on healthy rows, rise after onset, and not depend on the speed. Hidden-layer dataset probe AUC: 0.64 (0.5 = the network cannot tell the datasets apart).</p>
+<p>Ottawa held-out bearings, seed 0: healthy windows called healthy 1.00, damaged windows called faulty 1.00 (this version has no &#x27;developing&#x27; examples, so a stage accuracy would be capped by construction); health % by stage [97.0, 21.0, 16.0]; it falls healthy &gt; developing &gt; faulty on 12 of 16 bearings.</p>
+<img src='figs/confusion_20261110-220018_A_severity_onset.png' style='max-width:100%'>
+<p>INT8 vs FP32: 0.063 % of status decisions change, health differs by at most 2.17 % points, Failing row identical: True. RTL bit-exact: True.</p>
+<h2>Locked test (run once, frozen model)</h2>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>locked bearing</th>
+      <th>end caught</th>
+      <th>healthy rows alarmed / possible</th>
+      <th>Failing, min before end</th>
+      <th>health error before onset, %</th>
+      <th>after onset, %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>B06</td>
+      <td>yes</td>
+      <td>0/150</td>
+      <td>957</td>
+      <td>5.0</td>
+      <td>51.0</td>
+    </tr>
+    <tr>
+      <td>B07</td>
+      <td>yes</td>
+      <td>0/150</td>
+      <td>102</td>
+      <td>4.7</td>
+      <td>12.2</td>
+    </tr>
+    <tr>
+      <td>B13</td>
+      <td>yes</td>
+      <td>0/150</td>
+      <td>360</td>
+      <td>5.1</td>
+      <td>5.4</td>
+    </tr>
+    <tr>
+      <td>B17</td>
+      <td>yes</td>
+      <td>0/150</td>
+      <td>196</td>
+      <td>2.9</td>
+      <td>6.2</td>
+    </tr>
+  </tbody>
+</table>
+<p>Locked Ottawa bearings: stage accuracy 0.58, healthy called healthy 1.00, damaged called faulty 1.00, health % by stage [97.0, 16.0, 13.0].</p>
+<img src='figs/confusion_locked.png' style='max-width:100%'>
+<h2>7. Pre-checks on Ottawa</h2>
+<p>Three checks were run before any training, and all three failed. Version B trains on Ottawa anyway, beside version A, so the two can be compared; its &#x27;developing&#x27; output should be trusted only if the checks in section 6 hold.</p>
+<p>1 Ottawa stages vs recording-to-recording spread: FAIL</p>
+<img src='../prechecks/check1_stages.png' style='max-width:100%'>
+<p>2 Healthy rows, Paderborn vs Ottawa: FAIL</p>
+<img src='../prechecks/check2_overlap.png' style='max-width:100%'>
+<p>3 Ottawa signal above 10 kHz: FAIL</p>
+<img src='../prechecks/check3_high_band.png' style='max-width:100%'>
+<h2>8. Limits</h2>
+<p>Only 7 Paderborn bearings carry the training; every number here has wide uncertainty until the locked test. Health % is a severity scale of the vibration now, not a countdown to failure: it levels off when the vibration does, and a bearing whose end stage is close to its baseline (B12) stays near 100 %. After B12&#x27;s baseline restart its end stage is only 1.2 x its detector threshold (lowest of the other bearings: 5 x), so B12 is the hardest bearing to catch. The temperature rule&#x27;s limit was set on these same bearings, and temperature only rises at the very end on some of them, so it is a backstop for fast overheating, not an early warning. Version A cannot report &#x27;developing&#x27;; version B learns it from Ottawa only, where stage and recording differences are mixed. Ottawa recordings differ from each other in ways that are not damage (offset and level change between recordings), so Ottawa results are indicative only. The status ladder&#x27;s settings are host-side and were not tuned. The model has not run on the board.</p></body></html>
