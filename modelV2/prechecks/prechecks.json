@@ -1,0 +1,261 @@
+{
+ "1 Ottawa stages vs recording-to-recording spread": {
+  "pass": false,
+  "stage1_above_yardstick": 10,
+  "stage2_above_stage1": 9,
+  "bearings": 16,
+  "needed": 12,
+  "per_bearing": {
+   "1": {
+    "type": "inner",
+    "healthy_own": 0.6303806673379212,
+    "healthy_cross_max": 15.152915148533474,
+    "yardstick": 17.013582980209875,
+    "stage1": 34.79810532894295,
+    "stage2": 29.940999763569433,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": false
+   },
+   "2": {
+    "type": "inner",
+    "healthy_own": 1.3666960396137189,
+    "healthy_cross_max": 11.855408079184027,
+    "yardstick": 17.013582980209875,
+    "stage1": 168.11390961365387,
+    "stage2": 33.199452326442334,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": false
+   },
+   "3": {
+    "type": "inner",
+    "healthy_own": 0.37960157969903396,
+    "healthy_cross_max": 16.998462203077434,
+    "yardstick": 17.013582980209875,
+    "stage1": 38.409088128471055,
+    "stage2": 39.179608879364764,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": true
+   },
+   "5": {
+    "type": "inner",
+    "healthy_own": 0.8822126332068617,
+    "healthy_cross_max": 14.517372520405143,
+    "yardstick": 17.013582980209875,
+    "stage1": 71.65469074128096,
+    "stage2": 120.45779640470296,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": true
+   },
+   "6": {
+    "type": "outer",
+    "healthy_own": 0.7037261927408487,
+    "healthy_cross_max": 15.922279945156294,
+    "yardstick": 17.013582980209875,
+    "stage1": 31.40257237436193,
+    "stage2": 32.15718676199284,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": true
+   },
+   "8": {
+    "type": "outer",
+    "healthy_own": 0.6980210228716386,
+    "healthy_cross_max": 14.630339224152248,
+    "yardstick": 17.013582980209875,
+    "stage1": 11.942088260629212,
+    "stage2": 18.471395828675636,
+    "stage1_above_yardstick": false,
+    "stage2_above_stage1": true
+   },
+   "9": {
+    "type": "outer",
+    "healthy_own": 0.4602313586748363,
+    "healthy_cross_max": 17.63083014355117,
+    "yardstick": 17.013582980209875,
+    "stage1": 135.9427376056037,
+    "stage2": 128.42865034216604,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": false
+   },
+   "10": {
+    "type": "outer",
+    "healthy_own": 1.051597454109969,
+    "healthy_cross_max": 17.500148056485905,
+    "yardstick": 17.013582980209875,
+    "stage1": 66.11086219673898,
+    "stage2": 37.78413603233807,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": false
+   },
+   "11": {
+    "type": "ball",
+    "healthy_own": 0.8119145323723516,
+    "healthy_cross_max": 24.006175513736373,
+    "yardstick": 40.727919496633376,
+    "stage1": 96.96155952239639,
+    "stage2": 58.92191851536556,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": false
+   },
+   "12": {
+    "type": "ball",
+    "healthy_own": 0.6822357320982477,
+    "healthy_cross_max": 22.043543136612882,
+    "yardstick": 40.727919496633376,
+    "stage1": 8.295573051833525,
+    "stage2": 16.52445614460425,
+    "stage1_above_yardstick": false,
+    "stage2_above_stage1": true
+   },
+   "13": {
+    "type": "ball",
+    "healthy_own": 0.7519680283585858,
+    "healthy_cross_max": 41.306727971181445,
+    "yardstick": 40.727919496633376,
+    "stage1": 7.06653759162379,
+    "stage2": 7.0375915763991115,
+    "stage1_above_yardstick": false,
+    "stage2_above_stage1": false
+   },
+   "14": {
+    "type": "ball",
+    "healthy_own": 0.4383565411833038,
+    "healthy_cross_max": 37.98580677922451,
+    "yardstick": 40.727919496633376,
+    "stage1": 44.285488319116205,
+    "stage2": 138.19928880307887,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": true
+   },
+   "16": {
+    "type": "cage",
+    "healthy_own": 1.5404271778511114,
+    "healthy_cross_max": 29.573612069156145,
+    "yardstick": 40.727919496633376,
+    "stage1": 35.82886436255702,
+    "stage2": 39.4088818537603,
+    "stage1_above_yardstick": false,
+    "stage2_above_stage1": true
+   },
+   "17": {
+    "type": "cage",
+    "healthy_own": 2.375769903231266,
+    "healthy_cross_max": 41.018401005444396,
+    "yardstick": 40.727919496633376,
+    "stage1": 65.05507114514707,
+    "stage2": 62.352633758782886,
+    "stage1_above_yardstick": true,
+    "stage2_above_stage1": false
+   },
+   "18": {
+    "type": "cage",
+    "healthy_own": 2.008521107643393,
+    "healthy_cross_max": 40.631092327029705,
+    "yardstick": 40.727919496633376,
+    "stage1": 20.51117967844013,
+    "stage2": 34.79226030242892,
+    "stage1_above_yardstick": false,
+    "stage2_above_stage1": true
+   },
+   "20": {
+    "type": "cage",
+    "healthy_own": 0.5191937489660617,
+    "healthy_cross_max": 43.02617021811973,
+    "yardstick": 40.727919496633376,
+    "stage1": 26.7377267269674,
+    "stage2": 34.65598032843212,
+    "stage1_above_yardstick": false,
+    "stage2_above_stage1": true
+   }
+  }
+ },
+ "2 Healthy rows, Paderborn vs Ottawa": {
+  "pass": false,
+  "features": {
+   "rms": {
+    "paderborn_5_95": [
+     -1.7718599253001828,
+     1.5696157505024586
+    ],
+    "ottawa_median": -0.29502942969946155,
+    "inside": true
+   },
+   "peak": {
+    "paderborn_5_95": [
+     -1.938822585822048,
+     1.6543026328807633
+    ],
+    "ottawa_median": -0.21110201727505595,
+    "inside": true
+   },
+   "kurt": {
+    "paderborn_5_95": [
+     -1.3949345228976604,
+     1.555983471062849
+    ],
+    "ottawa_median": -0.1398230999999861,
+    "inside": true
+   },
+   "crest": {
+    "paderborn_5_95": [
+     -1.410385368624945,
+     1.7549614321236802
+    ],
+    "ottawa_median": 0.0030592566411170924,
+    "inside": true
+   },
+   "band_10_1k": {
+    "paderborn_5_95": [
+     -2.1953379888953837,
+     1.3962956521921304
+    ],
+    "ottawa_median": -0.04484111455091748,
+    "inside": true
+   },
+   "band_1k_5k": {
+    "paderborn_5_95": [
+     -1.212271166312514,
+     2.0909542426009615
+    ],
+    "ottawa_median": -0.14296562262444826,
+    "inside": true
+   },
+   "band_5k_15k": {
+    "paderborn_5_95": [
+     -1.0818301710083282,
+     2.9809273721433036
+    ],
+    "ottawa_median": 0.061737029132276154,
+    "inside": true
+   },
+   "ln score": {
+    "paderborn_5_95": [
+     -0.767070638072338,
+     0.6557066717551768
+    ],
+    "ottawa_median": -0.3462542115769942,
+    "inside": true
+   }
+  },
+  "probe_auc": {
+   "logistic": 0.7758035714285715,
+   "mlp": 0.8676339285714286
+  },
+  "probe_auc_without_rpm": {
+   "logistic": 0.7141517857142857,
+   "mlp": 0.8569642857142857
+  },
+  "rows": {
+   "paderborn": 350,
+   "ottawa": 64
+  }
+ },
+ "3 Ottawa signal above 10 kHz": {
+  "pass": false,
+  "level_10_15k_over_15_21k_healthy": 2.280148149255108,
+  "power_10_15k_vs_healthy": {
+   "developing": 21.83860007619097,
+   "faulty": 37.254298636208134
+  },
+  "rule": "healthy 10-15 kHz level at least 4x (6 dB) the 15-21 kHz level, and faulty at least 2x (3 dB) healthy"
+ }
+}
