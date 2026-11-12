@@ -124,7 +124,7 @@ def test_health_index_uses_the_selected_accelerometer():
 
 
 DEPLOYED = json.loads((HERE / "weights" / NAME / "deployed.json").read_text())
-CHANGED = {"E3_single_accel_a2": ["R_M_1_0.csv"], "E3_single_accel_a1": []}   # SINGLE_ACCEL_HARDWARE_REPORT.md
+CHANGED = {"E3_single_accel_a2": ["R_M_1_0.csv"], "E3_single_accel_a1": []}   # docs/Model/supporting_single_accel/02c_Single_accel_hardware_report.md
 
 
 def test_deployed_model_is_recorded_as_post_test():

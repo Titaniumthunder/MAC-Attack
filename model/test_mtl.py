@@ -114,7 +114,7 @@ def test_int8_inference_on_real_inputs():
 
 
 def test_cycles_fit_the_array_as_e3_single_accel():
-    assert mm.cycles(1)[3] == 382 and mm.cycles(10)[3] == 562     # SINGLE_ACCEL_HARDWARE_REPORT.md (xsim)
+    assert mm.cycles(1)[3] == 382 and mm.cycles(10)[3] == 562     # docs/Model/supporting_single_accel/02c_Single_accel_hardware_report.md (xsim)
 
 
 # ---------- input pipeline ----------

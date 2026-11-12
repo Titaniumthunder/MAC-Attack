@@ -1,6 +1,6 @@
 """Version 2 of the ML development report: version 1 (Runs 1-2) updated with Training Run 3. Version 1 is not touched.
 
-  python report/make_dev_report_v2.py   -> docs/Multitask_MLP_reports/Machine_Guardian_ML_Development_and_Training_Results_v2.md
+  python report/make_dev_report_v2.py   -> docs/Model/11_Development_history_Ottawa_to_Run3.md
   (then report/make_run3_reports.py builds its PDF)
 
 Every replacement is asserted to match exactly once in version 1; the Run 3 section's tables are taken from the
@@ -10,9 +10,9 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
-DOCS = HERE.parent / "docs" / "Multitask_MLP_reports"
-V1 = DOCS / "Machine_Guardian_ML_Development_and_Training_Results.md"
-V2 = DOCS / "Machine_Guardian_ML_Development_and_Training_Results_v2.md"
+DOCS = HERE.parent / "docs" / "Model"
+V1 = DOCS / "superseded" / "Development_history_v1_Ottawa_to_Run2.md"   # one folder deeper than V2
+V2 = DOCS / "11_Development_history_Ottawa_to_Run3.md"
 TABLES = (HERE / "results" / "supervised" / "run3" / "analysis" / "tables.md").read_text(encoding="utf-8")
 T = dict(re.findall(r"<!-- (T_[A-Z0-9_]+) -->\n(.*?)(?=\n<!-- T_|\Z)", TABLES, flags=re.S))
 F3 = "../../model/results/supervised/run3/analysis/figures"
@@ -248,7 +248,7 @@ comes from a bearing the network has never seen."""),
   teach intermediate stages."""),
     ("""| Run 2 | `model/train_deterioration_run2.py`, `model/results/supervised/run2/` (`TRAINING_RUN2_REPORT.md`, `results.json`, `checkpoints.csv`, `variants.csv`) |""",
      """| Run 2 | `model/train_deterioration_run2.py`, `model/results/supervised/run2/` (`TRAINING_RUN2_REPORT.md`, `results.json`, `checkpoints.csv`, `variants.csv`) |
-| New bearings and Run 3 | `model/extract_paderborn_zips.py`, `model/run3_prep.py`, `model/train_deterioration_run3.py`, `model/run3_hardware.py`, `model/run3_final_c.py`, `model/run3_supplement.py`, `model/run3_b12_diagnostic.py`, `model/results/supervised/run3/`, `docs/Multitask_MLP_reports/Machine_Guardian_Training_Run3_Report.pdf` |"""),
+| New bearings and Run 3 | `model/extract_paderborn_zips.py`, `model/run3_prep.py`, `model/train_deterioration_run3.py`, `model/run3_hardware.py`, `model/run3_final_c.py`, `model/run3_supplement.py`, `model/run3_b12_diagnostic.py`, `model/results/supervised/run3/`, `docs/Model/10_Training_run3.pdf` |"""),
     ("""- **Inputs:** quantized with one scale, 16/127 per step, so ±16 maps to ±127.""",
      """- **Inputs:** quantized with one scale. For the clipped models (Runs 1–2; Run 3's A, B and D) the step is 16/127, so
   ±16 maps to ±127. The exported Run 3 models E and C are not clipped: the ARM first log-compresses each input,
@@ -279,7 +279,7 @@ def renumber(text):
 
 
 def main():
-    v1 = V1.read_text(encoding="utf-8")
+    v1 = V1.read_text(encoding="utf-8").replace("](../../../model/", "](../../model/")   # links as seen from V2's folder
     s = v1
     for a, b in REPS:
         assert s.count(a) == 1, a[:80]
@@ -291,7 +291,7 @@ def main():
     s = s.replace("# Machine Guardian — ML Model Development and Training Results\n",
                   "# Machine Guardian — ML Model Development and Training Results (version 2)\n", 1)
     V2.write_text(s, encoding="utf-8")
-    assert V1.read_text(encoding="utf-8") == v1
+    assert V1.read_text(encoding="utf-8").replace("](../../../model/", "](../../model/") == v1
     print(f"wrote {V2}; sections:", re.findall(r"^## (\d+)\.", s, flags=re.M))
 
 

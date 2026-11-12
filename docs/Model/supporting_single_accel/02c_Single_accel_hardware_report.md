@@ -8,7 +8,7 @@ was changed. Files: `export/E3_single_accel_a2/` (`W<l>.hex`, `Bias<l>.hex`, `Sc
 
 ## Deployed model: E3_single_accel_a1 (accelerometer 1, seed 42)
 
-Chosen by the team after the test results (mounting; see `SINGLE_ACCEL_MODEL_REPORT.md` section 0). Same
+Chosen by the team after the test results (mounting; see `02a_Single_accel_model_report.md` section 0). Same
 architecture and pipeline as the a2 export below; `export/E3_single_accel_a1/`.
 
 - s_x p99.9 = 0.038896 (validation mean |logit error| 0.3670 against 0.3732 for max); hidden scales 0.118791,

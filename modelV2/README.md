@@ -35,7 +35,7 @@ All raw recordings are under `modelV2/rawdata/` (gitignored):
 | No-history variant | `model/.venv/bin/python modelV2/train.py --data paderborn+ottawa --name B_nohist --history 0` | another run folder |
 | Evaluate | `model/.venv/bin/python modelV2/evaluate.py` | `runs/*/eval.json`, `timelines.png`, `report/comparison.json` |
 | INT8 + RTL | `model/.venv/bin/python modelV2/hardware.py --run modelV2/runs/<folder>` | `runs/<folder>/hardware.json`, `export/<folder>/seed*/` |
-| Report | `model/.venv/bin/python modelV2/report.py` | `report/report.html`, `report/report.pdf` |
+| Report | `model/.venv/bin/python modelV2/report.py` | `report/report.html`, `docs/Model/13_modelV2_bearing_status_and_health.pdf` |
 | Freeze | `model/.venv/bin/python modelV2/freeze.py --run modelV2/runs/<folder>` | `frozen.json` (once) |
 | Locked test | `model/.venv/bin/python modelV2/locked_eval.py` | `report/locked_results.json` (once; needs the feature tables of B06, B07, B13, B17) |
 | Live replay | `model/.venv/bin/python modelV2/live.py --model modelV2/export/<folder>/seed0 --replay modelV2/rawdata/paderborn/B08` | `live_status.html` |

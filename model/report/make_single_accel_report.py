@@ -1,4 +1,4 @@
-"""The single-accelerometer report as a PDF: docs/Machine_Guardian_single_accel_report.pdf.
+"""The single-accelerometer report as a PDF: docs/Model/02_Ottawa_single_accelerometer_model.pdf.
 
   python report/make_single_accel_report.py          (inside model/; needs Microsoft Edge or Chrome for the PDF)
 
@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 HERE = Path(__file__).resolve().parent.parent
-OUT = HERE.parent / "docs" / "Machine_Guardian_single_accel_report.pdf"
+OUT = HERE.parent / "docs" / "Model" / "02_Ottawa_single_accelerometer_model.pdf"
 
 # reference palette (dataviz skill), light mode: slot 1 blue = healthy, slot 2 orange = faulty
 HEALTHY, FAULTY = "#2a78d6", "#eb6834"
@@ -498,7 +498,7 @@ sensors; refit the scaling and the health reference on it, and keep part of it a
     ["<code>weights/E3_single_accel/deployed.json</code>, <code>selected.json</code>", "the deployment decision; the validation rule's choice"],
     ["<code>export/E3_single_accel_a1/</code>", "INT8 hex files, C header <code>mg_model.h</code>, test vectors"],
     ["<code>results/E3_single_accel/analysis.md</code>", "every table behind this report"],
-    ["<code>SINGLE_ACCEL_MODEL_REPORT.md</code>, <code>_COMPARISON.md</code>, <code>_HARDWARE_REPORT.md</code>", "the detailed reports"]])}
+    ["<code>docs/Model/supporting_single_accel/02a-02c</code>", "the detailed reports"]])}
 </body></html>"""
     return html
 

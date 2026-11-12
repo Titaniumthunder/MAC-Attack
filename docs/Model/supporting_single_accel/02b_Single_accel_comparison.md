@@ -43,7 +43,7 @@ no decision changed; RTL 382 cycles per window (xsim).
 | Accelerometer 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0.9998 | 0.0037 | 2 |
 
 Validation saturates for every model; the rule fell through to its 8th key (window-level ROC-AUC), where the gaps
-are a handful of window pairs. Treat the choice as weakly supported (see `SINGLE_ACCEL_MODEL_REPORT.md`, section 5).
+are a handful of window pairs. Treat the choice as weakly supported (see `02a_Single_accel_model_report.md`, section 5).
 
 ## Other differences
 

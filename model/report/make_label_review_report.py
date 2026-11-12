@@ -1,4 +1,4 @@
-"""results/supervised/LABEL_REVIEW_REPORT.md as a PDF: docs/Multitask_MLP_reports/Label_review_report.pdf.
+"""results/supervised/LABEL_REVIEW_REPORT.md as a PDF: docs/Model/07_B02_B04_processing_and_labels.pdf.
 
   python report/make_label_review_report.py     (inside model/; --keep-html prints the intermediate page)
 
@@ -12,7 +12,7 @@ from make_paderborn_baseline_report import CSS, browser, convert   # noqa: E402
 
 HERE = Path(__file__).resolve().parent.parent
 SRC = HERE / "results" / "supervised" / "LABEL_REVIEW_REPORT.md"
-OUT = HERE.parent / "docs" / "Multitask_MLP_reports" / "Label_review_report.pdf"
+OUT = HERE.parent / "docs" / "Model" / "07_B02_B04_processing_and_labels.pdf"
 BREAKS = (3, 5, 7)
 
 

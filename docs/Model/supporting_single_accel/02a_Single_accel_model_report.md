@@ -2,7 +2,7 @@
 
 28 Oct 2026. Every number below was measured by the commands in section 10, unless it is marked **historical** (E3's
 committed results of 27 Oct). Generated tables: `results/E3_single_accel/analysis.md`; short comparison:
-`SINGLE_ACCEL_COMPARISON.md`; INT8 and RTL: `SINGLE_ACCEL_HARDWARE_REPORT.md`.
+`02b_Single_accel_comparison.md`; INT8 and RTL: `02c_Single_accel_hardware_report.md`.
 
 ## 0. Deployment decision (28 Oct, after this report's first version)
 

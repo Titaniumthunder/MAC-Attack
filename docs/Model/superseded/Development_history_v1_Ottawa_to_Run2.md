@@ -55,7 +55,7 @@ alarm logic.
 
 ### 2.1 From the proposal to the first model
 
-![Project timeline](../../model/results/supervised/run2/figures/dev_timeline.png)
+![Project timeline](../../../model/results/supervised/run2/figures/dev_timeline.png)
 
 - **Original proposal:** acoustic anomaly detection with a DCASE-style autoencoder (project log, 20 Oct entry).
 - **20 Oct:** the professor approved a **multi-task MLP on vibration, temperature and RPM**, to be trained first and then
@@ -81,7 +81,7 @@ MLP (K → 32 → 16 → 1) trained with Adam, and the decision averaged ten 1-s
 
 Seed 42 results. E3 over three seeds: test accuracy 0.948 ± 0.029, recall 0.940 ± 0.034, F1 0.969 ± 0.018.
 
-![Ottawa results](../../model/results/supervised/run2/figures/dev_ottawa.png)
+![Ottawa results](../../../model/results/supervised/run2/figures/dev_ottawa.png)
 
 Further results:
 
@@ -184,7 +184,7 @@ recorded.
   uninterrupted cold start, steady state reached before the first alarm, and a residual of at most 1 °C. B02, B03 and B04
   pass. B01 fails, so its temperature input is set to 0.
 
-![Rear-accelerometer RMS and labels of the four processed bearings](../../model/results/supervised/figures/labels_overview.png)
+![Rear-accelerometer RMS and labels of the four processed bearings](../../../model/results/supervised/figures/labels_overview.png)
 
 ### 3.4 How the training labels were created
 
@@ -219,7 +219,7 @@ The split was drawn once, on 2 Nov:
 
 ## 4. Neural Network Architecture
 
-![The 8 → 32 → 16 → 2 multi-task MLP](../../model/results/supervised/run2/figures/dev_architecture.png)
+![The 8 → 32 → 16 → 2 multi-task MLP](../../../model/results/supervised/run2/figures/dev_architecture.png)
 
 ### 4.1 The eight inputs
 
@@ -277,7 +277,7 @@ The idea is the one used in industry: each machine is compared with its own firs
 
 ### 5.2 Training and validation: leave one bearing out
 
-![Leave-one-bearing-out folds](../../model/results/supervised/run2/figures/dev_lobo.png)
+![Leave-one-bearing-out folds](../../../model/results/supervised/run2/figures/dev_lobo.png)
 
 There are only three labelled bearings, so each is held out once. The network trains on the other two and is scored on
 **every** measurement of the held-out bearing. Each fold is trained with three random seeds, giving 9 networks per
@@ -319,7 +319,7 @@ Run 1 (3 Nov) was the first time the deterioration head was trained. Training to
 
 ### 6.1 Training loss
 
-![Run 1: training loss, separation during training, and predictions over each run](../../model/results/supervised/run1/figures/training.png)
+![Run 1: training loss, separation during training, and predictions over each run](../../../model/results/supervised/run1/figures/training.png)
 
 | Held out | Final training loss (seeds 0, 1, 2) | Held-out healthy / end-stage rows on opposite sides of 0.5 from |
 |---|---|---|
@@ -337,7 +337,7 @@ These are computed on the labelled held-out rows: 100 healthy and 5 end-stage ro
 | Raw score > 0.5 | 1.000 | 1.000 | 1.000 | 1.000 | 900 / 0 / 0 / 45 |
 | Run 1 alarm (3 in a row) | 1.000 | 1.000 | 1.000 | 1.000 | 900 / 0 / 0 / 45 |
 
-![Confusion matrices on the labelled held-out rows](../../model/results/supervised/run2/figures/confusion_run2.png)
+![Confusion matrices on the labelled held-out rows](../../../model/results/supervised/run2/figures/confusion_run2.png)
 
 > **Caution:** perfect scores here do not mean the model is perfect. The labelled rows are the two easiest extremes, a
 > brand-new bearing and a worn-out one, and there are only 15 end-stage rows from 3 bearings.
@@ -381,7 +381,7 @@ of 100. "Changes" counts every switch on or off over the whole run.
 | B04 | **MLP, Run 2 latched** | 458–489, 15:02–15:12 | 194.6–204.4 | **1** | 0 / 0 | 100 % |
 | B04 | Anomaly detector (prototype) | 442, 14:57:25 | 209.6 | 1 | 1 / 0 (in-sample) | 100 % |
 
-![Alarm state of every detector over each held-out bearing](../../model/results/supervised/run2/figures/alarm_timeline_run2.png)
+![Alarm state of every detector over each held-out bearing](../../../model/results/supervised/run2/figures/alarm_timeline_run2.png)
 
 ### 7.2 Why the scores are so close to 0 or 1
 
@@ -398,7 +398,7 @@ of 100. "Changes" counts every switch on or off over the whole run.
 - **Is it calibrated?** On the labelled rows the calibration error is tiny (ECE 0.00013), but only 2 of 10 probability
   bins contain any rows. Calibration in between **cannot be checked**, because the unlabelled middle has no ground truth.
 
-![Calibration diagnostics](../../model/results/supervised/run2/figures/calibration_run2.png)
+![Calibration diagnostics](../../../model/results/supervised/run2/figures/calibration_run2.png)
 
 ### 7.3 A temperature-input shortcut, tested
 
@@ -436,7 +436,7 @@ the anomaly detector, while healthy rows stay far below the threshold.
 | Logit error | mean 0.12–0.18, max 1.60 |
 | RTL simulation of a trained network (B03 held out, seed 0; Icarus Verilog, `tb_mlp.sv`) | **PASS**, bit-exact; 1,642 cycles per 64 measurements, 382 cycles (1.78 µs at 214.286 MHz) per measurement |
 
-![INT8 decisions changed per network](../../model/results/supervised/run2/figures/int8_run2.png)
+![INT8 decisions changed per network](../../../model/results/supervised/run2/figures/int8_run2.png)
 
 ## 8. Run 1 vs. Run 2 Comparison
 
@@ -455,7 +455,7 @@ the anomaly detector, while healthy rows stay far below the threshold.
 | Trained model in INT8 / RTL | not checked | 0 labelled decisions changed; RTL PASS | **new evidence** |
 | Calibration understanding | none | cause identified; not calibratable with current labels | **new evidence** |
 
-![Alarm-state changes and first-alarm time per bearing](../../model/results/supervised/run2/figures/alarm_metrics_run2.png)
+![Alarm-state changes and first-alarm time per bearing](../../../model/results/supervised/run2/figures/alarm_metrics_run2.png)
 
 ### 8.2 Does the MLP outperform the anomaly detector?
 
@@ -490,7 +490,7 @@ The trained network is converted with the project's export scheme (`export.py`, 
 
 ### 9.2 The 8 × 8 systolic array
 
-![Inference path](../../model/results/supervised/run2/figures/dev_pipeline.png)
+![Inference path](../../../model/results/supervised/run2/figures/dev_pipeline.png)
 
 - **The array:** 64 processing elements, one DSP48E1 multiplier each, multiplying INT8 values into exact 22-bit
   accumulators. Matrices are up to 64 wide.

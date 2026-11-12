@@ -1,6 +1,6 @@
 """Rebuilds the report (HTML and PDF) from the saved results. Nothing is trained or recomputed here.
 
-  model/.venv/bin/python modelV2/report.py        ->  modelV2/report/report.html and report.pdf
+  model/.venv/bin/python modelV2/report.py        ->  modelV2/report/report.html and docs/Model/13_modelV2_bearing_status_and_health.pdf
 """
 import html, json, os
 
@@ -297,8 +297,9 @@ def main():
             flow.append(Table(cells, colWidths=[W / len(v[0])] * len(v[0]), style=[("GRID", (0, 0), (-1, -1), 0.3, colors.grey),
                                                                                   ("BACKGROUND", (0, 0), (-1, 0), colors.whitesmoke)]))
         flow.append(Spacer(1, 6))
-    SimpleDocTemplate(str(c.REPORT / "report.pdf"), pagesize=A4, leftMargin=40, rightMargin=40).build(flow)
-    print(f"{c.REPORT / 'report.html'}\n{c.REPORT / 'report.pdf'}")
+    pdf = c.writable(c.REPO / "docs" / "Model" / "13_modelV2_bearing_status_and_health.pdf")     # numbered model docs folder
+    SimpleDocTemplate(str(pdf), pagesize=A4, leftMargin=40, rightMargin=40).build(flow)
+    print(f"{c.REPORT / 'report.html'}\n{pdf}")
 
 
 if __name__ == "__main__":

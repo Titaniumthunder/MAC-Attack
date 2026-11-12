@@ -13,7 +13,7 @@ is healthy / faulty from motor vibration (University of Ottawa electric motor da
 | `mac_attack_accel/` | **Design 1:** 250 MHz matrix multiplier (step 14), finished | `zed/mac_zed_project/mac_zed.xpr` |
 | `mac_attack_accel_MLP/` | **Design 2:** on-chip MLP (step 15c), complete by itself | `zed/mac_zed_project/mac_zed.xpr` (started as a copy of design 1's; FCLK_CLK0 asked 225 MHz, the Zynq gives 214.286 MHz; adds the AXI register slice `mac_rs`) |
 | `model/` | Machine Guardian model: code, feature tables, weights, INT8 exports (see `model/README.md`) | |
-| `docs/` | `log.md` is the one project log (all steps, both designs), plus the brief and the model report | |
+| `docs/` | `log.md` is the one project log (all steps, both designs), plus the brief; `docs/Model/` has every model document, numbered in order (see `docs/Model/README.md`) | |
 | `Alex/` `James/` `Marco/` | Personal working areas | |
 | `archive/` | Files no longer used, kept for history (see `archive/README.md`) | |
 
@@ -32,7 +32,7 @@ Both design folders have `rtl/`, `tb/`, `mac.py` and `zed/`; only design 1 keeps
 │   └── openlane/            OpenLane / SKY130 chip config and sources (design 1 only)
 ├── mac_attack_accel_MLP/    Design 2 (see mac_attack_accel_MLP/README.md): rtl/, tb/, mac.py, zed/
 ├── model/                   Machine Guardian model (see model/README.md)
-├── docs/                    Project log, brief and shared documents
+├── docs/                    Project log, brief, shared documents; docs/Model/ = all model documents, numbered
 ├── archive/                 Files no longer used (see archive/README.md)
 ├── Alex/                    Alex's working area
 ├── James/                   James's working area

@@ -1,6 +1,6 @@
 """The label review packet and the review-step report as PDFs:
-docs/Multitask_MLP_reports/Label_review_packet.pdf (one review item per page), Review_step_report.pdf,
-Wording_revision_report.pdf, Label_review_instructions.pdf and Review_instructions_report.pdf.
+docs/Model/supporting_label_review/07a_Label_review_packet.pdf (one review item per page), 07b_Review_step_report.pdf,
+07c_Wording_revision_report.pdf, 07d_Label_review_instructions.pdf and 07e_Review_instructions_report.pdf.
 
   python report/make_review_docs.py     (inside model/)
 
@@ -13,14 +13,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from make_paderborn_baseline_report import CSS, browser, convert   # noqa: E402
 
 HERE = Path(__file__).resolve().parent.parent
-DOCS = HERE.parent / "docs" / "Multitask_MLP_reports"
+DOCS = HERE.parent / "docs" / "Model" / "supporting_label_review"
 SUP = HERE / "results" / "supervised"
 # (source, output, title, the ## sections that start a new page)
-JOBS = [(SUP / "LABEL_REVIEW_PACKET.md", DOCS / "Label_review_packet.pdf", "Label review packet", tuple(range(1, 16))),
-        (SUP / "REVIEW_STEP_REPORT.md", DOCS / "Review_step_report.pdf", "Review step report", (3, 4)),
-        (SUP / "WORDING_REVISION_REPORT.md", DOCS / "Wording_revision_report.pdf", "Wording revision report", (4,)),
-        (SUP / "LABEL_REVIEW_INSTRUCTIONS.md", DOCS / "Label_review_instructions.pdf", "Label review instructions", (5, 7)),
-        (SUP / "REVIEW_INSTRUCTIONS_REPORT.md", DOCS / "Review_instructions_report.pdf", "Review instructions report", (3,))]
+JOBS = [(SUP / "LABEL_REVIEW_PACKET.md", DOCS / "07a_Label_review_packet.pdf", "Label review packet", tuple(range(1, 16))),
+        (SUP / "REVIEW_STEP_REPORT.md", DOCS / "07b_Review_step_report.pdf", "Review step report", (3, 4)),
+        (SUP / "WORDING_REVISION_REPORT.md", DOCS / "07c_Wording_revision_report.pdf", "Wording revision report", (4,)),
+        (SUP / "LABEL_REVIEW_INSTRUCTIONS.md", DOCS / "07d_Label_review_instructions.pdf", "Label review instructions", (5, 7)),
+        (SUP / "REVIEW_INSTRUCTIONS_REPORT.md", DOCS / "07e_Review_instructions_report.pdf", "Review instructions report", (3,))]
 
 
 def build(src, out, title, breaks):

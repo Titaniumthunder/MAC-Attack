@@ -1,7 +1,12 @@
 # Machine Guardian model (motor faults, University of Ottawa dataset)
 
+> **This README describes the original Ottawa model (step 01–02 of the model's history), which is no longer the
+> current model.** The current model is the frozen modelV2 (`modelV2/`, document
+> `docs/Model/13_modelV2_bearing_status_and_health.pdf`); see `docs/Model/README.md` for the reading order of every
+> model document.
+
 The model the on-chip MLP (`mac_attack_accel_MLP/`, step 15) runs: healthy or faulty, from the vibration of an electric
-motor. **Start with `docs/Machine_Guardian_model_report.pdf`** (in the repo's top folder): the whole system from the data to the chip, with every
+motor. **Start with `docs/Model/01_Ottawa_three_accelerometer_model_E0-E3.pdf`** (in the repo's top folder): the whole system from the data to the chip, with every
 result. Decisions and results are logged in `docs/log.md`, section 12.
 
 ## Setup (once per computer)
@@ -62,8 +67,8 @@ tables in `features/` without it.
 ## Single-accelerometer models (`E3_single_accel`, 28 Oct)
 
 E3 with one physical accelerometer and ln f: 8 inputs -> 32 -> 16 -> 1, everything else as E3. E3's files are
-untouched. Results and limits: `SINGLE_ACCEL_MODEL_REPORT.md`, `SINGLE_ACCEL_COMPARISON.md`,
-`SINGLE_ACCEL_HARDWARE_REPORT.md`. Inside `model/` (`python` = the environment above; on the Windows PC it was run
+untouched. Results and limits: `docs/Model/supporting_single_accel/` (02a model report, 02b comparison, 02c
+hardware report). Inside `model/` (`python` = the environment above; on the Windows PC it was run
 with Python 3.12):
 
 | Step | Command |
@@ -76,7 +81,7 @@ with Python 3.12):
 | Export for the TPU (INT8, hex, C header, vectors) | `python export.py --experiment E3_single_accel_a1 --health H1_single_accel_a1` -> `export/E3_single_accel_a1/` |
 | RTL check | `python rtl_check.py --experiment E3_single_accel_a1` (Icarus) or `--sim vivado` (xsim; works with Vivado 2019.1) |
 | Tests | `python -m pytest test_single_accel.py -q` |
-| PDF report | `python report/make_single_accel_report.py` -> `docs/Machine_Guardian_single_accel_report.pdf` (needs Chrome or Edge, prints HTML headless) |
+| PDF report | `python report/make_single_accel_report.py` -> `docs/Model/02_Ottawa_single_accelerometer_model.pdf` (needs Chrome or Edge, prints HTML headless) |
 
 Inference: `features.window_inputs(accel_window, f_hz)` gives the 8 inputs of one 1-s window (42,000 samples in m/s^2,
 f = the drive's commanded frequency); standardize with `weights/<E>/model.json` `scaler`, run the network
@@ -96,7 +101,7 @@ and `health.statistics()`; no model uses them yet.
 | `health.py` | yes | The health index (output 2) |
 | `export.py`, `rtl_check.py` | yes | INT8 export and the RTL check |
 | `single_accel.py`, `test_single_accel.py` | yes | The single-accelerometer variants and their selection; their checks |
-| `SINGLE_ACCEL_*.md` | yes | The single-accelerometer reports |
+| `docs/Model/supporting_single_accel/` | yes | The single-accelerometer reports (moved out of `model/`, 11 Nov) |
 | `features/recordings.csv` | yes | 128 rows, one per 10-s recording |
 | `features/windows.csv` | yes | 1,280 rows, one per 1-s window (with `f_hz`, the window's drive frequency) |
 | `features/speed.csv`, `tracks.csv` | yes | The drive command of each recording and its fit; the tracked 1x lines of the 64 ramp recordings |
@@ -106,7 +111,7 @@ and `health.statistics()`; no model uses them yet.
 | `results/<E>/` | yes | `report.md` (the tables), `metrics.json`, `scores.csv` (every recording's score and decision) |
 | `results/H1/`, `results/ramps/` | yes | The health index's report and every recording's index; the ramp check figure |
 | `export/E3/` | yes | `W<l>.hex`, `Bias<l>.hex`, `Scl<l>.hex` (for `tb_mlp.sv`), `mg_model.h`, `vectors/`, `quant.json`, `report.md` |
-| `report/` | yes | `make_report.py` and the charts in `figures/`; it writes the PDF to `../docs/Machine_Guardian_model_report.pdf` |
+| `report/` | yes | `make_report.py` and the charts in `figures/`; it writes the PDF to `../docs/Model/01_Ottawa_three_accelerometer_model_E0-E3.pdf` |
 | `.venv/` | no | Python environment |
 
 The tables are in `features/`, not `data/`, because `.gitignore` ignores every `data/` folder.
