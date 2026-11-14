@@ -1,0 +1,57 @@
+# Tiny Tapeout project information
+project:
+  title:        "Tiny-TPU v2: 2-PE INT8 accelerator with on-chip ReLU"      # Project title
+  author:       "Alex Salamati, James Manikyan, Marco Flores"      # Your name
+  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  description:  "Two INT8 MAC PEs, 22-bit sums, ping-pong layer buffers, on-chip bias/rescale/ReLU, burst weight streaming; runs MLP layers for a motor-fault detector"      # One line description of what your project does
+  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
+  clock_hz:     50000000       # Clock frequency in Hz (or 0 if not applicable)
+
+  # How many tiles your design occupies? A single tile is about 167x108 uM.
+  tiles: "8x2"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+
+  # Your top module name must start with "tt_um_". Make it unique by including your github username:
+  top_module:  "tt_um_titaniumthunder_tiny_tpu_v2"
+
+  # List your project's source files here.
+  # Source files must be in ./src and you must list each source file separately, one per line.
+  # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
+  source_files:
+    - "project.v"
+    - "tiny_tpu_v2_core.v"
+
+# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
+# This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
+pinout:
+  # Inputs
+  ui[0]: "DATA[0] / PE0 weight[0] in burst"
+  ui[1]: "DATA[1] / PE0 weight[1] in burst"
+  ui[2]: "DATA[2] / PE0 weight[2] in burst"
+  ui[3]: "DATA[3] / PE0 weight[3] in burst"
+  ui[4]: "DATA[4] / PE0 weight[4] in burst"
+  ui[5]: "DATA[5] / PE0 weight[5] in burst"
+  ui[6]: "DATA[6] / PE0 weight[6] in burst"
+  ui[7]: "DATA[7] / PE0 weight[7] in burst"
+
+  # Outputs
+  uo[0]: "OUT[0] (byte selected by BSEL, PSEL)"
+  uo[1]: "OUT[1] (byte selected by BSEL, PSEL)"
+  uo[2]: "OUT[2] (byte selected by BSEL, PSEL)"
+  uo[3]: "OUT[3] (byte selected by BSEL, PSEL)"
+  uo[4]: "OUT[4] (byte selected by BSEL, PSEL)"
+  uo[5]: "OUT[5] (byte selected by BSEL, PSEL)"
+  uo[6]: "OUT[6] (byte selected by BSEL, PSEL)"
+  uo[7]: "OUT[7] (byte selected by BSEL, PSEL)"
+
+  # Bidirectional pins
+  uio[0]: "CMD[0] / PE1 weight[0] in burst"
+  uio[1]: "CMD[1] / PE1 weight[1] in burst"
+  uio[2]: "CMD[2] / PE1 weight[2] in burst"
+  uio[3]: "STROBE / VALID / PE1 weight[3] in burst"
+  uio[4]: "MODE / PE1 weight[4] in burst"
+  uio[5]: "BSEL[0] / PE1 weight[5] in burst"
+  uio[6]: "BSEL[1] / PE1 weight[6] in burst"
+  uio[7]: "PSEL / PE1 weight[7] in burst"
+
+# Do not change!
+yaml_version: 6
