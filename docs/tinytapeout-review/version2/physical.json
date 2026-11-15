@@ -1,0 +1,73 @@
+{
+  "version": 2,
+  "synthesis_cells": 7949,
+  "synthesis_area_um2": 86591.7984,
+  "physical_nonfill_cells": 13645,
+  "physical_nonfill_area_um2": 106631,
+  "physical_total_cells": 56258,
+  "physical_total_area_um2": 254599,
+  "worst_setup_slack_ns": 69.52076799901945,
+  "worst_hold_slack_ns": 0.1137239778981235,
+  "clock_target_mhz": 10,
+  "clock_min_period_reports": [
+    {
+      "corner": "min_ss_100C_1v60",
+      "min_period_ns": 24.81,
+      "fmax_mhz": 40.3
+    },
+    {
+      "corner": "max_ff_n40C_1v95",
+      "min_period_ns": 7.77,
+      "fmax_mhz": 128.69
+    },
+    {
+      "corner": "min_tt_025C_1v80",
+      "min_period_ns": 12.1,
+      "fmax_mhz": 82.64
+    },
+    {
+      "corner": "max_tt_025C_1v80",
+      "min_period_ns": 12.47,
+      "fmax_mhz": 80.18
+    },
+    {
+      "corner": "min_ff_n40C_1v95",
+      "min_period_ns": 7.52,
+      "fmax_mhz": 133.03
+    },
+    {
+      "corner": "max_ss_100C_1v60",
+      "min_period_ns": 25.48,
+      "fmax_mhz": 39.25
+    },
+    {
+      "corner": "nom_ff_n40C_1v95",
+      "min_period_ns": 7.64,
+      "fmax_mhz": 130.81
+    },
+    {
+      "corner": "nom_tt_025C_1v80",
+      "min_period_ns": 12.3,
+      "fmax_mhz": 81.32
+    },
+    {
+      "corner": "nom_ss_100C_1v60",
+      "min_period_ns": 25.17,
+      "fmax_mhz": 39.72
+    }
+  ],
+  "estimated_internal_fmax_mhz": 39.25,
+  "max_slew_violations": 2552,
+  "max_cap_violations": 7,
+  "routing_drc": 0,
+  "magic_drc": 0,
+  "lvs_errors": 0,
+  "antenna_violating_nets": 0,
+  "gds": "tt_um_mac_attack_v2.gds",
+  "oas": "tt_um_mac_attack_v2.oas",
+  "note": "Nonfill cell count includes physical-only tap cells. Fmax is internal-clock STA estimate, not a tested interface frequency. All execution logs retain original temporary paths.",
+  "max_fanout_violations": 27,
+  "tiles": "3x4",
+  "tile_count": 12,
+  "status": "diagnostic_layout_electrical_signoff_failed"
+}

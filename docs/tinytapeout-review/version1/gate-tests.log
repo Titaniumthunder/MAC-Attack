@@ -1,0 +1,27 @@
+rm -f results.xml
+"/Library/Developer/CommandLineTools/usr/bin/make" -f Makefile results.xml
+mkdir -p sim_build/gl
+/nix/store/0g9gnpnwj9b0flkyfawhfm2p9dl5hg3l-devshell-dir/bin/iverilog -o sim_build/gl/sim.vvp -s tb -g2012 -DGL_TEST -DFUNCTIONAL -DUSE_POWER_PINS -DSIM -DUNIT_DELAY=#1 -I<build>/version1/test/../src -f sim_build/gl/cmds.f  <build>/pdk/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v <build>/pdk/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v <build>/version1/test/gate_level_netlist.v <build>/version1/test/tb.v
+rm -f results.xml
+COCOTB_TEST_MODULES=test,test_protocol COCOTB_TESTCASE= COCOTB_TEST_FILTER= COCOTB_TOPLEVEL=tb TOPLEVEL_LANG=verilog \
+         /nix/store/0g9gnpnwj9b0flkyfawhfm2p9dl5hg3l-devshell-dir/bin/vvp -M <build>/venv-test/lib/python3.11/site-packages/cocotb/libs -m libcocotbvpi_icarus   sim_build/gl/sim.vvp -fst   
+     -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:94   in _embed_init_python              Using Python 3.11.9 interpreter at <build>/venv-test/bin/python
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:79   in gpi_print_registered_impl       VPI registered
+     0.00ns INFO     cocotb                             Running on Icarus Verilog version 12.0 (stable)
+     0.00ns INFO     cocotb                             Seeding Python random module with 1794683343
+     0.00ns INFO     cocotb                             Initialized cocotb v2.0.1 from <build>/venv-test/lib/python3.11/site-packages/cocotb
+     0.00ns INFO     cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+     0.00ns INFO     cocotb                             Running tests
+     0.00ns INFO     cocotb.regression                  running test.reference_vectors (1/2)
+2990551.00ns INFO     cocotb.regression                  test.reference_vectors passed
+2990551.00ns INFO     cocotb.regression                  running test_protocol.reset_enable_and_single_acceptance (2/2)
+2996302.00ns INFO     cocotb.regression                  test_protocol.reset_enable_and_single_acceptance passed
+2996302.00ns INFO     cocotb.regression                  **********************************************************************************************************
+                                                         ** TEST                                              STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                         **********************************************************************************************************
+                                                         ** test.reference_vectors                             PASS     2990551.00           1.69    1772551.27  **
+                                                         ** test_protocol.reset_enable_and_single_acceptance   PASS        5751.00           0.00    2467161.94  **
+                                                         **********************************************************************************************************
+                                                         ** TESTS=2 PASS=2 FAIL=0 SKIP=0                                2996302.00           1.69    1771202.09  **
+                                                         **********************************************************************************************************
+FST info: dumpfile tb.fst opened for output.

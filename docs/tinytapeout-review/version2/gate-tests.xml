@@ -1,0 +1,7 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1794684377" />
+    <testcase name="reference_vectors" classname="test" file="<build>/version2-3x4/test/test.py" lineno="8" time="416.27363109588623" sim_time_ns="55004351.0" ratio_time="132135.0834911041" />
+    <testcase name="reset_enable_and_single_acceptance" classname="test_protocol" file="<build>/version2-3x4/test/test_protocol.py" lineno="8" time="4.097590923309326" sim_time_ns="334751.0" ratio_time="81694.58744545587" />
+  </testsuite>
+</testsuites>

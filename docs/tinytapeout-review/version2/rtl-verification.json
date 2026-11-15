@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "inferences": 168,
+  "read_checks": 2016,
+  "exported_vectors": 64,
+  "additional_inferences": 104,
+  "reference": "Original mac.py golden_mlp, verified against all supplied vectors_C.hex; all four raw 22-bit sums compared through GPIO."
+}

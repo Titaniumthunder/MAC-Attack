@@ -1,0 +1,10 @@
+{
+  "pass": true,
+  "inferences": 115,
+  "read_checks": 1641,
+  "model_vectors": 12,
+  "additional_inferences": 103,
+  "operand_pairs": 256,
+  "overflow_tests": 2,
+  "reference": "Original pipeline.py functions compiled unchanged via AST; every MAC result, logits and supplied traces checked."
+}
