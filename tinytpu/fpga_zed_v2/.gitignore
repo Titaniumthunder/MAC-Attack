@@ -1,0 +1,5 @@
+tinytpu_v2_zed_project/
+sim/sim_build/
+sim/results.xml
+sim/__pycache__/
+sim/cosim/build/
