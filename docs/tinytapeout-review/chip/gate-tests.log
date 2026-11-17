@@ -1,0 +1,33 @@
+rm -f results.xml
+mkdir -p sim_build/gl
+/nix/store/d0jfzcxdlrb974c13h83na7jkya0qz7d-devshell-dir/bin/iverilog -o sim_build/gl/sim.vvp -s tb -g2012 -DGL_TEST -DFUNCTIONAL -DUSE_POWER_PINS -DSIM -DUNIT_DELAY=#1 -I/private/tmp/mac-attack-tt-20261116/chip-slowcorner/test/../src -f sim_build/gl/cmds.f  /private/tmp/mac-attack-tt-20261116/pdk/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v /private/tmp/mac-attack-tt-20261116/pdk/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v /private/tmp/mac-attack-tt-20261116/chip-slowcorner/test/gate_level_netlist.v /private/tmp/mac-attack-tt-20261116/chip-slowcorner/test/tb.v
+rm -f results.xml
+COCOTB_TEST_MODULES=test COCOTB_TESTCASE=  COCOTB_TOPLEVEL=tb TOPLEVEL_LANG=verilog       \
+		 /nix/store/d0jfzcxdlrb974c13h83na7jkya0qz7d-devshell-dir/bin/vvp -m /private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb/libs/libcocotbvpi_icarus.so   sim_build/gl/sim.vvp -fst   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/nix/store/0hhzvkw889bsybhqxy12ky4jx6a95p2d-python3-3.11.9/lib/libpython3.11.dylib'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:234  in gpi_load_users                  Running entry func 'initialize' from loaded library '/private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb/simulator.cpython-311-darwin.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:115  in initialize                      Using Python 3.11.9 interpreter at /private/tmp/mac-attack-tt-20261116/venv-test311/bin/python3.11
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1794895014
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 13.0 (devel)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test.test_golden_vectors (1/2)
+                                                            All 12 inferences from golden_vectors.json, command by command.
+112603.00ns INFO     cocotb.tb                          12 golden inferences, 72 READs, all accumulators exact
+112603.00ns INFO     cocotb.regression                  test.test_golden_vectors passed
+112603.00ns INFO     cocotb.regression                  running test.test_edge_cases (2/2)
+                                                            Signs, -8, overflow flag, CLEAR clears it, NOP changes nothing, slow host.
+251326.00ns INFO     cocotb.tb                          all 256 signed INT4 products exact
+373726.00ns INFO     cocotb.tb                          overflow is flagged, sticky, and cleared by CLEAR
+383846.00ns INFO     cocotb.tb                          slow host: same result
+383846.00ns INFO     cocotb.regression                  test.test_edge_cases passed
+383846.00ns INFO     cocotb.regression                  **************************************************************************************
+                                                        ** TEST                          STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        **************************************************************************************
+                                                        ** test.test_golden_vectors       PASS      112603.00           0.18     642470.99  **
+                                                        ** test.test_edge_cases           PASS      271243.00           0.32     837193.55  **
+                                                        **************************************************************************************
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0             383846.00           0.50     768009.19  **
+                                                        **************************************************************************************
+FST info: dumpfile tb.fst opened for output.

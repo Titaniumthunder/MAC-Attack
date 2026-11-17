@@ -1,0 +1,33 @@
+rm -f results.xml
+mkdir -p sim_build/rtl
+/nix/store/d0jfzcxdlrb974c13h83na7jkya0qz7d-devshell-dir/bin/iverilog -o sim_build/rtl/sim.vvp -s tb -g2012 -I/private/tmp/mac-attack-tt-20261116/chip/test/../src -f sim_build/rtl/cmds.f  /private/tmp/mac-attack-tt-20261116/chip/test/../src/project.v /private/tmp/mac-attack-tt-20261116/chip/test/../src/tiny_tpu_pe.v /private/tmp/mac-attack-tt-20261116/chip/test/tb.v
+rm -f results.xml
+COCOTB_TEST_MODULES=test COCOTB_TESTCASE=  COCOTB_TOPLEVEL=tb TOPLEVEL_LANG=verilog       \
+		 /nix/store/d0jfzcxdlrb974c13h83na7jkya0qz7d-devshell-dir/bin/vvp -m /private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb/libs/libcocotbvpi_icarus.so   sim_build/rtl/sim.vvp -fst   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/nix/store/0hhzvkw889bsybhqxy12ky4jx6a95p2d-python3-3.11.9/lib/libpython3.11.dylib'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:234  in gpi_load_users                  Running entry func 'initialize' from loaded library '/private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb/simulator.cpython-311-darwin.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:115  in initialize                      Using Python 3.11.9 interpreter at /private/tmp/mac-attack-tt-20261116/venv-test311/bin/python3.11
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1794894330
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 13.0 (devel)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test.test_golden_vectors (1/2)
+                                                            All 12 inferences from golden_vectors.json, command by command.
+ 87643.00ns INFO     cocotb.tb                          12 golden inferences, 72 READs, all accumulators exact
+ 87643.00ns INFO     cocotb.regression                  test.test_golden_vectors passed
+ 87643.00ns INFO     cocotb.regression                  running test.test_edge_cases (2/2)
+                                                            Signs, -8, overflow flag, CLEAR clears it, NOP changes nothing, slow host.
+195606.00ns INFO     cocotb.tb                          all 256 signed INT4 products exact
+290806.00ns INFO     cocotb.tb                          overflow is flagged, sticky, and cleared by CLEAR
+300046.00ns INFO     cocotb.tb                          slow host: same result
+300046.00ns INFO     cocotb.regression                  test.test_edge_cases passed
+300046.00ns INFO     cocotb.regression                  **************************************************************************************
+                                                        ** TEST                          STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        **************************************************************************************
+                                                        ** test.test_golden_vectors       PASS       87643.00           0.08    1120291.27  **
+                                                        ** test.test_edge_cases           PASS      212403.00           0.15    1406958.02  **
+                                                        **************************************************************************************
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0             300046.00           0.23    1306838.59  **
+                                                        **************************************************************************************
+FST info: dumpfile tb.fst opened for output.

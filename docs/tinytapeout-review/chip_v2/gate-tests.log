@@ -1,0 +1,49 @@
+rm -f results.xml
+mkdir -p sim_build/gl
+/nix/store/d0jfzcxdlrb974c13h83na7jkya0qz7d-devshell-dir/bin/iverilog -o sim_build/gl/sim.vvp -s tb -g2012 -DGL_TEST -DFUNCTIONAL -DUSE_POWER_PINS -DSIM -DUNIT_DELAY=#1 -I/private/tmp/mac-attack-tt-20261116/chip_v2-final-repair/test/../src -f sim_build/gl/cmds.f  /private/tmp/mac-attack-tt-20261116/pdk/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v /private/tmp/mac-attack-tt-20261116/pdk/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v /private/tmp/mac-attack-tt-20261116/chip_v2-final-repair/test/gate_level_netlist.v /private/tmp/mac-attack-tt-20261116/chip_v2-final-repair/test/tb.v
+rm -f results.xml
+COCOTB_TEST_MODULES=test COCOTB_TESTCASE=  COCOTB_TOPLEVEL=tb TOPLEVEL_LANG=verilog       \
+		 /nix/store/d0jfzcxdlrb974c13h83na7jkya0qz7d-devshell-dir/bin/vvp -m /private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb/libs/libcocotbvpi_icarus.so   sim_build/gl/sim.vvp -fst   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/nix/store/0hhzvkw889bsybhqxy12ky4jx6a95p2d-python3-3.11.9/lib/libpython3.11.dylib'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:234  in gpi_load_users                  Running entry func 'initialize' from loaded library '/private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb/simulator.cpython-311-darwin.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:115  in initialize                      Using Python 3.11.9 interpreter at /private/tmp/mac-attack-tt-20261116/venv-test311/bin/python3.11
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1794895710
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 13.0 (devel)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test.test_modelv2_on_chip (1/5)
+                                                            modelV2 with the hidden layers post-processed ON CHIP; only the final raw sums come out.
+1272597.00ns INFO     cocotb.tb                          modelV2 13-32-16-4 on chip: 64 rows, 3072 POST outputs and 256 final sums exact; 878 clocks per inference
+1272597.00ns INFO     cocotb.regression                  test.test_modelv2_on_chip passed
+1272597.00ns INFO     cocotb.regression                  running test.test_modelv2_bypass (2/5)
+                                                            The same model with READ every layer and the host doing the requantization (bypass).
+1514154.00ns INFO     cocotb.tb                          modelV2 in bypass mode: rows 0-15 exact
+1514154.00ns INFO     cocotb.regression                  test.test_modelv2_bypass passed
+1514154.00ns INFO     cocotb.regression                  running test.test_professor_int4_bypass (3/5)
+                                                            The professor's INT4 model: his host math is floating point, so it runs in bypass mode.
+1529551.00ns INFO     cocotb.tb                          professor's INT4 model, burst: 72 sums exact
+1672098.00ns INFO     cocotb.tb                          professor's INT4 model, handshake: 72 sums exact
+1672098.00ns INFO     cocotb.regression                  test.test_professor_int4_bypass passed
+1672098.00ns INFO     cocotb.regression                  running test.test_post_fuzz (4/5)
+                                                            Random layers with random bias / m0 / shift / ReLU; the stored outputs are read back through the
+2317892.00ns INFO     cocotb.tb                          POST fuzz: 60 random layers, 959 outputs exact in the registers and in the buffer
+2317892.00ns INFO     cocotb.regression                  test.test_post_fuzz passed
+2317892.00ns INFO     cocotb.regression                  running test.test_edge_cases (5/5)
+2358168.00ns INFO     cocotb.tb                          both PEs: 200 products exact
+2361683.00ns INFO     cocotb.tb                          overflow flags per PE, cleared by CLEAR
+2362829.00ns INFO     cocotb.tb                          POST while busy ignored, POST 4 clocks later taken, CLEAR right after a POST is safe
+2366095.00ns INFO     cocotb.tb                          handshake mode: MAC + LOAD_P + POST work, BURST ignored
+2366095.00ns INFO     cocotb.regression                  test.test_edge_cases passed
+2366095.00ns INFO     cocotb.regression                  *****************************************************************************************
+                                                        ** TEST                             STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        *****************************************************************************************
+                                                        ** test.test_modelv2_on_chip         PASS     1272597.00          63.47      20050.83  **
+                                                        ** test.test_modelv2_bypass          PASS      241557.00          11.42      21153.46  **
+                                                        ** test.test_professor_int4_bypass   PASS      157944.00           3.75      42164.24  **
+                                                        ** test.test_post_fuzz               PASS      645794.00          33.71      19157.89  **
+                                                        ** test.test_edge_cases              PASS       48203.00           1.31      36823.62  **
+                                                        *****************************************************************************************
+                                                        ** TESTS=5 PASS=5 FAIL=0 SKIP=0               2366095.00         113.65      20818.56  **
+                                                        *****************************************************************************************
+FST info: dumpfile tb.fst opened for output.

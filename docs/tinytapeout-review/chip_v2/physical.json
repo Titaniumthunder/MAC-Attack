@@ -1,0 +1,70 @@
+{
+  "name": "chip_v2",
+  "clock_period_ns": 40,
+  "synthesis_cells": 7916,
+  "synthesis_area_um2": 86724.4256,
+  "physical_nonfill_cells": 15530,
+  "physical_nonfill_area_um2": 114836,
+  "physical_total_cells": 69040,
+  "worst_setup_slack_ns": 9.88461962481344,
+  "worst_hold_slack_ns": 0.09736645099103507,
+  "checks": {
+    "design__max_slew_violation__count": 32,
+    "design__max_cap_violation__count": 0,
+    "design__max_fanout_violation__count": 2,
+    "route__drc_errors": 0,
+    "magic__drc_error__count": 0,
+    "design__lvs_error__count": 0,
+    "antenna__violating__nets": 0,
+    "timing__setup_vio__count": 0,
+    "timing__hold_vio__count": 0
+  },
+  "clock_reports": [
+    {
+      "corner": "min_ss_100C_1v60",
+      "min_period_ns": 29.23,
+      "fmax_mhz": 34.22
+    },
+    {
+      "corner": "max_ff_n40C_1v95",
+      "min_period_ns": 9.7,
+      "fmax_mhz": 103.04
+    },
+    {
+      "corner": "min_tt_025C_1v80",
+      "min_period_ns": 14.52,
+      "fmax_mhz": 68.86
+    },
+    {
+      "corner": "max_tt_025C_1v80",
+      "min_period_ns": 15.23,
+      "fmax_mhz": 65.66
+    },
+    {
+      "corner": "min_ff_n40C_1v95",
+      "min_period_ns": 9.23,
+      "fmax_mhz": 108.35
+    },
+    {
+      "corner": "max_ss_100C_1v60",
+      "min_period_ns": 30.12,
+      "fmax_mhz": 33.21
+    },
+    {
+      "corner": "nom_ff_n40C_1v95",
+      "min_period_ns": 9.48,
+      "fmax_mhz": 105.5
+    },
+    {
+      "corner": "nom_tt_025C_1v80",
+      "min_period_ns": 14.9,
+      "fmax_mhz": 67.13
+    },
+    {
+      "corner": "nom_ss_100C_1v60",
+      "min_period_ns": 29.72,
+      "fmax_mhz": 33.65
+    }
+  ],
+  "physical_signoff_clean": false
+}

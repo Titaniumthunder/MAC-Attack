@@ -1,0 +1,57 @@
+# Tiny Tapeout project information
+project:
+  title:        "Tiny-TPU: INT4 MAC processing element"      # Project title
+  author:       "Alex Salamati, James Manikyan, Marco Flores"      # Your name
+  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  description:  "One signed INT4 multiply-accumulate PE with a 16-bit accumulator, driven by a host MCU"      # One line description of what your project does
+  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
+  clock_hz:     50000000       # Clock frequency in Hz (or 0 if not applicable)
+
+  # How many tiles your design occupies? A single tile is about 167x108 uM.
+  tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+
+  # Your top module name must start with "tt_um_". Make it unique by including your github username:
+  top_module:  "tt_um_titaniumthunder_tiny_tpu"
+
+  # List your project's source files here.
+  # Source files must be in ./src and you must list each source file separately, one per line.
+  # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
+  source_files:
+    - "project.v"
+    - "tiny_tpu_pe.v"
+
+# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
+# This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
+pinout:
+  # Inputs
+  ui[0]: "a[0]"
+  ui[1]: "a[1]"
+  ui[2]: "a[2]"
+  ui[3]: "a[3] (sign)"
+  ui[4]: "w[0]"
+  ui[5]: "w[1]"
+  ui[6]: "w[2]"
+  ui[7]: "w[3] (sign)"
+
+  # Outputs
+  uo[0]: "result bit 0 / 8"
+  uo[1]: "result bit 1 / 9"
+  uo[2]: "result bit 2 / 10"
+  uo[3]: "result bit 3 / 11"
+  uo[4]: "result bit 4 / 12"
+  uo[5]: "result bit 5 / 13"
+  uo[6]: "result bit 6 / 14"
+  uo[7]: "result bit 7 / 15 (sign)"
+
+  # Bidirectional pins
+  uio[0]: "cmd[0]"
+  uio[1]: "cmd[1]"
+  uio[2]: "STROBE"
+  uio[3]: "HI (result byte select)"
+  uio[4]: "ACK"
+  uio[5]: "OVF (overflow)"
+  uio[6]: ""
+  uio[7]: ""
+
+# Do not change!
+yaml_version: 6

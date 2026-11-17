@@ -1,0 +1,19 @@
+{
+  "src/tiny_tpu_v2_core.v": "175f4d662021e20ae1545ca8b0241e5f01b5fa0bdd676a0cd389569ecf5eb007",
+  "src/config_merged.json": "1bc64fddbf48b8f24fde062e7f8a5d8418e147bf474bc9c916376e07695d22c8",
+  "src/config.json": "fe22b01b8065a286a446998cc15f4668196a6292cc71de50c116934e960d64d3",
+  "src/project.v": "28c1d5c574af3435a511b3fe26d118dc1aa9cc04a08aeaee949c7b22e6a55dc8",
+  "src/user_config.json": "87555badcd82c6b03a0aecdcc12229992c592f43013e3cbf2dcf2ca9163718c3",
+  "tt_submission/tt_um_titaniumthunder_tiny_tpu_v2.oas": "bb9583551be574b375190c2695827cd96d03d2596b73ce4fa37ad3949b60b277",
+  "tt_submission/tt_um_titaniumthunder_tiny_tpu_v2.gds": "8bdf76aa73b698f5d7a281af98868a6eaf94a1ec5d15a4407f0ee5fe8a8d5040",
+  "tt_submission/tt_um_titaniumthunder_tiny_tpu_v2.lef": "0b3b4de9a71e3439ffb50b0ee41dfcc367f54e2ce5a59e8b51fcf86c94110d36",
+  "tt_submission/commit_id.json": "563fa6375902fe86dc145df737f506f24582bd987ffcc37a5a7c8e90afd93aef",
+  "tt_submission/resolved.json": "75c92da3114d4187af54d10f4bc3366ec394b471ee4243f0076bc8bcb024a4fa",
+  "tt_submission/tt_um_titaniumthunder_tiny_tpu_v2.min.spef": "e9994ee5b23943d7aedf07fbbcdafb87ff9c83505e549b74a3f30b0935ad5ca2",
+  "tt_submission/pdk.json": "3a4735418652e24f5dc21f2a0cb308d65d1a37f08a1218f27994f56811ff59f3",
+  "tt_submission/tt_um_titaniumthunder_tiny_tpu_v2.v": "2ad047cf60eb14f3af4fffee49b79a88149d1e3ae933a970c825de30a3497550",
+  "tt_submission/tt_um_titaniumthunder_tiny_tpu_v2.max.spef": "17d1103c04760c19d6a4b72ca57e35d16bbbc23b68d4c9a33177b5bb689dbbae",
+  "tt_submission/tt_um_titaniumthunder_tiny_tpu_v2.nom.spef": "895d9861f301419379240c8f78c9825dd7131271c757307f963dde4e716ba581",
+  "tt_submission/stats/metrics.csv": "1260f0fba2f59afd40a8223795fa4d387e856e9573f64ee506960a645691c88b",
+  "tt_submission/stats/synthesis-stats.txt": "b9fcb17747f6a8f017e1ed0b5a63e030df8ee106b15f943112e0267e036f87a4"
+}

@@ -1,0 +1,10 @@
+{
+  "chip": {
+    "project.v": "36b0410a097540c343df71c324d835dfa82260c9483b6876464ab9e7c3c197c3",
+    "tiny_tpu_pe.v": "93508430312c320cf5e5758a3265165d77ae933dbefff2bf9a6598c7e6c4f50e"
+  },
+  "chip_v2": {
+    "tiny_tpu_v2_core.v": "175f4d662021e20ae1545ca8b0241e5f01b5fa0bdd676a0cd389569ecf5eb007",
+    "project.v": "28c1d5c574af3435a511b3fe26d118dc1aa9cc04a08aeaee949c7b22e6a55dc8"
+  }
+}

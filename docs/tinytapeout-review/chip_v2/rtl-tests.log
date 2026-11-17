@@ -1,0 +1,49 @@
+rm -f results.xml
+mkdir -p sim_build/rtl
+/nix/store/d0jfzcxdlrb974c13h83na7jkya0qz7d-devshell-dir/bin/iverilog -o sim_build/rtl/sim.vvp -s tb -g2012 -I/private/tmp/mac-attack-tt-20261116/chip_v2/test/../src -f sim_build/rtl/cmds.f  /private/tmp/mac-attack-tt-20261116/chip_v2/test/../src/project.v /private/tmp/mac-attack-tt-20261116/chip_v2/test/../src/tiny_tpu_v2_core.v /private/tmp/mac-attack-tt-20261116/chip_v2/test/tb.v
+rm -f results.xml
+COCOTB_TEST_MODULES=test COCOTB_TESTCASE=  COCOTB_TOPLEVEL=tb TOPLEVEL_LANG=verilog       \
+		 /nix/store/d0jfzcxdlrb974c13h83na7jkya0qz7d-devshell-dir/bin/vvp -m /private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb/libs/libcocotbvpi_icarus.so   sim_build/rtl/sim.vvp -fst   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/nix/store/0hhzvkw889bsybhqxy12ky4jx6a95p2d-python3-3.11.9/lib/libpython3.11.dylib'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:234  in gpi_load_users                  Running entry func 'initialize' from loaded library '/private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb/simulator.cpython-311-darwin.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:115  in initialize                      Using Python 3.11.9 interpreter at /private/tmp/mac-attack-tt-20261116/venv-test311/bin/python3.11
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1794894330
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /private/tmp/mac-attack-tt-20261116/venv-test311/lib/python3.11/site-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 13.0 (devel)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test.test_modelv2_on_chip (1/5)
+                                                            modelV2 with the hidden layers post-processed ON CHIP; only the final raw sums come out.
+1272597.00ns INFO     cocotb.tb                          modelV2 13-32-16-4 on chip: 64 rows, 3072 POST outputs and 256 final sums exact; 878 clocks per inference
+1272597.00ns INFO     cocotb.regression                  test.test_modelv2_on_chip passed
+1272597.00ns INFO     cocotb.regression                  running test.test_modelv2_bypass (2/5)
+                                                            The same model with READ every layer and the host doing the requantization (bypass).
+1514154.00ns INFO     cocotb.tb                          modelV2 in bypass mode: rows 0-15 exact
+1514154.00ns INFO     cocotb.regression                  test.test_modelv2_bypass passed
+1514154.00ns INFO     cocotb.regression                  running test.test_professor_int4_bypass (3/5)
+                                                            The professor's INT4 model: his host math is floating point, so it runs in bypass mode.
+1529551.00ns INFO     cocotb.tb                          professor's INT4 model, burst: 72 sums exact
+1640418.00ns INFO     cocotb.tb                          professor's INT4 model, handshake: 72 sums exact
+1640418.00ns INFO     cocotb.regression                  test.test_professor_int4_bypass passed
+1640418.00ns INFO     cocotb.regression                  running test.test_post_fuzz (4/5)
+                                                            Random layers with random bias / m0 / shift / ReLU; the stored outputs are read back through the
+2286212.00ns INFO     cocotb.tb                          POST fuzz: 60 random layers, 959 outputs exact in the registers and in the buffer
+2286212.00ns INFO     cocotb.regression                  test.test_post_fuzz passed
+2286212.00ns INFO     cocotb.regression                  running test.test_edge_cases (5/5)
+2326488.00ns INFO     cocotb.tb                          both PEs: 200 products exact
+2330003.00ns INFO     cocotb.tb                          overflow flags per PE, cleared by CLEAR
+2331149.00ns INFO     cocotb.tb                          POST while busy ignored, POST 4 clocks later taken, CLEAR right after a POST is safe
+2333695.00ns INFO     cocotb.tb                          handshake mode: MAC + LOAD_P + POST work, BURST ignored
+2333695.00ns INFO     cocotb.regression                  test.test_edge_cases passed
+2333695.00ns INFO     cocotb.regression                  *****************************************************************************************
+                                                        ** TEST                             STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        *****************************************************************************************
+                                                        ** test.test_modelv2_on_chip         PASS     1272597.00           1.20    1061139.71  **
+                                                        ** test.test_modelv2_bypass          PASS      241557.00           0.23    1057255.21  **
+                                                        ** test.test_professor_int4_bypass   PASS      126264.00           0.10    1263194.76  **
+                                                        ** test.test_post_fuzz               PASS      645794.00           0.58    1121004.15  **
+                                                        ** test.test_edge_cases              PASS       47483.00           0.05     873270.65  **
+                                                        *****************************************************************************************
+                                                        ** TESTS=5 PASS=5 FAIL=0 SKIP=0               2333695.00           2.16    1080961.13  **
+                                                        *****************************************************************************************
+FST info: dumpfile tb.fst opened for output.

@@ -1,0 +1,4 @@
+{
+  "chip": "https://gds-viewer.tinytapeout.com/?pdk=sky130A&model=https%3A%2F%2Fraw.githubusercontent.com%2FTitaniumthunder%2FMAC-Attack%2Frefs%2Fheads%2Ftinytapeout-review-20261115%2Fdocs%2Ftinytapeout-review%2Fchip%2Ftt_um_titaniumthunder_tiny_tpu.oas",
+  "chip_v2": "https://gds-viewer.tinytapeout.com/?pdk=sky130A&model=https%3A%2F%2Fraw.githubusercontent.com%2FTitaniumthunder%2FMAC-Attack%2Frefs%2Fheads%2Ftinytapeout-review-20261115%2Fdocs%2Ftinytapeout-review%2Fchip_v2%2Ftt_um_titaniumthunder_tiny_tpu_v2.oas"
+}
