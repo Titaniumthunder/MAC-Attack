@@ -12,6 +12,30 @@ over AXI4-Lite. The processing element is **the same file as the chip**, `../chi
 | `sw/model_data.h` | The INT4 model and test vectors for the program (generated) |
 | `sw/make_model_header.py` | Writes `model_data.h` from `../chip/test/int4_package.json` + `golden_vectors.json` |
 | `sim/test_axi.py`, `sim/run.py` | cocotb simulation of the wrapper over AXI (`python run.py`; needs cocotb, cocotbext-axi, Icarus) |
+| `sw/tinytpu_model_test.c` | ARM test program (16 Nov): the professor's model on the same 64 rows, checks and printout as `MAC_model_TinyTPU` and Version 2's `tinytpu_model_test`, in host mode |
+| `sw/tinytpu_model.h` | Its model and rows, written by `../mac_mlp/export_mac_mlp.py` (the same file as the other two boards') |
+| `sim/xsim_cosim/` | Runs either ARM program against the RTL in **Vivado's simulator** (DPI-C; only Vivado needed): `run_xsim_cosim.bat <program>` |
+| `build_bitstream.tcl`, `sdk_build.tcl`, `run_on_board.tcl` | No-GUI build and board run (16 Nov), as in `../fpga_zed_v2` |
+
+## Open the committed project and run it (no rebuild)
+
+Since 16 Nov 2026 the Vivado project `tinytpu_zed_project/` is in git with its results, like the MAC Attack project
+(`.gitignore` lists exactly what is tracked): the project, the block design, the bitstream and reports, and the SDK
+applications `model_v2_test` (despite its name, the Tiny-TPU model test: modelV2 cannot run on Version 1) and `tinytpu_test` (sources and project files). Not in git: the exported `.hdf`, the hardware platform and the
+BSP. Every application expects a BSP named **`model_v2_test_bsp`**.
+
+1. Open `tinytpu_zed_project\tinytpu_zed.xpr` in Vivado 2019.1. If it says the runs are out of date, do not rebuild.
+2. **File > Export > Export Hardware**, tick *Include bitstream*, `<Local to Project>`. Then **File > Launch SDK**
+   (both locations `<Local to Project>`).
+3. In the SDK: **File > New > Board Support Package**, name `model_v2_test_bsp`, standalone, `ps7_cortexa9_0`.
+4. **File > Import > General > Existing Projects into Workspace**, root directory the `.sdk` folder, select the
+   applications, leave "Copy projects into workspace" unticked. Build each one (Release).
+5. Board on (J17 JTAG, J14 UART at 115200 8N1, jumpers on JTAG): right-click an application > Run As > Run
+   Configurations > Target Setup: tick Reset entire system, Program FPGA, Run ps7_init and Run ps7_post_config,
+   then Run. Expected last lines: `model_v2_test` ALL TINY-TPU MODEL TESTS PASSED (2/2), `tinytpu_test` ALL TINY-TPU TESTS PASSED (5/5).
+
+Full walkthrough: `docs/guides/TinyTPU_Vivado_SDK_guide.pdf`. Board results of 16 Nov:
+`docs/Model/16_TinyTPU_V1_V2_ZedBoard_run.pdf`.
 
 ## Registers (base 0x43C00000 unless Vivado assigns another)
 
@@ -39,6 +63,23 @@ products; the overflow flag; then it times one inference with the PE against the
 
 **Expect the ARM alone to be faster.** Every multiply-add is one bus write, and an 8x8-bit multiply is one
 instruction on the ARM. This PE proves the arithmetic in hardware; it is not a speedup on its own.
+
+## Without the GUI, and the model test (16 Nov 2026)
+
+From a Command Prompt in this folder (board: J17 JTAG, J14 UART, terminal at 115200 8N1, boot jumpers on JTAG):
+```
+C:\Xilinx\Vivado\2019.1\bin\vivado.bat -mode batch -source build_bitstream.tcl    (ends with BUILD OK)
+C:\Xilinx\SDK\2019.1\bin\xsct.bat sdk_build.tcl                                     (ends with SDK BUILD OK)
+C:\Xilinx\SDK\2019.1\bin\xsct.bat run_on_board.tcl tinytpu_model_test               (ALL TINY-TPU MODEL TESTS PASSED (2/2))
+C:\Xilinx\SDK\2019.1\bin\xsct.bat run_on_board.tcl tinytpu_test                     (ALL TINY-TPU TESTS PASSED (5/5))
+```
+`tinytpu_model_test` runs the professor's model on the same 64 rows as the MAC Attack accelerator's
+`MAC_model_TinyTPU` and Version 2's `tinytpu_model_test` (12 golden + 52 random INT4 rows): ARM alone, then host
+mode, every multiply-add on the PE (52 commands per row), the float step on the ARM. Version 1 has no on-chip
+step, so there is no on-chip mode. modelV2 cannot run here: its weights and inputs are INT8, the PE takes INT4.
+
+Vivado co-simulation (`sim\xsim_cosim\run_xsim_cosim.bat <program>`, 16 Nov): `tinytpu_model_test` 2/2 (256/256/128
+sums, 256 hidden values, 64/64 classes, golden logits equal to the expected ones); `tinytpu_test` 5/5.
 
 ## After training a real model
 

@@ -13,6 +13,8 @@
  *      own integer requantization, and the last layer's raw sums must equal vectors_C (the Python reference).
  *   5. modelV2 in bypass mode (READ every layer, the ARM requantizes), all 64 rows.
  *   6. The professor's INT4 8-4-2 in bypass mode: 12 vectors, 72 sums.
+ *  6b. The professor's model, whole host flow: the ARM makes the hidden INT4 values from the chip's layer-0 sums
+ *      (float dequantize, bias, ReLU, requantize), sends them for layer 1, and prints the predicted class.
  *   7. Timing: modelV2 on the chip core vs the ARM doing the same integer math alone.
  *
  * Build: Vivado SDK (2019.1), standalone application for ps7_cortexa9_0 from the exported hardware;
@@ -30,6 +32,12 @@
 /* Base address of tiny_tpu_v2_axi: copy it from Vivado's Address Editor if it differs */
 #ifndef TPU_BASE
 #define TPU_BASE 0x43C00000u
+#endif
+
+/* The PL clock the bitstream was built with (FCLK_MHZ in create_tinytpu_v2_zed_project.tcl); only for the
+ * printed core time. 50 since 16 Nov 2026: 100 MHz did not meet timing. */
+#ifndef FCLK_MHZ
+#define FCLK_MHZ 50
 #endif
 
 #define REG_CMD     0x00u
@@ -150,6 +158,17 @@ static int requant(int32_t acc, int32_t bias, uint16_t m0, int sh, int relu)
     if (relu && t < 0) return 0;
     if (!relu && t < -128) return -128;
     return (int)t;
+}
+
+/* round to nearest, ties to even (numpy rint, as the professor's pipeline.py) */
+static long rint_even(double x)
+{
+    int neg = x < 0;
+    double a = neg ? -x : x;
+    long t = (long)a;
+    double f = a - (double)t;
+    if (f > 0.5 || (f == 0.5 && (t & 1))) t++;
+    return neg ? -t : t;
 }
 
 static int32_t dot(const int8_t *a, const int8_t *w, int k)
@@ -309,6 +328,38 @@ int main(void)
     snprintf(buf, sizeof buf, "%d/%d sums exact (%d vectors)", sums_ok, sums, P_N_VEC);
     report("professor's INT4 model (bypass)", sums_ok == sums && !ovf, buf);
 
+    /* 6b. The professor's model, the whole host flow: the ARM turns the chip's layer-0 sums into the hidden
+     * INT4 values itself (dequantize, float bias, ReLU, requantize), sends those back for layer 1, and makes the
+     * logits and the class. The hidden values must equal the golden ones and the class the expected one. */
+    int hid_ok = 0, cls_ok = 0;
+    ovf = 0;
+    printf("      the professor's model, what it predicts (logits x 1000):\r\n");
+    for (int v = 0; v < P_N_VEC; v++) {
+        int32_t s0[P_N_HID], s1[P_N_OUT];
+        int8_t a1[P_N_HID];
+        double logit[P_N_OUT];
+        load_inputs(P_A0[v], P_N_IN);
+        layer_read(&P_W0[0][0], P_N_IN, P_N_HID, s0, &ovf);
+        for (int j = 0; j < P_N_HID; j++) {
+            double h = (double)s0[j] * P_S_A0 * P_S_W0 + P_B0F[j];
+            long q = rint_even((h > 0.0 ? h : 0.0) / P_S_A1);
+            a1[j] = (int8_t)(q > 7 ? 7 : q < -7 ? -7 : q);
+            hid_ok += a1[j] == P_A1[v][j];
+        }
+        load_inputs(a1, P_N_HID);
+        layer_read(&P_W1[0][0], P_N_HID, P_N_OUT, s1, &ovf);
+        int best = 0;
+        for (int j = 0; j < P_N_OUT; j++) {
+            logit[j] = (double)s1[j] * P_S_A1 * P_S_W1 + P_B1F[j];
+            if (logit[j] > logit[best]) best = j;
+        }
+        cls_ok += best == P_CLASS[v];
+        printf("      vector %2d: %-8s (expected %s, true %s)  logits %6ld %6ld\r\n", v, P_LABELS[best],
+               P_LABELS[P_CLASS[v]], P_LABELS[P_TRUE[v]], rint_even(logit[0] * 1000.0), rint_even(logit[1] * 1000.0));
+    }
+    snprintf(buf, sizeof buf, "hidden %d/%d = golden, class %d/%d", hid_ok, P_N_VEC * P_N_HID, cls_ok, P_N_VEC);
+    report("professor's INT4 model (host flow)", hid_ok == P_N_VEC * P_N_HID && cls_ok == P_N_VEC && !ovf, buf);
+
     /* 7. Timing: ROUNDS x all rows each way; the chip path does not read the hidden outputs back */
 #ifndef ROUNDS
 #define ROUNDS 20
@@ -343,8 +394,9 @@ int main(void)
     snprintf(buf, sizeof buf, "%lu inferences each way, all = vectors_C", n_inf);
     report("timing runs exact", timed_ok, buf);
     printf("\r\n Time per inference: chip core %lu ns, ARM alone %lu ns\r\n", chip_ns, arm_ns);
-    printf(" Per inference: %lu AXI writes + %lu reads; the core ran %lu steps (%lu ns at 100 MHz),\r\n",
-           writes / n_inf, reads / n_inf, (unsigned long)(steps / n_inf), (unsigned long)(steps / n_inf) * 10ul);
+    printf(" Per inference: %lu AXI writes + %lu reads; the core ran %lu steps (%lu ns at %d MHz),\r\n",
+           writes / n_inf, reads / n_inf, (unsigned long)(steps / n_inf),
+           (unsigned long)(steps / n_inf) * 1000ul / FCLK_MHZ, FCLK_MHZ);
     printf(" so the rest of the chip-core time is the bus.\r\n");
 
     printf("\r\n==================================================================\r\n");

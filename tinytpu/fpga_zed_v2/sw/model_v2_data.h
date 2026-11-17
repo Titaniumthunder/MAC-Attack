@@ -309,5 +309,16 @@ static const int32_t P_S1[12][2] = {
     {-25, 35},
     {-25, 35}
 };
+/* the professor's host flow (int4_package.json): h = ReLU(s0 * P_S_A0 * P_S_W0 + P_B0F),
+ * a1 = clamp(rint_even(h / P_S_A1), -7, 7); logit = s1 * P_S_A1 * P_S_W1 + P_B1F; class = argmax */
+#define P_S_A0 0.391345603125436
+#define P_S_A1 0.9183751260533667
+#define P_S_W0 0.10658246278762817
+#define P_S_W1 0.1206175514629909
+static const double P_B0F[4] = {0.7142766714096069, 0.3813045918941498, -0.20053577423095703, 0.5938612818717957};
+static const double P_B1F[2] = {0.005428181495517492, 0.06501535326242447};
+static const int P_CLASS[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+static const int P_TRUE[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+static const char *const P_LABELS[2] = {"faulty", "healthy"};
 
 #endif

@@ -1,5 +1,17 @@
+# The Vivado project tinytpu_v2_zed_project/ is build output, so it is ignored as a whole. Exception (16 Nov 2026), the same as
+# mac_attack_accel_MLP/zed/mac_zed_project: these parts of it ARE tracked (added with git add -f), so a teammate
+# can open it, program the board and run the apps without the 10-minute build:
+#   tinytpu_v2_zed_project/*.xpr, *.srcs (block design), *.runs (bitstream, checkpoints, reports), *.hw
+#   tinytpu_v2_zed_project/*.sdk/<app>/.project, .cproject and src/  for each SDK application
+# Not tracked (the tools remake them): caches, logs, .Xil, the SDK's .metadata, the BSP (model_v2_test_bsp),
+# the hardware platform (system_wrapper_hw_platform_0), the exported .hdf and the apps' Debug/Release folders.
+# A new file inside the project stays ignored until it is added with git add -f.
 tinytpu_v2_zed_project/
 sim/sim_build/
 sim/results.xml
 sim/__pycache__/
 sim/cosim/build/
+build_bitstream.log
+sdk_build.log
+sim/xsim_cosim/build_*/
+.Xil/

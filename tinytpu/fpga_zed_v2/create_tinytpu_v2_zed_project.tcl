@@ -22,7 +22,9 @@ if {[string match "//*" $here] || [string match {\\\\*} $here]} {
 
 # PL clock from the Zynq. The longest path is the POST finish step (round, shift, clamp) and the
 # 64-entry buffer read into a multiply-add; if timing fails (negative WNS), set this to 50 and rerun.
-set FCLK_MHZ 100
+# 16 Nov 2026: 100 MHz failed (WNS -2.659 ns, POST shift/clamp into the buffer, 29 logic levels, about 79 MHz
+# at best), so 50 MHz. FCLK_MHZ in sw/tinytpu_v2_test.c must match (it only affects the printed core time).
+set FCLK_MHZ 50
 
 create_project tinytpu_v2_zed [file join $here tinytpu_v2_zed_project] -part xc7z020clg484-1 -force
 
@@ -37,8 +39,8 @@ if {$bp ne ""} {
 
 # Sources: the core exactly as the chip uses it, plus the AXI wrapper (plain Verilog, so the block design
 # can use it as a module reference)
-add_files -norecurse [file join $chip tiny_tpu_v2_core.v]
-add_files -norecurse [file join $here tiny_tpu_v2_axi.v]
+add_files -norecurse [list [file join $chip tiny_tpu_v2_core.v]]
+add_files -norecurse [list [file join $here tiny_tpu_v2_axi.v]]
 set_property top tiny_tpu_v2_axi [get_filesets sources_1]
 update_compile_order -fileset sources_1
 

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>16 · Both models on the Tiny-TPU chip RTL</title>
+<style>
+@page {
+  size: A4;
+  margin: 16mm 16mm 18mm 16mm;
+  @bottom-left { content: "MAC Attack · 16 · Both models on the Tiny-TPU chip RTL (16 Nov 2026)"; font: 8pt "Segoe UI", Arial, sans-serif; color: #6b7780; }
+  @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt "Segoe UI", Arial, sans-serif; color: #6b7780; }
+}
+:root {
+  --fg: #1b2328; --muted: #5a6670; --line: #d4dade; --accent: #0d6b6b; --accent-soft: #e6f2f1;
+  --pass: #1f7a3d; --pass-soft: #e3f2e7; --warn: #7a5000; --warn-soft: #fbf1dc; --bad: #8c2f2f; --bad-soft: #f8e4e4;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; color: var(--fg); font-family: "Segoe UI", Arial, sans-serif; font-size: 9.6pt; line-height: 1.45; }
+h1 { font-size: 20pt; margin: 0 0 4pt; letter-spacing: -0.01em; }
+h2 { font-size: 13pt; margin: 16pt 0 6pt; color: var(--accent); break-after: avoid; }
+h3 { font-size: 10.5pt; margin: 10pt 0 4pt; break-after: avoid; }
+p { margin: 0 0 6pt; }
+code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 8.6pt; background: var(--accent-soft); padding: 0 3px; border-radius: 2px; }
+.doc-head { border-bottom: 2px solid var(--accent); padding-bottom: 8pt; margin-bottom: 10pt; }
+.doc-head .num { font-family: Consolas, monospace; font-size: 8.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.doc-head .meta { color: var(--muted); font-size: 8.8pt; }
+.summary { display: grid; grid-template-columns: 1fr 1fr; gap: 8pt; margin: 8pt 0 4pt; }
+.tile { border: 1px solid var(--line); border-radius: 4px; padding: 7pt 9pt; break-inside: avoid; }
+.tile .name { font-weight: 600; font-size: 10.5pt; }
+.tile .big { font-family: Consolas, monospace; font-size: 14pt; color: var(--pass); font-weight: 600; }
+.tile .sub { color: var(--muted); font-size: 8.6pt; }
+table { border-collapse: collapse; width: 100%; margin: 4pt 0 8pt; font-size: 8.7pt; }
+table.keep { break-inside: avoid; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th, td { text-align: left; padding: 3.5pt 6pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 7.6pt; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); font-weight: 600; border-bottom: 1.5px solid var(--fg); }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.k { font-family: Consolas, monospace; font-size: 8.3pt; }
+.pill { display: inline-block; font-family: Consolas, monospace; font-size: 7.8pt; padding: 0 5pt; border-radius: 8pt; white-space: nowrap; }
+.pill.pass { background: var(--pass-soft); color: var(--pass); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+ul { margin: 0 0 6pt; padding-left: 14pt; }
+li { margin-bottom: 2.5pt; }
+.note { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 6pt 9pt; margin: 6pt 0 8pt; break-inside: avoid; }
+.note.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.note p:last-child, .note ul:last-child { margin-bottom: 0; }
+figure { margin: 6pt 0 10pt; break-inside: avoid; }
+figure img { width: 100%; border: 1px solid var(--line); border-radius: 3px; }
+figcaption { font-size: 8.2pt; color: var(--muted); margin-top: 3pt; }
+.page-break { break-before: page; }
+.src { color: var(--muted); font-size: 8.2pt; }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="num">Machine Guardian · document 16</div>
+  <h1>Both models on the Tiny-TPU chip RTL</h1>
+  <div class="meta">16 Nov 2026 · ZedBoard runs of Tiny-TPU Version 1 (<code>tinytpu/fpga_zed</code>) and Version 2 (<code>tinytpu/fpga_zed_v2</code>), the RTL that goes to Tiny Tapeout · follows 15, the same models on the MAC Attack accelerator</div>
+</div>
+
+<p>Document 15 ran modelV2 and the professor's Tiny-TPU RSCL model on the MAC Attack 8 × 8 accelerator. This document runs the same two models, the same test rows and the same checks on the <b>Tiny-TPU chip RTL</b> on the ZedBoard: Version 1, the professor's single INT4 processing element, and Version 2, the team's two-PE INT8 expansion. All five test programs passed on the board. Every sum, hidden value and prediction is identical to the software model, to the simulation and to the MAC Attack board run.</p>
+
+<div class="summary">
+  <div class="tile"><div class="name">Version 2: 2 INT8 PEs, 50 MHz</div><div class="big">3/3 · 3/3 · 8/8</div><div class="sub">modelV2, the Tiny-TPU model and the chip's own hardware test all pass on the board</div></div>
+  <div class="tile"><div class="name">Version 1: 1 INT4 PE, 100 MHz</div><div class="big">2/2 · 5/5</div><div class="sub">The Tiny-TPU model and the PE's own hardware test pass. modelV2 can't run here (INT8 model, INT4 hardware).</div></div>
+</div>
+
+<h2>1. The hardware</h2>
+<table class="keep">
+  <thead><tr><th style="width:22%"></th><th>Tiny-TPU Version 1</th><th>Tiny-TPU Version 2</th><th>MAC Attack (doc 15, for comparison)</th></tr></thead>
+  <tbody>
+    <tr><td class="k">Folder</td><td class="k">tinytpu/fpga_zed</td><td class="k">tinytpu/fpga_zed_v2</td><td class="k">mac_attack_accel_MLP</td></tr>
+    <tr><td class="k">Compute</td><td>1 PE, INT4 × INT4, 16-bit sum</td><td>2 PEs, INT8 × INT8, exact 22-bit sums</td><td>8 × 8 systolic array, INT8, 22-bit sums</td></tr>
+    <tr><td class="k">Between layers</td><td>Host does everything except multiply-adds</td><td>On chip: bias, rescale, ReLU (POST); or bypass to the host</td><td>On-chip MLP controller runs whole models</td></tr>
+    <tr><td class="k">Weights kept</td><td>None: one MAC command per (input, weight)</td><td>None: the model is sent with every row</td><td>Up to 4 layers held on chip</td></tr>
+    <tr><td class="k">Board clock</td><td>100 MHz (WNS +0.997 ns)</td><td>50 MHz (WNS +4.481 ns)</td><td>214.286 MHz</td></tr>
+    <tr><td class="k">Models</td><td>Tiny-TPU model (host mode)</td><td>Both models</td><td>Both models</td></tr>
+  </tbody>
+</table>
+<p>The core RTL in both FPGA builds is the same file that goes to Tiny Tapeout (<code>chip/src/tiny_tpu_pe.v</code>, <code>chip_v2/src/tiny_tpu_v2_core.v</code>). Only the AXI wrapper is FPGA-specific. The RTL was not changed for this work.</p>
+
+<h2>2. What it took to run them</h2>
+<p>Before 16 Nov, both folders had only a Vivado script: no project, no bitstream and no built ARM program. They had been tested in simulation only (cocotb, Verilator). To get them onto the board:</p>
+<ul>
+  <li><b>Script bug fixed.</b> Both <code>create_…_project.tcl</code> scripts passed each file path to <code>add_files</code> without wrapping it, so a folder name with a space (<code>C:\Users\James Manikyan\…</code>) split into two paths and the script stopped.</li>
+  <li><b>Version 2 clock lowered to 50 MHz.</b> The first ever Vivado build of Version 2 missed timing at the planned 100 MHz by 2.66 ns. The slow path is the post-processing step (shift, then clamp, then the write into the buffer), 29 logic levels, about 79 MHz at best. The script already named 50 MHz as the fallback. Version 1 meets 100 MHz.</li>
+  <li><b>Test programs that match the MAC Attack runs.</b> New <code>model_v2_test</code> (V2) and <code>tinytpu_model_test</code> (V1 and V2) use the same model files, rows and printout as <code>MAC_model_V2</code> and <code>MAC_model_TinyTPU</code>, so the boards can be compared line by line. V2 also gained a shared driver (<code>tpu_v2_driver.h</code>), and its hardware test gained test 6b: the professor's full host flow with a printed prediction.</li>
+  <li><b>Checked in Vivado's simulator first.</b> <code>sim/xsim_cosim/run_xsim_cosim.bat</code> runs each board program unchanged against the RTL. All five passed there before the board run.</li>
+  <li><b>Build and run scripts.</b> <code>build_bitstream.tcl</code>, <code>sdk_build.tcl</code> and <code>run_on_board.tcl</code> in each folder; the board runs in this document used the SDK GUI (see the separate Vivado and SDK guide).</li>
+</ul>
+
+<h2>3. Version 2 on the ZedBoard</h2>
+<h3>modelV2: <code>model_v2_test</code>, Release build</h3>
+<table class="keep">
+  <thead><tr><th>Test</th><th class="n">Sums correct</th><th class="n">64 rows</th><th class="n">Per row</th><th class="n">Core clocks / row</th><th>Against the ARM</th></tr></thead>
+  <tbody>
+    <tr><td>ARM alone (software)</td><td class="n">256/256</td><td class="n">690 µs</td><td class="n">10 µs</td><td class="n">–</td><td>baseline</td></tr>
+    <tr><td>On chip: hidden layers by POST</td><td class="n">256/256</td><td class="n">9,320 µs</td><td class="n">145 µs</td><td class="n">852 (17.0 µs)</td><td>ARM 13.5× faster</td></tr>
+    <tr><td>Bypass: the ARM rescales</td><td class="n">256/256</td><td class="n">9,059 µs</td><td class="n">141 µs</td><td class="n">612 (12.2 µs)</td><td>ARM 13.1× faster</td></tr>
+  </tbody>
+</table>
+<p>The printed predictions are identical to the MAC Attack board, sum for sum: row 0 healthy 97.1 %, row 7 faulty 13.2 %, row 28 faulty 29.0 %, row 49 healthy 94.7 %, row 63 faulty 76.1 % with sums 708, −29579, 15293, 6439. Document 15 maps these rows to their bearings.</p>
+
+<h3>The Tiny-TPU model: <code>tinytpu_model_test</code></h3>
+<table class="keep">
+  <thead><tr><th>Test</th><th>Result</th><th class="n">64 rows</th><th class="n">Core clocks / row</th></tr></thead>
+  <tbody>
+    <tr><td>ARM alone (professor's contract)</td><td>layer 0 256/256, hidden 256/256, layer 1 128/128, class 64/64</td><td class="n">220 µs</td><td class="n">–</td></tr>
+    <tr><td>Host mode (core sums, ARM float step)</td><td>layer 0 256/256, hidden 256/256, layer 1 128/128, class 64/64</td><td class="n">921 µs</td><td class="n">40</td></tr>
+    <tr><td>On chip (layer 0's step by POST)</td><td>sums 128/128, class 64/64, golden rows = contract 12/12</td><td class="n">934 µs</td><td class="n">60 (1.2 µs)</td></tr>
+  </tbody>
+</table>
+<p>The 12 golden rows give the professor's logits to the last digit (row 0: −2763876 and 3942041 × 10<sup>−6</sup>), all "healthy" as expected.</p>
+
+<h3>The chip's own test: <code>tinytpu_v2_test</code></h3>
+<table class="keep">
+  <thead><tr><th>Test</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>ID register</td><td>0x54505538 "TPU8"</td></tr>
+    <tr><td>All INT8 products</td><td>65,536/65,536 on both PEs</td></tr>
+    <tr><td>22-bit overflow flags</td><td>127 MACs give 2,080,768 / −16,256 with flags clear; +1 sets the flag; CLEAR clears it</td></tr>
+    <tr><td>modelV2 on chip = Python</td><td>64/64 rows, 3,072/3,072 POST outputs exact</td></tr>
+    <tr><td>modelV2 bypass = Python</td><td>64/64 rows exact</td></tr>
+    <tr><td>Professor's model, bypass</td><td>72/72 sums exact (12 vectors)</td></tr>
+    <tr><td>Professor's model, host flow (test 6b)</td><td>hidden 48/48 = golden, class 12/12, all "healthy"</td></tr>
+    <tr><td>Timing runs</td><td>1,280 inferences each way, all equal to the reference</td></tr>
+  </tbody>
+</table>
+<p>Per modelV2 inference: 387 AXI writes and 4 reads; the core ran 852 steps (17.0 µs at 50 MHz) of the 208 µs total, so the rest is the bus.</p>
+
+<h2>4. Version 1 on the ZedBoard</h2>
+<h3>The Tiny-TPU model: <code>tinytpu_model_test</code></h3>
+<table class="keep">
+  <thead><tr><th>Test</th><th>Result</th><th class="n">64 rows</th></tr></thead>
+  <tbody>
+    <tr><td>ARM alone (professor's contract)</td><td>layer 0 256/256, hidden 256/256, layer 1 128/128, class 64/64</td><td class="n">61 µs</td></tr>
+    <tr><td>Host mode: every multiply-add on the PE (52 commands per row)</td><td>layer 0 256/256, hidden 256/256, layer 1 128/128, class 64/64</td><td class="n">787 µs</td></tr>
+  </tbody>
+</table>
+<p>The golden rows' logits are identical to Version 2 and the MAC Attack board.</p>
+
+<h3>The PE's own test: <code>tinytpu_test</code></h3>
+<table class="keep">
+  <thead><tr><th>Test</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>ID register</td><td>0x54505534 "TPU4"</td></tr>
+    <tr><td>Golden command stream</td><td>72/72 READs exact, 624 commands</td></tr>
+    <tr><td>Host flow = Python reference</td><td>12/12 classes, 12/12 logits, 0 operand mismatches</td></tr>
+    <tr><td>All INT4 products</td><td>256/256</td></tr>
+    <tr><td>16-bit overflow flag</td><td>668 × 49 = 32,732 with the flag clear; +49 sets it; CLEAR clears it</td></tr>
+  </tbody>
+</table>
+<p>Per inference: 19.3 µs with the PE against 4.5 µs for the ARM alone (52 writes and 12 reads).</p>
+
+<h2>5. The same answers on three designs</h2>
+<table class="keep">
+  <thead><tr><th>Check</th><th>MAC Attack</th><th>Tiny-TPU V2</th><th>Tiny-TPU V1</th></tr></thead>
+  <tbody>
+    <tr><td>modelV2 row 63 sums</td><td class="k">708 −29579 15293 6439</td><td class="k">708 −29579 15293 6439</td><td>can't run</td></tr>
+    <tr><td>modelV2 row 63 prediction</td><td>faulty, 76.1 %</td><td>faulty, 76.1 %</td><td>–</td></tr>
+    <tr><td>Tiny-TPU golden row 0 logits (× 10<sup>−6</sup>)</td><td class="k">−2763876 3942041</td><td class="k">−2763876 3942041</td><td class="k">−2763876 3942041</td></tr>
+    <tr><td>Clock counts on the board equal the simulation</td><td>474 / 642 / 1,986 · 268 / 100 / 79</td><td>852 / 612 · 60 / 40</td><td>52 PE commands per row</td></tr>
+  </tbody>
+</table>
+<div class="note"><p><b>Two small differences that are not errors.</b> <code>tinytpu_v2_test</code> prints row 0's health as 97.0 %, while <code>model_v2_test</code> and the MAC Attack app print 97.1 %. The sums are identical. The hardware test uses the C library's <code>exp()</code>, while the other two use <code>MAC_model_V2</code>'s fast sigmoid, which is within 0.3 %. Also, ARM-alone times differ between programs (for example 61 µs on V1 against 220 µs on V2 for the same contract code) because the builds differ: only <code>model_v2_test</code> prints that it is a Release build, and the others were probably built in Debug.</p></div>
+
+<h2>6. Speed</h2>
+<table class="keep">
+  <thead><tr><th>modelV2, one row</th><th class="n">Time</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>MAC Attack, 64 rows per run</td><td class="n">≈ 2 µs</td><td>127 µs for 64 rows, the bus included (doc 15)</td></tr>
+    <tr><td>ARM alone, Release</td><td class="n">10 µs</td><td>this run</td></tr>
+    <tr><td>Tiny-TPU V2 on chip</td><td class="n">145 µs</td><td>the core computes for 17 µs; the rest is 387 bus writes</td></tr>
+  </tbody>
+</table>
+<p>As expected, the ARM alone beats both Tiny-TPU boards. Neither keeps weights, so the whole model crosses the AXI bus for every row, and Version 1 even sends one bus write per multiply-add. On the Tiny Tapeout board the RP2040 host has the same structure, so the chip's value is in proving the arithmetic in silicon, not in speed. The speed design is the MAC Attack array, which keeps the weights on chip and runs 64 rows per run.</p>
+
+<h2>7. What this establishes</h2>
+<ul>
+  <li><b>The Tiny-TPU RTL works on real hardware.</b> Both versions, built from the same core files that go to Tiny Tapeout, pass every check on the ZedBoard. That includes all 65,536 INT8 products on V2, all 256 INT4 products on V1, and both overflow flags.</li>
+  <li><b>Both models give identical answers on all three hardware designs</b> and in software. The interfaces are correct end to end.</li>
+  <li><b>Limits.</b> The FPGA's timing says nothing about the SKY130 chip's timing; that comes from the Tiny Tapeout build. A pass proves the arithmetic, not the model's accuracy (documents 13 and 14). The Tiny-TPU model was trained on synthetic data.</li>
+</ul>
+<p><b>Next:</b> commit the Tiny-TPU folders' new scripts and programs. Run Version 2 through the Tiny Tapeout GitHub build. Train the Tiny-TPU model on the real Ottawa recordings and rerun these tests with the new export.</p>
+
+<h2 class="page-break">Appendix: the board output</h2>
+<figure><img src="supporting_tinytpu_board_run/16b_V2_model_v2_test.png" alt="Version 2 model_v2_test terminal output, all tests passed"><figcaption>Version 2, <code>model_v2_test</code>: ALL MODEL TESTS PASSED (3/3)</figcaption></figure>
+<figure><img src="supporting_tinytpu_board_run/16a_V2_tinytpu_model_test.png" alt="Version 2 tinytpu_model_test terminal output, all tests passed"><figcaption>Version 2, <code>tinytpu_model_test</code>: ALL TINY-TPU MODEL TESTS PASSED (3/3)</figcaption></figure>
+<figure><img src="supporting_tinytpu_board_run/16c_V2_tinytpu_v2_test.png" alt="Version 2 tinytpu_v2_test terminal output, all tests passed"><figcaption>Version 2, <code>tinytpu_v2_test</code>: ALL TINY-TPU V2 TESTS PASSED (8/8)</figcaption></figure>
+<figure><img src="supporting_tinytpu_board_run/16e_V1_tinytpu_model_test.png" alt="Version 1 tinytpu_model_test terminal output, all tests passed"><figcaption>Version 1, <code>tinytpu_model_test</code>: ALL TINY-TPU MODEL TESTS PASSED (2/2)</figcaption></figure>
+<figure><img src="supporting_tinytpu_board_run/16d_V1_tinytpu_test.png" alt="Version 1 tinytpu_test terminal output, all tests passed"><figcaption>Version 1, <code>tinytpu_test</code>: ALL TINY-TPU TESTS PASSED (5/5)</figcaption></figure>
+
+<p class="src">Sources: board output on the USB-UART (COM3, 115200 8N1), 16 Nov 2026, in <code>supporting_tinytpu_board_run/</code>. Timing results from each project's <code>timing_summary.rpt</code>. Simulation results in each folder's README. MAC Attack figures from document 15.</p>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Runs Version="1" Minor="0">
+	<Run Id="impl_1" LaunchDir="C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel_MLP/zed/mac_zed_project/mac_zed.runs/impl_1" FlowId="Vivado_Implementation" FromStepId="post_route_phys_opt_design" ToStepId="write_bitstream"/>
+	<Run Id="impl_2" LaunchDir="C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel_MLP/zed/mac_zed_project/mac_zed.runs/impl_2" FlowId="Vivado_Implementation" FromStepId="init_design" ToStepId="write_bitstream"/>
+	<Run Id="impl_3" LaunchDir="C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel_MLP/zed/mac_zed_project/mac_zed.runs/impl_3" FlowId="Vivado_Implementation" FromStepId="init_design" ToStepId="write_bitstream"/>
+	<Run Id="impl_4" LaunchDir="C:/Users/alexsalamati/Xilinx/Lab/MAC-Attack/mac_attack_accel_MLP/zed/mac_zed_project/mac_zed.runs/impl_4" FlowId="Vivado_Implementation" FromStepId="init_design" ToStepId="write_bitstream"/>
+	<Parameters>
+		<Parameter Name="runs.monitorLSFJobs" Val="true" Type="bool"/>
+	</Parameters>
+</Runs>
+

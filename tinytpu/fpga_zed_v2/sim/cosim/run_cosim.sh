@@ -1,7 +1,7 @@
 #!/bin/sh
 # Builds and runs the co-simulation: the ARM test program (sw/tinytpu_v2_test.c) against the RTL.
 # Needs Verilator (5.x) and a C/C++ compiler. Usage, from anywhere:  sh run_cosim.sh [max random wait]
-# It must end with "ALL TINY-TPU V2 TESTS PASSED (7/7)" and "program returned 0".
+# It must end with "ALL TINY-TPU V2 TESTS PASSED (8/8)" and "program returned 0".
 set -e
 here=$(cd "$(dirname "$0")" && pwd)
 sw="$here/../../sw"

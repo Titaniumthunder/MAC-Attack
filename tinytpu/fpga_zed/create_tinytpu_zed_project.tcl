@@ -35,8 +35,8 @@ if {$bp ne ""} {
 
 # Sources: the PE exactly as the chip uses it, plus the AXI wrapper (plain Verilog, so the block design
 # can use it as a module reference)
-add_files -norecurse [file join $chip tiny_tpu_pe.v]
-add_files -norecurse [file join $here tiny_tpu_axi.v]
+add_files -norecurse [list [file join $chip tiny_tpu_pe.v]]
+add_files -norecurse [list [file join $here tiny_tpu_axi.v]]
 set_property top tiny_tpu_axi [get_filesets sources_1]
 update_compile_order -fileset sources_1
 

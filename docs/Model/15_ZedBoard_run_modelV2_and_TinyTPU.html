@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>15 · Both models on the ZedBoard</title>
+<style>
+@page {
+  size: A4;
+  margin: 16mm 16mm 18mm 16mm;
+  @bottom-left { content: "MAC Attack · 15 · Both models on the ZedBoard (16 Nov 2026)"; font: 8pt "Segoe UI", Arial, sans-serif; color: #6b7780; }
+  @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt "Segoe UI", Arial, sans-serif; color: #6b7780; }
+}
+:root {
+  --fg: #1b2328; --muted: #5a6670; --line: #d4dade; --accent: #0d6b6b; --accent-soft: #e6f2f1;
+  --pass: #1f7a3d; --pass-soft: #e3f2e7; --warn: #7a5000; --warn-soft: #fbf1dc; --bad: #8c2f2f; --bad-soft: #f8e4e4;
+  --console: #f3f5f6;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; color: var(--fg); font-family: "Segoe UI", Arial, sans-serif; font-size: 9.6pt; line-height: 1.45; }
+h1 { font-size: 20pt; margin: 0 0 4pt; letter-spacing: -0.01em; }
+h2 { font-size: 13pt; margin: 16pt 0 6pt; color: var(--accent); break-after: avoid; }
+h3 { font-size: 10.5pt; margin: 10pt 0 4pt; break-after: avoid; }
+p { margin: 0 0 6pt; }
+code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 8.6pt; background: var(--accent-soft); padding: 0 3px; border-radius: 2px; }
+.doc-head { border-bottom: 2px solid var(--accent); padding-bottom: 8pt; margin-bottom: 10pt; }
+.doc-head .num { font-family: Consolas, monospace; font-size: 8.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.doc-head .meta { color: var(--muted); font-size: 8.8pt; }
+.summary { display: grid; grid-template-columns: 1fr 1fr; gap: 8pt; margin: 8pt 0 4pt; }
+.tile { border: 1px solid var(--line); border-radius: 4px; padding: 7pt 9pt; break-inside: avoid; }
+.tile .name { font-weight: 600; font-size: 10.5pt; }
+.tile .big { font-family: Consolas, monospace; font-size: 15pt; color: var(--pass); font-weight: 600; }
+.tile .sub { color: var(--muted); font-size: 8.6pt; }
+table { border-collapse: collapse; width: 100%; margin: 4pt 0 8pt; font-size: 8.8pt; break-inside: auto; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th, td { text-align: left; padding: 3.5pt 6pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 7.6pt; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); font-weight: 600; border-bottom: 1.5px solid var(--fg); }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.k { font-family: Consolas, monospace; font-size: 8.4pt; white-space: nowrap; }
+.pill { display: inline-block; font-family: Consolas, monospace; font-size: 7.8pt; padding: 0 5pt; border-radius: 8pt; }
+.pill.pass { background: var(--pass-soft); color: var(--pass); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+.hb { display: flex; align-items: center; gap: 5pt; }
+.bar { width: 70pt; height: 6pt; background: #e3e7ea; border-radius: 3pt; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+.hb span { font-family: Consolas, monospace; font-size: 8.4pt; width: 3.4em; text-align: right; }
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5pt; margin: 6pt 0 8pt; }
+.flow div { border: 1px solid var(--line); border-radius: 4px; padding: 5pt 7pt; font-size: 8.6pt; }
+.flow b { display: block; font-family: Consolas, monospace; font-size: 7.6pt; letter-spacing: 0.06em; color: var(--accent); }
+ul { margin: 0 0 6pt; padding-left: 14pt; }
+li { margin-bottom: 2.5pt; }
+.note { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 6pt 9pt; margin: 6pt 0 8pt; break-inside: avoid; }
+.note.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.note p:last-child, .note ul:last-child { margin-bottom: 0; }
+pre { font-family: Consolas, monospace; font-size: 7.8pt; line-height: 1.4; background: var(--console); border: 1px solid var(--line); border-radius: 4px; padding: 6pt 8pt; margin: 4pt 0 8pt; white-space: pre; overflow: hidden; break-inside: avoid; }
+.page-break { break-before: page; }
+table.keep { break-inside: avoid; }
+.src { color: var(--muted); font-size: 8.2pt; }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="num">Machine Guardian · document 15</div>
+  <h1>Both models on the ZedBoard</h1>
+  <div class="meta">16 Nov 2026 · modelV2 and the Tiny-TPU RSCL model on the MAC Attack accelerator (<code>mac_attack_accel_MLP</code>) · follows 13 (modelV2) and 14 (its review), which ended with "run it on the board"</div>
+</div>
+
+<p>Two ML models were connected to the MAC Attack accelerator and run on the ZedBoard: <b>modelV2</b>, the team's frozen bearing-health model (document 13), and the professor's <b>Tiny-TPU RSCL</b> motor-vibration model. Every number the accelerator returned matched the software model exactly, and both board programs passed.</p>
+
+<div class="summary">
+  <div class="tile"><div class="name">modelV2</div><div class="big">4/4 PASS</div><div class="sub">13 → 32 → 16 → 4, INT8 · 64 rows · 256/256 sums exact in every batch size · 474 FPGA clocks per row</div></div>
+  <div class="tile"><div class="name">Tiny-TPU RSCL</div><div class="big">5/5 PASS</div><div class="sub">8 → 4 → 2, INT4 · 64 rows · every sum, hidden value and class exact · 79 FPGA clocks per row</div></div>
+</div>
+
+<h2>1. The hardware</h2>
+<p>The accelerator is an 8 × 8 systolic array of INT8 multiply-accumulate units with exact 22-bit sums, built into the ZedBoard's FPGA. Its on-chip MLP controller (<code>mlp_ctrl</code>) runs a whole model of up to 4 layers in one go: it holds each layer's weights, adds the bias, rescales and applies ReLU between layers, and returns the last layer's raw sums. The ZedBoard's ARM processor drives it through AXI4-Lite registers. The committed build runs at 214.286 MHz.</p>
+<div class="flow">
+  <div><b>PC</b>Train, quantize, export weights and test rows as a C header</div>
+  <div><b>ARM</b>Load weights, biases and scales once; send input rows; read the sums</div>
+  <div><b>FPGA</b>Run every layer in the 8 × 8 array, with the step between layers on chip</div>
+  <div><b>ARM</b>Check every sum against Python; turn the sums into a prediction</div>
+</div>
+
+<h2>2. How each model was connected to the accelerator</h2>
+<p>Neither model required any change to the RTL. Each one gets an <b>interface</b>: software that converts the trained model into what the accelerator understands, and an ARM program that loads it through the accelerator's registers. Each interface was checked against the RTL in simulation before the board run.</p>
+<table>
+  <thead><tr><th style="width:17%"></th><th style="width:41%">modelV2</th><th>Tiny-TPU RSCL</th></tr></thead>
+  <tbody>
+    <tr><td class="k">Origin</td><td>The team's bearing-health model, trained on Paderborn run-to-failure data and frozen on 10 Nov (document 13)</td><td>The professor's starter kit (<code>tinytpu/model/</code>): an INT4 MLP, trained on his synthetic demo data</td></tr>
+    <tr><td class="k">Converter</td><td><code>modelV2/hardware.py</code> (existing)</td><td><code>tinytpu/mac_mlp/export_mac_mlp.py</code> (new, 16 Nov)</td></tr>
+    <tr><td class="k">Conversion</td><td>INT8 weights; a 32-bit bias, multiplier and shift for each channel of the two hidden layers</td><td>INT4 values (−7 to +7) fit inside the INT8 bytes unchanged. The professor's float step between layers became an integer bias (17, 9, −5, 14) and a scale of 47624 / 2<sup>20</sup></td></tr>
+    <tr><td class="k">Modes tested</td><td>Whole model on chip; 1, 8 and 64 rows per run</td><td><b>Host mode</b>, the professor's contract: the array does the sums, the ARM does the float step between layers. <b>On-chip mode</b>: the whole model in one run</td></tr>
+    <tr><td class="k">Test rows</td><td>64 real Paderborn rows from 7 bearings</td><td>The professor's 12 golden rows, plus 52 random INT4 rows so the "faulty" output is also tested</td></tr>
+    <tr><td class="k">Before the board</td><td>RTL bit-exact in Icarus (<code>hardware.json</code>), 474 clocks per row</td><td>Vivado testbench <code>tb_tinytpu</code> 4/4. A deliberately planted rounding bug made 3 of the 4 tests fail</td></tr>
+    <tr><td class="k">Board program</td><td><code>MAC_model_V2</code> (SDK app)</td><td><code>MAC_model_TinyTPU</code> (SDK app, new)</td></tr>
+  </tbody>
+</table>
+<p>The Tiny-TPU testbench and app live in a copy of the project, <code>mac_attack_accel_MLP_TinyTPU</code>. Its RTL is identical to the original's, so running the app from the original project, as this run did, gives the same results.</p>
+<div class="note"><p><b>One known difference from the professor's contract.</b> His contract caps hidden values at 7, but the chip caps them at 127. On the 12 golden rows the two agree exactly. On 10 of the 52 random rows the on-chip sums differ from the contract's, but the predicted class never does. The on-chip test checks those rows against the chip's own integer path.</p></div>
+
+<h2>3. modelV2 on the ZedBoard</h2>
+<table>
+  <thead><tr><th>Test</th><th class="n">Sums correct</th><th class="n">64 rows</th><th class="n">Per row</th><th class="n">FPGA clocks / run</th><th class="n">Printed speedup</th></tr></thead>
+  <tbody>
+    <tr><td>ARM alone (software)</td><td class="n">256/256</td><td class="n">3,916 µs</td><td class="n">61 µs</td><td class="n">–</td><td class="n">baseline</td></tr>
+    <tr><td>Accelerator, 1 row per run</td><td class="n">256/256</td><td class="n">336 µs</td><td class="n">5 µs</td><td class="n">474</td><td class="n">11.7×</td></tr>
+    <tr><td>Accelerator, 8 rows per run</td><td class="n">256/256</td><td class="n">149 µs</td><td class="n">2 µs</td><td class="n">642</td><td class="n">26.3×</td></tr>
+    <tr><td>Accelerator, 64 rows per run</td><td class="n">256/256</td><td class="n">127 µs</td><td class="n">2 µs</td><td class="n">1,986</td><td class="n">30.8×</td></tr>
+  </tbody>
+</table>
+<ul>
+  <li><b>Exact:</b> all 256 sums matched Python in every batch size. The clock counts, 474 for one row and 1,986 for 64, equal the RTL check recorded before the board run.</li>
+  <li><b>The bus dominates the time.</b> At 214.286 MHz, 1,986 clocks is about 9.3 µs. The 64-row run took 127 µs, so roughly 93 % of it is the ARM sending data and reading results.</li>
+</ul>
+<div class="note warn"><p><b>The speedups are inflated.</b> The program was built in Debug (−O0), and it printed that warning itself. That makes the ARM-alone time slower than it should be, so 11.7× to 30.8× is too high. Rerun with the Release build before quoting a speedup.</p></div>
+
+<h3>What the model predicted</h3>
+<p>The 64 test rows are spaced evenly through the lives of 7 bearings: B02, B03, B04, B08, B09, B11 and B12, in that order. Each recording runs from new to failure. The table shows every row the board printed, with its bearing and how far through that bearing's life it comes. "Damage started" means the row comes after the bearing's onset, the point where the vibration detector's score rose and stayed up.</p>
+<table class="keep">
+  <thead><tr><th>Row</th><th>Bearing</th><th class="n">Through its life</th><th>Damage started</th><th>Status</th><th>Health</th></tr></thead>
+  <tbody>
+    <tr><td class="k">0</td><td>B02</td><td class="n">0 %</td><td>no</td><td><span class="pill pass">healthy</span></td><td><div class="hb"><div class="bar"><i style="width:97.1%"></i></div><span>97.1 %</span></div></td></tr>
+    <tr><td class="k">7</td><td>B02</td><td class="n">93 %</td><td>yes</td><td><span class="pill bad">faulty</span></td><td><div class="hb"><div class="bar"><i style="width:13.2%"></i></div><span>13.2 %</span></div></td></tr>
+    <tr><td class="k">14</td><td>B04</td><td class="n">29 %</td><td>no</td><td><span class="pill pass">healthy</span></td><td><div class="hb"><div class="bar"><i style="width:96.7%"></i></div><span>96.7 %</span></div></td></tr>
+    <tr><td class="k">21</td><td>B08</td><td class="n">13 %</td><td>no</td><td><span class="pill pass">healthy</span></td><td><div class="hb"><div class="bar"><i style="width:97.6%"></i></div><span>97.6 %</span></div></td></tr>
+    <tr><td class="k">28</td><td>B08</td><td class="n">69 %</td><td>yes</td><td><span class="pill bad">faulty</span></td><td><div class="hb"><div class="bar"><i style="width:29%"></i></div><span>29.0 %</span></div></td></tr>
+    <tr><td class="k">35</td><td>B09</td><td class="n">25 %</td><td>yes</td><td><span class="pill bad">faulty</span></td><td><div class="hb"><div class="bar"><i style="width:47.9%"></i></div><span>47.9 %</span></div></td></tr>
+    <tr><td class="k">42</td><td>B09</td><td class="n">82 %</td><td>yes</td><td><span class="pill bad">faulty</span></td><td><div class="hb"><div class="bar"><i style="width:47.3%"></i></div><span>47.3 %</span></div></td></tr>
+    <tr><td class="k">49</td><td>B11</td><td class="n">34 %</td><td>no</td><td><span class="pill pass">healthy</span></td><td><div class="hb"><div class="bar"><i style="width:94.7%"></i></div><span>94.7 %</span></div></td></tr>
+    <tr><td class="k">56</td><td>B11</td><td class="n">85 %</td><td>yes</td><td><span class="pill bad">faulty</span></td><td><div class="hb"><div class="bar"><i style="width:23%"></i></div><span>23.0 %</span></div></td></tr>
+    <tr><td class="k">63</td><td>B12</td><td class="n">100 %</td><td>yes</td><td><span class="pill bad">faulty</span></td><td><div class="hb"><div class="bar"><i style="width:76.1%"></i></div><span>76.1 %</span></div></td></tr>
+  </tbody>
+</table>
+<ul>
+  <li><b>All 10 statuses agree</b> with whether damage had started. Healthy rows are at 95–98 % health, and rows after onset at 13–48 %.</li>
+  <li><b>How health works:</b> each bearing's first measurements set its healthy baseline. Health is 100 % while the vibration score stays within 2.5 times normal noise, and falls on a log scale to 0 % at 25 times, a typical end-of-life level. Within one bearing it only goes down. The jumps back up in the list are where a new bearing starts.</li>
+  <li><b>B09</b> (rows 35, 42): damage started early, about 10 % through its life, and grew slowly, so health stays near 48 %.</li>
+  <li><b>B12</b> (row 63): its recording stops at moderate damage, not at failure, so it reads "faulty" but still at 76 % health.</li>
+</ul>
+<div class="note">
+  <p><b>These rows test the hardware, not the model's accuracy.</b> They come from the data the final model was trained on. Accuracy comes from bearings the model never saw (documents 13 and 14):</p>
+  <ul>
+    <li><b>Validation (7 bearings):</b> damage caught on 7 of 7, no false alarms. Health error is 3–9 points before onset and 6–20 points after.</li>
+    <li><b>Locked test (4 bearings, run once):</b> damage caught on 4 of 4, 0 false alarms in 600 healthy rows. Health error is 3–5 points before onset. After onset it's 5–12 points on B07, B13 and B17, and 51 on B06.</li>
+  </ul>
+  <p>The fault alarm is the stronger output. Health % is reliable while a bearing is healthy and a rough guide once damage has started.</p>
+</div>
+
+<h2>4. Tiny-TPU RSCL on the ZedBoard</h2>
+<table>
+  <thead><tr><th>Test</th><th>Result</th><th class="n">64 rows</th><th class="n">FPGA clocks / run</th></tr></thead>
+  <tbody>
+    <tr><td>ARM alone (professor's contract)</td><td>layer 0 256/256, hidden 256/256, layer 1 128/128, class 64/64</td><td class="n">218 µs</td><td class="n">–</td></tr>
+    <tr><td>Host mode (contract on the accelerator)</td><td>layer 0 256/256, hidden 256/256, layer 1 128/128, class 64/64</td><td class="n">224 µs</td><td class="n">–</td></tr>
+    <tr><td>On-chip MLP, 64 rows per run</td><td>sums 128/128, class 64/64, golden rows = contract 12/12</td><td class="n">67 µs</td><td class="n">268</td></tr>
+    <tr><td>On-chip MLP, 8 rows per run</td><td>sums 128/128, class 64/64, golden 12/12</td><td class="n">76 µs</td><td class="n">100</td></tr>
+    <tr><td>On-chip MLP, 1 row per run</td><td>sums 128/128, class 64/64, golden 12/12</td><td class="n">153 µs</td><td class="n">79</td></tr>
+  </tbody>
+</table>
+<ul>
+  <li><b>Exact:</b> all sums, hidden INT4 values and classes match, in both modes. The 12 golden rows give the professor's logits to the last digit, for example −2763876 and 3942041 (×10<sup>−6</sup>) on row 0, and all 12 predict "healthy" as expected.</li>
+  <li><b>Same as simulation:</b> the clock counts 268, 100 and 79 equal the Vivado simulation exactly.</li>
+  <li><b>Host mode is no faster than the ARM alone</b> (224 against 218 µs). The ARM still does the float step between layers, and every layer crosses the bus twice. The whole model on chip, 64 rows per run, takes 67 µs. The program doesn't print whether it was a Debug or a Release build.</li>
+</ul>
+<h3>Board output (golden rows)</h3>
+<pre> row  0  sums  -25   35  logits  -2763876   3942041 (expected  -2763876   3942041)  healthy (expected healthy, true healthy)
+ row  2  sums  -20   28  logits  -2210015   3166636 (expected  -2210015   3166636)  healthy (expected healthy, true healthy)
+ ... rows 1 and 3-11 identical in form; all 12 healthy, all logits equal to the expected ones
+ ALL TINY-TPU MODEL TESTS PASSED (5/5)</pre>
+<div class="note warn"><p><b>What this model's predictions mean.</b> The model only says healthy or faulty; it has no health %. It was trained on the professor's synthetic demo vibrations, and all 12 golden rows are "healthy". This run proves the arithmetic on the board, but it says nothing yet about real motors. That needs training on the University of Ottawa recordings first.</p></div>
+
+<h2>5. What's next</h2>
+<ul>
+  <li>Rerun <code>MAC_model_V2</code> with the <b>Release</b> build to get a fair speedup figure.</li>
+  <li>Run both models on the <b>Tiny-TPU V2 chip RTL</b> (<code>tinytpu/fpga_zed_v2</code>). Its bitstream is built and meets timing at 50 MHz (100 MHz missed by 2.66 ns). The ARM program build and the board run are still to do.</li>
+  <li>To follow one bearing from healthy to failure, re-export modelV2's test rows from a single bearing in time order. This needs <code>modelV2/data/rows.npz</code>, rebuilt by <code>prep.py</code>.</li>
+  <li>Train the Tiny-TPU model on the real Ottawa recordings and rerun the exporter and the board app.</li>
+</ul>
+
+<p class="src" style="margin-top:12pt">Sources: board output recorded 16 Nov 2026 on the USB-UART (COM3, 115200 8N1). Bearing positions rebuilt from the row counts in <code>modelV2/runs/20261110-220018_A_severity_onset/hardware.json</code>, in <code>prep.py</code>'s bearing order. Accuracy figures from <code>modelV2/report/comparison.json</code> and <code>locked_results.json</code>. Clock frequency from <code>mac_attack_accel_MLP/zed/README.md</code>.</p>
+
+</body>
+</html>

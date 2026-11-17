@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tiny-TPU in Vivado and the SDK</title>
+<style>
+@page {
+  size: A4;
+  margin: 16mm 16mm 18mm 16mm;
+  @bottom-left { content: "MAC Attack · Tiny-TPU in Vivado and the SDK (16 Nov 2026)"; font: 8pt "Segoe UI", Arial, sans-serif; color: #6b7780; }
+  @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt "Segoe UI", Arial, sans-serif; color: #6b7780; }
+}
+:root {
+  --fg: #1b2328; --muted: #5a6670; --line: #d4dade; --accent: #0d6b6b; --accent-soft: #e6f2f1;
+  --warn: #7a5000; --warn-soft: #fbf1dc;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; color: var(--fg); font-family: "Segoe UI", Arial, sans-serif; font-size: 9.6pt; line-height: 1.45; }
+h1 { font-size: 20pt; margin: 0 0 4pt; letter-spacing: -0.01em; }
+h2 { font-size: 13pt; margin: 16pt 0 6pt; color: var(--accent); break-after: avoid; }
+h3 { font-size: 10.5pt; margin: 10pt 0 4pt; break-after: avoid; }
+p { margin: 0 0 6pt; }
+code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 8.6pt; background: var(--accent-soft); padding: 0 3px; border-radius: 2px; }
+.menu { font-family: Consolas, monospace; font-size: 8.7pt; font-weight: 600; }
+.doc-head { border-bottom: 2px solid var(--accent); padding-bottom: 8pt; margin-bottom: 10pt; }
+.doc-head .num { font-family: Consolas, monospace; font-size: 8.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.doc-head .meta { color: var(--muted); font-size: 8.8pt; }
+table { border-collapse: collapse; width: 100%; margin: 4pt 0 8pt; font-size: 8.7pt; }
+table.keep { break-inside: avoid; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th, td { text-align: left; padding: 3.5pt 6pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 7.6pt; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); font-weight: 600; border-bottom: 1.5px solid var(--fg); }
+td.k { font-family: Consolas, monospace; font-size: 8.3pt; }
+ol, ul { margin: 0 0 6pt; padding-left: 16pt; }
+li { margin-bottom: 3pt; }
+li ul { margin-top: 2pt; }
+.note { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 6pt 9pt; margin: 6pt 0 8pt; break-inside: avoid; }
+.note.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.note p:last-child { margin-bottom: 0; }
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5pt; margin: 6pt 0 8pt; }
+.flow div { border: 1px solid var(--line); border-radius: 4px; padding: 5pt 7pt; font-size: 8.6pt; }
+.flow b { display: block; font-family: Consolas, monospace; font-size: 7.6pt; letter-spacing: 0.06em; color: var(--accent); }
+figure { margin: 6pt 0 10pt; break-inside: avoid; }
+figure img { max-width: 100%; border: 1px solid var(--line); border-radius: 3px; display: block; }
+figure.half img { max-width: 62%; }
+figcaption { font-size: 8.2pt; color: var(--muted); margin-top: 3pt; }
+.src { color: var(--muted); font-size: 8.2pt; }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="num">MAC Attack · hardware guide</div>
+  <h1>Tiny-TPU in Vivado and the SDK</h1>
+  <div class="meta">16 Nov 2026 · how to take <code>tinytpu/fpga_zed</code> (Version 1) and <code>tinytpu/fpga_zed_v2</code> (Version 2) from the Vivado project to test results on the ZedBoard, using the Vivado and SDK 2019.1 windows · results in <code>docs/Model/16_TinyTPU_V1_V2_ZedBoard_run.pdf</code></div>
+</div>
+
+<p>Every run follows the same four stages. Vivado holds the hardware: the block design, the bitstream and the hardware export. The SDK holds the software: one ARM application per test program. The board runs both, and the results arrive on a serial terminal.</p>
+<div class="flow">
+  <div><b>1 · VIVADO</b>Open the project, check the bitstream and timing</div>
+  <div><b>2 · EXPORT</b>Export Hardware with the bitstream, Launch SDK</div>
+  <div><b>3 · SDK</b>One application per test program, built in Release</div>
+  <div><b>4 · BOARD</b>Run Configurations, then read the terminal</div>
+</div>
+
+<h2>The two projects</h2>
+<table class="keep">
+  <thead><tr><th></th><th>Version 1</th><th>Version 2</th></tr></thead>
+  <tbody>
+    <tr><td class="k">Folder</td><td class="k">tinytpu\fpga_zed</td><td class="k">tinytpu\fpga_zed_v2</td></tr>
+    <tr><td class="k">Project file</td><td class="k">tinytpu_zed_project\tinytpu_zed.xpr</td><td class="k">tinytpu_v2_zed_project\tinytpu_v2_zed.xpr</td></tr>
+    <tr><td class="k">Script that makes it</td><td class="k">create_tinytpu_zed_project.tcl</td><td class="k">create_tinytpu_v2_zed_project.tcl</td></tr>
+    <tr><td class="k">Hardware</td><td>1 INT4 PE, 16-bit sum</td><td>2 INT8 PEs, on-chip bias / rescale / ReLU</td></tr>
+    <tr><td class="k">Clock</td><td>100 MHz</td><td>50 MHz (100 MHz misses timing)</td></tr>
+    <tr><td class="k">Test programs</td><td><code>tinytpu_model_test</code>, <code>tinytpu_test</code></td><td><code>model_v2_test</code>, <code>tinytpu_model_test</code>, <code>tinytpu_v2_test</code></td></tr>
+  </tbody>
+</table>
+<p>The project files and bitstreams are build output and are not in git. On a PC that has never built them, start with "Make the project from the script" below.</p>
+
+<h2>Stage 1 · Vivado: open the project</h2>
+<h3>A project that is already built</h3>
+<ol>
+  <li>Start Vivado 2019.1 and choose <span class="menu">File › Open Project</span>. Pick the <code>.xpr</code> from the table.</li>
+  <li>If Vivado says the runs are out of date, don't rebuild. The bitstream is in <code>&lt;project&gt;.runs\impl_1\system_wrapper.bit</code>.</li>
+  <li>To see timing: <span class="menu">Flow Navigator › Implementation › Open Implemented Design</span>, then <span class="menu">Reports › Timing › Report Timing Summary</span>. WNS (setup) and WHS (hold) must both be 0 or more. On 16 Nov, V1 had WNS +0.997 ns and V2 +4.481 ns.</li>
+  <li>To see the address the ARM uses: <span class="menu">Flow Navigator › IP Integrator › Open Block Design</span>, then the <b>Address Editor</b> tab. The Tiny-TPU wrapper must be at <code>0x43C00000</code>, the <code>TPU_BASE</code> in every test program.</li>
+</ol>
+<h3>Make the project from the script</h3>
+<ol>
+  <li><span class="menu">Tools › Run Tcl Script…</span> and pick the folder's <code>create_…_project.tcl</code>. It makes the project and the block design: Zynq processing system, then AXI interconnect, then the Tiny-TPU wrapper. The Tcl Console should end with <code>Block design 'system' built</code> and the address <code>0x43C00000</code>.</li>
+  <li><span class="menu">Flow Navigator › Program and Debug › Generate Bitstream</span>. It runs synthesis and implementation first, about 10 minutes. Watch progress in the <b>Design Runs</b> tab at the bottom.</li>
+  <li>Check timing as above. If WNS is negative, lower <code>FCLK_MHZ</code> near the top of the script and run it again.</li>
+</ol>
+<div class="note warn"><p><b>The script replaces the project.</b> It runs <code>create_project -force</code>, so running it again deletes the project, its bitstream and the SDK workspace inside it. Only run it to rebuild from scratch. If you work from a copy of the folder, as the 16 Nov run did from <code>C:\tinytpu</code>, copy it after the latest changes so <code>sw\</code> has every file listed below.</p></div>
+
+<h2>Stage 2 · Export the hardware and start the SDK</h2>
+<ol>
+  <li><span class="menu">File › Export › Export Hardware…</span>, tick <b>Include bitstream</b>, location <code>&lt;Local to Project&gt;</code>, then OK. Overwrite if asked. This writes <code>system_wrapper.hdf</code> into the project's <code>.sdk</code> folder.</li>
+  <li><span class="menu">File › Launch SDK</span>, with both locations set to <code>&lt;Local to Project&gt;</code>. The SDK opens on that <code>.sdk</code> folder and makes the hardware platform project <code>system_wrapper_hw_platform_0</code>. It holds the bitstream, <code>ps7_init</code> and <code>system.hdf</code>.</li>
+  <li>Launch the SDK from the project you want to test. Each project has its own SDK workspace, and a V1 workspace has the V1 bitstream. modelV2 needs the V2 workspace.</li>
+</ol>
+
+<h2>Stage 3 · SDK: one application per test program</h2>
+<p>Each test program is a complete program with its own <code>main()</code>, so each gets its own application. The source files are in the project folder's <code>sw\</code> subfolder.</p>
+<table class="keep">
+  <thead><tr><th>Project</th><th>Application</th><th>Import these files from sw\, and nothing else</th><th>Needs m</th></tr></thead>
+  <tbody>
+    <tr><td>V1</td><td class="k">tinytpu_model_test</td><td class="k">tinytpu_model_test.c, tinytpu_model.h</td><td>no</td></tr>
+    <tr><td>V1</td><td class="k">tinytpu_test</td><td class="k">tinytpu_test.c, model_data.h</td><td>yes</td></tr>
+    <tr><td>V2</td><td class="k">model_v2_test</td><td class="k">model_v2_test.c, model_v2_data.h, tpu_v2_driver.h</td><td>no</td></tr>
+    <tr><td>V2</td><td class="k">tinytpu_model_test</td><td class="k">tinytpu_model_test.c, tinytpu_model.h, tpu_v2_driver.h</td><td>no</td></tr>
+    <tr><td>V2</td><td class="k">tinytpu_v2_test</td><td class="k">tinytpu_v2_test.c, model_v2_data.h</td><td>yes</td></tr>
+  </tbody>
+</table>
+<p>For each application in the table:</p>
+<ol>
+  <li><span class="menu">File › New › Application Project</span>.
+    <ul>
+      <li><b>Project name:</b> the name from the table.</li>
+      <li><b>OS Platform</b> standalone, <b>Hardware Platform</b> <code>system_wrapper_hw_platform_0</code>, <b>Processor</b> <code>ps7_cortexa9_0</code>, <b>Language</b> C.</li>
+      <li><b>Board Support Package:</b> <i>Create New</i> for the first application in a workspace, then <i>Use existing</i> for the rest. The BSP is named after the first application, for example <code>model_v2_test_bsp</code>.</li>
+      <li>Next, choose the template <b>Empty Application</b>, then Finish.</li>
+    </ul>
+  </li>
+  <li>Right-click the application's <code>src</code> folder, <span class="menu">Import… › General › File System</span>, browse to <code>sw\</code> and tick only the files the table lists. Leave "Create links" unticked, so the files are copied.</li>
+  <li>Make Release the active build: right-click the application, <span class="menu">Build Configurations › Set Active › Release</span>. The programs warn in Debug, and only Release makes the ARM-alone time a fair baseline.</li>
+  <li>If the table says <b>yes</b> under "Needs m", add the math library: right-click the application, <span class="menu">Properties › C/C++ Build › Settings › ARM v7 gcc linker › Libraries</span>. First set <b>Configuration</b> at the top to <b>[ All configurations ]</b>, then add <code>m</code> with the green + button, then Apply.</li>
+  <li><span class="menu">Project › Build Project</span>. The <b>Problems</b> tab must show no errors, and the <code>.elf</code> appears under <code>Release\</code>.</li>
+</ol>
+
+<figure class="half"><img src="images/sdk_linker_libraries.png" alt="SDK Properties dialog, ARM v7 gcc linker Libraries page with m added"><figcaption>The math library <code>m</code> under ARM v7 gcc linker › Libraries. Here the Configuration box at the top says <b>Debug [Active]</b>, so <code>m</code> only reaches the Debug build. Choose <b>[ All configurations ]</b> before adding it.</figcaption></figure>
+
+<h3>The most common mistake: two programs in one application</h3>
+<p>Importing all of <code>sw\</code> into one application puts two or three <code>main()</code> functions in it, and the build fails with <code>multiple definition of 'main'</code> and <code>make: *** … Error 1</code>. To fix it, delete the extra <code>.c</code> files and their headers from <code>src</code> (right-click › Delete), then run <span class="menu">Project › Clean…</span>. Make the other programs as their own applications.</p>
+<figure><img src="images/sdk_two_mains_error.png" alt="SDK Project Explorer and Problems tab: three test programs in one application, linker errors about main"><figcaption>All three V2 programs imported into one application. The Problems tab names <code>tinytpu_model_test.o</code> and <code>tinytpu_v2_test.o</code> "in function main". Keep only <code>model_v2_test.c</code>, <code>model_v2_data.h</code> and <code>tpu_v2_driver.h</code> in this one.</figcaption></figure>
+
+<h2>Stage 4 · Run on the ZedBoard</h2>
+<ol>
+  <li><b>Board:</b> set the boot-mode jumpers to JTAG, plug micro-USB cables into <b>J17 (PROG)</b> and <b>J14 (UART)</b>, and power it on.</li>
+  <li><b>Terminal:</b> open the J14 COM port (Device Manager › Ports) at <b>115200 baud, 8 data bits, no parity, 1 stop bit</b>, in the SDK's <b>SDK Terminal</b> tab, PuTTY or Tera Term. Open it before you run, because each program prints once and stops.</li>
+  <li>Right-click the application › <span class="menu">Run As › Run Configurations…</span>. Double-click <i>Xilinx C/C++ application (System Debugger)</i> to make a configuration for it.</li>
+  <li>In <b>Target Setup</b>, tick <i>Reset entire system</i>, <i>Program FPGA</i>, <i>Run ps7_init</i> and <i>Run ps7_post_config</i>. The bitstream must be this project's <code>system_wrapper.bit</code>.</li>
+  <li>In <b>Application</b>, <code>ps7_cortexa9_0</code> must run this application's Release <code>.elf</code>.</li>
+  <li>Click <b>Run</b>. The SDK programs the FPGA, starts the ARM and loads the program.</li>
+  <li>For the next program, choose its configuration in the same window, or make one, and click Run. Each run resets and reprograms the board.</li>
+</ol>
+<table class="keep">
+  <thead><tr><th>Project</th><th>Application</th><th>The terminal must end with</th></tr></thead>
+  <tbody>
+    <tr><td>V1</td><td class="k">tinytpu_model_test</td><td class="k">ALL TINY-TPU MODEL TESTS PASSED (2/2)</td></tr>
+    <tr><td>V1</td><td class="k">tinytpu_test</td><td class="k">ALL TINY-TPU TESTS PASSED (5/5)</td></tr>
+    <tr><td>V2</td><td class="k">model_v2_test</td><td class="k">ALL MODEL TESTS PASSED (3/3)</td></tr>
+    <tr><td>V2</td><td class="k">tinytpu_model_test</td><td class="k">ALL TINY-TPU MODEL TESTS PASSED (3/3)</td></tr>
+    <tr><td>V2</td><td class="k">tinytpu_v2_test</td><td class="k">ALL TINY-TPU V2 TESTS PASSED (8/8)</td></tr>
+  </tbody>
+</table>
+<p>All five passed on 16 Nov 2026 (document 16). On these boards the ARM alone is faster than the Tiny-TPU core, because the whole model crosses the bus for every row. That's expected: the runs prove the chip's arithmetic.</p>
+
+<h2>Without the board</h2>
+<p>Neither Vivado project has a simulation testbench, so Vivado's Run Simulation has nothing to run. Each folder has <code>sim\xsim_cosim\run_xsim_cosim.bat</code> instead. From a Command Prompt, <code>run_xsim_cosim.bat model_v2_test</code> (or another program name) runs the board program, unchanged, against that project's RTL in Vivado's simulator. It prints the same lines the terminal would.</p>
+<p>The same four stages also run without any windows: <code>build_bitstream.tcl</code>, <code>sdk_build.tcl</code> and <code>run_on_board.tcl &lt;program&gt;</code>, described in each folder's README.</p>
+
+<h2>If something goes wrong</h2>
+<table>
+  <thead><tr><th style="width:34%">What you see</th><th>What to do</th></tr></thead>
+  <tbody>
+    <tr><td>multiple definition of 'main'</td><td>Two programs in one application. Keep one <code>.c</code> per application (Stage 3).</td></tr>
+    <tr><td>undefined reference to rint, fabs or exp</td><td>Add <code>m</code> to the linker libraries for the configuration you build, or for All configurations.</td></tr>
+    <tr><td>tinytpu_model.h or tpu_v2_driver.h: No such file</td><td>A file from the table wasn't imported, or the folder copy is older than 16 Nov. Import it from <code>sw\</code>.</td></tr>
+    <tr><td>defined but not used [-Wunused-function]</td><td>A harmless warning from an older <code>tpu_v2_driver.h</code>. The current one fixes it.</td></tr>
+    <tr><td>Core not found / PE not found at 0x43c00000</td><td>The FPGA holds another bitstream, or the address differs. Tick <i>Program FPGA</i> and check the Address Editor against <code>TPU_BASE</code>.</td></tr>
+    <tr><td>Run: no target / cannot connect</td><td>Check the J17 cable, power and JTAG jumpers. Close Vivado's Hardware Manager if it holds the cable.</td></tr>
+    <tr><td>Nothing on the terminal</td><td>Wrong COM port or speed. Use J14 at 115200 8N1, opened before Run.</td></tr>
+    <tr><td>The SDK says the hardware changed</td><td>After a new bitstream, export again (Stage 2), accept the update to <code>system_wrapper_hw_platform_0</code>, and rebuild the applications.</td></tr>
+    <tr><td>Timing fails after a change</td><td>Lower <code>FCLK_MHZ</code> in the create script. Keep V2 at 50 MHz; its post-processing path tops out near 79 MHz.</td></tr>
+  </tbody>
+</table>
+
+<p class="src">Vivado and SDK 2019.1 menu names. The screenshots are from the 16 Nov 2026 session.</p>
+
+</body>
+</html>

@@ -3,11 +3,13 @@
 It holds two models, both from the files the chip test uses (../../chip_v2/test/):
   - our modelV2 INT8 13-32-16-4 (modelV2/quant.json) with its 64 reference rows (vectors_X.hex) and the
     reference raw sums of the last layer (vectors_C.hex)
-  - the professor's INT4 8-4-2 (golden_vectors.json): its operands and expected sums per layer
+  - the professor's INT4 8-4-2 (golden_vectors.json): its operands and expected sums per layer, plus the
+    package's scales, float biases and labels (int4_package.json), so the ARM can run the professor's host
+    flow itself (dequantize, bias, ReLU, requantize, logits, class)
 
 Usage (from this folder):
     python make_model_v2_header.py
-    python make_model_v2_header.py --modelv2 DIR --golden FILE
+    python make_model_v2_header.py --modelv2 DIR --golden FILE --package FILE
 Re-run it after a new export (copy the files into chip_v2/test/ first), then rebuild the SDK application.
 """
 import argparse
@@ -19,6 +21,7 @@ test = here.parents[1] / "chip_v2" / "test"
 ap = argparse.ArgumentParser()
 ap.add_argument("--modelv2", default=test / "modelV2")
 ap.add_argument("--golden", default=test / "golden_vectors.json")
+ap.add_argument("--package", default=test / "int4_package.json")
 ap.add_argument("--out", default=here / "model_v2_data.h")
 a = ap.parse_args()
 
@@ -134,6 +137,18 @@ out.append(f"static const int8_t P_A0[{len(per_vec)}][{n_in}] = {rows([p[0][0] f
 out.append(f"static const int8_t P_A1[{len(per_vec)}][{n_hid}] = {rows([p[1][0] for p in per_vec])};")
 out.append(f"static const int32_t P_S0[{len(per_vec)}][{n_hid}] = {rows([p[0][2] for p in per_vec])};")
 out.append(f"static const int32_t P_S1[{len(per_vec)}][{n_out}] = {rows([p[1][2] for p in per_vec])};")
+pkg = json.loads(Path(a.package).read_text())
+assert pkg["weights"][0] == W0 and pkg["weights"][1] == W1, "int4_package.json and golden_vectors.json differ"
+(sa0, sa1), (sw0, sw1) = pkg["activation_scales"], pkg["weight_scales"]
+out.append("/* the professor's host flow (int4_package.json): h = ReLU(s0 * P_S_A0 * P_S_W0 + P_B0F),")
+out.append(" * a1 = clamp(rint_even(h / P_S_A1), -7, 7); logit = s1 * P_S_A1 * P_S_W1 + P_B1F; class = argmax */")
+for name, v in (("P_S_A0", sa0), ("P_S_A1", sa1), ("P_S_W0", sw0), ("P_S_W1", sw1)):
+    out.append(f"#define {name} {float(v)!r}")
+out.append(f"static const double P_B0F[{n_hid}] = {arr(repr(float(v)) for v in pkg['biases'][0])};")
+out.append(f"static const double P_B1F[{n_out}] = {arr(repr(float(v)) for v in pkg['biases'][1])};")
+out.append(f"static const int P_CLASS[{len(vec)}] = {arr(v['expected_class'] for v in vec)};")
+out.append(f"static const int P_TRUE[{len(vec)}] = {arr(v['true_class'] for v in vec)};")
+out.append(f"static const char *const P_LABELS[{len(pkg['labels'])}] = {{" + ", ".join(f'"{n}"' for n in pkg["labels"]) + "};")
 out.append("")
 out.append("#endif")
 

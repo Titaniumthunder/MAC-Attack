@@ -2,7 +2,7 @@
 
 Every document about the Machine Guardian model is in this folder, numbered in the order the work happened, so reading
 01, 02, 03, ... follows our progress; the highest number is the newest document. **The current model** is
-`13_modelV2_bearing_status_and_health.pdf`, the frozen modelV2 (code in `modelV2/`); `14` is a review of it. Lettered files (`07a`, `02b`) are
+`13_modelV2_bearing_status_and_health.pdf`, the frozen modelV2 (code in `modelV2/`); `14` is a review of it, `15` is its first run on the ZedBoard, and `16` runs both models on the Tiny-TPU chip RTL. Lettered files (`07a`, `02b`) are
 supporting records for the document with the same number and sit in a `supporting_*` subfolder.
 
 ## The progression
@@ -25,6 +25,8 @@ supporting records for the document with the same number and sit in a `supportin
 | 12 | `12_Run3_model_summary.pdf` | 9 Nov | Run 3 model summary | the Run 3 model (configuration E) on its own: data, inputs, 850 parameters, training, outputs, results, hardware (was `00_Current_model`) | B12 is never caught, and the health head was never trained |
 | 13 | `13_modelV2_bearing_status_and_health.pdf` | 10 Nov | **modelV2: the current model (frozen)** | 13 → 32 → 16 → 4 (1,044 parameters): status (healthy / developing / faulty) + a trained health %; faulty trained from the detector's onset, baseline restart after a step; 7 of 7 development bearings caught (B12 included), 0 healthy rows alarmed; **locked test run once: 4 of 4**; INT8 and RTL bit-exact, 474 cycles (2.21 µs). Not yet on the board | run on the ZedBoard (`MAC_model_V2` SDK app) |
 | 14 | `14_modelV2_review_session.pdf` | 11 Nov | Review of modelV2 | ran on a PC (raw B03 replay, bit-exact, RTL on xsim); accuracy / precision / recall / F1 (about 99 %, labels from the detector); health index 4–7 points from its target; **on B02–B04 the network makes the same calls as the anomaly detector alone** | run it on the board; report a detector-only baseline; try features that could warn earlier |
+| 15 | `15_ZedBoard_run_modelV2_and_TinyTPU.pdf` | 16 Nov | **Both models on the ZedBoard** | modelV2 and the professor's Tiny-TPU RSCL model (INT4 8-4-2) on the MAC Attack accelerator (`mac_attack_accel_MLP`) on the board; no RTL change, each model gets an interface (`modelV2/hardware.py`; new `tinytpu/mac_mlp/export_mac_mlp.py`); **modelV2 4/4, Tiny-TPU 5/5, every sum exact**; 474 clocks per modelV2 row, as in simulation; the 64 test rows mapped to their bearings and the health % explained | Release-build speedup; both models on the Tiny-TPU V2 chip RTL (`tinytpu/fpga_zed_v2`); a single-bearing test export |
+| 16 | `16_TinyTPU_V1_V2_ZedBoard_run.pdf` | 16 Nov | **Both models on the Tiny-TPU chip RTL** | the same models, rows and checks as 15 on Tiny-TPU Version 1 (`tinytpu/fpga_zed`, 1 INT4 PE, 100 MHz) and Version 2 (`tinytpu/fpga_zed_v2`, 2 INT8 PEs, 50 MHz: 100 MHz missed timing) on the ZedBoard; **V2: modelV2 3/3, Tiny-TPU model 3/3, hardware test 8/8; V1: Tiny-TPU model 2/2, hardware test 5/5**; every sum and prediction identical to 15 and to simulation; the ARM alone is faster (bus-bound, as expected); board screenshots in `supporting_tinytpu_board_run/` | commit; Tiny Tapeout build of V2; train the Tiny-TPU model on real Ottawa data |
 
 ## In one paragraph
 
@@ -109,3 +111,5 @@ The builder scripts (in `model/report/` unless shown) write to these names:
 | 12 | `make_run3_summary_report.py` |
 | 13 | `modelV2/report.py` (run from the repo root) |
 | 14 | exported from a Claude Doc (no builder script) |
+| 15 | `15_ZedBoard_run_modelV2_and_TinyTPU.html`, printed with Chrome: `chrome --headless=new --no-pdf-header-footer --print-to-pdf=15_ZedBoard_run_modelV2_and_TinyTPU.pdf 15_ZedBoard_run_modelV2_and_TinyTPU.html` |
+| 16 | `16_TinyTPU_V1_V2_ZedBoard_run.html`, printed with Chrome the same way as 15 |
