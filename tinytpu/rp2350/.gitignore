@@ -1,0 +1,3 @@
+sim/sim_build_*/
+sim/results.xml
+__pycache__/

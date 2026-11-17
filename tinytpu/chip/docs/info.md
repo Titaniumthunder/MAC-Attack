@@ -13,7 +13,7 @@ Tiny-TPU is one processing element (PE) of a tiny neural-network accelerator, bu
 (Alex Salamati, James Manikyan, Marco Flores) for a motor-vibration fault detector.
 
 The PE multiplies two signed 4-bit numbers (INT4, an activation `a` and a weight `w`) and adds the product to a
-signed 16-bit accumulator. A host microcontroller (the RP2040 on the Tiny Tapeout demo board) keeps the trained
+signed 16-bit accumulator. A host microcontroller (the RP2350 on the Tiny Tapeout demo board) keeps the trained
 model, streams each neuron's activation/weight pairs to the chip, reads back the 16-bit sum, and finishes the
 neuron itself (scale, bias, ReLU).
 
@@ -39,4 +39,4 @@ and HI = 1 (bits 15:8). Example: MAC(3, 2), MAC(-2, 4), MAC(1, -1) gives 6 - 8 -
 
 ## External hardware
 
-None beyond the Tiny Tapeout demo board: its RP2040 acts as the host.
+None beyond the Tiny Tapeout demo board: its RP2350 acts as the host (driver: `tinytpu/rp2350/tinytpu_v1.py` in the project repo).

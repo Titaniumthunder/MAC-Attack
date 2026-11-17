@@ -17,7 +17,7 @@
 
   "//": "CLOCK_PERIOD - Increase this in case you are getting setup time violations.",
   "//": "The value is in nanoseconds, so 20ns == 50MHz.",
-  "CLOCK_PERIOD": 20,
+  "CLOCK_PERIOD": 40,
 
   "//": "Hold slack margin - Increase them in case you are getting hold violations.",
   "PL_RESIZER_HOLD_SLACK_MARGIN": 0.1,
@@ -70,5 +70,29 @@
   "MAGIC_DEF_LABELS": 0,
 
   "//": "Only export pin area in LEF (without any connected nets)",
-  "MAGIC_WRITE_LEF_PINONLY": 1
+  "MAGIC_WRITE_LEF_PINONLY": 1,
+
+  "//": "--- MAC Attack physical settings (no RTL change). Verified locally for this design by the",
+  "//": "team review (docs/tinytapeout-review), LibreLane 3.0.14. Optimise and repair at the slow corner",
+  "//": "(setup) and the fast corner (hold); repair again after global routing.",
+  "DEFAULT_CORNER": "max_ss_100C_1v60",
+  "PNR_CORNERS": ["max_ss_100C_1v60", "min_ff_n40C_1v95"],
+  "RSZ_CORNERS": ["max_ss_100C_1v60", "min_ff_n40C_1v95"],
+  "DEDUPLICATE_CORNERS": true,
+  "EXTRA_EXCLUDED_CELLS": ["sky130_fd_sc_hd__clkdlybuf*"],
+  "RUN_POST_GRT_DESIGN_REPAIR": true,
+  "PNR_SDC_FILE": "dir::pnr.sdc",
+  "SIGNOFF_SDC_FILE": "dir::signoff.sdc",
+
+  "//": "Added 17 Nov, not yet run: the review left 32 slew + 2 fanout violations with the settings above.",
+  "//": "Version 2 is 16 tiles wide (1.38 mm), so some nets cross the whole block. Buffer long wires,",
+  "//": "repair with margin (pnr.sdc aims at 0.6 ns slew and fanout 8; signoff still checks 0.75 ns and 10),",
+  "//": "and cluster clock sinks. CLOCK_PERIOD 40 (25 MHz): the slow corner reaches about 33 MHz.",
+  "CTS_SINK_CLUSTERING_SIZE": 8,
+  "DESIGN_REPAIR_MAX_WIRE_LENGTH": 400,
+  "GRT_DESIGN_REPAIR_MAX_WIRE_LENGTH": 400,
+  "DESIGN_REPAIR_MAX_SLEW_PCT": 25,
+  "DESIGN_REPAIR_MAX_CAP_PCT": 25,
+  "GRT_DESIGN_REPAIR_MAX_SLEW_PCT": 25,
+  "GRT_DESIGN_REPAIR_MAX_CAP_PCT": 25
 }

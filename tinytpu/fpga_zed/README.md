@@ -1,6 +1,6 @@
 # Tiny-TPU on the ZedBoard
 
-The FPGA prototype of the Tiny-TPU chip. The ARM plays the host (the RP2040's job on the Tiny Tapeout board)
+The FPGA prototype of the Tiny-TPU chip. The ARM plays the host (the RP2350's job on the Tiny Tapeout board)
 over AXI4-Lite. The processing element is **the same file as the chip**, `../chip/src/tiny_tpu_pe.v`; only
 `tiny_tpu_axi.v` is FPGA-specific.
 

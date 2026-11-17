@@ -11,7 +11,7 @@ You can also include images in this folder and reference them in the markdown. E
 
 Tiny-TPU v2 is a small neural-network accelerator by team MAC Attack (Alex Salamati, James Manikyan,
 Marco Flores) for a motor-vibration fault detector. It runs a multilayer perceptron layer by layer while the host
-(the RP2040 on the demo board) streams in the weights.
+(the RP2350 on the demo board) streams in the weights.
 
 - **Two processing elements** (a 1x2 array): each multiplies signed 8-bit numbers and adds them into an exact
   22-bit sum. In a **BURST**, two weights arrive per clock (`ui_in` and `uio_in`), so both PEs work on two neurons
@@ -41,4 +41,4 @@ BSEL = 3), lower STROBE, wait for ACK = 0.
 
 ## External hardware
 
-None beyond the Tiny Tapeout demo board: its RP2040 acts as the host.
+None beyond the Tiny Tapeout demo board: its RP2350 acts as the host (driver: `tinytpu/rp2350/tinytpu_v2.py` in the project repo).
