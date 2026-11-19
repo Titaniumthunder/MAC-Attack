@@ -1,0 +1,17 @@
+{
+ "rows": 64,
+ "pe_model": {
+  "sums_checked": 3328,
+  "sums_differ": 0,
+  "overflow": false
+ },
+ "status_same_as_fp32": 64,
+ "status_same_as_int8": 64,
+ "status_fp32_rows": [
+  31,
+  0,
+  33
+ ],
+ "health_max_diff_vs_fp32_pct": 14.352292322425093,
+ "health_mean_diff_vs_fp32_pct": 2.9039150668662526
+}

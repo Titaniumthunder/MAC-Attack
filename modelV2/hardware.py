@@ -20,10 +20,6 @@ from export import build, c_array                  # model/
 from mac import golden_mlp, write_hex              # mac_attack_accel_MLP/ (path added by mtl_model)
 
 
-def load(path):
-    net = N.mlp()
-    net.load_state_dict(torch.load(path, weights_only=True))
-    return net.eval()
 
 
 def quantize(net, X_calib):
@@ -101,6 +97,9 @@ def main():
     out = c.EXPORT / run.name
     if c.stale(cfg, run.name):
         raise SystemExit(1)
+    if cfg.get("int4"):
+        raise SystemExit(f"{run.name} is an INT4 run (Tiny-TPU Version 1): export it with hardware_int4.py")
+    load = lambda path: N.load(path, cfg)
     if out.exists():
         raise SystemExit(f"already exported: {out}. Delete that folder to run hardware.py on this run again.")
     hist = max(cfg["history"], 1)

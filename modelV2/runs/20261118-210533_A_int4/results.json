@@ -1,0 +1,11 @@
+{
+ "validation": {
+  "val_status_pad": 0.35201749418463024,
+  "val_status_ott": NaN,
+  "val_acc_pad": 0.9663865509487334,
+  "val_acc_ott": 0.5668498121556782,
+  "val_health": 0.09775793534659204,
+  "val_mae": 27.702294894627162
+ },
+ "elapsed_s": 336.2995467185974
+}

@@ -44,6 +44,8 @@ foreach d [list [file join $sdk gnu aarch32 nt gcc-arm-none-eabi bin] [file join
 set apps {
     tinytpu_model_test {tinytpu_model_test.c tinytpu_model.h}
     tinytpu_test       {tinytpu_test.c model_data.h}
+    modelv2_int4_test  {modelv2_int4_test.c modelv2_int4.h}
+    modelv3_int4_test  {modelv3_int4_test.c modelv3_int4.h}
 }
 
 # The BSP (standalone, ps7_cortexa9_0) and an empty application, once

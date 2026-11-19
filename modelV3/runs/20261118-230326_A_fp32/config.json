@@ -1,0 +1,99 @@
+{
+ "name": "A_fp32",
+ "data": "paderborn",
+ "history": 4,
+ "quick": false,
+ "steps": 4000,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "batch": 64,
+ "lr": 0.001,
+ "lr_schedule": "cosine to 0",
+ "weight_decay": 0.01,
+ "optimizer": "Adam",
+ "sizes": [
+  13,
+  32,
+  16,
+  4
+ ],
+ "inputs": [
+  "z_rms",
+  "z_peak",
+  "z_kurt",
+  "z_crest",
+  "z_band_10_1k",
+  "z_band_1k_5k",
+  "z_band_5k_15k",
+  "g_score",
+  "m4_rms",
+  "m4_band_1k_5k",
+  "m4_band_5k_15k",
+  "m4_kurt",
+  "rpm"
+ ],
+ "int4": false,
+ "s_x": 0.07252315249587808,
+ "folds": [
+  {
+   "pad": "B02",
+   "ott": [
+    "U01",
+    "U12"
+   ]
+  },
+  {
+   "pad": "B03",
+   "ott": [
+    "U06",
+    "U17",
+    "U05"
+   ]
+  },
+  {
+   "pad": "B04",
+   "ott": [
+    "U11",
+    "U10"
+   ]
+  },
+  {
+   "pad": "B08",
+   "ott": [
+    "U16",
+    "U03",
+    "U14"
+   ]
+  },
+  {
+   "pad": "B09",
+   "ott": [
+    "U09",
+    "U20"
+   ]
+  },
+  {
+   "pad": "B11",
+   "ott": [
+    "U02",
+    "U13"
+   ]
+  },
+  {
+   "pad": "B12",
+   "ott": [
+    "U08",
+    "U18"
+   ]
+  }
+ ],
+ "faulty_training_label": "rows after the detector's sustained onset",
+ "health_target": "severity: 100 % at score <= 2.5, 0 % at 25.0",
+ "git_commit": "d5af1057ed7a3d5a769502f77a92f7680633fec7",
+ "code_sha256": "57ac6663fc5ab9c8e8b9de1bad6b5b25f3fc65f610aa33da898b535c32d06f2d",
+ "rows_sha256": "a152134df65965c19e4c5c5e46f50a7ff5af8ccc1e3261b00044a34a75583642",
+ "loss": "cross-entropy (status rows) + MSE on sigmoid (health rows), each masked to its labelled rows"
+}

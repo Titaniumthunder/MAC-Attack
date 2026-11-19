@@ -1,0 +1,6 @@
+data/
+*.tmp
+__pycache__/
+.pytest_cache/
+rawdata/
+live_status.html

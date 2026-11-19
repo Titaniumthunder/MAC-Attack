@@ -9,12 +9,14 @@
 #   4. The terminal shows the test and its last line:
 #        tinytpu_model_test   ALL TINY-TPU MODEL TESTS PASSED (2/2)
 #        tinytpu_test         ALL TINY-TPU TESTS PASSED (5/5)
+#        modelv2_int4_test    ALL MODELV2 INT4 TESTS PASSED (4/4)
+#        modelv3_int4_test    ALL MODELV3 INT4 TESTS PASSED (4/4)
 #   Run it again with another program name for the next test (it resets the board and reloads everything).
 #
 # The same steps the SDK's Run As > Launch on Hardware does with "Reset entire system", "Program FPGA",
 # "Run ps7_init" and "Run ps7_post_config" ticked.
 
-set apps {tinytpu_model_test tinytpu_test}
+set apps {tinytpu_model_test tinytpu_test modelv2_int4_test modelv3_int4_test}
 set app [lindex $argv 0]
 if {$app eq ""} { set app tinytpu_model_test }
 if {[lsearch -exact $apps $app] < 0} {

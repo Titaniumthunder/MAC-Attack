@@ -13,6 +13,9 @@ over AXI4-Lite. The processing element is **the same file as the chip**, `../chi
 | `sw/make_model_header.py` | Writes `model_data.h` from `../chip/test/int4_package.json` + `golden_vectors.json` |
 | `sim/test_axi.py`, `sim/run.py` | cocotb simulation of the wrapper over AXI (`python run.py`; needs cocotb, cocotbext-axi, Icarus) |
 | `sw/tinytpu_model_test.c` | ARM test program (16 Nov): the professor's model on the same 64 rows, checks and printout as `MAC_model_TinyTPU` and Version 2's `tinytpu_model_test`, in host mode |
+| `sw/modelv2_int4_test.c` | ARM test program (18 Nov): modelV2 13-32-16-4 in INT4 (bearing status + health), 1,096 PE commands per inference. Every INT4 input, PE sum and output must equal Python (`modelV2/int4.py`) |
+| `sw/modelv2_int4.h` | Its model and 64 test rows, written by `modelV2/hardware_int4.py --to-zed`. For now this is the demo export (see `modelV2/README.md`) |
+| `sw/modelv3_int4_test.c`, `sw/modelv3_int4.h` | The same program for modelV3's INT4 model (`modelV3/hardware_int4.py --to-zed`), ends with `ALL MODELV3 INT4 TESTS PASSED (4/4)`; passed in the simulation on 18 Nov |
 | `sw/tinytpu_model.h` | Its model and rows, written by `../mac_mlp/export_mac_mlp.py` (the same file as the other two boards') |
 | `sim/xsim_cosim/` | Runs either ARM program against the RTL in **Vivado's simulator** (DPI-C; only Vivado needed): `run_xsim_cosim.bat <program>` |
 | `build_bitstream.tcl`, `sdk_build.tcl`, `run_on_board.tcl` | No-GUI build and board run (16 Nov), as in `../fpga_zed_v2` |
@@ -76,7 +79,11 @@ C:\Xilinx\SDK\2019.1\bin\xsct.bat run_on_board.tcl tinytpu_test                 
 `tinytpu_model_test` runs the professor's model on the same 64 rows as the MAC Attack accelerator's
 `MAC_model_TinyTPU` and Version 2's `tinytpu_model_test` (12 golden + 52 random INT4 rows): ARM alone, then host
 mode, every multiply-add on the PE (52 commands per row), the float step on the ARM. Version 1 has no on-chip
-step, so there is no on-chip mode. modelV2 cannot run here: its weights and inputs are INT8, the PE takes INT4.
+step, so there is no on-chip mode.
+
+The INT8 modelV2 cannot run here, because the PE takes INT4. Its INT4 version can: `modelv2_int4_test`
+(`run_xsim_cosim.bat modelv2_int4_test`, or `xsct run_on_board.tcl modelv2_int4_test`). It ends with
+`ALL MODELV2 INT4 TESTS PASSED (4/4)`. It passed in the simulation on 18 Nov and has not run on the board yet.
 
 Vivado co-simulation (`sim\xsim_cosim\run_xsim_cosim.bat <program>`, 16 Nov): `tinytpu_model_test` 2/2 (256/256/128
 sums, 256 hidden values, 64/64 classes, golden logits equal to the expected ones); `tinytpu_test` 5/5.

@@ -43,6 +43,10 @@ TEMP_WINDOW, TEMP_RISE_C, TEMP_SETTLE_MIN = 50, 6.0, 60
 # Evaluation is unchanged: "end stage caught" still means the last END_N rows.
 FAULTY_FROM_ONSET = True
 HIDDEN, STEPS, QUICK_STEPS, BATCH, LR, WD, SEEDS = (32, 16), 4000, 300, 64, 1e-3, 0.01, (0, 1, 2)
+# INT4 for Tiny-TPU Version 1 (int4.py, train.py --int4, hardware_int4.py). Training runs in FP32 for the first
+# QAT_START of the steps, then switches INT4 fake quantization on, with each layer's activation scale starting at the
+# CALIB_PCT percentile of its |input| / 7 on the training rows. More steps than FP32: the INT4 phase needs its own.
+QAT_START, CALIB_PCT, INT4_STEPS = 0.5, 99.0, 6000
 
 PAD_DEV = ["B02", "B03", "B04", "B08", "B09", "B11", "B12"]
 PAD_LOCKED = sorted(json.loads((MODEL / "results/splits/splits.json").read_text())["split"]["test"].values())

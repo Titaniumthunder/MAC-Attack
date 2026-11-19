@@ -2,7 +2,8 @@
 
   model/.venv/bin/python modelV2/evaluate.py
 
-Writes runs/<run>/eval.json and timelines.png, and report/comparison.json.
+Writes runs/<run>/eval.json and timelines.png, and report/comparison.json. A run that hardware_int4.py has exported
+is scored a second time on its INT4 integer outputs (runs/<run>/eval_int4.json, "<run> INT4 integer").
 """
 import json
 
@@ -73,10 +74,9 @@ def hidden_probe(run, rows, folds, hist):
     X = torch.tensor(F.network_inputs(rows["Z"][m], rows["s"][m], rows["rpm"][m], rows["M"][m], np.full(m.sum(), hist)))
     ds, aucs = rows["ds"][m], []
     for f in folds:
-        net = N.mlp()
-        net.load_state_dict(torch.load(run / "models" / f"{f['pad']}_seed0.pt", weights_only=True))
+        net = N.load(run / "models" / f"{f['pad']}_seed0.pt", json.loads((run / "config.json").read_text()))
         with torch.no_grad():
-            H = net[:-1](X).numpy()
+            H = N.hidden(net, X).numpy()
         held = np.isin(rows["bearing"][m], [f["pad"], *f["ott"]])
         aucs.append({k: roc_auc_score(ds[held], p.fit(H[~held], ds[~held]).predict_proba(H[held])[:, 1])
                      for k, p in precheck.probes().items()})
@@ -140,11 +140,15 @@ def main():
     rows = dict(np.load(c.DATA / "rows.npz"))
     folds = json.loads((c.DATA / "folds.json").read_text())
     comparison = {"run3": run3(rows), "temperature": temperature()}
-    for run in sorted(d for d in c.RUNS.iterdir() if (d / "val_outputs.npz").exists()):
+    # every run's validation outputs, and the INT4 integer outputs hardware_int4.py wrote for it (Tiny-TPU Version 1)
+    sources = [(d, f) for d in sorted(c.RUNS.iterdir()) for f in ("val_outputs.npz", "val_outputs_int4.npz") if (d / f).exists()]
+    for run, file in sources:
         cfg = json.loads((run / "config.json").read_text())
         if c.stale(cfg, run.name):
             continue
-        v = np.load(run / "val_outputs.npz")
+        is4 = file.endswith("_int4.npz")
+        name = run.name + (" INT4 integer (hardware_int4.py)" if is4 else "")
+        v = np.load(run / file)
         res = {"paderborn": {}, "ottawa": []}
         for i, seed in enumerate(v["seeds"]):
             for b in [f["pad"] for f in folds]:
@@ -152,15 +156,16 @@ def main():
                 e = paderborn_eval({k: a[m] for k, a in rows.items()}, v["out"][i][m])
                 res["paderborn"].setdefault(b, []).append(e)
             res["ottawa"].append(ottawa_eval(rows, v["out"][i]))
-        timelines(run, rows, {b: e[0] for b, e in res["paderborn"].items()})
+        if not is4:
+            timelines(run, rows, {b: e[0] for b, e in res["paderborn"].items()})
         for e in sum(res["paderborn"].values(), []):
             del e["_series"]
         res["hidden_layer_dataset_probe_auc"] = hidden_probe(run, rows, folds, max(cfg["history"], 1))
-        (run / "eval.json").write_text(json.dumps(res, indent=1) + "\n")
-        comparison[run.name] = res
+        (run / ("eval_int4.json" if is4 else "eval.json")).write_text(json.dumps(res, indent=1) + "\n")
+        comparison[name] = res
         P = sum(res["paderborn"].values(), [])
         late = sum(e["failing_min_before_onset"] is None or e["failing_min_before_onset"] < 0 for e in P)
-        print(f"{run.name}: end stages caught {sum(e['end_caught'] for e in P)}/{len(P)} (bearing x seed), healthy rows alarmed "
+        print(f"{name}: end stages caught {sum(e['end_caught'] for e in P)}/{len(P)} (bearing x seed), healthy rows alarmed "
               f"{sum(e['healthy_rows_alarmed'] for e in P)}/{sum(e['healthy_rows'] for e in P)}, later than onset or never {late}/{len(P)}, health MAE before/after "
               f"onset {np.mean([e['health_mae_before_onset'] for e in P]):.1f}/{np.mean([e['health_mae_after_onset'] for e in P]):.1f} %, "
               f"Ottawa stage accuracy {np.mean([o['accuracy'] for o in res['ottawa']]):.2f}, healthy called healthy {np.mean([o['healthy_called_healthy'] for o in res['ottawa']]):.2f}, damaged called faulty "

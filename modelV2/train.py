@@ -6,6 +6,11 @@ runs; runs/compare.html overlays all runs afterwards.
   model/.venv/bin/python modelV2/train.py --data paderborn --name A
   model/.venv/bin/python modelV2/train.py --data paderborn+ottawa --name B
   model/.venv/bin/python modelV2/train.py --data paderborn+ottawa --name B_nohist --history 0
+  model/.venv/bin/python modelV2/train.py --data paderborn --name A_int4 --int4      INT4 for Tiny-TPU Version 1
+
+--int4 trains the same network for the INT4 PE of Tiny-TPU Version 1 (int4.py): FP32 for the first QAT_START of the
+steps, then INT4 fake quantization, so the network learns the INT4 grid (quantization-aware training). Export it with
+hardware_int4.py. --hidden changes the hidden layer sizes (e.g. --hidden 48,24); the run's config.json records them.
 
 One model per (held-out bearing, seed), all trained in step so the curves are fold averages, plus one model per seed on
 every development bearing (the one that is exported). Paderborn trains both heads (healthy / faulty, and health).
@@ -42,17 +47,24 @@ def compare():
 class Job:
     """One network: trained on every bearing except the fold's held-out ones (fold None: on all of them)."""
 
-    def __init__(self, fold, seed, rows, hist, ottawa, y_train):
+    def __init__(self, fold, seed, rows, hist, ottawa, y_train, cfg, X_full):
         self.fold, self.seed, self.hist = fold, seed, hist
         self.val = np.isin(rows["bearing"], [fold["pad"], *fold["ott"]] if fold else [])
         train = ~self.val & ((rows["ds"] == 0) | ottawa)
+        self.train = train
         self.ottawa = ottawa
         pools = [np.flatnonzero(train & (rows["ds"] == d) & (y_train == y)) for d in (0, 1) for y in (0, 1, 2)]
         self.status_pools = [p for p in pools if len(p)]
         self.health_pools = [np.flatnonzero(train & (rows["ds"] == 0) & (rows["post"] == p)) for p in (False, True)]
         self.rng = np.random.default_rng(seed)
-        self.net = N.mlp(seed=seed)
-        self.opt = torch.optim.Adam(self.net.parameters(), lr=c.LR, weight_decay=c.WD)
+        self.net = N.build(cfg, seed=seed)
+        if cfg["int4"]:                             # INT4: inputs standardized with this job's training rows only
+            self.net.standardize(X_full[train])
+            groups = [{"params": [p for n, p in self.net.named_parameters() if n != "log_sa"]},
+                      {"params": [self.net.log_sa], "weight_decay": 0.0}]
+        else:
+            groups = self.net.parameters()
+        self.opt = torch.optim.Adam(groups, lr=c.LR, weight_decay=c.WD)
         self.sum = np.zeros(2)
 
     def batch(self):
@@ -89,13 +101,19 @@ def main():
     ap.add_argument("--name", required=True)
     ap.add_argument("--history", type=int, default=c.HIST, choices=range(c.HIST + 1), help="rows of history (0: none)")
     ap.add_argument("--quick", action="store_true", help="dry run: one seed, few steps")
+    ap.add_argument("--int4", action="store_true", help="quantization-aware INT4 training for Tiny-TPU Version 1")
+    ap.add_argument("--hidden-levels", type=int, default=8, choices=(8, 16),
+                    help="--int4: hidden activations 0..7 (8) or 0..15 sent as -8..7 (16), int4.py")
+    ap.add_argument("--hidden", default=",".join(map(str, c.HIDDEN)), help="hidden layer sizes, e.g. 32,16")
     a = ap.parse_args()
     missing = json.loads((c.DATA / "summary.json").read_text())["missing"]
     if missing and not a.quick:
         raise SystemExit(f"raw data of {missing} is missing: add it, run prep.py, then train (or use --quick)")
     rows = dict(np.load(c.DATA / "rows.npz"))
     folds = json.loads((c.DATA / "folds.json").read_text())
-    steps, seeds, every = (c.QUICK_STEPS, (0,), 25) if a.quick else (c.STEPS, c.SEEDS, 100)
+    steps, seeds, every = (c.QUICK_STEPS, (0,), 25) if a.quick else (c.INT4_STEPS if a.int4 else c.STEPS, c.SEEDS, 100)
+    hidden = tuple(int(v) for v in a.hidden.split(","))
+    qat_step = int(c.QAT_START * steps) + 1 if a.int4 else None     # the first step trained with INT4 fake quantization
     hist = max(a.history, 1)
     out = c.RUNS / f"{datetime.now():%Y%m%d-%H%M%S}_{a.name}"
     out.mkdir(parents=True)                         # fails if it exists: a run is never overwritten
@@ -106,7 +124,9 @@ def main():
         code.update(p.name.encode() + p.read_bytes())
     cfg = {"name": a.name, "data": a.data, "history": a.history, "quick": a.quick,
            "steps": steps, "seeds": list(seeds), "batch": c.BATCH, "lr": c.LR, "lr_schedule": "cosine to 0",
-           "weight_decay": c.WD, "optimizer": "Adam", "sizes": [len(c.INPUTS), *c.HIDDEN, 4], "inputs": c.INPUTS,
+           "weight_decay": c.WD, "optimizer": "Adam", "sizes": [len(c.INPUTS), *hidden, 4], "inputs": c.INPUTS,
+           "int4": a.int4, **({"int4_qat_from_step": qat_step, "int4_calib_pct": c.CALIB_PCT, "int4_weight_decay": 0.0, "int4_hidden_levels": a.hidden_levels,
+                               "int4_contract": "int4.py docstring (Tiny-TPU Version 1 host flow)"} if a.int4 else {}),
            "s_x": c.S_X, "folds": folds,
            "faulty_training_label": "rows after the detector's sustained onset" if c.FAULTY_FROM_ONSET else f"last {c.END_N} rows",
            "health_target": f"severity: 100 % at score <= {c.HEALTH_FULL_AT}, 0 % at {c.HEALTH_ZERO_AT}", "git_commit": commit, "code_sha256": code.hexdigest(), "rows_sha256": c.rows_sha256(),
@@ -122,10 +142,17 @@ def main():
     y_train = np.where(rows["post"] & c.FAULTY_FROM_ONSET, 2, rows["y"])     # training labels of the status head
     yt = torch.tensor(y_train)
     ottawa = a.data.endswith("ottawa")
-    jobs = [Job(f, s, rows, hist, ottawa, y_train) for f in [*folds, None] for s in seeds]
+    jobs = [Job(f, s, rows, hist, ottawa, y_train, cfg, Xh[-1]) for f in [*folds, None] for s in seeds]
     history, val_out, t0 = [], np.full((len(seeds), n, 4), np.nan, np.float32), time.time()
     for step in range(steps + 1):                   # step 0: the untrained networks, so every curve has a start
         lr = 0.5 * c.LR * (1 + np.cos(np.pi * max(step - 1, 0) / max(steps, 1)))
+        if step == qat_step:                        # INT4 on: scales from each job's own training rows
+            for j in jobs:
+                j.net.calibrate(Xh[-1][j.train])
+                j.net.quant.fill_(1)
+                for g in j.opt.param_groups:        # no weight decay from here on: with per-neuron weight scales it
+                    g["weight_decay"] = 0.0         # shrinks every weight and the outputs with them (18 Nov run)
+            print(f"step {step}: INT4 fake quantization on, weight decay off", flush=True)
         for j in jobs if step else []:
             idx, h = j.batch()
             x = torch.stack([Xh[k - 1][i] for i, k in zip(idx, h)])
