@@ -1,4 +1,6 @@
-data/
+# data/ is tracked (19 Nov 2026): 5 MB of features of the development bearings only, so a clone can train,
+# evaluate and export without the raw downloads, and the committed runs keep matching their data fingerprint.
+# Locked bearings never go in data/ (prep.py refuses them until freeze.py has run).
 *.tmp
 __pycache__/
 .pytest_cache/

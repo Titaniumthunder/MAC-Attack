@@ -57,6 +57,10 @@ venv/
 *.wav
 data/
 model/newdata/
+# Except modelV2's and modelV3's prepared features (5 MB each, development bearings only): a clone can train,
+# evaluate and export without the raw downloads (19 Nov 2026)
+!modelV2/data/
+!modelV3/data/
 
 # OS
 Thumbs.db
